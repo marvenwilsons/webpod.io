@@ -1,0 +1,1 @@
+this directory contains components thats used for admin and public
