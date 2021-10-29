@@ -1,0 +1,26 @@
+.text-primary {
+  color: #303133 !important;
+}
+
+.text-regular {
+  color: #606266 !important;
+}
+
+.text-secondary{
+  color: #4a4f55 !important
+}
+
+.text-small {
+  font-size: 90% !important;
+}
+
+.text-placeholder {
+  color: #C0C4CC !important
+}
+
+:root {
+  --base-border: #DCDFE6;
+  --light-border: #E4E7ED;
+  --lighter-border: #EBEEF5;
+  --lighter-border: #F2F6FC;
+}
