@@ -1,0 +1,74 @@
+{
+  "DashboardPaneSystem": {
+    "description": "Auto imported from components/dashboard/pane-system/index.vue"
+  },
+  "DashboardSideBar": {
+    "description": "Auto imported from components/dashboard/side-bar/index.vue"
+  },
+  "DashboardSideBarNavigator": {
+    "description": "Auto imported from components/dashboard/side-bar/navigator.vue"
+  },
+  "DashboardServicesEmpty": {
+    "description": "Auto imported from components/dashboard/services/empty.js"
+  },
+  "DashboardServices": {
+    "description": "Auto imported from components/dashboard/services/index.js"
+  },
+  "DashboardServicesObjectifySample": {
+    "description": "Auto imported from components/dashboard/services/objectify-sample.js"
+  },
+  "DashboardServicesServiceMaker": {
+    "description": "Auto imported from components/dashboard/services/service-maker.js"
+  },
+  "DashboardServicesServiceSample": {
+    "description": "Auto imported from components/dashboard/services/service-sample.js"
+  },
+  "DashboardServicesTableSample": {
+    "description": "Auto imported from components/dashboard/services/table-sample.js"
+  },
+  "DashboardServicesTodo": {
+    "description": "Auto imported from components/dashboard/services/todo.js"
+  },
+  "DashboardServicesUniview": {
+    "description": "Auto imported from components/dashboard/services/uniview.js"
+  },
+  "GlobalsDoc": {
+    "description": "Auto imported from components/globals/doc/index.vue"
+  },
+  "GlobalsError": {
+    "description": "Auto imported from components/globals/error/index.vue"
+  },
+  "GlobalsInfo": {
+    "description": "Auto imported from components/globals/info/index.vue"
+  },
+  "GlobalsSimpleNavs": {
+    "description": "Auto imported from components/globals/simpleNavs/index.vue"
+  },
+  "GlobalsSimpleNavsItem": {
+    "description": "Auto imported from components/globals/simpleNavs/item.vue"
+  },
+  "GlobalsSimpleNavsItemAdditionalContent": {
+    "description": "Auto imported from components/globals/simpleNavs/itemAdditionalContent.vue"
+  },
+  "GlobalsSimpleNavsLoader": {
+    "description": "Auto imported from components/globals/simpleNavs/loader.vue"
+  },
+  "GlobalsUniview": {
+    "description": "Auto imported from components/globals/uniview/index.vue"
+  },
+  "GlobalsWarning": {
+    "description": "Auto imported from components/globals/warning/index.vue"
+  },
+  "DashboardPaneSystemPane": {
+    "description": "Auto imported from components/dashboard/pane-system/pane/index.vue"
+  },
+  "DashboardPaneModal": {
+    "description": "Auto imported from components/dashboard/pane-system/pane/pane-modal.vue"
+  },
+  "DashboardPaneSystemPaneManager": {
+    "description": "Auto imported from components/dashboard/pane-system/pane-manager/index.vue"
+  },
+  "DashboardPaneActivator": {
+    "description": "Auto imported from components/dashboard/pane-system/pane-manager/pane-activator.vue"
+  }
+}
