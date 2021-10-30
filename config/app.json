@@ -1,3 +1,4 @@
 {
-  "app_name": "sample.com"
+  "app_name": "sample.com",
+  "admin_route": "admin"
 }
