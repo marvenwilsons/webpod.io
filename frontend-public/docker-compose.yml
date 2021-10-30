@@ -10,7 +10,7 @@ services:
     environment:
       - "APP_HOST=frontend-public"
       - "APP_PORT=3001"
-      - "APP_NAME=Sample.com"
+      - "APP_NAME=sample.com"
     ports:
       - "3001:3001"
     volumes:
