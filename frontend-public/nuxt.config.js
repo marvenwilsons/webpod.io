@@ -1,10 +1,10 @@
 import colors from 'vuetify/es5/util/colors'
-
+console.log('APP_NAME: ',process.env.APP_NAME)
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - frontend-public',
-    title: 'frontend-public',
+    titleTemplate: process.env.APP_NAME,
+    title: process.env.APP_NAME,
     htmlAttrs: {
       lang: 'en'
     },
@@ -61,5 +61,10 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+  },
+  telemetry: false,
+  server: {
+    host: process.env.APP_HOST,
+    port: process.env.APP_PORT
   }
 }
