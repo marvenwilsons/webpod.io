@@ -1,5 +1,8 @@
 const app_config = require('../app.json')
 
+/**************************************************************
+ *                  Front End Admin Container                  *
+ **************************************************************/
 const frontEndAdminContainer = {
   build: {
     context: '.',
@@ -29,6 +32,9 @@ const frontEndAdminContainer = {
     "../frontend-admin/nuxt.config.js:/usr/src/nuxt-app/nuxt.config.js"
   ]
 }
+/**************************************************************
+ *                  Front End Public Container                 *
+ **************************************************************/
 const frontEndPublicContainer = {
   build: {
     context: '.',
@@ -59,6 +65,9 @@ const frontEndPublicContainer = {
     "../frontend-public/nuxt.config.js:/usr/src/nuxt-app/nuxt.config.js"
   ]
 }
+/**************************************************************
+ *                      Nginx Container                       *
+ **************************************************************/
 const nginxContainer = {
   image: 'nginx',
   depends_on: [
@@ -78,12 +87,14 @@ const nginxContainer = {
     "NGINX_HTTPS_PORT=8443",
     "NGINX_HOST=localhost",
     "NGINX_PORT=80",
-    "APP_SERVER=site:5000",
+    "UPSTREAM_ADMIN=frontend-admin:3000",
+    `ADMIN_ROUTE=${app_config.admin_route}`,
+    "UPSTREAM_PUBLIC=frontend-public:3001",
     "PGADMIN_URL=mydb"
   ]
 }
 
-module.exports = {
+const final = {
   version: '3',
   services: {
     'frontend-admin': frontEndAdminContainer,
@@ -91,3 +102,5 @@ module.exports = {
     'nginx': nginxContainer
   }
 }
+
+module.exports = final
