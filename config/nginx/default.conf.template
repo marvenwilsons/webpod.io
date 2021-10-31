@@ -8,7 +8,6 @@ upstream admin {
 
 server {
     listen          80;
-
     server_name     www.${NGINX_HOST};
     return          301 https://${NGINX_HOST}$uri;
 }
