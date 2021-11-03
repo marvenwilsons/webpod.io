@@ -6,7 +6,7 @@ services:
       target: "dev"
     container_name: "Admin"
     restart: "unless-stopped"
-    working_dir: "/usr/src/nuxt"
+    working_dir: "/usr/src/admin"
     environment:
       - "APP_HOST=frontend-admin"
       - "APP_PORT=5000"
@@ -43,7 +43,6 @@ services:
       - "public-network"
     volumes:
       - "../frontend-public/assets:/usr/src/public/assets"
-      - "../frontend-public/components:/usr/src/public/components"
       - "../frontend-public/layouts:/usr/src/public/layouts"
       - "../frontend-public/middleware:/usr/src/public/middleware"
       - "../frontend-public/pages:/usr/src/public/pages"

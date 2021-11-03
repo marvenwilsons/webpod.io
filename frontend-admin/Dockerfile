@@ -1,7 +1,7 @@
 FROM node:lts-alpine as base
-RUN mkdir -p /usr/src/nuxt
-WORKDIR /usr/src/nuxt
-COPY . /usr/src/nuxt
+# RUN mkdir -p /usr/src/nuxt
+WORKDIR /usr/src/admin
+COPY . /usr/src/admin
 RUN npm install
 
 # Development
