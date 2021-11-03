@@ -94,6 +94,6 @@ export default {
     port: process.env.APP_PORT
   },
   router: {
-    base: '/admin/'
+    base: `/${process.env.ADMIN_ROUTE}/`
   }
 }

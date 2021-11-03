@@ -1,5 +1,4 @@
-const app_config = require('../app.json')
-
+const app_config = require('../app.js')
 const adminPort = 5000
 const publicPort = 3000
 /**************************************************************
@@ -15,7 +14,8 @@ const frontEndAdminContainer = {
   working_dir: '/usr/src/admin',
   environment: [
     "APP_HOST=frontend-admin",
-    `APP_PORT=${adminPort}`
+    `APP_PORT=${adminPort}`,
+    `ADMIN_ROUTE=${app_config.admin_route}`
   ],
   networks: [
     'admin-network'
@@ -97,7 +97,7 @@ const nginxContainer = {
     `UPSTREAM_ADMIN=frontend-admin:${adminPort}`,
     `ADMIN_ROUTE=${app_config.admin_route}`,
     `UPSTREAM_PUBLIC=frontend-public:${publicPort}`,
-    "PGADMIN_URL=mydb"
+    `PGADMIN_URL=${app_config.pg_admin.PGADMIN_URL}`
   ],
   networks: [
     'admin-network',
