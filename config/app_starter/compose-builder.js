@@ -12,10 +12,13 @@ const frontEndAdminContainer = {
   },
   container_name: 'Admin',
   restart: 'unless-stopped',
-  working_dir: '/usr/src/admin',
+  working_dir: '/usr/src/nuxt',
   environment: [
     "APP_HOST=frontend-admin",
     `APP_PORT=${adminPort}`
+  ],
+  networks: [
+    'admin-network'
   ],
   ports: [
     `${adminPort}:${adminPort}`
@@ -44,7 +47,7 @@ const frontEndPublicContainer = {
   },
   container_name: 'Public',
   restart: 'unless-stopped',
-  working_dir: '/usr/src/public',
+  working_dir: '/usr/src/nuxt',
   environment: [
     'APP_HOST=frontend-public',
     `APP_PORT=${publicPort}`,
@@ -52,6 +55,9 @@ const frontEndPublicContainer = {
   ],
   ports: [
     `${publicPort}:${publicPort}`
+  ],
+  networks: [
+    'public-network'
   ],
   volumes: [
     "../frontend-public/assets:/usr/src/public/assets",
@@ -93,16 +99,32 @@ const nginxContainer = {
     `ADMIN_ROUTE=${app_config.admin_route}`,
     `UPSTREAM_PUBLIC=frontend-public:${publicPort}`,
     "PGADMIN_URL=mydb"
+  ],
+  networks: [
+    'admin-network',
+    'public-network'
   ]
 }
 
-const final = {
+let final = {
   version: '3',
   services: {
     'frontend-admin': frontEndAdminContainer,
     'frontend-public': frontEndPublicContainer,
     'nginx': nginxContainer
+  },
+  networks:{
+    'admin-network' : {
+      driver: 'bridge',
+    },
+    'public-network': {
+      driver: 'bridge'
+    }
   }
 }
+
+// final.networks['admin-network'].volumes = final.networks['admin-network'].volumes.map(i => {
+//   return i.replace(/ /g,"")
+// })
 
 module.exports = final
