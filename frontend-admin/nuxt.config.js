@@ -96,4 +96,8 @@ export default {
   router: {
     base: `/${process.env.ADMIN_ROUTE}/`
   }
+
 }
+
+console.log('API_URL',process.env.API_URL)
+

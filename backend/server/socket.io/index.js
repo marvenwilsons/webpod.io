@@ -12,7 +12,7 @@ app.get('/', (req,res) => {
   })
 })
 const server = app.listen(port, host, () => 
-{console.log(`ℹ Listening on: http://${host}:${port}`)})
+{console.log(`ℹ Admin: Listening on: http://${host}:${port}`)})
 const io = socket(server, { cookie: false})
 
 module.exports = io

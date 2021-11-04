@@ -8,6 +8,5 @@ RUN npm install
 
 CMD ["node","server/index"]
 
-EXPOSE ${BACKEND_PORT}
 
 

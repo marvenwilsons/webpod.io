@@ -68,3 +68,4 @@ export default {
     port: process.env.APP_PORT
   }
 }
+console.log('API_URL',process.env.API_URL)
