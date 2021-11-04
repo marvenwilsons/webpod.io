@@ -51,7 +51,7 @@ const frontEndPublicContainer = {
   environment: [
     'APP_HOST=frontend-public',
     `APP_PORT=${publicPort}`,
-    'APP_NAME=sample.com'
+    'APP_NAME=sample.com',
   ],
   ports: [
     `${publicPort}:${publicPort}`
@@ -73,13 +73,39 @@ const frontEndPublicContainer = {
   ]
 }
 /**************************************************************
+ *                   Back-End Container                       *
+ **************************************************************/
+ const backEndContainer = {
+  build: {
+    context: '../backend',
+  },
+  container_name: "BackEnd",
+  restart: "unless-stopped",
+  working_dir: "/usr/src/backend",
+  environment: [
+    "HOST=backend",
+    "PORT=8000"
+  ],
+  ports: [
+    `${app_config.backend.port}:${app_config.backend.port}`,
+  ],
+  depends_on: [
+    'frontend-admin',
+    'frontend-public',
+  ],
+  networks: [
+    'backend-network'
+  ]
+}
+/**************************************************************
  *                      Nginx Container                       *
  **************************************************************/
 const nginxContainer = {
   image: 'nginx',
   depends_on: [
+    'backend',
     'frontend-admin',
-    'frontend-public'
+    'frontend-public',
   ],
   container_name: 'nginx',
   volumes: [
@@ -94,29 +120,43 @@ const nginxContainer = {
     "NGINX_HTTPS_PORT=8443",
     "NGINX_HOST=localhost",
     "NGINX_PORT=80",
+    // ADMIN
     `UPSTREAM_ADMIN=frontend-admin:${adminPort}`,
     `ADMIN_ROUTE=${app_config.admin_route}`,
+    // PUBLIC
     `UPSTREAM_PUBLIC=frontend-public:${publicPort}`,
+    // BACKEND
+    `BACKEND_ROUTE=${app_config.backend.rest_api_route}`,
+    `UPSTREAM_BACKEND=backend:${app_config.backend.port}`,
+    // PG ADMIN
     `PGADMIN_URL=${app_config.pg_admin.PGADMIN_URL}`
   ],
   networks: [
+    'backend-network',
     'admin-network',
     'public-network'
   ]
 }
 
+
+
+
 let final = {
   version: '3',
   services: {
+    'backend': backEndContainer,
     'frontend-admin': frontEndAdminContainer,
     'frontend-public': frontEndPublicContainer,
-    'nginx': nginxContainer
+    'nginx': nginxContainer,
   },
   networks:{
     'admin-network' : {
       driver: 'bridge',
     },
     'public-network': {
+      driver: 'bridge'
+    },
+    'backend-network': {
       driver: 'bridge'
     }
   }

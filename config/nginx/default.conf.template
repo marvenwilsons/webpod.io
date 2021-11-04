@@ -6,6 +6,10 @@ upstream admin {
     server         ${UPSTREAM_ADMIN};
 }
 
+upstream backend {
+    server          ${UPSTREAM_BACKEND};
+}
+
 server {
     listen          80;
     server_name     www.${NGINX_HOST};
@@ -45,6 +49,21 @@ server {
         client_max_body_size 0;
     }
 
+    location /${BACKEND_ROUTE}/ {
+        proxy_pass                  http://backend;
+        proxy_http_version 1.1;
+
+        proxy_set_header Host $http_host;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Scheme $scheme;
+        proxy_set_header X-Script-Name /${BACKEND_ROUTE};
+
+        client_max_body_size 0;
+    }
+
     location / {
         proxy_set_header            Upgrade $http_upgrade;
         proxy_set_header            Connection "upgrade";
@@ -53,9 +72,4 @@ server {
         proxy_set_header            Host $host;
         proxy_pass                  http://public/;
     }
-
-    # location /_nuxt/ {
-    #     proxy_pass                  http://admin;
-    # }
-
 }

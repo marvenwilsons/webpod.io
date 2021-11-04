@@ -43,10 +43,8 @@ module.exports = {
   },
 
   backend: {
-    // node js server host
-    host: '',
-
+    rest_api_route: 'iasdhflasihsdfpq',
     // node js server port
-    port: ''
+    port: '8000'
   }
 }
