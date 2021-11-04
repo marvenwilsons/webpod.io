@@ -1,1 +1,1 @@
-const io = require('./socket.io/index')
+const io = require('./socket.io/admin-server')

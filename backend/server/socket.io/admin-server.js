@@ -15,4 +15,6 @@ const server = app.listen(port, host, () =>
 {console.log(`ℹ Admin: Listening on: http://${host}:${port}`)})
 const io = socket(server, { cookie: false})
 
-module.exports = io
+// admin authentication
+const admin_authentication = require('./admin_methods/admin_authentication')
+admin_authentication(io)
