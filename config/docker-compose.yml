@@ -4,13 +4,14 @@ services:
     build:
       context: "../backend"
       args:
-        BACKEND_PORT: "8000"
+        BACKEND_PORT: 8000
     container_name: "BackEnd"
     restart: "unless-stopped"
     working_dir: "/usr/src/backend"
     environment:
       - "HOST=backend"
       - "PORT=8000"
+      - "API_URL=aar_8JWZklTr09cSFcP4xjbtRhtG07HFWKjwKQxb30Iz"
     ports:
       - "8000:8000"
     depends_on:
@@ -29,6 +30,7 @@ services:
       - "APP_HOST=frontend-admin"
       - "APP_PORT=5000"
       - "ADMIN_ROUTE=wpadmin"
+      - "API_URL=aar_8JWZklTr09cSFcP4xjbtRhtG07HFWKjwKQxb30Iz"
     networks:
       - "admin-network"
     ports:
@@ -56,6 +58,7 @@ services:
       - "APP_HOST=frontend-public"
       - "APP_PORT=3000"
       - "APP_NAME=sample.com"
+      - "API_URL=par_7lPP0kowJyZHvFy5bc41cN16MpBuLeidExwZ50a4"
     ports:
       - "3000:3000"
     networks:
@@ -91,7 +94,7 @@ services:
       - "UPSTREAM_ADMIN=frontend-admin:5000"
       - "ADMIN_ROUTE=wpadmin"
       - "UPSTREAM_PUBLIC=frontend-public:3000"
-      - "BACKEND_ROUTE=(length) => {\n      var result           = '';\n      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';\n      var charactersLength = characters.length;\n      for ( var i = 0; i < length; i++ ) {\n        result += characters.charAt(Math.floor(Math.random() * charactersLength));\n      }\n     return result;\n    }"
+      - "BACKEND_ROUTE=aar_8JWZklTr09cSFcP4xjbtRhtG07HFWKjwKQxb30Iz"
       - "UPSTREAM_BACKEND=backend:8000"
       - "PGADMIN_URL=mydb"
     networks:

@@ -1,11 +1,10 @@
-function randomString(length) {
+const random_string = (length) => {
   var result           = '';
   var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   var charactersLength = characters.length;
   for ( var i = 0; i < length; i++ ) {
-    result += characters.charAt(Math.floor(Math.random() * 
-charactersLength));
- }
+    result += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
  return result;
 }
 
@@ -54,16 +53,14 @@ module.exports = {
   },
 
   backend: {
-    api_route: (() => (length) => {
-      var result           = '';
-      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      var charactersLength = characters.length;
-      for ( var i = 0; i < length; i++ ) {
-        result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      }
-     return result;
-    })(40),
-    // node js server port
-    port: '8000'
+    // server 1 for admin api dashboard use, every call on this route requires
+    // authentication process like user token and username
+    admin_api_route: 'aar_' + random_string(40),
+    admin_server_port: 8000,
+
+    // server 2 for public api use, every call on this route requires no
+    // authentication, anyone can access this link.
+    public_api_route: 'par_' +random_string(40),
+    public_server_port: 9000,
   }
 }

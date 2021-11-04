@@ -15,7 +15,8 @@ const frontEndAdminContainer = {
   environment: [
     "APP_HOST=frontend-admin",
     `APP_PORT=${adminPort}`,
-    `ADMIN_ROUTE=${app_config.admin_route}`
+    `ADMIN_ROUTE=${app_config.admin_route}`,
+    `API_URL=${app_config.backend.admin_api_route}`
   ],
   networks: [
     'admin-network'
@@ -52,6 +53,7 @@ const frontEndPublicContainer = {
     'APP_HOST=frontend-public',
     `APP_PORT=${publicPort}`,
     'APP_NAME=sample.com',
+    `API_URL=${app_config.backend.public_api_route}`
   ],
   ports: [
     `${publicPort}:${publicPort}`
@@ -79,7 +81,7 @@ const frontEndPublicContainer = {
   build: {
     context: '../backend',
     args: {
-      BACKEND_PORT: app_config.backend.port
+      BACKEND_PORT: app_config.backend.admin_server_port
     }
   },
   container_name: "BackEnd",
@@ -87,10 +89,11 @@ const frontEndPublicContainer = {
   working_dir: "/usr/src/backend",
   environment: [
     "HOST=backend",
-    "PORT=8000"
+    "PORT=8000",
+    `API_URL=${app_config.backend.admin_api_route}`
   ],
   ports: [
-    `${app_config.backend.port}:${app_config.backend.port}`,
+    `${app_config.backend.admin_server_port}:${app_config.backend.admin_server_port}`,
   ],
   depends_on: [
     'frontend-admin',
@@ -129,8 +132,8 @@ const nginxContainer = {
     // PUBLIC
     `UPSTREAM_PUBLIC=frontend-public:${publicPort}`,
     // BACKEND
-    `BACKEND_ROUTE=${app_config.backend.api_route}`,
-    `UPSTREAM_BACKEND=backend:${app_config.backend.port}`,
+    `BACKEND_ROUTE=${app_config.backend.admin_api_route}`,
+    `UPSTREAM_BACKEND=backend:${app_config.backend.admin_server_port}`,
     // PG ADMIN
     `PGADMIN_URL=${app_config.pg_admin.PGADMIN_URL}`
   ],
