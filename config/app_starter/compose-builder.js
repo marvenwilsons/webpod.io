@@ -78,6 +78,9 @@ const frontEndPublicContainer = {
  const backEndContainer = {
   build: {
     context: '../backend',
+    args: {
+      BACKEND_PORT: app_config.backend.port
+    }
   },
   container_name: "BackEnd",
   restart: "unless-stopped",
@@ -126,7 +129,7 @@ const nginxContainer = {
     // PUBLIC
     `UPSTREAM_PUBLIC=frontend-public:${publicPort}`,
     // BACKEND
-    `BACKEND_ROUTE=${app_config.backend.rest_api_route}`,
+    `BACKEND_ROUTE=${app_config.backend.api_route}`,
     `UPSTREAM_BACKEND=backend:${app_config.backend.port}`,
     // PG ADMIN
     `PGADMIN_URL=${app_config.pg_admin.PGADMIN_URL}`
@@ -141,7 +144,7 @@ const nginxContainer = {
 
 
 
-let final = {
+let dockerCompose = {
   version: '3',
   services: {
     'backend': backEndContainer,
@@ -162,8 +165,4 @@ let final = {
   }
 }
 
-// final.networks['admin-network'].volumes = final.networks['admin-network'].volumes.map(i => {
-//   return i.replace(/ /g,"")
-// })
-
-module.exports = final
+module.exports = dockerCompose

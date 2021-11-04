@@ -1,3 +1,14 @@
+function randomString(length) {
+  var result           = '';
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result += characters.charAt(Math.floor(Math.random() * 
+charactersLength));
+ }
+ return result;
+}
+
 module.exports = {
   // default 
   app_name: 'webpod.io', 
@@ -43,7 +54,15 @@ module.exports = {
   },
 
   backend: {
-    rest_api_route: 'iasdhflasihsdfpq',
+    api_route: (() => (length) => {
+      var result           = '';
+      var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+      var charactersLength = characters.length;
+      for ( var i = 0; i < length; i++ ) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+     return result;
+    })(40),
     // node js server port
     port: '8000'
   }

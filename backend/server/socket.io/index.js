@@ -11,7 +11,8 @@ app.get('/', (req,res) => {
     status: 'success'
   })
 })
-const server = app.listen(port, host, () => {console.log(`backend now running in ${host} ${port}`)})
+const server = app.listen(port, host, () => 
+{console.log(`ℹ Listening on: http://${host}:${port}`)})
 const io = socket(server, { cookie: false})
 
 module.exports = io
