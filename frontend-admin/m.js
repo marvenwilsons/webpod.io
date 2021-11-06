@@ -30,23 +30,18 @@ export default {
       }
 
       this.isauth = this.$store.state.isauth
+      this.socket = io()
 
-      // this.socket = this.$nuxtSocket({
-      //     name: 'main',
-      //     channel: '/'
-      // })
-
-      console.log('HEEY!')
-
-      const socket = io()
-      // console.log('API_URL',process.env.API_URL)
-      socket.on('ping', (data) => {
-          console.log('ping ',data)
-      })
-
-      // setInterval(() => {
-      //   console.log('sending ping')
-      //   socket.emit('ping', 'test')
+      // setTimeout(() => {
+      //   console.log('sending test')
+      //   this.socket.emit('req', {
+      //     name: 'test',
+      //     payload: 'hellworld'
+      //   })
+      //   this.socket.on('notification', ({method_name, payload}) => {
+      //     console.log('method name', method_name)
+      //     console.log('payload', payload)
+      //   })
       // }, 1000)
 
       

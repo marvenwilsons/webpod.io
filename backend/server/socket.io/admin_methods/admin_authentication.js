@@ -1,6 +1,5 @@
 const jwtGenerator = require('../../utils/jwt-generator')
 const jwt = require('jsonwebtoken')
-const admin_request = require('./admin_request')
 
 const verifyToken = (token) => {
     const payload = jwt.verify(token, process.env.JWT_SECRET)
@@ -41,7 +40,7 @@ module.exports = function(socket) {
 
     socket.on('request', ({token,request_name, request_payload}) => {
         if(verifyToken(token)) {
-            admin_request[request_name](socket,request_payload)
+            // admin_request[request_name](socket,request_payload)
         }
     })
 }
