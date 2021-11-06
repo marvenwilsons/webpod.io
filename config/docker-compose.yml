@@ -11,9 +11,7 @@ services:
     environment:
       - "HOST=backend"
       - "PORT=8000"
-      - "API_URL=aar_kCN7yl3xjlBOpv1LJ1Y1FMXyDvj7CEloB3HNSuj0"
-    ports:
-      - "8000:8000"
+      - "API_URL=aar_k3i7ZvGLJIrGEruFoB6zjhbcYdqWssS5aWYGmAdx"
     depends_on:
       - "frontend-admin"
       - "frontend-public"
@@ -30,12 +28,10 @@ services:
       - "APP_HOST=frontend-admin"
       - "APP_PORT=5000"
       - "ADMIN_ROUTE=wpadmin"
-      - "API_URL=aar_kCN7yl3xjlBOpv1LJ1Y1FMXyDvj7CEloB3HNSuj0"
+      - "API_URL=aar_k3i7ZvGLJIrGEruFoB6zjhbcYdqWssS5aWYGmAdx"
       - "API_BASE=backend:8000"
     networks:
       - "admin-network"
-    ports:
-      - "5000:5000"
     volumes:
       - "../frontend-admin/assets:/usr/src/admin/assets"
       - "../frontend-admin/components:/usr/src/admin/components"
@@ -60,8 +56,6 @@ services:
       - "APP_PORT=3000"
       - "APP_NAME=sample.com"
       - "API_URL=backend:8000"
-    ports:
-      - "3000:3000"
     networks:
       - "public-network"
     volumes:
@@ -95,7 +89,7 @@ services:
       - "UPSTREAM_ADMIN=frontend-admin:5000"
       - "ADMIN_ROUTE=wpadmin"
       - "UPSTREAM_PUBLIC=frontend-public:3000"
-      - "BACKEND_ROUTE=aar_kCN7yl3xjlBOpv1LJ1Y1FMXyDvj7CEloB3HNSuj0"
+      - "BACKEND_ROUTE=aar_k3i7ZvGLJIrGEruFoB6zjhbcYdqWssS5aWYGmAdx"
       - "UPSTREAM_BACKEND=backend:8000"
       - "PGADMIN_URL=mydb"
     networks:

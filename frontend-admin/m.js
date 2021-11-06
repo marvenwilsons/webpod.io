@@ -32,17 +32,17 @@ export default {
       this.isauth = this.$store.state.isauth
       this.socket = io()
 
-      // setTimeout(() => {
-      //   console.log('sending test')
-      //   this.socket.emit('req', {
-      //     name: 'test',
-      //     payload: 'hellworld'
-      //   })
-      //   this.socket.on('notification', ({method_name, payload}) => {
-      //     console.log('method name', method_name)
-      //     console.log('payload', payload)
-      //   })
-      // }, 1000)
+      setTimeout(() => {
+        console.log('sending test')
+        this.socket.emit('req', {
+          name: 'test',
+          payload: 'hellworld'
+        })
+        this.socket.on('notification', ({method_name, payload}) => {
+          console.log('method name', method_name)
+          console.log('payload', payload)
+        })
+      }, 1000)
 
       
 

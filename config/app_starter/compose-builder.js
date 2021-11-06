@@ -22,9 +22,9 @@ const frontEndAdminContainer = {
   networks: [
     'admin-network'
   ],
-  ports: [
-    `${adminPort}:${adminPort}`
-  ],
+  // ports: [
+  //   `${adminPort}:${adminPort}`
+  // ],
   volumes: [
     "../frontend-admin/assets:/usr/src/admin/assets",
     "../frontend-admin/components:/usr/src/admin/components",
@@ -56,9 +56,9 @@ const frontEndPublicContainer = {
     'APP_NAME=sample.com',
     `API_URL=backend:${app_config.backend.admin_server_port}`
   ],
-  ports: [
-    `${publicPort}:${publicPort}`
-  ],
+  // ports: [
+  //   `${publicPort}:${publicPort}`
+  // ],
   networks: [
     'public-network'
   ],
@@ -93,9 +93,9 @@ const frontEndPublicContainer = {
     "PORT=8000",
     `API_URL=${app_config.backend.admin_api_route}`
   ],
-  ports: [
-    `${app_config.backend.admin_server_port}:${app_config.backend.admin_server_port}`,
-  ],
+  // ports: [
+  //   `${app_config.backend.admin_server_port}:${app_config.backend.admin_server_port}`,
+  // ],
   depends_on: [
     'frontend-admin',
     'frontend-public',

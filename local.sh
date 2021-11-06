@@ -9,7 +9,7 @@ node compose-generator
 
 cd ..
 cd nginx
-cat https > default.conf.template
+cat http > default.conf.template
 
 # 2. start docker-compose
 cd ..

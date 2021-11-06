@@ -27,7 +27,7 @@ io.on('connection', (socket) => {
   })
 })
 
-server.listen(8000, 'backend', (err) => {
+server.listen(process.env.PORT, 'backend', (err) => {
   if(err) {
     console.log('ℹ There was an error: ', err)
   }
