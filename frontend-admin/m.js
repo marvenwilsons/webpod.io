@@ -1,5 +1,5 @@
 import gsap from "gsap";
-
+import { io } from "socket.io-client"; 
 export default {
     data: () => ({
       loaded: [],
@@ -31,20 +31,23 @@ export default {
 
       this.isauth = this.$store.state.isauth
 
-      // if(this.$route.fullPath == '/admin') {
-      //   this.socket = this.$nuxtSocket({
-      //       name: 'home',
-      //       channel: '/'
-      //   })
+      // this.socket = this.$nuxtSocket({
+      //     name: 'main',
+      //     channel: '/'
+      // })
 
-      //   // this.socket.on('status', (data) => {
-      //   //     console.log('status ',data)
-      //   // })
+      console.log('HEEY!')
 
-      //   // this.socket.on('ping_response', (data) => {
-      //   //     console.log('ping ',data)
-      //   // })
-      // }
+      const socket = io()
+      // console.log('API_URL',process.env.API_URL)
+      socket.on('ping', (data) => {
+          console.log('ping ',data)
+      })
+
+      // setInterval(() => {
+      //   console.log('sending ping')
+      //   socket.emit('ping', 'test')
+      // }, 1000)
 
       
 

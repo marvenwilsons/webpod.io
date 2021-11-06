@@ -31,7 +31,9 @@
 <script>
 import sidebar from '@/components/dashboard/side-bar/index' 
 import service from '@/components/dashboard/services/index'
+import m from '@/m'
 export default {
+    mixins: [m],
     components: {sidebar},
     created() {
         service.getAllServices(this)

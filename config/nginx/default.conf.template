@@ -50,7 +50,6 @@ server {
     }
 
     location /${BACKEND_ROUTE}/ {
-        proxy_pass                  http://backend/;
         proxy_http_version 1.1;
 
         proxy_set_header Host $http_host;
@@ -62,6 +61,15 @@ server {
         proxy_set_header X-Script-Name /${BACKEND_ROUTE};
 
         client_max_body_size 0;
+        proxy_pass                  http://backend/;
+    }
+
+    # ~ ^/(other|socket\.io)
+    location  /socket.io {
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_pass http://backend/socket.io;
     }
 
     location / {

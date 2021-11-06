@@ -1,20 +1,21 @@
+const http = require('http')
 const express = require('express')
+const socketio = require('socket.io')
+
 const app = express()
-const socket = require('socket.io')
-
-const port = process.env.PORT || 8000;
-const host = process.env.HOST || 'localhost';
-
-app.get('/', (req,res) => {
-  console.log('hello world')
-  res.status(200).json({
-    status: 'success'
-  })
+const server = http.createServer(app)
+const io = socketio(server,{
+  cookie: false
 })
-const server = app.listen(port, host, () => 
-{console.log(`ℹ Admin: Listening on: http://${host}:${port}`)})
-const io = socket(server, { cookie: false})
 
-// admin authentication
-const admin_authentication = require('./admin_methods/admin_authentication')
-admin_authentication(io)
+io.on('connection', (socket) => {
+  console.log('ℹ Client connected')
+})
+
+setInterval(() => {
+  io.emit('ping', 'test')
+},5000)
+
+server.listen(8000, 'backend', (err) => {
+  console.log('ℹ There was an error: ', err)
+})

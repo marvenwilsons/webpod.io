@@ -37,6 +37,13 @@ export default {
         href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' 
       },
     ],
+    script: [
+      // {
+      //   src: 'https://cdn.socket.io/4.3.2/socket.io.min.js',
+      //   integrity: "sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs",
+      //   crossorigin: "anonymous"
+      // },
+    ]
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -63,7 +70,19 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    // 'nuxt-socket-io',
   ],
+
+  // io: {
+  //   // module options
+  //   sockets: [{
+  //     name: 'main',
+  //     url: process.env.API_URL,
+  //     default: true,
+  //     cookie: false,
+  //     channel: '/test'
+  //   }]
+  // }, 
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {
@@ -95,6 +114,10 @@ export default {
   },
   router: {
     base: `/${process.env.ADMIN_ROUTE}/`
+  },
+
+  env: {
+    API_URL: process.env.API_URL
   }
 
 }

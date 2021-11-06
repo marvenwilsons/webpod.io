@@ -16,7 +16,8 @@ const frontEndAdminContainer = {
     "APP_HOST=frontend-admin",
     `APP_PORT=${adminPort}`,
     `ADMIN_ROUTE=${app_config.admin_route}`,
-    `API_URL=${app_config.backend.admin_api_route}`
+    `API_URL=${app_config.backend.admin_api_route}`,
+    `API_BASE=backend:${app_config.backend.admin_server_port}`
   ],
   networks: [
     'admin-network'
@@ -53,7 +54,7 @@ const frontEndPublicContainer = {
     'APP_HOST=frontend-public',
     `APP_PORT=${publicPort}`,
     'APP_NAME=sample.com',
-    `API_URL=${app_config.backend.public_api_route}`
+    `API_URL=backend:${app_config.backend.admin_server_port}`
   ],
   ports: [
     `${publicPort}:${publicPort}`
