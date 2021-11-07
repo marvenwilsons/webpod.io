@@ -54,7 +54,7 @@ const frontEndPublicContainer = {
     'APP_HOST=frontend-public',
     `APP_PORT=${publicPort}`,
     'APP_NAME=sample.com',
-    `API_URL=backend:${app_config.backend.admin_server_port}`
+    `API_URL=${app_config.backend.public_api_route}`
   ],
   // ports: [
   //   `${publicPort}:${publicPort}`
@@ -90,7 +90,8 @@ const frontEndPublicContainer = {
   working_dir: "/usr/src/backend",
   environment: [
     "HOST=backend",
-    "PORT=8000",
+    "ADMIN_SERVER_PORT=8000",
+    "PUBLIC_SERVER_PORT=9000",
     `API_URL=${app_config.backend.admin_api_route}`
   ],
   // ports: [
@@ -127,16 +128,16 @@ const nginxContainer = {
     "NGINX_HTTPS_PORT=8443",
     "NGINX_HOST=localhost",
     "NGINX_PORT=80",
-    // ADMIN
-    `UPSTREAM_ADMIN=frontend-admin:${adminPort}`,
-    `ADMIN_ROUTE=${app_config.admin_route}`,
     // PUBLIC
-    `UPSTREAM_PUBLIC=frontend-public:${publicPort}`,
-    // BACKEND
-    `BACKEND_ROUTE=${app_config.backend.admin_api_route}`,
-    `UPSTREAM_BACKEND=backend:${app_config.backend.admin_server_port}`,
+    { PUBLIC_FRONTEND_SERVER_UPSTREAM:  'frontend-public:' + publicPort },
+    { PUBLIC_BACKEND_UPSTREAM:          'backend:' + app_config.backend.public_server_port },
+    { PUBLIC_API_LINK:                 app_config.backend.public_api_route },
+    // ADMIN
+    { ADMIN_FRONTEND_SERVER_UPSTREAM:   'frontend-admin:' + adminPort },
+    { ADMIN_DASHBOARD_PUBLIC_LINK:      app_config.admin_route },
+    { ADMIN_BACKEND_SERVER:             'backend:' + app_config.backend.admin_server_port },
     // PG ADMIN
-    `PGADMIN_URL=${app_config.pg_admin.PGADMIN_URL}`
+    { PGADMIN_URL:                      app_config.pg_admin.PGADMIN_URL }
   ],
   networks: [
     'backend-network',
@@ -145,7 +146,11 @@ const nginxContainer = {
   ]
 }
 
-
+nginxContainer.environment.map((e,i) => {
+  if(typeof e == 'object') {
+    nginxContainer.environment[i] = `${[Object.keys(e)[0]]}=${e[Object.keys(e)[0]]}`
+  }
+})
 
 
 let dockerCompose = {

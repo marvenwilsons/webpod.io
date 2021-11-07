@@ -1,3 +1,12 @@
+
+echo ''
+echo '******************************************'
+echo '*                                        *'
+echo '*        Running WebPod.io locally       *'
+echo '*                                        *'
+echo '******************************************'
+echo ''
+
 docker rm -f $(docker ps -aq)
 docker network rm $(docker network ls -q)
 docker image rm $(docker image ls -q)
