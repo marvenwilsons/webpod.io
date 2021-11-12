@@ -3,11 +3,20 @@ const app = express()
 const path = require('path')
 const port = process.env.PUBLIC_SERVER_PORT
 
-// app.use(express.static(__dirname + '/html'));
-app.get('/', (req, res) => {
-  // res.sendFile(path.join(__dirname + '/index.html'));
-  res.send('')
-})
+const auth_token = (req, res, next) => {
+  // http://localhost/url/videos/sample.mp4?token="22teoasdakjdsvnkansdfsadf2"
+  console.log('this is auth_token', req.query)
+  setTimeout(() => {
+    console.log('authentication done!')
+    next()
+  },1000)
+}
+
+app.use('/images', auth_token, express.static(__dirname + '/images'));
+app.use('/videos', auth_token, express.static(__dirname + '/videos'));
+// app.get('/images', (req, res) => {
+//   res.sendFile(path.join(__dirname + '/images/'));
+// })
 
 app.listen(port, () => {
   console.log(`\n ℹ Public app listening at http://backend:${port} \n`)
