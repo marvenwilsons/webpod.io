@@ -109,7 +109,7 @@ const frontEndPublicContainer = {
  *                      Nginx Container                       *
  **************************************************************/
 const nginxContainer = {
-  image: 'nginx',
+  image: 'nginx:stable-alpine-perl',
   depends_on: [
     'backend',
     'frontend-admin',
