@@ -4,12 +4,12 @@ const path = require('path')
 const port = process.env.PUBLIC_SERVER_PORT
 
 const auth_token = (req, res, next) => {
-  // http://localhost/url/videos/sample.mp4?token="22teoasdakjdsvnkansdfsadf2"
-  console.log('this is auth_token', req.query)
+  // http://localhost/url/videos/sample.mp4?token="22teoasdakjdsvnkansdfsadf2"&&user_prefix="iadsjfh"
+  console.log('this is auth_token', req.query.token, req.query.user_prefix)
   setTimeout(() => {
     console.log('authentication done!')
     next()
-  },1000)
+  },3000)
 }
 
 app.use('/images', auth_token, express.static(__dirname + '/images'));
