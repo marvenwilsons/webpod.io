@@ -16,7 +16,13 @@
     "gsap": "^3.8.0",
     "nuxt": "^2.15.7",
     "socket.io-client": "^4.3.2",
-    "vuetify": "^2.5.5"
+    "vuetify": "^2.5.5",
+    "vue-prism-editor": "1.0.1",
+    "prismjs": "^1.25.0",
+    "monaco-editor-vue": "^1.0.10",
+    "monaco-editor-webpack-plugin": "1.8.0",
+    "nuxt-element-ui": "^1.0.10",
+    "vue-easytable": "^2.8.3"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1",
@@ -24,11 +30,6 @@
     "babel-core": "7.0.0-bridge.0",
     "babel-jest": "^27.0.5",
     "jest": "^27.0.5",
-    "vue-jest": "^3.0.4",
-    "vue-prism-editor": "1.0.1",
-    "prismjs": "^1.25.0",
-    "monaco-editor-vue": "^1.0.10",
-    "monaco-editor-webpack-plugin": "1.8.0",
-    "nuxt-element-ui": "^1.0.10"
+    "vue-jest": "^3.0.4"
   }
 }

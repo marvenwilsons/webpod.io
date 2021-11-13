@@ -113,6 +113,9 @@ export default {
 
   env: {
     API_URL: process.env.API_URL
-  }
+  },
+  build: {
+    transpile: ['vue-easytable','monaco-editor-vue','monaco-editor-webpack-plugin']
 
+  }
 }

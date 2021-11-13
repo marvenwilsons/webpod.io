@@ -38,15 +38,25 @@ Vue.component("codeEditor", codeEditor)
 import ribbon from '@/components/globals/ribbon/index.vue'
 Vue.component("ribbon", ribbon)
 
-
 // loading
 import Loading from '@/components/globals/loading/index.vue'
 Vue.component("Loading", Loading)
+
+// table
+import table from '@/components/globals/table/index.vue'
+Vue.component("dtable", table)
+
 
 
 // form builder
 import formBuilder from '@/components/globals/form-builder/index.vue'
 Vue.component("formBuilder", formBuilder)
+
+// vue easy
+import "vue-easytable/libs/theme-default/index.css"; // import style
+import { VeTable, VePagination, VeIcon, VeLoading, VeLocale } from "vue-easytable";
+Vue.use(VeTable);
+Vue.component("ve-table", VeTable)
 
 
 // import lazy from './components/lazy'
@@ -57,13 +67,8 @@ Vue.component("formBuilder", formBuilder)
 // import field from '@/components/globals/field/index.vue'
 // import heading from '@/components/globals/heading/index.vue'
 // import todoList from '@/components/globals/todo-list/index.vue'
-// import table from '@/components/globals/table/index.vue'
 
-// vue easy
-// import "vue-easytable/libs/theme-default/index.css"; // import style
-// import { VeTable, VePagination, VeIcon, VeLoading, VeLocale } from "vue-easytable";
-// Vue.use(VeTable);
-// Vue.component("ve-table", VeTable)
+
 
 // Vue.component("lazy", lazy)
 // Vue.component("Objectify", objectify)
