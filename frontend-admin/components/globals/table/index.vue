@@ -1,5 +1,5 @@
 <template>
-    <div class="relative" >
+    <div class="relative borderRad4" style="background: white;" >
         <ve-table
             fixed-header
             :max-height="500"
@@ -14,38 +14,54 @@
             :eventCustomOption="eventCustomOption"
         />
         <div >
-            <v-expand-transition>
-                <div v-if="selection" class="marginbottom025 flex flexcol" style="height: 200px; overflow-y:hidden; background: #fafafa" >
+                <div v-if="selection" class="marginbottom025 flex flexcol paneBorder" style="height: 200px; overflow-y:hidden; background: #fafafa" >
                     <div>
                         <v-tabs
                         height="30px"
                         background-color="#f8fafc"
                         v-model="tab"
-                        :ripple="false"
                     >
-                        <v-tab @click="tab = 'Cell'">
-                            Cell
-                        </v-tab>
-                        <v-tab @click="tab = 'Update Cell'" >
-                            Update Cell
-                        </v-tab>
-                         <v-tab @click="tab = 'Row'" >
-                            Row
-                        </v-tab>
+                            <v-tab :ripple="false" @click="tab = 'Cell'">
+                                <span class="text-small">Cell</span>
+                            </v-tab>
+                            <v-tab :ripple="false" @click="tab = 'Update Cell'" >
+                                <span class="text-small" >Update Cell</span>
+                            </v-tab>
+                            <v-tab :ripple="false" @click="tab = 'Row'" >
+                                <span class="text-small" >Row</span>
+                            </v-tab>
                         </v-tabs>
                     </div>
                     <div style="overflow-y: auto;" class="fullheight-percent pad125" >
-                        <div v-if="tab == 0" >{{selection}}</div>
-                        <div v-if="tab == 1" > update enterface </div>
+                        <div v-if="tab == 0" class="text-small" >{{selection}}</div>
+                        <div v-if="tab == 1" > 
+                            <!-- <span class="warning pad050 borderRad4 text-small" >
+                                update enterface not found! will default to textarea
+                            </span> -->
+                            <div class="flex flexcol" >
+                                <span class="text-small2" >Update enterface not found, will default to textarea</span>
+                                <textarea 
+                                    class="fullwidth paneBorder pad050" 
+                                    style="background:whitesmoke" 
+                                    cols="10" rows="5"
+                                    :value="selection"
+                                >
+                                </textarea>
+                                <div class="flex flexend margintop050" >
+                                    <v-btn small color="primary" :ripple="false" >Update</v-btn>
+                                </div>
+                            </div>
+                        </div>
                         <div v-if="tab == 2" >
-                            <div class="flex paneBorder" v-for="(r,i) in selectedRow" :key="uid(r)" >
-                                <div class="flex1">{{i}}:</div>
-                                <div class="flex4" >{{r}}</div>
+                            <div class="flex pad050 margin050 borderRad4" 
+                            style="background: #e0f3ff;"
+                             v-for="(r,i) in selectedRow" :key="uid(r)" >
+                                <div style="color: gray" class="flex1 text-small">{{i}}:</div>
+                                <div style="color: #0c8ee7;" class="flex4 text-small" >{{r}}</div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </v-expand-transition>
         </div>
     </div>
 </template>
@@ -117,7 +133,7 @@ export default {
             console.log(str)
         }, 
         minimizeStr(str) {
-            return str.length > 5 ? `${str.slice(0,15)} ... ` : str
+            return str.length > 5 ? `${str.slice(0,5)}...` : str
         },
         generateCellItem(field,title) {
             const requiredProps = {
@@ -128,8 +144,9 @@ export default {
                 renderBodyCell: ({ row, column, rowIndex }, h) => {
                     // column --> align, field, key, renderBodyCell, title
                     return <span 
-                    class={['text-small']} 
-                    id={column.key+row._key} domPropsInnerText={this.minimizeStr(row[field])}
+                    class={['text-small2','pointer']} 
+                    id={column.key+row._key} 
+                    domPropsInnerText={this.minimizeStr(row[field])}
                     >
                     </span>;
                 },
@@ -146,7 +163,12 @@ export default {
                     name: `name${i}`,
                     hobby: `hobby${i}`,
                     address: `address${i}`,
+                    address2: `address${i}`,
+ 
                     grade: Math.floor(Math.random() * 100),
+                    // grade1: Math.floor(Math.random() * 100),
+                    // grade2: Math.floor(Math.random() * 100),
+                    // grade3: Math.floor(Math.random() * 100),
                     insp:  Math.floor(Math.random() * 2),
                     clean:  Math.floor(Math.random() * 2),
                     notes:  Math.floor(Math.random() * 2) ? `Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime mollitia,
