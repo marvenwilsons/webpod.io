@@ -61,7 +61,7 @@ function getName() {
         // ribbon
         {
           view: 'ribbon',
-          viewData: ['objectify-sample', 'table-sample', 'weird-table', 'monaco-editor', 'simple-navs'],
+          viewData: ['formBuilder', 'table-sample', 'weird-table', 'monaco-editor', 'simple-navs'],
           viewHooks: `(paneCollection,pane,view) => ({
             onButtonClick(item) {
               pane.spawnModal({
@@ -70,8 +70,8 @@ function getName() {
                 modalConfig: {}
               })
               
-              if(item === 'objectify-sample') {
-                pane.getService('objectifySample').then((view) => {
+              if(item === 'formBuilder') {
+                pane.getService('formBuilder').then((view) => {
                   pane.closeModal()
                   view.body.paneConfig.width = '800px'
                   // console.log(view.body)

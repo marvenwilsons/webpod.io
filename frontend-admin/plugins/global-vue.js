@@ -25,15 +25,34 @@ Vue.component("uniview",uniview)
 import doc from '@/components/globals/doc/index.vue'
 Vue.component("doc", doc)
 
-// import codeEditor from '@/components/globals/vue-prism-editor/index.vue'
-// import monacoEditpr from '@/components/globals/monaco-editor/index.vue'
+
+// monaco-editor
+import monacoEditor from '@/components/globals/monaco-editor/index.vue'
+Vue.component("monacoEditor", monacoEditor)
+
+// code editor
+import codeEditor from '@/components/globals/vue-prism-editor/index.vue'
+Vue.component("codeEditor", codeEditor)
+
+// ribbon
+import ribbon from '@/components/globals/ribbon/index.vue'
+Vue.component("ribbon", ribbon)
+
+
+// loading
+import Loading from '@/components/globals/loading/index.vue'
+Vue.component("Loading", Loading)
+
+
+// form builder
+import formBuilder from '@/components/globals/form-builder/index.vue'
+Vue.component("formBuilder", formBuilder)
+
 
 // import lazy from './components/lazy'
 // import objectify from '@/components/globals/objectify/index.vue'
 // import ContentRect from './components/resize-container.vue'
-// import Loading from '@/components/globals/loading/index.vue'
 
-// import ribbon from '@/components/globals/ribbon/index.vue'
 // import textField from '@/components/globals/textField/index.vue'
 // import field from '@/components/globals/field/index.vue'
 // import heading from '@/components/globals/heading/index.vue'
@@ -49,7 +68,6 @@ Vue.component("doc", doc)
 // Vue.component("lazy", lazy)
 // Vue.component("Objectify", objectify)
 // Vue.component("rezcon", ContentRect)
-// Vue.component("Loading", Loading)
 // Vue.component("codeEditor",codeEditor)
 // Vue.component("monacoEditor",monacoEditpr)
 // Vue.component("ribbon", ribbon)

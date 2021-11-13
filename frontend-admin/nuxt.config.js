@@ -57,6 +57,7 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     { src: '~/plugins/global-vue.js', mode: 'client' },
+    { src: '~/plugins/element-ui.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -73,16 +74,10 @@ export default {
     // 'nuxt-socket-io',
   ],
 
-  // io: {
-  //   // module options
-  //   sockets: [{
-  //     name: 'main',
-  //     url: process.env.API_URL,
-  //     default: true,
-  //     cookie: false,
-  //     channel: '/test'
-  //   }]
-  // }, 
+  elementUI: {
+    components: ['Button', 'DatePicker'],
+    locale: 'fr',
+  },
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

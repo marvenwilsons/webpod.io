@@ -1,11 +1,11 @@
 export default {
-  name: 'objectifySample',
+  name: 'formBuilder',
   body: {
     view: 'uniview',
     viewData: (uniview) => {
         return [
             {
-              view:'objectify',
+              view:'formBuilder',
               viewData: {
                 // Normal
                 'user information': {

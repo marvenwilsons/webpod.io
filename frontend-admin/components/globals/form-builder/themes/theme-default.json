@@ -1,0 +1,28 @@
+{ 
+    "title_text_color": "#333",
+    "sub_title_description_text_color": "gray",
+
+    "wrap_around_border_color": "whitesmoke",
+    "divider_border_color":"whitesmoke",
+
+    "keys_bg_color": "white",
+    "keys_text_color": "#333",
+
+    "values_bg_color": "white",
+    "values_text_color": "#333",
+
+    "select_arrow_down_color": "#333",
+    "select_option_hover_bg": "lightgray",
+    "select_option_border_color": "rgba(211, 211, 211, 0.048)",
+    "select_option_bg": "whitesmoke",
+
+    "select_chip_bg_color": "whitesmoke",
+    "select_chip_hover_bg_color": "whitesmoke",
+    "select_chip_border_color": "whitesmoke",
+
+    "button_bg_color": "#ffa33c",
+    "button_text_color": "#26344a",
+
+    "background_selected": "lightgray",
+    "modal_overlay_bg": "black"         
+}

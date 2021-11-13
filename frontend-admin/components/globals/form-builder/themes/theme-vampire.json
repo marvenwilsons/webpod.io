@@ -1,0 +1,28 @@
+{ 
+    "title_text_color": "var(--secondary-text-color)",
+    "sub_title_description_text_color": "var(--secondary-text-color)",
+
+    "wrap_around_border_color": "var(--main-brand-color-flavour1)",
+    "divider_border_color":"var(--main-brand-color-flavour4)",
+
+    "keys_bg_color": "var(--main-brand-color-flavour2)",
+    "keys_text_color": "var(--main-text-color)",
+
+    "values_bg_color": "var(--main-brand-color-flavour1)",
+    "values_text_color": "var(--secondary-text-color)",
+
+    "select_arrow_down_color": "var(--secondary-text-color)",
+    "select_option_hover_bg": "#1d2839",
+    "select_option_border_color": "rgba(211, 211, 211, 0.048)",
+    "select_option_bg": "var(--main-brand-color-flavour2)",
+
+    "select_chip_bg_color": "rgba(128, 128, 128, 0.363)",
+    "select_chip_hover_bg_color": "rgba(128, 128, 128, 0.562)",
+    "select_chip_border_color": "var(--main-brand-color-flavour4)",
+
+    "button_bg_color": "var(--main-brand-color-flavour1)",
+    "button_text_color": "var(--main-text-color)",
+
+    "background_selected": "lightgray",
+    "modal_overlay_bg": "black"         
+}

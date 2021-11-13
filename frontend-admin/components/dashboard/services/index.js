@@ -3,7 +3,7 @@ import maker from './service-maker'
 import empty from './empty'
 import univew from './uniview'
 import Todos from './todo'
-import objectifySample from './objectify-sample'
+import formBuilder from './form-builder'
 import tableSample from './table-sample'
 
 let services = []
@@ -23,7 +23,7 @@ export default {
       empty,
       univew,
       Todos,
-      objectifySample,
+      formBuilder,
       tableSample
     ]
   },
