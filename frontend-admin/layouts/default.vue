@@ -2,6 +2,7 @@
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main >
             <main class="flex fullheight-percent" style="background:#7fccff;" >
+
                 <!-- BACKGROUND -->
                 <div class="fullwidth" style="position:fixed;z-index:1" >
                     <svg 
@@ -20,8 +21,26 @@
                     <sidebar ref="sidebar" />
                 </section>
                 <!-- CONTENT -->
-                <section class="fullwidth flex" style="z-index:2" >
-                    <nuxt ref="pane" />
+                <section class="fullwidth flex flexcol" style="z-index:2" >
+                    <div style="background: #464e52; color: #009aff;"  class="pad025" >
+                        <main class="flex spacebetween flexcenter" >
+                            <div class="fullwidth" >
+                                <span class="pointer" >test > </span>
+                                <span>test</span>
+                            </div>
+                            <div class="pointer padright025 flex flexcenter" >
+                                <span class="marginright050 marginleft050" >
+                                    marvenwilsons@gmail.com
+                                </span>
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
+                                </svg>
+                            </div>
+                        </main>
+                    </div>
+                    <section class="flex fullwidth" >
+                        <nuxt ref="pane" />
+                    </section>
                 </section>
             </main>
         </v-main>
@@ -35,6 +54,9 @@ import m from '@/m'
 export default {
     mixins: [m],
     components: {sidebar},
+    data: () => ({
+        panes: []
+    }),
     created() {
         service.getAllServices(this)
     },

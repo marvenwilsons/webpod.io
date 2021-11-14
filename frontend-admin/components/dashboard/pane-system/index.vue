@@ -112,6 +112,7 @@ export default {
                     }
                     // pane toggle
                     if(this.paneCollection.length - 1 == paneIndexOrigin){
+                        this.paneCollection = []
                         this.paneCollection.push(paneItemObject)
                     } else {
                         // non zero index pane case
