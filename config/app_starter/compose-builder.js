@@ -45,11 +45,11 @@ const frontEndAdminContainer = {
 const frontEndPublicContainer = {
   build: {
     context: '../frontend-public',
-    target: 'production'
+    target: 'dev'
   },
   container_name: 'Public',
   restart: 'unless-stopped',
-  working_dir: '/usr/src/nuxt',
+  working_dir: '/usr/src/public',
   environment: [
     'APP_HOST=frontend-public',
     `APP_PORT=${publicPort}`,

@@ -1,0 +1,71 @@
+:root {
+  --size-1-half: calc(var(--fontSize) * 0.25);
+  --size-1-full: calc(var(--fontSize) * 1.25);
+
+  --size-2-half: calc(var(--fontSize) * 0.50);
+  /* light */
+  --deftheme-light-primary: #e4ebf5;
+
+  /* dark */
+  --deftheme-dark-primary: #232729;
+  --deftheme-dark-secondary:#303340;
+  --deftheme-blue-text: #206add;
+  /* error color */
+  --err: #ae1100;
+
+  /* fonts */
+  --oxygen-mono: "Oxygen Mono", monospace;
+  --ubunto-mono: "Ubuntu Mono", monospace;
+  --inconsolata: "Inconsolata", monospace;
+  --lobster: "Lobster", cursive;
+  --cuprum: "Cuprum", sans-serif;
+  --openSans: "Open Sans", sans-serif;
+  --ptSans: 'PT Sans', sans-serif;
+  
+  /* bg */
+  --page-bg: #f9f9fa;
+}
+
+.defbtn {
+  background:#629af4; 
+  color:white; 
+  border-radius: 4px;
+  padding: var(--size-2-half);
+  /* padding-left: var(--size-1-full); */
+  /* padding-right: var(--size-1-full); */
+}
+.defbtn-cancel {
+  background: rgba(110, 110, 110, 0.445); 
+  color:whitesmoke; 
+  border-radius: 4px;
+  padding: var(--size-2-half);
+  /* padding-left: var(--size-1-full); */
+  /* padding-right: var(--size-1-full); */
+}
+.defbtn:hover {
+  background:#629af4d8; 
+  color:white; 
+  transition: 0.3s;
+}
+
+.modalShadow{
+  box-shadow: 0px 0px 67px -18px rgba(54, 54, 54, 0.432);
+}
+.paneShadow{
+  box-shadow: 0px 0px 30px -18px rgba(54,54,54,1);
+  border-bottom: 1px solid rgba(54, 54, 54, 0.096);
+}
+.itemShadow{
+  box-shadow: 0px 0px 30px -18px rgba(54, 54, 54, 0.404);
+}
+.listitem:hover{
+  background: #E3F2FDFF; 
+  cursor: pointer;
+  transition: 0.1s;
+}
+.optiontext:hover {
+  /* text-shadow: 0px 1px 1px black; */
+  /* font-weight: 600; */
+  color: #2069dd80 !important;
+  transition: 0.2s;
+}

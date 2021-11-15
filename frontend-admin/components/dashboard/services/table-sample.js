@@ -76,6 +76,9 @@ export default {
       },
       onUpdate({updateURL, context}) {
         console.log('on update')
+      },
+      onNestedCellClick() {
+        console.log('nested cell click.')
       }
     })`,
     paneConfig: {

@@ -41,13 +41,13 @@
                             <div class="flex flexcol" >
                                 <span class="text-small2" >Update enterface not found, will default to textarea</span>
                                 <textarea 
-                                    class="fullwidth paneBorder pad050" 
+                                    class="fullwidth paneBorder pad050 text-small" 
                                     style="background:whitesmoke" 
                                     cols="10" rows="5"
-                                    :value="selection"
+                                    v-model="updateValue"
                                 >
                                 </textarea>
-                                <div class="flex flexend margintop050" >
+                                <div @click="submitUpdate" class="flex flexend margintop050" >
                                     <v-btn small color="primary" :ripple="false" >Update</v-btn>
                                 </div>
                             </div>
@@ -71,8 +71,10 @@ import m from '@/m'
 import watcher from './watch'
 export default {
     mixins: [m,watcher],
+    props: ['myData','config','hooks'],
     data() {
         return {
+            updateValue: undefined,
             // selection
             selection: undefined,
             selectedCellSelectionFn: () => {},
@@ -129,7 +131,11 @@ export default {
         };
     },
     methods: {
+        submitUpdate() {
+            // submit to 
+        },
         cellClick(str) {
+            this.updateValue = str
             console.log(str)
         }, 
         minimizeStr(str) {
@@ -164,7 +170,9 @@ export default {
                     hobby: `hobby${i}`,
                     address: `address${i}`,
                     address2: `address${i}`,
- 
+                    nested: {
+                        message: 'hello'
+                    },
                     grade: Math.floor(Math.random() * 100),
                     // grade1: Math.floor(Math.random() * 100),
                     // grade2: Math.floor(Math.random() * 100),
