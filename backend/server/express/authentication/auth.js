@@ -71,12 +71,10 @@ router.post('/login', async (req,res) => {
 
 router.get('/verify', authorization, (req,res) => {
     try{
-        console.log('************* /verify')
         res.json({
             authorized: true
         })
     } catch(err) {
-        console.log('************* /verify -- Error')
         console.log(err)
     }
 })

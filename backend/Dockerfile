@@ -5,8 +5,8 @@ COPY . /usr/src/backend
 
 # Run BackEnd Server
 RUN npm install
-
-CMD ["node","server/index"]
+RUN echo "****** BackEnd is on dev mode *******"
+CMD ["./node_modules/nodemon/bin/nodemon.js","server/index"]
 
 
 

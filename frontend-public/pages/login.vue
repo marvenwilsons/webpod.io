@@ -121,11 +121,8 @@ export default {
                     case 'Sign in':
                         console.log('sign in')
                         setTimeout(() => {
-                            // sample on error
- 
-
                             this.$axios
-                            .$get(`$dqappservices/v1/user/confirm`, {
+                            .$get(`${process.env.api_url}/v1/user/confirm`, {
                                 params: { user: this.currentForm.value }
                             })
                             .then(({isSuccess, msg}) => {
@@ -141,7 +138,6 @@ export default {
                                 } else {
                                     this.currentForm.error = msg
                                     this.currentForm.isLoading = false
-                                    
                                 }
                             })
 

@@ -1,2 +1,2 @@
-require('./socket.io/admin-server')
-require('./public/index')
+require('./socket.io/admin-server');
+require('./public/index');

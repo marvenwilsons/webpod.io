@@ -38,6 +38,7 @@ export default {
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/axios'
   ],
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
@@ -66,7 +67,10 @@ export default {
   server: {
     host: process.env.APP_HOST,
     port: process.env.APP_PORT
+  },
+  env: {
+    api_url: process.env.API_URL
   }
 }
-console.log('API_URL',process.env.API_URL)
+// console.log('API_URL',process.env.API_URL)
 
