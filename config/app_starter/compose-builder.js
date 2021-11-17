@@ -1,13 +1,14 @@
 const app_config = require('../app.js')
 const adminPort = 5000
 const publicPort = 3000
+const mode = 'dev' // dev or production
 /**************************************************************
  *                  Front End Admin Container                  *
  **************************************************************/
 const frontEndAdminContainer = {
   build: {
     context: '../frontend-admin',
-    target: 'dev'
+    target: mode
   },
   container_name: 'Admin',
   restart: 'unless-stopped',
@@ -45,7 +46,7 @@ const frontEndAdminContainer = {
 const frontEndPublicContainer = {
   build: {
     context: '../frontend-public',
-    target: 'dev'
+    target: mode
   },
   container_name: 'Public',
   restart: 'unless-stopped',
@@ -82,7 +83,7 @@ const frontEndPublicContainer = {
   build: {
     context: '../backend',
     args: {
-      BACKEND_PORT: app_config.backend.admin_server_port
+      BACKEND_PORT: app_config.backend.admin_server_port,
     }
   },
   container_name: "BackEnd",
@@ -93,6 +94,11 @@ const frontEndPublicContainer = {
     "ADMIN_SERVER_PORT=8000",
     "PUBLIC_SERVER_PORT=9000",
     `API_URL=${app_config.backend.admin_api_route}`
+  ],
+  volumes: [
+    "../backend:/usr/src/backend",
+    // "../backend/public:/usr/src/backend/server/public",
+    // "../backend/node_modules:/usr/src/backend/node_modules"
   ],
   // ports: [
   //   `${app_config.backend.admin_server_port}:${app_config.backend.admin_server_port}`,

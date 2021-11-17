@@ -1,5 +1,6 @@
 <template>
-    <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter smth flexcenter" >
+    <client-only>
+        <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter smth flexcenter" >
         <div id="bgContainer2" style="width:100%;height:100%;" class="fullwidth  fullheight-percent absolute" ></div>
         <!-- <img id="lleaves" class="absolute" src="ganapathy.jpg" alt=""> -->
         <div style="background:  rgb(26,118,210); background: linear-gradient(180deg, rgba(26,118,210,1) 49%, rgba(4,19,42,1) 100%);" class="absolute fullwidth fullheight-percent" >test</div>
@@ -50,6 +51,7 @@
             </div>
         </div>
     </v-app>
+    </client-only>
 </template>
 
 <script>
@@ -78,7 +80,8 @@ export default {
             featureText: 'Forgot password?',
             showFeature: false,
             currentPosition: 0,
-            showField: true
+            showField: true,
+            api:undefined
         },
         currentForm: undefined,
         ready: false,
@@ -118,12 +121,11 @@ export default {
                      * 
                      * get if the email or username supplied exist in the database
                      */
-                    case 'Sign in':
-                        console.log('sign in')
+                    case 'Sign in': 
+                        // console.log('sign in', `${process.env.api_url}/user/confirm_user`)
                         setTimeout(() => {
-                            this.$axios
-                            .$get(`${process.env.api_url}/v1/user/confirm`, {
-                                params: { user: this.currentForm.value }
+                            this.$axios.$get(`${this.api}/user/confirm_user`, {
+                                params: { user: this.currentForm.value },
                             })
                             .then(({isSuccess, msg}) => {
                                 if(isSuccess) {
@@ -168,13 +170,16 @@ export default {
                     case 'Input Password':
                         console.log("Input password!")
                         this.currentForm.disabled = true
-                        this.$axios.$post('/$dqappservices/v1/user/signin', {
+                        this.$axios.$post(`${this.api}/user/signin`, {
                             user: this.$refs.signInForm.value,
                             password: this.$refs.passwordForm.value
                         })
                         .then(({isSuccess, content}) => {
                             if(isSuccess) {
                                 localStorage.setItem('token', content.token)
+                                setTimeout(() => {
+                                    location.reload()
+                                }, 500)
                             }
                         })
                         .then(() => {
@@ -206,6 +211,7 @@ export default {
         }
     },
     mounted() {
+        this.api = `${window.location.origin}/${process.env.api_url}`
         this.ready = true
 
         /**
