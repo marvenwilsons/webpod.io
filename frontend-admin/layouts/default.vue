@@ -22,7 +22,7 @@
                 </section>
                 <!-- CONTENT -->
                 <section class="fullwidth flex flexcol" style="z-index:2" >
-                    <div style="background: #464e52; color: #009aff;"  class="pad025" >
+                    <div style="background: #232729; color: #009aff;"  class="pad025" >
                         <main class="flex spacebetween flexcenter" >
                             <div class="fullwidth" >
                                 <span class="pointer" >test > </span>

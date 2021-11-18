@@ -1,6 +1,5 @@
 const express = require('express')
 const app = express()
-const user = require('./user')
 const port = process.env.PUBLIC_SERVER_PORT
 
 const auth_token = (req, res, next) => {
@@ -12,10 +11,12 @@ const auth_token = (req, res, next) => {
   },3000)
 }
 
-// for videos and images
+// access for videos and images
 app.use('/images', auth_token, express.static(__dirname + '/images'));
 app.use('/videos', auth_token, express.static(__dirname + '/videos'));
 
+// for user related routes
+const user = require('./user')
 app.use(express.json())
 user(app)
 
