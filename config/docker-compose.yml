@@ -12,7 +12,7 @@ services:
       - "HOST=backend"
       - "ADMIN_SERVER_PORT=8000"
       - "PUBLIC_SERVER_PORT=9000"
-      - "API_URL=aar_rVzXcS5IOd1WH7dAPzXx27wzdMv4me7iRVANrqDJ"
+      - "API_URL=aar_Ftz0V4AkB6JPYnx0EMlRCvWSwVWZ4IhyeLb9CESq"
     volumes:
       - "../backend:/usr/src/backend"
     depends_on:
@@ -31,7 +31,7 @@ services:
       - "APP_HOST=frontend-admin"
       - "APP_PORT=5000"
       - "ADMIN_ROUTE=wpadmin"
-      - "API_URL=aar_rVzXcS5IOd1WH7dAPzXx27wzdMv4me7iRVANrqDJ"
+      - "API_URL=aar_Ftz0V4AkB6JPYnx0EMlRCvWSwVWZ4IhyeLb9CESq"
       - "API_BASE=backend:8000"
     networks:
       - "admin-network"
@@ -58,7 +58,7 @@ services:
       - "APP_HOST=frontend-public"
       - "APP_PORT=3000"
       - "APP_NAME=sample.com"
-      - "API_URL=par_3vjofut34Oeai0Rk4cQiQKph9FhuG1VugFKQPI80"
+      - "API_URL=par_h9i7k1csuomgNkN0fBPQsaPJo5Tx1EjejyIN09MV"
     networks:
       - "public-network"
     volumes:
@@ -68,6 +68,7 @@ services:
       - "../frontend-public/pages:/usr/src/public/pages"
       - "../frontend-public/plugins:/usr/src/public/plugins"
       - "../frontend-public/server:/usr/src/public/server"
+      - "../frontend-public/components:/usr/src/public/components"
       - "../frontend-public/store:/usr/src/public/store"
       - "../frontend-public/static:/usr/src/public/static"
       - "../frontend-public/m.js:/usr/src/public/m.js"
@@ -91,7 +92,7 @@ services:
       - "NGINX_PORT=80"
       - "PUBLIC_FRONTEND_SERVER_UPSTREAM=frontend-public:3000"
       - "PUBLIC_BACKEND_UPSTREAM=backend:9000"
-      - "PUBLIC_API_LINK=par_3vjofut34Oeai0Rk4cQiQKph9FhuG1VugFKQPI80"
+      - "PUBLIC_API_LINK=par_h9i7k1csuomgNkN0fBPQsaPJo5Tx1EjejyIN09MV"
       - "ADMIN_FRONTEND_SERVER_UPSTREAM=frontend-admin:5000"
       - "ADMIN_DASHBOARD_PUBLIC_LINK=wpadmin"
       - "ADMIN_BACKEND_SERVER=backend:8000"

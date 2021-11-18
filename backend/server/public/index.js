@@ -16,7 +16,7 @@ const auth_token = (req, res, next) => {
 app.use('/images', auth_token, express.static(__dirname + '/images'));
 app.use('/videos', auth_token, express.static(__dirname + '/videos'));
 
-
+app.use(express.json())
 user(app)
 
 app.listen(port, () => {

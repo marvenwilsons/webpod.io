@@ -21,8 +21,9 @@
                     <div class="padleft125 padright125 padbottom125 flex flexcol" >
                         <div class="flex flexcol flexcenter fullwidth" >
                             <!-- logo -->
-                            <div class="relative flex flexcenter" style="height:85px;width:85px;" >
-                                <img class="absolute flex" style="z-index:1;" src="dq-logo.png" alt="">
+                            <div v-if="showForms" class="relative flex flexcenter flexstart fullwidth padtop125 padleft025" style="color: lightgray;" >
+                                webpod.io
+                                <!-- <img class="absolute flex" style="z-index:1;" src="dq-logo.png" alt=""> -->
                             </div>
                         </div>
                         <!-- forms -->
@@ -117,8 +118,6 @@ export default {
             } else {
                 switch(this.currentForm.title) {
                     /**
-                     * /$dqappservices/user/confirm
-                     * 
                      * get if the email or username supplied exist in the database
                      */
                     case 'Sign in': 
@@ -148,15 +147,13 @@ export default {
                     break
 
                     /**
-                     * /$dqappservices/user/get-account
-                     * 
                      * payload: first name, last name, email used
                      */
                     case 'Retrive account':
                     break
 
                     /**
-                     * /$dqappservices/user/signin
+                     * /user/signin
                      * 
                      * When this case hits, it mean the user clicks the
                      * submit button to submit the entered username or email together
@@ -168,28 +165,26 @@ export default {
                      * payload: email or username and password
                      */
                     case 'Input Password':
-                        console.log("Input password!")
                         this.currentForm.disabled = true
                         this.$axios.$post(`${this.api}/user/signin`, {
                             user: this.$refs.signInForm.value,
                             password: this.$refs.passwordForm.value
                         })
-                        .then(({isSuccess, content}) => {
+                        .then(({isSuccess, content, msg}) => {
                             if(isSuccess) {
                                 localStorage.setItem('token', content.token)
                                 setTimeout(() => {
-                                    location.reload()
+                                    location.href = '/wpadmin'
                                 }, 500)
+                            } else {
+                                this.currentForm.disabled = false
+                                this.currentForm.error = msg
+                                this.currentForm.isLoading = false
                             }
-                        })
-                        .then(() => {
-                            // get token and send to server, get user sevices then
-                            // redirect to admin dashboard
                         })
                     break
 
                     /**
-                     * /$dqappservices/user/get-account
                      * 
                      * the admin will define in the dashboard if to give the user an 
                      * ability to change password on request

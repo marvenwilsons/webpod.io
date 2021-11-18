@@ -70,6 +70,7 @@ const frontEndPublicContainer = {
     "../frontend-public/pages:/usr/src/public/pages",
     "../frontend-public/plugins:/usr/src/public/plugins",
     "../frontend-public/server:/usr/src/public/server",
+    "../frontend-public/components:/usr/src/public/components",
     "../frontend-public/store:/usr/src/public/store",
     "../frontend-public/static:/usr/src/public/static",
     "../frontend-public/m.js:/usr/src/public/m.js",

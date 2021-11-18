@@ -19,7 +19,7 @@
             </div>
 
             <v-expand-transition>
-                <div v-if="false" class="fullwidth padtop125" >
+                <div v-if="error" class="fullwidth padtop125" >
                     <span class="err" >
                         {{error}}
                     </span>
@@ -34,6 +34,7 @@
                 type="password"
                 id="password-field"
                 :disabled="disabled"
+                :error="error ? true : false"
             ></v-text-field>
 
             <div class="fullwidth" >
@@ -64,6 +65,9 @@ export default {
         // set component default
         this.showForm = true
     },
+    // data: () => ({
+    //     error: undefined,
+    // })
 }
 </script>
 

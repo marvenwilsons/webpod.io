@@ -19,5 +19,12 @@ export default {
             lastName: undefined,
             emailUsed: undefined
         }
-    })
+    }),
+    watch: {
+        value() {
+            if(this.error) {
+                this.error = undefined
+            }
+        }
+    }
 }
