@@ -14,6 +14,7 @@
                             <path fill="orange" d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
                         </svg>
                     </div>
+                    <!-- _ECEE-1-html: purpose is to remove a pane from the paneCollection array -->
                     <div @click="onRemovePaneCollectionItem" class="flex flexcenter pointer" >
                         <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                             <path fill="#f56c6c" d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
@@ -98,6 +99,8 @@ export default {
     },
     methods: {
         onRemovePaneCollectionItem() {
+            // _ECEE-2-js locates the most parent component and executes removePaneCollectionItem from that component
+            // paneIndex is the current position of the object in the array in paneCollection
             this.$parent.$parent.$parent.removePaneCollectionItem(this.paneIndex)()
         },
         /** Pane direct related methods */

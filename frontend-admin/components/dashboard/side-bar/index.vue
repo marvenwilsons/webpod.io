@@ -21,9 +21,6 @@
                 >
                 <div :style="{color: $vuetify.theme.themes.light.primary}"  
                 class="pointer fullwidth pad050" >
-                    <!-- <v-icon :color="$vuetify.theme.themes.light.primary">
-                        mdi-arrow-right-circle
-                    </v-icon> -->
                     <i class="el-icon-box padleft025 padright025"></i>
                     <span :style="{fontWeight: '400'}" >
                         {{item}}
@@ -31,16 +28,12 @@
                 </div>
             </div>
         </section>
-        <section class="pad125" >
-            <Navigator />
-        </section>
     </main>
 </template>
 <script>
-import Navigator from './navigator'
 export default {
-    components: {Navigator},
     data: () => ({
+        // TODO
         items: [
             'Dashboard',
             'Collections',

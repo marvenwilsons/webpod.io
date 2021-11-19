@@ -28,7 +28,7 @@
                         <Pane
                             v-if="ready"
                             :id="`pane${paneIndex}`"
-                            @onRemovePaneCollectionItem="removePaneCollectionItem"
+                            @onRemovePaneCollectionItem="removePaneCollectionItem /** _ECEE-3 register event handler */"
                             @onInsertPaneCollectionItem="insertPaneCollectionItem"
                             :data="data"
                             :paneIndex="paneIndex"
@@ -50,6 +50,7 @@ export default {
     components: {Pane,PaneManager,PaneActivator},
     data: () => ({
         paneCollection: [],
+        onEmpty: undefined
     }),
     computed: {
         getPaneCollection() {
@@ -59,7 +60,6 @@ export default {
     watch: {
         paneCollection() {
             if(this.paneCollection.length == 0) {
-                // back to dashboard
             }
         }
     },
@@ -81,13 +81,19 @@ export default {
                 this.insertPaneCollectionItem(paneIndex,this.paneCollection[paneIndex])
             }
         },
-        removePaneCollectionItem(paneIndex) /** Splice an item from pane collection arary */ {
+        removePaneCollectionItem(paneIndex) {
+            // _ECEE-4
+            /** Splice an item from pane collection arary */
             // the deactivate method is executed first to animate the close of the pane
             // this.$refs.paneActivator.deactivate(() => {
             //     this.paneCollection.splice(paneIndex,1)
             // })
             return () => {
                 this.paneCollection.splice(paneIndex,1)
+
+                if(this.paneCollection.length == 0) {
+                    this.onEmpty()
+                }
             }
 
         },
@@ -112,7 +118,7 @@ export default {
                     }
                     // pane toggle
                     if(this.paneCollection.length - 1 == paneIndexOrigin){
-                        this.paneCollection = []
+                        // this.paneCollection = []
                         this.paneCollection.push(paneItemObject)
                     } else {
                         // non zero index pane case

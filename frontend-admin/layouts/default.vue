@@ -72,11 +72,15 @@ export default {
         const sidebar = this.$refs.sidebar
         const pane = this.$refs.pane.$children[0].$children[0]
 
+        // watch the pane on empty
+        pane.onEmpty = () => sidebar.setSelected('Dashboard')
+
         // set default sidebar
         sidebar.setSelected('Dashboard')
 
         // fires everytime sidebar select property changes
         sidebar.onSelect = (selected) => {
+            // empty the pane before rendering a new pane
             pane.paneCollection = []
             // get selected service view
             const selectedService = service.getService(selected)
