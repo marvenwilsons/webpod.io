@@ -23,20 +23,7 @@
                 <!-- CONTENT -->
                 <section class="fullwidth flex flexcol" style="z-index:2" >
                     <div style="background: #232729; color: #009aff;"  class="pad025" >
-                        <main class="flex spacebetween flexcenter" >
-                            <div class="fullwidth" >
-                                <span class="pointer" >test > </span>
-                                <span>test</span>
-                            </div>
-                            <div class="pointer padright025 flex flexcenter" >
-                                <span class="marginright050 marginleft050" >
-                                    marvenwilsons@gmail.com
-                                </span>
-                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" />
-                                </svg>
-                            </div>
-                        </main>
+                        <topbar />
                     </div>
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
@@ -50,10 +37,12 @@
 <script>
 import sidebar from '@/components/dashboard/side-bar/index' 
 import service from '@/components/dashboard/services/index'
+import dashboard from '@/components/dashboard/dashboard.js'
+import topbar from '@/components/dashboard/topbar/index.vue'
 import m from '@/m'
 export default {
     mixins: [m],
-    components: {sidebar},
+    components: {sidebar, topbar},
     data: () => ({
         panes: []
     }),
@@ -71,28 +60,10 @@ export default {
         // component references
         const sidebar = this.$refs.sidebar
         const pane = this.$refs.pane.$children[0].$children[0]
+        const topbar = undefined
+        const dash = undefined
 
-        // watch the pane on empty
-        pane.onEmpty = () => sidebar.setSelected('Dashboard')
-
-        // set default sidebar
-        sidebar.setSelected('Dashboard')
-
-        // fires everytime sidebar select property changes
-        sidebar.onSelect = (selected) => {
-            // empty the pane before rendering a new pane
-            pane.paneCollection = []
-            // get selected service view
-            const selectedService = service.getService(selected)
-            
-            setTimeout(() => {
-                try {
-                    pane.insertPaneCollectionItem(0)(selectedService.body)
-                }catch(err) {
-                    location.reload()
-                }
-            }, 0)
-        }
+        dashboard(pane,sidebar, topbar, service, dash, this.socket)
     }
 }
 </script>
