@@ -23,7 +23,7 @@
                 <!-- CONTENT -->
                 <section class="fullwidth flex flexcol" style="z-index:2" >
                     <div style="background: #232729; color: #009aff;"  class="pad025" >
-                        <topbar />
+                        <topbar ref="topbar" />
                     </div>
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
@@ -60,7 +60,7 @@ export default {
         // component references
         const sidebar = this.$refs.sidebar
         const pane = this.$refs.pane.$children[0].$children[0]
-        const topbar = undefined
+        const topbar =  this.$refs.topbar
         const dash = undefined
 
         dashboard(pane,sidebar, topbar, service, dash, this.socket)

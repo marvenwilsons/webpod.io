@@ -6,11 +6,11 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
   sidebar.setSelected('Dashboard')
 
   // fires everytime sidebar select property changes
-  sidebar.onSelect = (selected) => {
+  sidebar.onSelect = (selected_sidebar) => {
       // empty the pane before rendering a new pane
       pane.paneCollection = []
       // get selected service view
-      const selectedService = service.getService(selected)
+      const selectedService = service.getService(selected_sidebar)
       
       setTimeout(() => {
           try {
@@ -20,4 +20,7 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
           }
       }, 0)
   }
+
+  topbar.setUser('marvenwilsons@gmail.com')
+  topbar.setMsg('sample.com')
 }
