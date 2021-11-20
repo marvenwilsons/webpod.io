@@ -1,7 +1,15 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
-        <v-main >
-            <main class="flex fullheight-percent" style="background:#7fccff;" >
+        <v-main style="background: #1565c0a8;" class="relative" >
+            <v-fade-transition>
+                <div v-if="loading" style="z-index:900; background: #1565c0a8;" class="absolute fullwidth fullheight-percent flex flexcenter" >
+                    <div style="background: #eaf4fb;" class="pad125 borderRad4 modalShadow" >
+                        <!-- <loading/> -->
+                        loading ...
+                    </div>
+                </div>
+            </v-fade-transition>
+            <main v-if="true" class="flex fullheight-percent" style="background:#7fccff;" >
 
                 <!-- BACKGROUND -->
                 <div class="fullwidth" style="position:fixed;z-index:1" >
@@ -44,7 +52,8 @@ export default {
     mixins: [m],
     components: {sidebar, topbar},
     data: () => ({
-        panes: []
+        panes: [],
+        loading: true
     }),
     created() {
         service.getAllServices(this)
@@ -61,7 +70,11 @@ export default {
         const sidebar = this.$refs.sidebar
         const pane = this.$refs.pane.$children[0].$children[0]
         const topbar =  this.$refs.topbar
-        const dash = undefined
+        const dash = {
+            loading: (state) => {
+                this.loading = state
+            }
+        }
 
         dashboard(pane,sidebar, topbar, service, dash, this.socket)
     }

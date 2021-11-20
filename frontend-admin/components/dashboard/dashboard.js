@@ -1,4 +1,5 @@
 export default function (pane, sidebar, topbar, service, dash, socket) {
+  dash.loading(true)
   // watch the pane on empty
   pane.onEmpty = () => sidebar.setSelected('Dashboard')
 
@@ -23,4 +24,6 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
 
   topbar.setUser('marvenwilsons@gmail.com')
   topbar.setMsg('sample.com')
+
+  setTimeout(() => dash.loading(false),1000)
 }
