@@ -9,6 +9,7 @@ const io = socketio(server,{
 })
 
 const admin_methods = require('./admin_methods/index')
+const admin_auth = require('./admin_methods/admin_auth')
 
 io.on('connection', (socket) => {
   console.log('ℹ Client connected')
@@ -17,7 +18,17 @@ io.on('connection', (socket) => {
     console.log('ℹ request received for ',name)
 
     try {
-      admin_methods(data => socket.emit('notification',data))[name](payload)
+      admin_auth(
+        {token: payload.token, user: payload.user}, 
+        () => {
+          admin_methods()
+          [name]
+          ({req: payload}, data => socket.emit('notification',{
+            payload: data,
+            method_name: name
+          }))
+        }
+      )
     } catch(err) {
       socket.emit('error', {
         method_name: name,

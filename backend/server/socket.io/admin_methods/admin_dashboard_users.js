@@ -6,5 +6,13 @@
  * 4. Delete users
  */
 module.exports = {
-  createAdmin() {}
+  userServices: (req, res) => {
+    // get services by querying the database using the user value
+    res({
+      user: 'marvenwilsons',
+      app_name: 'sample.com',
+      sidebar_items: ['Dashsboard','Collections','Site','Apps','Services','Settings','Media','Uniview'],
+      services: []
+    })
+  }
 }

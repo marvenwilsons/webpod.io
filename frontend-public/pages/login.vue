@@ -173,9 +173,8 @@ export default {
                         .then(({isSuccess, content, msg}) => {
                             if(isSuccess) {
                                 localStorage.setItem('token', content.token)
-                                setTimeout(() => {
-                                    location.href = '/wpadmin'
-                                }, 500)
+                                localStorage.setItem('user', content.user)
+                                location.href = '/wpadmin'
                             } else {
                                 this.currentForm.disabled = false
                                 this.currentForm.error = msg

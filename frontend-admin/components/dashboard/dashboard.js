@@ -1,5 +1,4 @@
 export default function (pane, sidebar, topbar, service, dash, socket) {
-  dash.loading(true)
   // watch the pane on empty
   pane.onEmpty = () => sidebar.setSelected('Dashboard')
 
@@ -22,8 +21,32 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
       }, 0)
   }
 
-  topbar.setUser('marvenwilsons@gmail.com')
-  topbar.setMsg('sample.com')
 
-  setTimeout(() => dash.loading(false),1000)
+
+  if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
+    socket.emit('req', {
+        name: 'userServices',
+        payload: {
+            token:localStorage.getItem('token'),
+            user: localStorage.getItem('user')
+        }
+    })
+  } else {
+      location.href = '/login'
+  }
+
+  socket.on('notification', ({method_name, payload}) => {
+      console.log('Notification recieved', method_name)
+      if(method_name === 'userServices') {
+        topbar.setUser(payload.user)
+        topbar.setMsg(payload.app_name)
+        sidebar.setItems(payload.sidebar_items)
+      }
+  })
+
+  
+  setTimeout(() => {
+      dash.loading(false)
+      dash.showDashboard(true)
+  },1000)
 }

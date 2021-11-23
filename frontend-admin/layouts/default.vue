@@ -9,7 +9,7 @@
                     </div>
                 </div>
             </v-fade-transition>
-            <main v-if="true" class="flex fullheight-percent" style="background:#7fccff;" >
+            <main v-show="showDashboard" class="flex fullheight-percent" style="background:#7fccff;" >
 
                 <!-- BACKGROUND -->
                 <div class="fullwidth" style="position:fixed;z-index:1" >
@@ -53,7 +53,8 @@ export default {
     components: {sidebar, topbar},
     data: () => ({
         panes: [],
-        loading: true
+        loading: true,
+        showDashboard: false
     }),
     created() {
         service.getAllServices(this)
@@ -63,7 +64,7 @@ export default {
             const paneCollection = this.$refs.pane.$children[0].$children[0]
             // console.log(paneCollection)
         }catch(err) {
-            alert('Cannot access paneCollection methods, maybe it was moved or deleted, error in admin.vue')
+            // alert('Cannot access paneCollection methods, maybe it was moved or deleted, error in admin.vue')
         }
 
         // component references
@@ -73,6 +74,9 @@ export default {
         const dash = {
             loading: (state) => {
                 this.loading = state
+            },
+            showDashboard: (state) => {
+                this.showDashboard = state
             }
         }
 

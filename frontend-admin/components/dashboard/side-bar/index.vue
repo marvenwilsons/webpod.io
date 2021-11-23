@@ -65,8 +65,11 @@ export default {
         },
         addItem(itemName) {
             if(!this.items.includes(itemName)) {
-                this.items.push(itemName)
+                // this.items.push(itemName)
             }
+        },
+        setItems(items) {
+            this.items = items
         }
     }
 }
