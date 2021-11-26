@@ -34,19 +34,7 @@
 export default {
     data: () => ({
         // TODO
-        items: [
-            'Dashboard',
-            'Collections',
-            'Site',
-            'Apps',
-            'Services',
-            'Settings',
-            'Files',
-            'Maker',
-            'empty',
-            'uniview',
-            'Todo List'
-        ],
+        items: [],
         selected: undefined,
         onSelected: undefined
     }),

@@ -22,10 +22,10 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
   }
 
 
-
+  const server_service_getter_method_name = 'getUserServices'
   if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
     socket.emit('req', {
-        name: 'userServices',
+        name: server_service_getter_method_name,
         payload: {
             token:localStorage.getItem('token'),
             user: localStorage.getItem('user')
@@ -37,7 +37,7 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
 
   socket.on('notification', ({method_name, payload}) => {
       console.log('Notification recieved', method_name)
-      if(method_name === 'userServices') {
+      if(method_name === server_service_getter_method_name) {
         topbar.setUser(payload.user)
         topbar.setMsg(payload.app_name)
         sidebar.setItems(payload.sidebar_items)
