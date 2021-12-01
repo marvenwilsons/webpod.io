@@ -2,8 +2,7 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
   // watch the pane on empty
   pane.onEmpty = () => sidebar.setSelected('Dashboard')
 
-  // set default sidebar
-  sidebar.setSelected('Dashboard')
+  
 
   // fires everytime sidebar select property changes
   sidebar.onSelect = (selected_sidebar) => {
@@ -38,8 +37,10 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
   socket.on('notification', ({method_name, payload}) => {
       console.log('Notification recieved', method_name)
       if(method_name === server_service_getter_method_name) {
+
         topbar.setUser(payload.user)
         topbar.setMsg(payload.app_name)
+
         sidebar.setItems(payload.sidebar_items)
       }
   })
@@ -48,5 +49,8 @@ export default function (pane, sidebar, topbar, service, dash, socket) {
   setTimeout(() => {
       dash.loading(false)
       dash.showDashboard(true)
+      setTimeout(() => {
+        sidebar.setSelected('Dashboard')
+      },250)
   },1000)
 }

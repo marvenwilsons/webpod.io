@@ -4,7 +4,7 @@ async function getUserServices(payload) {
   const admin =  {
     user: 'marvenwilsons',
     app_name: 'sample.com',
-    sidebar_items: ['Dashsboard','Collections','Site','Apps','Services','Settings','Media','Uniview'],
+    sidebar_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','Uniview'],
     services: []
   }
 

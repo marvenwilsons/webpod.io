@@ -22,8 +22,8 @@
                 -->
                 <PaneActivator 
                     ref="paneActivator" v-slot="{ready}" 
-                    :style="{minWidth:data.paneConfig.width || '600px',maxWidth:data.paneConfig.width || '600px', paddingLeft:'5px', paddingRight:'5px'}" 
-                    class="padtop025 padbottom025" >
+                    :style="{minWidth:data.paneConfig.width || '600px',maxWidth:data.paneConfig.width || '600px', paddingLeft:'0px', paddingRight:'5px'}" 
+                    class=" " >
                     <v-slide-x-transition mode="in-out" >
                         <Pane
                             v-if="ready"

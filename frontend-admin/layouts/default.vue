@@ -31,11 +31,14 @@
                 <!-- CONTENT -->
                 <section class="fullwidth flex flexcol" style="z-index:2" >
                     <div style="background: #232729; color: #009aff;"  class="pad025" >
-                        <topbar ref="topbar" />
+                        <topbar @openNotificationWindow="notificationWindow = !notificationWindow" ref="topbar" />
                     </div>
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
                     </section>
+                </section>
+                    <section v-if="notificationWindow" style="z-index:100; background: #e5f1fa; width:550px;" class="" >
+                    <notificationProfile @close="notificationWindow = false" />
                 </section>
             </main>
         </v-main>
@@ -47,14 +50,16 @@ import sidebar from '@/components/dashboard/side-bar/index'
 import service from '@/components/dashboard/services/index'
 import dashboard from '@/components/dashboard/dashboard.js'
 import topbar from '@/components/dashboard/topbar/index.vue'
+import notificationProfile from '@/components/dashboard/notification/index.vue'
 import m from '@/m'
 export default {
     mixins: [m],
-    components: {sidebar, topbar},
+    components: {sidebar, topbar, notificationProfile},
     data: () => ({
         panes: [],
         loading: true,
-        showDashboard: false
+        showDashboard: false,
+        notificationWindow: false
     }),
     created() {
         service.getAllServices(this)
@@ -78,7 +83,7 @@ export default {
             showDashboard: (state) => {
                 this.showDashboard = state
             }
-        }
+         }
 
         dashboard(pane,sidebar, topbar, service, dash, this.socket)
     }
