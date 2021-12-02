@@ -1,31 +1,20 @@
-import dashboard from './service-sample'
-import maker from './service-maker'
-import empty from './empty'
-import univew from './uniview'
-import Todos from './todo'
-import formBuilder from './form-builder'
-import tableSample from './table-sample'
-
+/**
+ * 1. Fetch user services in the server, using user credintials
+ * 2. each services has different kinds of versions in it for different kinds of user roles,
+ * determine the correct service version to return to the user requesting it.
+ * 3. the user will then get its own set of services, to be toggled.
+ */
 let services = []
 
 export default {
+  setServices(s) {
+    services = s 
+  },
+  insertService(s) {
+    services.push(s)
+  },
   getAllServices() {
-    /**
-     * 1. Fetch user services in the server, using user credintials
-     * 2. each services has different kinds of versions in it for different kinds of user roles,
-     * determine the correct service version to return to the user requesting it.
-     * 3. the user will then get its own set of services, to be toggled.
-     */
-
-    services = [
-      dashboard,
-      maker,
-      empty,
-      univew,
-      Todos,
-      formBuilder,
-      tableSample
-    ]
+    return services
   },
   getService(serviceName) {
     // fetch service in database

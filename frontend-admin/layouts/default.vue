@@ -3,9 +3,12 @@
         <v-main style="background: #1565c0a8;" class="relative" >
             <v-fade-transition>
                 <div v-if="loading" style="z-index:900; background: #1565c0a8;" class="absolute fullwidth fullheight-percent flex flexcenter" >
-                    <div style="background: #eaf4fb;" class="pad125 borderRad4 modalShadow" >
-                        <!-- <loading/> -->
-                        loading ...
+                    <div style="background: #eaf4fb;" class="pad125 modalShadow flex flexcenter" >
+                        <div style="max-width:70%;" class="flex flexcol" >
+                            <span>
+                                Loading ...
+                            </span>
+                        </div>
                     </div>
                 </div>
             </v-fade-transition>
@@ -66,26 +69,29 @@ export default {
     },
     mounted() {
         try {
+             // component references
+            const sidebar = this.$refs.sidebar
             const paneCollection = this.$refs.pane.$children[0].$children[0]
-            // console.log(paneCollection)
+            const topbar =  this.$refs.topbar
+            const dash = {
+                loading: (state) => {
+                    this.loading = state
+                },
+                showDashboard: (state) => {
+                    this.showDashboard = state
+                },
+                alert: (msg) => {
+
+                }
+            }
+
+            dashboard(paneCollection,sidebar, topbar, service, dash, this.socket)
         }catch(err) {
-            // alert('Cannot access paneCollection methods, maybe it was moved or deleted, error in admin.vue')
+            alert(err)
+            console.log(err)
         }
 
-        // component references
-        const sidebar = this.$refs.sidebar
-        const pane = this.$refs.pane.$children[0].$children[0]
-        const topbar =  this.$refs.topbar
-        const dash = {
-            loading: (state) => {
-                this.loading = state
-            },
-            showDashboard: (state) => {
-                this.showDashboard = state
-            }
-         }
-
-        dashboard(pane,sidebar, topbar, service, dash, this.socket)
+       
     }
 }
 </script>
