@@ -2,9 +2,12 @@ async function getUserServices(payload) {
   // get services by querying the database using the user value
 
   const admin =  {
+    name: 'Marven Wilson Donque',
+    email: 'marvenwilsons@gmail.com',
     user: 'marvenwilsons',
-    app_name: 'sample.com',
-    sidebar_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','uniview'],
+    avatar: '',
+    app_name: 'marvenwilsondonque.com',
+    menu_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','uniview'],
     services: [
       {
       name: 'Dashboard',

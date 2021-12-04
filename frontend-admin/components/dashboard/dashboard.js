@@ -1,16 +1,16 @@
-export default function (paneCollection, sidebar, topbar, service, dash, socket) {
+export default function (paneCollection, menu, topbar, service, dash, sidebar, socket) {
     dash.loading(true)
 
 /*********************************** DASHBOARD EVENT HANDLERS *************************************************/
     // watch the pane on empty
-    paneCollection.onEmpty = () => sidebar.setSelected('Dashboard')
+    paneCollection.onEmpty = () => menu.setSelected('Dashboard')
     
-    // fires everytime sidebar select property changes
-    sidebar.onSelect = (selected_sidebar) => {
+    // fires everytime menu select property changes
+    menu.onSelect = (selected_menu) => {
         // empty the pane before rendering a new pane
         paneCollection.paneCollection = []
         // get selected service view
-        const selectedService = service.getService(selected_sidebar)
+        const selectedService = service.getService(selected_menu)
         
         setTimeout(() => {
             try {
@@ -27,17 +27,25 @@ export default function (paneCollection, sidebar, topbar, service, dash, socket)
     
     const ioEvents = {
         getUserServices(payload) {
+            // user set
+            dash.setUser({
+                name: payload.name,
+                email: payload.email,
+                avatar: payload.avatar
+            })
+
             // topbar set
-            topbar.setUser(payload.user)
             topbar.setMsg(payload.app_name)
 
             // service set
             service.setServices(payload.services)
 
-            // sidebar set
-            sidebar.setItems(payload.sidebar_items, () => {
-                sidebar.setSelected('Dashboard')
+            // menu set
+            menu.setItems(payload.menu_items, () => {
+                menu.setSelected('Dashboard')
             })
+
+            
         },
         pushNotify(payload) {
             // push or inserts a new notification item to dashboard
@@ -62,6 +70,13 @@ export default function (paneCollection, sidebar, topbar, service, dash, socket)
     setTimeout(() => {
         dash.loading(false)
         dash.showDashboard(true)
+
+        
+        // setTimeout(() => {
+        //     setTimeout(() => {
+        //         sidebar.close()
+        //     }, 1000)
+        // }, 5000)
     },1000)
 
 }

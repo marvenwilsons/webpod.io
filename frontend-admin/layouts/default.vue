@@ -2,15 +2,20 @@
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main style="background: #1565c0a8;" class="relative" >
             <v-fade-transition>
+                <!-- loading -->
                 <div v-if="loading" style="z-index:900; background: #1565c0a8;" class="absolute fullwidth fullheight-percent flex flexcenter" >
-                    <div style="background: #eaf4fb;" class="pad125 modalShadow flex flexcenter" >
-                        <div style="max-width:70%;" class="flex flexcol" >
-                            <span>
-                                Loading ...
-                            </span>
+                    <div  class="pad125 modalShadow flexcenter" >
+                        <div class="flex flexcol" >
+                            <v-progress-circular
+                            :size="70"
+                            :width="7"
+                            color="white"
+                            indeterminate
+                            ></v-progress-circular>
                         </div>
                     </div>
                 </div>
+                <!--  -->
             </v-fade-transition>
             <main v-show="showDashboard" class="flex fullheight-percent" style="background:#7fccff;" >
 
@@ -27,52 +32,62 @@
                             </path>
                     </svg>
                 </div>
-                <!-- SIDEBAR -->
+                <!-- menubar -->
                 <section style="z-index:100; min-width:220px; background:#232729;color:white;" class="flexcol" >
-                    <sidebar ref="sidebar" />
+                    <menubar ref="menubar" />
                 </section>
                 <!-- CONTENT -->
                 <section class="fullwidth flex flexcol" style="z-index:2" >
                     <div style="background: #232729; color: #009aff;"  class="pad025" >
-                        <topbar @openNotificationWindow="notificationWindow = !notificationWindow" ref="topbar" />
+                        <topbar :user="user" @openNotificationWindow="sidebarWindowIsOpen = !sidebarWindowIsOpen" ref="topbar" />
                     </div>
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
                     </section>
                 </section>
-                    <section v-if="notificationWindow" style="z-index:100; background: #e5f1fa; width:550px;" class="" >
-                    <notificationProfile @close="notificationWindow = false" />
-                </section>
+                <v-slide-x-reverse-transition>
+                    <section v-if="sidebarWindowIsOpen" style="z-index:100; background: #e5f1fa; width:450px; right:0;" class="absolute fullheight-percent paneShadow" >
+                        <sidebar :user="user" ref="sidebar" @close="sidebarWindowIsOpen = false">
+                        </sidebar>
+                    </section>
+                </v-slide-x-reverse-transition>
             </main>
         </v-main>
     </v-app>
 </template>
 
 <script>
-import sidebar from '@/components/dashboard/side-bar/index' 
+import menubar from '@/components/dashboard/menu-bar/index' 
 import service from '@/components/dashboard/services/index'
 import dashboard from '@/components/dashboard/dashboard.js'
 import topbar from '@/components/dashboard/topbar/index.vue'
-import notificationProfile from '@/components/dashboard/notification/index.vue'
+import sidebar from '@/components/dashboard/side-bar/index.vue'
 import m from '@/m'
 export default {
     mixins: [m],
-    components: {sidebar, topbar, notificationProfile},
+    components: {menubar, topbar, sidebar},
     data: () => ({
         panes: [],
         loading: true,
         showDashboard: false,
-        notificationWindow: false
+        sidebarWindowIsOpen: false,
+        user: false
     }),
     created() {
         service.getAllServices(this)
     },
     mounted() {
         try {
+            console.log(this.$refs)
              // component references
-            const sidebar = this.$refs.sidebar
+            const menu = this.$refs.menubar
             const paneCollection = this.$refs.pane.$children[0].$children[0]
             const topbar =  this.$refs.topbar
+            const sidebar = {
+                open: () => this.sidebarWindowIsOpen = true,
+                close: () => this.sidebarWindowIsOpen = false,
+                profile: this.$refs.sidebar
+            }
             const dash = {
                 loading: (state) => {
                     this.loading = state
@@ -80,12 +95,15 @@ export default {
                 showDashboard: (state) => {
                     this.showDashboard = state
                 },
+                setUser: (o) => {
+                    this.user = o
+                },
                 alert: (msg) => {
 
                 }
             }
 
-            dashboard(paneCollection,sidebar, topbar, service, dash, this.socket)
+            dashboard(paneCollection,menu, topbar, service, dash, sidebar, this.socket)
         }catch(err) {
             alert(err)
             console.log(err)

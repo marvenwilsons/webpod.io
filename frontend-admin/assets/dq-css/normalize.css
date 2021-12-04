@@ -346,7 +346,7 @@
 /* scroll bar */
 /* width */
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 7px;
   border-radius: 3px;
   height: 10px;
 }
@@ -361,12 +361,12 @@
 /* Handle */
 ::-webkit-scrollbar-thumb {
   background: rgba(128, 128, 128, 0.733); 
-  width: 3px;
+  width: 5px;
   height: 3px;
   border-radius: 3px;
 }
 ::-webkit-scrollbar-thumb:horizontal {
   background: rgba(128, 128, 128, 0.733); 
-  width: 3px;
+  width: 5px;
   border-radius: 3px;
 }

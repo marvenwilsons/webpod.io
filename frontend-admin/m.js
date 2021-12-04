@@ -7,19 +7,7 @@ export default {
       isauth: false,
       socket: undefined,
       mode: undefined,
-      authorization: undefined,
-      sampleListData: [
-        {month: 'January', total: 1000},
-        {month: 'February', total: 800},
-        {month: 'April', total: 3000},
-        {month: 'May', total: 3000},
-        {month: 'June', total: 3000},
-        {month: 'July', total: 3000},
-        {month: 'August', total: 3000},
-        {month: 'September', total: 3000},
-        {month: 'November', total: 3000},
-        {month: 'December', total: 3000},
-      ]
+      authorization: undefined
     }),
     mounted() {
       // every axios request requires authorization headers
@@ -31,6 +19,7 @@ export default {
 
       this.isauth = this.$store.state.isauth
       this.socket = io()
+      console.log('socket', this.socket)
 
       setTimeout(() => {
         console.log('sending test')

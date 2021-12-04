@@ -1,67 +1,86 @@
 <template>
-    <main class="flex flexcol fullheight-percent" >
-        <section class="padtop125 padleft050 padbottom125" >
-
-            <h5 class="padleft025 " :style="{color: $vuetify.theme.themes.light.primary, margin:'0'}" >
-                <span style="font-style: italic;" class="merri-font" >
-                    Web<span class="merri-font" style="font-weight:100;" >Pod.io</span>
-                </span>
-            </h5>
-        </section>
-        <section :style="{borderBottom: '1px solid #171a1b'}" class="" >
-            <div 
-                :style="{
-                    background: selected == item ? '#303340' : '', 
-                    transition: '0.2s',
-                    borderTop: '1px solid #171a1b'
-                }"
-                class="fullwidth pad025" 
-                v-for="(item,index) in items" :key="index * 43" 
-                @click="selected = item"
-                >
-                <div :style="{color: $vuetify.theme.themes.light.primary}"  
-                class="pointer fullwidth pad050" >
-                    <i class="el-icon-box padleft025 padright025"></i>
-                    <span :style="{fontWeight: '400'}" >
-                        {{item}}
-                    </span>
-                </div>
-            </div>
-        </section>
-    </main>
+  <div class="fullheight-percent" >
+    <section class=" flex flexcol fullheight-percent" >
+      <div style="font-weight:300;" class="relative flex flexcol padbottom125 spacebetween flexend" >
+        <div @click="$emit('close')" style="margin-bottom:10px;"  class="pointer flex flexend " >
+          <div class="flat_action " >
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+            </svg>
+          </div>
+        </div>
+        <div @click="signout" style="bottom:-12px; right:0; " class=" absolute pointer flex flexend flexcenter padright050" >
+          <div class="flat_action relative flex flexcenter">
+            <span class="padright025 flat_action" style="margin-top:-2px; font-weight:600;">
+              sign out
+            </span>
+            <svg class="" style="width:20px;height:20px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M14.08,15.59L16.67,13H7V11H16.67L14.08,8.41L15.5,7L20.5,12L15.5,17L14.08,15.59M19,3A2,2 0 0,1 21,5V9.67L19,7.67V5H5V19H19V16.33L21,14.33V19A2,2 0 0,1 19,21H5C3.89,21 3,20.1 3,19V5C3,3.89 3.89,3 5,3H19Z" />
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div style="background:white;"  class="flex flexcenter pad125 margintop125 flexcol" >
+        <div class="relative fullwidth " >
+          <div class="paneBorder absolute" 
+          style="background: white; width:90px; height:90px; border-radius: 100%; bottom:0;  right:39%;" >
+            <img v-if="user.avatar" :src="usr.avatar" alt="avatar">
+          </div>
+        </div>
+        <div class="flex flexcenter flexcol padtop050" >
+          <span style="font-weight:500;" >
+            {{user.name}}
+          </span>
+          <span style="font-weight:300;" class="text-small" >
+            {{user.email}}
+          </span>
+        </div>
+      </div>
+      <div style="overflow-y: auto; background: white;" class="fullheight-percent relative" >
+        <div class="pad050 fullheight-percent absolute fullwidth padbottom125" >
+          <div v-for="e in 5" :key="e"  class="notify-tile pad125 pointer text-small margintop050 borderRad4 fullwidth">
+            <notifcationItem >
+            </notifcationItem>
+          </div>
+          <div class="pad125" >
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
 </template>
+
 <script>
+import notifcationItem from './notification-item.vue'
 export default {
-    data: () => ({
-        // TODO
-        items: [],
-        selected: undefined,
-        onSelected: undefined
-    }),
-    watch: {
-        selected() {
-            this.onSelect(this.selected)
-        }
+  props: ['user'],
+  components: {
+    notifcationItem
+  },
+  methods: {
+    signout() {
+      localStorage.removeItem('token')
+      localStorage.removeItem('user')
+      this.$emit('close')
+      setTimeout(() => {
+        location.reload()
+      }, 500)
     },
-    methods: {
-        setSelected(itemName) {
-            if(this.items.includes(itemName)) {
-                this.selected = itemName
-            } else {
-                alert(`Error cannot set sidebar selected item '${this.selected}'`)
-            }
-        },
-        addItem(itemName) {
-            if(!this.items.includes(itemName)) {
-                // this.items.push(itemName)
-            }
-        },
-        setItems(items, cb) {
-            this.items = items
-            setTimeout(() => {
-                cb()
-            },250)
-        }
+    setUser() {
+      console.log('setting user')
     }
+  }
 }
 </script>
+
+<style>
+.notify-tile {
+  background: #f3f8fb;
+}
+.notify-tile:hover {
+  background: white !important;
+  box-shadow: 1px -1px 16px -1px #DDE1E3;
+  /* border: 2px solid #DDE1E3; */
+  transition: 150ms;
+}
+</style>

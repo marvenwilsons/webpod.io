@@ -1,23 +1,48 @@
 <template>
 <!-- PANE -->
-    <main v-if="ready"  class="fullheight-percent flex flexcol borderRad4 pane overflowhidden paneShadow" >
-        <section :style="{background: '#f5f7fa'}" class="flex spacebetween pad025 padleft050 padright025 paneShadow" >
-            <!-- PANE TITLE -->
-            <div class="paneTextColor merri-font" style="z-index:100" >
-                {{this.paneCollection[this.paneIndex].paneConfig.title || 'pane'}}
+    <main v-if="ready"  class="fullheight-percent flex flexcol pane overflowhidden paneShadow" >
+        <section :style="{background: 'transparent'}" class="flex spacebetween pad025 padleft050 padright025" >
+            <div class="paneTextColor merri-font padleft125 padtop125 padright025  fullwidth" style="z-index:100" >
+                <!-- pane title -->
+                <section class="flex" role="pane title" >
+                    <div role="pane title" class="flat_action_plain" >
+                        <div class="flex" >
+                            <h6 style="margin:0; color: #444; font-weight: 500;" class="merri-font" >{{this.paneCollection[this.paneIndex].paneConfig.title || 'pane'}}</h6>
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                            </svg>
+                        </div>
+                    </div>
+                </section>
+                <!--  -->
+                <span class="text-small" >
+                    {{this.paneCollection[this.paneIndex].paneConfig.description || ''}}
+                </span>
+                <!-- service ribbon here -->
+                <section role="service ribbon" class="margintop050 marginbottom025" >
+                    <span class="flat_action pointer">
+                        Add New
+                        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
+                    </span>
+                    <span class="el-dropdown-link flat_action pointer">
+                        Create New
+                        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
+                    </span>
+                </section>
+                <div class="" style="border-bottom: 1px solid lightgray;" ></div>
             </div>
             <!-- CLOSE -->
-            <div style="z-index:100" >
+            <div class="" style="z-index:100" >
                 <div class="flex" >
                     <div @click="$emit('onInsertPaneCollectionItem',paneIndex)" class="flex flexcenter pointer" >
-                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                        <!-- <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                             <path fill="orange" d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
-                        </svg>
+                        </svg> -->
                     </div>
                     <!-- _ECEE-1-html: purpose is to remove a pane from the paneCollection array -->
-                    <div @click="onRemovePaneCollectionItem" class="flex flexcenter pointer" >
+                    <div @click="onRemovePaneCollectionItem" class="flex flexcenter pointer flat_action" >
                         <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                            <path fill="#f56c6c" d="M12,8A4,4 0 0,0 8,12A4,4 0 0,0 12,16A4,4 0 0,0 16,12A4,4 0 0,0 12,8Z" />
+                            <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
                         </svg>
                     </div>
                 </div>
@@ -27,7 +52,7 @@
         <section 
             :style="{zIndex:100, overflow: paneModalisActive ? '':'auto'}" 
             class="fullheight-percent relative" >
-            <section role="content" class="absolute fullwidth pad125" >
+            <section role="content" class="absolute fullwidth pad050" >
                 <!-- component use here should be registered globally  -->
                 <!-- <div class="pad025 margin025 borderRad4" style="max-height:300px; overflow-y: auto; " >
                     <code>
@@ -52,7 +77,7 @@
                 ref="paneModal" 
                 v-if="paneModalisActive" 
                 :config="paneModalConfig" 
-                class="flex flexcenter fullwidth pane fullheight-percent"
+                class="flex flexcenter fullwidth fullheight-percent"
                 :hooks="viewHooks"
                 :hookArgs="viewHooksArgs"
             />

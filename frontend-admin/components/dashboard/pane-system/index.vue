@@ -22,7 +22,7 @@
                 -->
                 <PaneActivator 
                     ref="paneActivator" v-slot="{ready}" 
-                    :style="{minWidth:data.paneConfig.width || '600px',maxWidth:data.paneConfig.width || '600px', paddingLeft:'0px', paddingRight:'5px'}" 
+                    :style="{minWidth:'100%' || '600px',maxWidth:data.paneConfig.width || '600px', paddingLeft:'0px', paddingRight:'0px'}" 
                     class=" " >
                     <v-slide-x-transition mode="in-out" >
                         <Pane

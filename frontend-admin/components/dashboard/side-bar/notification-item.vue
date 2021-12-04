@@ -1,8 +1,10 @@
 <template>
   <div class="fullwidth" >
-    <section class="flex spacebetween marginbottom050" role="name and time">
-      <span style="font-weight: 300;">
-        APP
+    <section class="flex spacebetween marginbottom050"  role="name and time">
+      <span style="color: #222;" >
+        <strong>
+          APP NAME
+        </strong>
       </span>
       <span>
         2:20 PM
@@ -23,7 +25,23 @@
 </template>
 
 <style>
+.flat_action_plain:hover {
+  background: rgb(211, 211, 211);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.flat_action{
+  padding: 6px;
+  padding-left: 13px;
+  padding-right: 13px;
+}
 .flat_action:hover {
-  color: #0099ff;
+  background: rgb(211, 211, 211);
+  padding: 6px;
+  padding-left: 13px;
+  padding-right: 13px;
+  text-decoration: underline;
+  cursor: pointer;
 }
 </style>
