@@ -1,16 +1,16 @@
 <template>
     <div class="relative flex fullwidth " style="overflow-y:auto; overflow-x:hidden;" >
-        <div class="fullwidth" >
-            <div class="" v-for="(nav, index) in navs" :key="index" >
-                <div class="merri-font   padtop125" >
+        <div class="fullwidth flex flexcol flexwrap" >
+            <div class="flex marginbottom125" v-for="(nav, index) in navs" :key="index" >
+                <!-- <div class="merri-font   padtop125" >
                     {{nav.name}}
                     <v-divider></v-divider>
-                </div>
-                <div class=" flexwrap" style="gap:15px;" >
+                </div> -->
+                <div class=" flex flexwrap  fullwidth" style="gap: 15px;"  >
                     <item
                     ref="toolTipItem"
                     v-for="(item,n) in nav.items"
-                    class=" borderRad4 flexwrap"
+                    :class="['borderRad4 flexwrap', ...item.class]"
                     :key="n"
                     :itemName="item.name"
                     :itemIcon="item.itemIcon"
@@ -19,6 +19,7 @@
                     :warning="item.warning"
                     :removeWarningOn="removeWarningOn"
                     :disabled="disabled"
+                    :style="item.style || {}"
                     @itemClick="bubbleEvent"
                     />
                 </div>

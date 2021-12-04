@@ -4,20 +4,7 @@
         <section :style="{background: 'transparent'}" class="flex spacebetween pad025 padleft050 padright025" >
             <div class="paneTextColor merri-font padleft125 padtop125 padright025  fullwidth" style="z-index:100" >
                 <!-- pane title -->
-                <section class="flex" role="pane title" >
-                    <div role="pane title" class="flat_action_plain" >
-                        <div class="flex" >
-                            <h6 style="margin:0; color: #444; font-weight: 500;" class="merri-font" >{{this.paneCollection[this.paneIndex].paneConfig.title || 'pane'}}</h6>
-                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                            </svg>
-                        </div>
-                    </div>
-                </section>
-                <!--  -->
-                <span class="text-small" >
-                    {{this.paneCollection[this.paneIndex].paneConfig.description || ''}}
-                </span>
+                <paneTitle  :paneCollection="paneCollection" :paneIndex="paneIndex" ></paneTitle>
                 <!-- service ribbon here -->
                 <section role="service ribbon" class="margintop050 marginbottom025" >
                     <span class="flat_action pointer">
@@ -50,7 +37,7 @@
         </section>
         <!-- BODY -->
         <section 
-            :style="{zIndex:100, overflow: paneModalisActive ? '':'auto'}" 
+            :style="{zIndex:1, overflow: paneModalisActive ? '':'auto'}" 
             class="fullheight-percent relative" >
             <section role="content" class="absolute fullwidth pad050" >
                 <!-- component use here should be registered globally  -->
@@ -71,8 +58,6 @@
                 </div>
             </section>
             <!-- pane modal -->
-            <v-fade-transition>
-            </v-fade-transition>
             <PaneModal 
                 ref="paneModal" 
                 v-if="paneModalisActive" 
@@ -88,8 +73,9 @@
 <script>
 import PaneModal from './pane-modal'
 import service from '../../services/index'
+import paneTitle from './pane-tile.vue'
 export default {
-    components: {PaneModal},
+    components: {PaneModal, paneTitle},
     props: ['data','paneIndex','paneCollection'],
     data: () => ({
         paneWidth: '100%',

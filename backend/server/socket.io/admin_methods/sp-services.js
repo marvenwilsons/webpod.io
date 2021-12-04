@@ -15,7 +15,11 @@ async function getUserServices(payload) {
       userRoleTitle: '',
       body: {
         view: 'simpleNavs', // the name of the view, its a vue component registered globally
-        viewConfig: null,
+        viewConfig: {
+          ribbons: [],
+          view_versions: ['v1','v2','v3','v4'], // will be mapped to Dashboard/v1
+          default_view: 'v1'
+        },
         viewData: [
           {
               name: 'Pane Services',
@@ -75,19 +79,28 @@ async function getUserServices(payload) {
                         },
                     ],
                     events: ['Spawn Error', "Spawn Info", "Spawn Warning"],
-                    warning: null
+                    warning: null,
+                    style: {
+                      width: '500px'
+                    }
                 },
                 {
                     name: 'Pane Collection',
                     itemIcon: 'mdi-grain',
                     additionalContent: undefined,
-                    events: ['Add New Pane Item', 'Copy And Insert Pane', 'Remove this pane item']
+                    events: ['Add New Pane Item', 'Copy And Insert Pane', 'Remove this pane item'],
+                    style: {
+                      width: '400px'
+                    }
                 },
                 {
                     name: 'View',
                     itemIcon: 'mdi-border-all',
                     additionalContent: undefined,
-                    events: ['Update view data','Change view']
+                    events: ['Update view data','Change view'],
+                    style: {
+                      width: '400px'
+                    }
                 }
               ]
           },
@@ -168,9 +181,12 @@ async function getUserServices(payload) {
         })`,
         paneConfig: {
             width: '600px',
-            title: 'User Dashboard',
+            title: 'My Dashboard',
         },
         paneHooks: `(paneCollection,pane,view) => ({
+            onRibbonClick(e) {
+              console.log('ribbon has benn clicked')
+            },
             onMount() {
               // pane.setPaneData('https://jsonplaceholder.typicode.com/todos',(data) => {
               // })

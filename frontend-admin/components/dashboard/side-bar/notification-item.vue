@@ -26,7 +26,7 @@
 
 <style>
 .flat_action_plain:hover {
-  background: rgb(211, 211, 211);
+  background: #d3d3d4;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -37,7 +37,7 @@
   padding-right: 13px;
 }
 .flat_action:hover {
-  background: rgb(211, 211, 211);
+  background: #d3d3d4;
   padding: 6px;
   padding-left: 13px;
   padding-right: 13px;

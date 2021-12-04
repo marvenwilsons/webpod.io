@@ -23,7 +23,7 @@
                     </div>
                 </el-button> -->
                 <!-- expanded content -->
-                <div v-if="true" style="z-index:100;" class="margintop125" slot="content" >
+                <div v-if="true" style="z-index:100;" class="" slot="content" >
                     <div style="align-items: flex-end;" class="flex padleft125 padright125 padtop125" >
                         <div class="flex flexcenter fullheigt-percent">
                             <!--  -->
