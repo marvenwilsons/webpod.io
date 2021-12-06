@@ -78,7 +78,6 @@ export default {
     },
     mounted() {
         try {
-            console.log(this.$refs)
              // component references
             const menu = this.$refs.menubar
             const paneCollection = this.$refs.pane.$children[0].$children[0]

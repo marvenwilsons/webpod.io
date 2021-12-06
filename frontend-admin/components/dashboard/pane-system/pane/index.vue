@@ -6,15 +6,8 @@
                 <!-- pane title -->
                 <paneTitle  :paneCollection="paneCollection" :paneIndex="paneIndex" ></paneTitle>
                 <!-- service ribbon here -->
-                <section role="service ribbon" class="margintop050 marginbottom025" >
-                    <span class="flat_action pointer">
-                        Add New
-                        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
-                    </span>
-                    <span class="el-dropdown-link flat_action pointer">
-                        Create New
-                        <!-- <i class="el-icon-arrow-down el-icon--right"></i> -->
-                    </span>
+                <section role="service ribbon" class="margintop050 marginbottom025 flex" >
+                    <paneRibbon :onRibbonClick="viewHooks.onRibbonClick" :ribbons="paneCollection[paneIndex].viewConfig.ribbons" ></paneRibbon>
                 </section>
                 <div class="" style="border-bottom: 1px solid lightgray;" ></div>
             </div>
@@ -73,9 +66,10 @@
 <script>
 import PaneModal from './pane-modal'
 import service from '../../services/index'
-import paneTitle from './pane-tile.vue'
+import paneTitle from './pane-title.vue'
+import paneRibbon from './pane-ribbon.vue'
 export default {
-    components: {PaneModal, paneTitle},
+    components: {PaneModal, paneTitle, paneRibbon},
     props: ['data','paneIndex','paneCollection'],
     data: () => ({
         paneWidth: '100%',

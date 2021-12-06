@@ -25,7 +25,7 @@
             </v-card>
         </div>
     </section>
-    <!--  -->
+    <!-- desc -->
     <span class="text-small" >
         {{this.paneCollection[this.paneIndex].paneConfig.description || ''}}
     </span>

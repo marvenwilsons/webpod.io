@@ -16,7 +16,11 @@ async function getUserServices(payload) {
       body: {
         view: 'simpleNavs', // the name of the view, its a vue component registered globally
         viewConfig: {
-          ribbons: [],
+          ribbons: {
+            'Add New': ['Dashboard', 'Test 2'],
+            'Create New': [],
+            'Delete': ['one','bulk']
+          },
           view_versions: ['v1','v2','v3','v4'], // will be mapped to Dashboard/v1
           default_view: 'v1'
         },
@@ -125,6 +129,9 @@ async function getUserServices(payload) {
         // viewHooks is used to read properties within the specified view component and sometimes execute view methods
         // each view has its own viewHooks, to know the viewHooks on every views, a documentation will be provided
         viewHooks: `(paneCollection,pane,view) => ({
+          onRibbonClick(e) {
+            console.log('ribbon has benn clicked', e)
+          },
           onNavClick(simpleNavs) {
             switch(simpleNavs.clickedOn) {
               // spawn error
@@ -184,9 +191,7 @@ async function getUserServices(payload) {
             title: 'My Dashboard',
         },
         paneHooks: `(paneCollection,pane,view) => ({
-            onRibbonClick(e) {
-              console.log('ribbon has benn clicked')
-            },
+            
             onMount() {
               // pane.setPaneData('https://jsonplaceholder.typicode.com/todos',(data) => {
               // })
