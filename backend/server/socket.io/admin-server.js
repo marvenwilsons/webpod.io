@@ -15,7 +15,6 @@ io.on('connection', function (socket) {
   console.log('ℹ Client connected')
 
   socket.on('req', async function ({name, payload}) {
-
     try {
       if(payload) {
         if(payload.token == undefined && payload.user == undefined) {
@@ -59,9 +58,10 @@ io.on('connection', function (socket) {
 
       
     } catch(err) {
+      console.log('an error occured', err)
       socket.emit('error', {
         method_name: name,
-        message: err
+        message: err.message
       })
     }
   })

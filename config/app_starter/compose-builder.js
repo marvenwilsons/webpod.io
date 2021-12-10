@@ -5,7 +5,7 @@ const mode = 'dev' // dev or production
 /**************************************************************
  *                  Front End Admin Container                  *
  **************************************************************/
-const frontEndAdminContainer = {
+const frontend_admin_container = {
   build: {
     context: '../frontend-admin',
     target: mode
@@ -43,7 +43,7 @@ const frontEndAdminContainer = {
 /**************************************************************
  *                  Front End Public Container                 *
  **************************************************************/
-const frontEndPublicContainer = {
+const frontend_public_container = {
   build: {
     context: '../frontend-public',
     target: mode
@@ -80,7 +80,7 @@ const frontEndPublicContainer = {
 /**************************************************************
  *                   Back-End Container                       *
  **************************************************************/
- const backEndContainer = {
+ const backend_container = {
   build: {
     context: '../backend',
     args: {
@@ -116,7 +116,7 @@ const frontEndPublicContainer = {
 /**************************************************************
  *                      Nginx Container                       *
  **************************************************************/
-const nginxContainer = {
+const nginx_container = {
   image: 'nginx:stable-alpine-perl',
   depends_on: [
     'backend',
@@ -153,21 +153,39 @@ const nginxContainer = {
     'public-network'
   ]
 }
-
-nginxContainer.environment.map((e,i) => {
+nginx_container.environment.map((e,i) => {
   if(typeof e == 'object') {
-    nginxContainer.environment[i] = `${[Object.keys(e)[0]]}=${e[Object.keys(e)[0]]}`
+    nginx_container.environment[i] = `${[Object.keys(e)[0]]}=${e[Object.keys(e)[0]]}`
   }
 })
-
+/**************************************************************
+ *                  postgres Container                       *
+ **************************************************************/
+const postgres_container = {
+  container_name: 'postgres',
+  image: 'postgres',
+  restart: 'always',
+  ports: ['5432'],
+  environment: [
+    `POSTGRES_PASSWORD=postgres`,
+    `POSTGRES_USER=postgres`,
+    `POSTGRES_DB=webpod`,
+    `PGHOST=postgres`
+  ],
+  depends_on: ['nginx'],
+  volumes: [
+    '../postgres:/var/lib/postgresql/data'
+  ]
+}
 
 let dockerCompose = {
   version: '3',
   services: {
-    'backend': backEndContainer,
-    'frontend-admin': frontEndAdminContainer,
-    'frontend-public': frontEndPublicContainer,
-    'nginx': nginxContainer,
+    'backend': backend_container,
+    'frontend-admin': frontend_admin_container,
+    'frontend-public': frontend_public_container,
+    'nginx': nginx_container,
+    'postgres': postgres_container
   },
   networks:{
     'admin-network' : {

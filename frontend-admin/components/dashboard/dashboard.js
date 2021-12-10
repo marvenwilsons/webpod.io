@@ -54,6 +54,8 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         
     socket.on('notification', ({method_name, payload}) => ioEvents[method_name](payload))
     socket.on('error', (payload) => {
+
+        console.error('err', payload)
         if(payload.message === 'authentication failed') {
             localStorage.removeItem('token'),
             localStorage.removeItem('user')

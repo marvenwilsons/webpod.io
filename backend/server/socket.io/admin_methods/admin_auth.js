@@ -12,7 +12,7 @@ module.exports = async function ({user, token}) {
     password: 'admin',
     token: undefined
   }
-  return new Promise(function(resolve,reject) {ion
+  return new Promise(function(resolve,reject) {
     if(user) {
     // check user token, dashboard request authenticat
       setTimeout(() => {

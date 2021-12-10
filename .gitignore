@@ -76,6 +76,7 @@ $RECYCLE.BIN/
 *.sqlite
 *.sqlite3
 docker-compose.yml
+postgres/*
 
 
 ############################
