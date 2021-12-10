@@ -1,11 +1,26 @@
 module.exports = async function ({user, token}) {
-  // verifying: check if the token 
-  console.log('authenticating')
+  const sampleUser = {
+    user: 'admin',
+    password: 'admin',
+    token: undefined
+  }
   return new Promise(function(resolve,reject) {
-    setTimeout(() => {
-      resolve({
-        is_valid: true
-      })
-    })
+    if(user) {
+      
+    
+      setTimeout(() => {
+        resolve({
+          is_valid: true
+        })
+      }, 100)
+    } else {
+      console.log('authentication failed user is undefined')
+      setTimeout(() => {
+        resolve({
+          is_valid: false
+        })
+      }, 100)
+    }
+    
   })
 }

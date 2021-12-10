@@ -94,7 +94,8 @@ const frontEndPublicContainer = {
     "HOST=backend",
     "ADMIN_SERVER_PORT=8000",
     "PUBLIC_SERVER_PORT=9000",
-    `API_URL=${app_config.backend.admin_api_route}`
+    `API_URL=${app_config.backend.admin_api_route}`,
+    `JWT_SECRET=${app_config.jwt_secret}`
   ],
   volumes: [
     "../backend:/usr/src/backend",

@@ -22,7 +22,7 @@ module.exports = {
   use_pg_admin: true,
   
   // secret should be change to unique value
-  jwt_secret: 'k@zsdfi23hdshfakhdsflkahjdhflajksdfh945kjadf', 
+  jwt_secret: 'sample_jwt_secret_you_should_change_this', 
 
   // when run in your local machine, set this to false in production
   app_mode: 'dev', // dev or production

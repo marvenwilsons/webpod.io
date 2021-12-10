@@ -17,7 +17,7 @@ module.exports = (app) => {
 
   })
   
-  app.post('/user/signin', function (req, res) {
+  app.post('/user/signin', async function (req, res) {
     const { user, password } = req.body
     // 1.   Query users database using the "user" variable
     // 2.a  Return an error if the user could not be found
@@ -26,14 +26,40 @@ module.exports = (app) => {
     // 3.a  If password is match generate a token then return it to the user inside content object.
     // 3.b  If password does not match return an error
 
-    const mock_password_check = password == 'admin'
-    // const token = jwtGenerator(user.id,process.env.JWT_SECRET)
+    const JWT_SECRET = process.env.JWT_SECRET ||  'sample_jwt_secret_you_should_change_this'
+    const TOKEN_EXPIRATION = '1hr'
+
+    async function passwordIsValid () {
+      return new Promise((resolve,reject) => {
+        setTimeout(() => {
+          resolve(password == 'admin')
+        },3000)
+      })
+    }
+
+
+    async function getUserId(user) {
+      // query database
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('sampleUserId')
+        }, 5000)
+      })
+    }
+
+    function generateToken(user_id,JWT_SECRET) {
+      const payload = {
+          user: user_id
+      }
+    
+      return jwt.sign(payload, JWT_SECRET, {expiresIn: TOKEN_EXPIRATION})
+    }
 
     res.status(200).json({
-      isSuccess: mock_password_check,
-      msg: mock_password_check ? null : 'Password is incorrect',
+      isSuccess: await passwordIsValid(),
+      msg: await passwordIsValid() ? null : 'Password is incorrect',
       content: {
-          token: mock_password_check ? 'nvoYkjsdfkjndkjhf2983475932rksdnf' : null,
+          token: await passwordIsValid() ? generateToken(await getUserId(user),JWT_SECRET) : null,
           user
       }
     })

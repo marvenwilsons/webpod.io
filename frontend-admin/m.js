@@ -21,17 +21,17 @@ export default {
       this.socket = io()
       console.log('socket', this.socket)
 
-      setTimeout(() => {
-        console.log('sending test')
-        this.socket.emit('req', {
-          name: 'test',
-          payload: 'hellworld'
-        })
-        this.socket.on('notification', ({method_name, payload}) => {
-          console.log('method name', method_name)
-          console.log('payload', payload)
-        })
-      }, 1000)
+      // setTimeout(() => {
+      //   console.log('sending test')
+      //   this.socket.emit('req', {
+      //     name: 'test',
+      //     payload: 'hellworld'
+      //   })
+      //   this.socket.on('notification', ({method_name, payload}) => {
+      //     console.log('method name', method_name)
+      //     console.log('payload', payload)
+      //   })
+      // }, 1000)
 
       
 

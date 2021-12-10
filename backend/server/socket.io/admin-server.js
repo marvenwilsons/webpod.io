@@ -17,28 +17,47 @@ io.on('connection', function (socket) {
   socket.on('req', async function ({name, payload}) {
 
     try {
+      if(payload) {
+        if(payload.token == undefined && payload.user == undefined) {
+          // without user and token in payload object is invalid request
+          socket.emit('error', {
+            method_name: undefined,
+            message: 'authentication failed'
+          })
+        } else if(name == undefined) {
+          // without method name string is an invalid request
+          socket.emit('error', {
+            method_name: undefined,
+            message: 'authentication failed'
+          })
+        } else {
+          // process request
+          const authenticate_admin = await admin_auth({token: payload.token, user: payload.user})
 
-      const authenticate_admin = await admin_auth({token: payload.token, user: payload.user})
+          if(authenticate_admin.is_valid) {
 
-      if(authenticate_admin.is_valid) {
+            const requested_method = admin_methods()[name]
 
-        const requested_method = admin_methods()[name]
+            const request_response = await requested_method(payload)
 
-        const request_response = await requested_method(payload)
+            // response to request
+            socket.emit('notification', {
+              method_name: name,
+              payload: request_response
+            })
 
-        socket.emit('notification', {
-          method_name: name,
-          payload: request_response
-        })
+          } else {
 
-      } else {
-
-        socket.emit('error', {
-          method_name: name,
-          message: 'authentication failed'
-        })
-        
+            socket.emit('error', {
+              method_name: name,
+              message: 'authentication failed'
+            })
+            
+          }
+        }
       }
+
+      
     } catch(err) {
       socket.emit('error', {
         method_name: name,
