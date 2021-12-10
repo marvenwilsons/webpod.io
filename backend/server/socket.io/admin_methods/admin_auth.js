@@ -6,22 +6,21 @@ function verifyToken (token,secret,user) {
 }
 
 module.exports = async function ({user, token}) {
-  const u = {
+  const u = { // TODO
     user: 'admin',
-    id: 'sampleUserIdz',
+    id: 'sampleUserId',
     password: 'admin',
     token: undefined
   }
-  return new Promise(function(resolve,reject) {
-    // check user token, dashboard request authentication
+  return new Promise(function(resolve,reject) {ion
     if(user) {
+    // check user token, dashboard request authenticat
       setTimeout(() => {
         resolve({
           is_valid: verifyToken(token, process.env.JWT_SECRET,u)
         })
       }, 100)
     } else {
-      console.log('authentication failed user is undefined')
       setTimeout(() => {
         resolve({
           is_valid: false
