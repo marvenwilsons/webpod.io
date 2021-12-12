@@ -15,17 +15,22 @@ module.exports = async function ({user, token}) {
   return new Promise(function(resolve,reject) {
     if(user) {
     // check user token, dashboard request authenticat
-      setTimeout(() => {
+      try {
+        const is_valid = verifyToken(token, process.env.JWT_SECRET,u)
         resolve({
-          is_valid: verifyToken(token, process.env.JWT_SECRET,u)
+          is_valid
         })
-      }, 100)
-    } else {
-      setTimeout(() => {
+      } catch(err) {
+        // when token expires
         resolve({
           is_valid: false
         })
-      }, 100)
+      }
+    } else {
+      // when user is undefined
+      resolve({
+        is_valid: false
+      })
     }
     
   })
