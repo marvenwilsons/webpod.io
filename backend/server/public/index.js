@@ -8,7 +8,7 @@ const auth_token = (req, res, next) => {
   setTimeout(() => {
     console.log('authentication done!')
     next()
-  },3000)
+  },0)
 }
 
 // access for videos and images

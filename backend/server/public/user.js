@@ -33,7 +33,7 @@ module.exports = (app) => {
       return new Promise((resolve,reject) => {
         setTimeout(() => {
           resolve(password == 'admin')
-        },3000)
+        },0)
       })
     }
 
@@ -43,7 +43,7 @@ module.exports = (app) => {
       return new Promise((resolve, reject) => {
         setTimeout(() => {
           resolve('sampleUserId')
-        }, 5000)
+        }, 0)
       })
     }
 
