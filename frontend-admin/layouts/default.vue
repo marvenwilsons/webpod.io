@@ -5,10 +5,13 @@
                 <!-- loading -->
                 <div v-if="loading" style="z-index:900; background: #1565c0a8;" class="absolute fullwidth fullheight-percent flex flexcenter" >
                     <div  class="pad125 modalShadow flexcenter" >
-                        <div class="flex flexcol" >
+                        <div class="flex flexcol relative" >
+                            <span class="absolute fullwidth fullheight-percent flex flexcenter" >
+                                <h1 class="merri-font" style="font-size:120px; color: #e6f2fa; margin:0;" >W</h1>
+                            </span>
                             <v-progress-circular
-                            :size="70"
-                            :width="7"
+                            :size="200"
+                            :width="1"
                             color="white"
                             indeterminate
                             ></v-progress-circular>
