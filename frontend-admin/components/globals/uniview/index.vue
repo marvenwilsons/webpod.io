@@ -1,7 +1,7 @@
 <template>
   <div v-if="ready" class="flex flexcol" style="gap:1px;" >
     <div
-      v-for="(item,index) in mData(s)"
+      v-for="(item,index) in mData"
       :key="index * 321 + uid()"
       :is="item.view"
       :myData="item.viewData"
@@ -35,18 +35,19 @@ export default {
     }
   },
   mounted() {
-    this.mData = new Function(`return ${this.myData}`)()
+    // this.mData = new Function(`return ${this.myData}`)()
+    this.ready = true
+    // console.log(this.myData)
 
-    if(typeof this.mData != 'function') {
-      alert(`Error: uniview's viewData property should be a function that returns an array of view objects not ${typeof this.mData}`)
-    } 
-    else if(Array.isArray(this.mData()) == false) {
-      alert(`Error: uniview's viewData property should be a function that returns an array of view objects not ${typeof this.mData()}`)
-    } 
-    else {
-      this.s = this
-      this.ready = true
-      this.currentId = this.uid()
+    if(!Array.isArray(this.myData)) {
+      this.mData = [{
+          view: 'error',
+          viewData: {
+            msg: `Uniview viewData expected to be an array of objects but got '${typeof this.myData}' instead`
+          }
+        },]
+    } else {
+      this.mData = this.myData
     }
   }
 }
