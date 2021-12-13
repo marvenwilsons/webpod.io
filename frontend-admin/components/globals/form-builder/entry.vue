@@ -14,7 +14,7 @@
     </div>
     <!-- container -->
     <div :style="{border: `1px solid ${appearance.wrap_around_border_color}`, background: 'white'}">
-      <div class="margin125" >
+      <div class="margin125">
         <div
           class="flex flexcol"
           v-for="(obj_key,obj_index) in final_model"
@@ -25,14 +25,14 @@
             <div
               :id="`objectify-${obj_index}`"
               role="display object index"
-              :class="['flex1 pointer flexwrap padleft125 flex flexend', editMode.includes(obj_index) ? 'padtop125 margintop025' : 'padtop125 margintop025']"
-              :style="get_keys_style"
+              :class="['flex3 flexend pointer flexwrap padleft125 flex', editMode.includes(obj_index) ? 'padtop125 margintop025' : 'padtop125 margintop025']"
+              :style="{...get_keys_style, width:'50%'}"
               :title="obj_key.hoverInfo"
             >
                 <span class="marginright050" >{{obj_index}}</span>
             </div>
             <!-- value -->
-            <div :style="get_value_style" role="display object value" class="flex flex3 fullwidth relative pad050">
+            <div :style="{...get_value_style, width: '100%'}" role="display object value" class="flex flex1 relative pad050 ">
               <div v-if="disable_all_fields" id="disabler" class="absolute fullheight-percent fullwidth" style="z-index:100" ></div>
               <div
                 :style="{color: get_value_style.color}"

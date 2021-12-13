@@ -43,6 +43,9 @@
                 <section class="fullwidth flex flexcol" style="z-index:2" >
                     <div style="background: #232729; color: #009aff;"  class="pad025" >
                         <topbar :user="user" @openNotificationWindow="sidebarWindowIsOpen = !sidebarWindowIsOpen" ref="topbar" />
+                        <div>
+                            <history @historyClick="historyClick" ref="history" />
+                        </div>
                     </div>
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
@@ -64,11 +67,12 @@ import menubar from '@/components/dashboard/menu-bar/index'
 import service from '@/components/dashboard/services/index'
 import dashboard from '@/components/dashboard/dashboard.js'
 import topbar from '@/components/dashboard/topbar/index.vue'
+import history from '@/components/dashboard/topbar/history.vue'
 import sidebar from '@/components/dashboard/side-bar/index.vue'
 import m from '@/m'
 export default {
     mixins: [m],
-    components: {menubar, topbar, sidebar},
+    components: {menubar, topbar, sidebar, history},
     data: () => ({
         panes: [],
         loading: true,
@@ -79,12 +83,24 @@ export default {
     created() {
         service.getAllServices(this)
     },
+    methods: {
+        historyClick(i) {
+            console.log('history click',i)
+            try {
+                const el = document.getElementById(`pane${i}`)
+                el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"})
+            } catch(err) {}
+        }
+    },
     mounted() {
         try {
              // component references
             const menu = this.$refs.menubar
             const paneCollection = this.$refs.pane.$children[0].$children[0]
-            const topbar =  this.$refs.topbar
+            const topbar =  {
+                ...this.$refs.topbar,
+                history: this.$refs.history
+            }
             const sidebar = {
                 open: () => this.sidebarWindowIsOpen = true,
                 close: () => this.sidebarWindowIsOpen = false,
@@ -101,7 +117,7 @@ export default {
                     this.user = o
                 },
                 alert: (msg) => {
-
+                    
                 }
             }
 

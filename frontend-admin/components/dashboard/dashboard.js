@@ -11,6 +11,13 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         paneCollection.paneCollection = []
         // get selected service view
         const selectedService = service.getService(selected_menu)
+        //
+        paneCollection.onPaneCollectionChange = function() {
+            const title = paneCollection.paneCollection.map(e => {
+                return e.paneConfig.title || 'untitled'
+            })
+            topbar.history.panes = title
+        }
         
         setTimeout(() => {
             try {

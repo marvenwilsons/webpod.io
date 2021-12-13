@@ -50,7 +50,8 @@ export default {
     components: {Pane,PaneManager,PaneActivator},
     data: () => ({
         paneCollection: [],
-        onEmpty: undefined
+        onEmpty: undefined,
+        onPaneCollectionChange: undefined
     }),
     computed: {
         getPaneCollection() {
@@ -59,7 +60,8 @@ export default {
     },
     watch: {
         paneCollection() {
-            if(this.paneCollection.length == 0) {
+            if(this.onPaneCollectionChange) {
+                this.onPaneCollectionChange()
             }
         }
     },

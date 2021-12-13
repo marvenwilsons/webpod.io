@@ -1,6 +1,6 @@
 <template>
   <div v-if="ready" style="max-width:400px" :class="['fullwidth pad050', showUpdateControls ? 'paneBorder bg-update borderRad4' : '']" >
-    <div v-if="data.headDescription && showUpdateControls" class="marginbottom050 padleft025" >
+    <div v-if="data.headDescription && showUpdateControls" class="marginbottom050 padleft025 " >
       <span class="text-secondary" >
         {{data.headDescription}}
       </span>
