@@ -52,6 +52,17 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                 menu.setSelected('Dashboard')
             })
 
+            let c = 0
+
+            // setInterval(() => {
+            //     c++
+            //     sidebar.pushNotification({
+            //         app: `System ${c}`,
+            //         time: '2:20 PM',
+            //         body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+            //     })
+            // }, 5000)
+            
             
         },
         pushNotify(payload) {

@@ -14,6 +14,7 @@ const auth_token = (req, res, next) => {
 // access for videos and images
 app.use('/images', auth_token, express.static(__dirname + '/images'));
 app.use('/videos', auth_token, express.static(__dirname + '/videos'));
+app.use('/server_assets', auth_token, express.static(__dirname + '/server_assets'));
 
 // for user related routes
 const user = require('./user')

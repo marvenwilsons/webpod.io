@@ -42,7 +42,7 @@
                 <!-- CONTENT -->
                 <section class="fullwidth flex flexcol" style="z-index:2" >
                     <div style="background: #232729; color: #009aff;"  class="pad025" >
-                        <topbar :user="user" @openNotificationWindow="sidebarWindowIsOpen = !sidebarWindowIsOpen" ref="topbar" />
+                        <topbar :notificationLength="notifications.length" :user="user" @openNotificationWindow="sidebarWindowIsOpen = !sidebarWindowIsOpen" ref="topbar" />
                         <div>
                             <history @historyClick="historyClick" ref="history" />
                         </div>
@@ -53,7 +53,11 @@
                 </section>
                 <v-slide-x-reverse-transition>
                     <section v-if="sidebarWindowIsOpen" style="z-index:100; background: #e5f1fa; width:450px; right:0;" class="absolute fullheight-percent paneShadow" >
+                        <!-- <img src="@/static/leaves.jpeg" alt=""> -->
+                        <!-- <audio src="@/static/webpod_notification_sound.mp3" type="audio/mpeg" autoplay >
+                        </audio> -->
                         <sidebar :user="user" ref="sidebar" @close="sidebarWindowIsOpen = false">
+                            <notification :notifications="notifications" ref="notification" />
                         </sidebar>
                     </section>
                 </v-slide-x-reverse-transition>
@@ -69,19 +73,22 @@ import dashboard from '@/components/dashboard/dashboard.js'
 import topbar from '@/components/dashboard/topbar/index.vue'
 import history from '@/components/dashboard/topbar/history.vue'
 import sidebar from '@/components/dashboard/side-bar/index.vue'
+import notification from '@/components/dashboard/side-bar/notification.vue'
 import m from '@/m'
 export default {
     mixins: [m],
-    components: {menubar, topbar, sidebar, history},
+    components: {menubar, topbar, sidebar, history, notification},
     data: () => ({
         panes: [],
         loading: true,
         showDashboard: false,
         sidebarWindowIsOpen: false,
-        user: false
+        user: false,
+        notifications: []
     }),
     created() {
         service.getAllServices(this)
+        // console.log(`${location.href}${process.env.API_URL}`)
     },
     methods: {
         historyClick(i) {
@@ -104,7 +111,9 @@ export default {
             const sidebar = {
                 open: () => this.sidebarWindowIsOpen = true,
                 close: () => this.sidebarWindowIsOpen = false,
-                profile: this.$refs.sidebar
+                pushNotification: (notificationItem) => {
+                    this.notifications.push(notificationItem)
+                }
             }
             const dash = {
                 loading: (state) => {

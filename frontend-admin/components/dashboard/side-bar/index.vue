@@ -38,10 +38,8 @@
       </div>
       <div style="overflow-y: auto; background: white;" class="fullheight-percent relative" >
         <div class="pad050 fullheight-percent absolute fullwidth padbottom125" >
-          <div v-for="e in 5" :key="e"  class="notify-tile pad125 pointer text-small margintop050 borderRad4 fullwidth">
-            <notifcationItem >
-            </notifcationItem>
-          </div>
+          <slot>
+          </slot>
           <div class="pad125" >
           </div>
         </div>
@@ -51,12 +49,9 @@
 </template>
 
 <script>
-import notifcationItem from './notification-item.vue'
 export default {
   props: ['user'],
-  components: {
-    notifcationItem
-  },
+
   methods: {
     signout() {
       localStorage.removeItem('token')

@@ -3,7 +3,7 @@
     <section class="flex spacebetween marginbottom050"  role="name and time">
       <span style="color: #222;" >
         <strong>
-          APP NAME
+          {{notificationInfo.app}}
         </strong>
       </span>
       <span>
@@ -23,6 +23,12 @@
     </section>
   </div>
 </template>
+
+<script>
+export default {
+  props: ['notificationInfo']
+}
+</script>
 
 <style>
 .flat_action_plain:hover {

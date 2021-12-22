@@ -1,0 +1,2 @@
+for sending images from server to client using socket.io
+==> https://gist.github.com/companje/b95e735650f1cd2e2a41
