@@ -28,11 +28,11 @@ module.exports = async (dashboard) => ({
           .exec('service',  'setServices',  userServices.services)
           .exec('menu',     'setItems',     userServices.menu_items)
           .exec('menu',     'setSelected',  'Dashboard')
-          .exec('sidebar',  'pushNotification', {
-              app: `System`,
-              time: '2:20 PM',
-              body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-          })
+          // .exec('sidebar',  'pushNotification', {
+          //     app: `System`,
+          //     time: '2:20 PM',
+          //     body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
+          // })
 
       break;
     }

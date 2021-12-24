@@ -188,6 +188,7 @@ async function getUserServices(payload) {
         })`,
         paneConfig: {
             title: 'My Dashboard',
+            isClosable: false,
         },
         paneHooks: `(paneCollection,pane,view) => ({
             
