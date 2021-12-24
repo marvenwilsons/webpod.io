@@ -125,5 +125,6 @@ export default {
         }
       })
     }
-  }
+  },
+  loading: false
 }

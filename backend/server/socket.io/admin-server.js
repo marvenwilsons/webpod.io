@@ -1,7 +1,7 @@
 const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
-
+const fs = require('fs')
 const app = express()
 const server = http.createServer(app)
 const io = socketio(server,{
@@ -10,9 +10,21 @@ const io = socketio(server,{
 
 const admin_methods = require('./admin_methods/index')
 const admin_auth = require('./admin_methods/admin_auth')
+const dashboard_event_handler = require('./admin_methods/dashboard-event-handler')
 
-io.on('connection', function (socket) {
+io.on('connection', async function (socket) {
   console.log('ℹ Client connected')
+  const dashboard_exec = {
+    exec(cmd) {
+      socket.emit('exec',{
+        location: cmd.location,
+        action: cmd.action,
+        payload: cmd.payload
+      })
+    }
+  }
+  const dashboard_events = await dashboard_event_handler(dashboard_exec)
+  dashboard_events.onMount()
 
   socket.on('req', async function ({name, payload}) {
     try {
@@ -34,6 +46,8 @@ io.on('connection', function (socket) {
           const authenticate_admin = await admin_auth({token: payload.token, user: payload.user})
 
           if(authenticate_admin.is_valid) {
+            
+            dashboard_events
 
             const requested_method = admin_methods()[name]
 

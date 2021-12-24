@@ -74,6 +74,8 @@ import topbar from '@/components/dashboard/topbar/index.vue'
 import history from '@/components/dashboard/topbar/history.vue'
 import sidebar from '@/components/dashboard/side-bar/index.vue'
 import notification from '@/components/dashboard/side-bar/notification.vue'
+import { io } from "socket.io-client"; 
+
 import m from '@/m'
 export default {
     mixins: [m],
@@ -88,6 +90,7 @@ export default {
     }),
     created() {
         service.getAllServices(this)
+        this.use_socket = true
         // console.log(`${location.href}${process.env.API_URL}`)
     },
     methods: {

@@ -7,7 +7,8 @@ export default {
       isauth: false,
       socket: undefined,
       mode: undefined,
-      authorization: undefined
+      authorization: undefined,
+      use_socket: false
     }),
     mounted() {
       // every axios request requires authorization headers
@@ -18,23 +19,11 @@ export default {
       }
 
       this.isauth = this.$store.state.isauth
-      this.socket = io()
-      console.log('socket', this.socket)
-
-      // setTimeout(() => {
-      //   console.log('sending test')
-      //   this.socket.emit('req', {
-      //     name: 'test',
-      //     payload: 'hellworld'
-      //   })
-      //   this.socket.on('notification', ({method_name, payload}) => {
-      //     console.log('method name', method_name)
-      //     console.log('payload', payload)
-      //   })
-      // }, 1000)
-
-      
-
+      if(this.use_socket) {
+        // wrap in if statment because this file is used in multiple vue components
+        // only components that will use the socket will activates the socket connection
+        this.socket = io()
+      }
     },
     methods: {
       signout() {
