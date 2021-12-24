@@ -56,11 +56,8 @@ export default {
                 // this.items.push(itemName)
             }
         },
-        setItems(items, cb) {
+        setItems(items) {
             this.items = items
-            setTimeout(() => {
-                cb()
-            },250)
         }
     }
 }

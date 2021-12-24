@@ -33,40 +33,11 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
 /*********************************** SOCKET.IO EVENT HANDLERS *************************************************/
     
     const ioEvents = {
-        getUserServices(payload) {
-            // user set
-            dash.setUser({
-                name: payload.name,
-                email: payload.email,
-                avatar: payload.avatar
-            })
-
-            // topbar set
-            topbar.setMsg(payload.app_name)
-
-            // service set
-            service.setServices(payload.services)
-
-            // menu set
-            menu.setItems(payload.menu_items, () => {
-                menu.setSelected('Dashboard')
-            })
-
-            // let c = 0
-
-            sidebar.pushNotification({
-                app: `System`,
-                time: '2:20 PM',
-                body: 'Lorem ipsum dolor sit amet consectetur adipisicing elit.'
-            })
-            
-        },
         pushNotify(payload) {
             // push or inserts a new notification item to dashboard
         }
     }
         
-    socket.on('notification', ({method_name, payload}) => ioEvents[method_name](payload))
     socket.on('exec', (e) => {
         const dashboard_locations = { paneCollection, menu, topbar, service, dash, sidebar }
         dashboard_locations[e.location][e.action](e.payload)

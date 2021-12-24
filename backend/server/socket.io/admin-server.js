@@ -15,12 +15,17 @@ const dashboard_event_handler = require('./admin_methods/dashboard-event-handler
 io.on('connection', async function (socket) {
   console.log('ℹ Client connected')
   const dashboard_exec = {
-    exec(cmd) {
-      socket.emit('exec',{
-        location: cmd.location,
-        action: cmd.action,
-        payload: cmd.payload
-      })
+    exec(location,action,payload) {
+      setTimeout(() => {
+        socket.emit('exec', {
+          location,
+          action,
+          payload
+        })
+      },100)
+      return {
+        exec: this.exec
+      }
     }
   }
   const dashboard_events = await dashboard_event_handler(dashboard_exec)
@@ -47,7 +52,7 @@ io.on('connection', async function (socket) {
 
           if(authenticate_admin.is_valid) {
             
-            dashboard_events
+            dashboard_events.onRequest(name, payload.user)
 
             const requested_method = admin_methods()[name]
 
@@ -60,6 +65,7 @@ io.on('connection', async function (socket) {
             })
 
           } else {
+            dashboard_events.onTokenExpire()
 
             socket.emit('error', {
               method_name: name,
