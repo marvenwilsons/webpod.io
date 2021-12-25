@@ -2,23 +2,42 @@
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main style="background: #1565c0a8;" class="relative" >
             <v-fade-transition>
-                <!-- loading -->
-                <div v-if="loading" style="z-index:900; background: #1565c0a8;" class="absolute fullwidth fullheight-percent flex flexcenter" >
-                    <div  class="pad125 modalShadow flexcenter" >
-                        <div class="flex flexcol relative" >
-                            <span class="absolute fullwidth fullheight-percent flex flexcenter" >
-                                <h1 class="merri-font" style="font-size:120px; color: #e6f2fa; margin:0;" >W</h1>
-                            </span>
-                            <v-progress-circular
-                            :size="200"
-                            :width="1"
-                            color="white"
-                            indeterminate
-                            ></v-progress-circular>
+                <main>
+                    <!-- loading -->
+                    <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
+                        <div  class="pad125 modalShadow flexcenter" >
+                            <div class="flex flexcol relative" >
+                                <span class="absolute fullwidth fullheight-percent flex flexcenter" >
+                                    <h1 class="merri-font" style="font-size:120px; color: #e6f2fa; margin:0;" >W</h1>
+                                </span>
+                                <v-progress-circular
+                                :size="200"
+                                :width="1"
+                                color="white"
+                                indeterminate
+                                ></v-progress-circular>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <!--  -->
+                    <!-- Alert -->
+                    <div v-if="alertMsg && !loading" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
+                        <div class="pad125 borderRad4 margin125" 
+                            style="background:white; color: #3f444a; min-width: 400px; max-width: 1080px;" >
+                            <div style="max-height:500px; overflow-x: auto;" >
+                                <div v-html="alertMsg" ></div>
+                            </div>
+                            <div class="margintop125 flex flexend">
+                                <el-button @click="() => {alertMsg = ''} " size="small" >Close</el-button>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Editors -->
+                    <div v-if="editor" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter" >
+                        <div style="background:#f5f5f5;" class="fullwidth fullheight-percent relative" >
+                            <div @click="() => {editor = undefined}" class="absolute pointer" style="right:0;" >x</div>
+                        </div>
+                    </div>
+                </main>
             </v-fade-transition>
             <main v-show="showDashboard" class="flex fullheight-percent" style="background:#7fccff;" >
 
@@ -74,7 +93,6 @@ import topbar from '@/components/dashboard/topbar/index.vue'
 import history from '@/components/dashboard/topbar/history.vue'
 import sidebar from '@/components/dashboard/side-bar/index.vue'
 import notification from '@/components/dashboard/side-bar/notification.vue'
-import { io } from "socket.io-client"; 
 
 import m from '@/m'
 export default {
@@ -82,11 +100,14 @@ export default {
     components: {menubar, topbar, sidebar, history, notification},
     data: () => ({
         panes: [],
+        showModal: false,
+        editor: false,
         loading: true,
         showDashboard: false,
         sidebarWindowIsOpen: false,
         user: false,
-        notifications: []
+        notifications: [],
+        alertMsg: undefined
     }),
     created() {
         service.getAllServices(this)
@@ -129,7 +150,7 @@ export default {
                     this.user = o
                 },
                 alert: (msg) => {
-                    
+                    this.alertMsg = msg
                 }
             }
 
@@ -147,5 +168,9 @@ export default {
 <style>
 .merri-font {
     font-family: 'Merriweather', serif !important;
+}
+.modal-wrapper {
+    background: #1565c0a8;
+    z-index: 900;
 }
 </style>
