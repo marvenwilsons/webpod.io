@@ -321,7 +321,7 @@ export default {
   border-bottom: 1px solid rgba(54, 54, 54, 0.096);
 }
 .paneItemBg{
-    background: #f5f7fa !important;
+    background: #f5f7fab9 !important;
 }
 .paneBorder{
     border:1px solid rgba(54, 54, 54, 0.096)

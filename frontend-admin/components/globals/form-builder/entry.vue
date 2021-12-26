@@ -20,19 +20,21 @@
           v-for="(obj_key,obj_index) in final_model"
           :key="`-o-${obj_index}`"
         >
-          <div v-if="renderPaused != obj_index" class=" flex pad050">
+          <div v-if="renderPaused != obj_index" class=" flex pad050 flexcol">
             <!-- keys -->
             <div
               :id="`objectify-${obj_index}`"
               role="display object index"
-              :class="['flex3 flexend pointer flexwrap padleft125 flex', editMode.includes(obj_index) ? 'padtop125 margintop025' : 'padtop125 margintop025']"
+              :class="['flex3 pointer flexwrap padleft050 flex', editMode.includes(obj_index) ? 'padtop125 margintop025' : 'padtop125 margintop025']"
               :style="{...get_keys_style, width:'50%'}"
               :title="obj_key.hoverInfo"
             >
-                <span class="marginright050" >{{obj_index}}</span>
+                <span class="marginright050" style="color: #232729; font-weight:600;" >
+                    {{obj_index}}
+                </span>
             </div>
             <!-- value -->
-            <div :style="{...get_value_style, width: '100%'}" role="display object value" class="flex flex1 relative pad050 ">
+            <div :style="{...get_value_style}" role="display object value" class="flex flex1 relative pad050 ">
               <div v-if="disable_all_fields" id="disabler" class="absolute fullheight-percent fullwidth" style="z-index:100" ></div>
               <div
                 :style="{color: get_value_style.color}"
@@ -417,7 +419,7 @@ export default {
       return {
         // borderBottom: `1px solid ${this.appearance.divider_border_color}`,
         // minWidth: "140px",
-        background: 'white',
+        background: 'transparent',
         color: this.appearance.keys_text_color
       };
     },
@@ -426,7 +428,7 @@ export default {
     get_value_style() {
       return {
         // borderBottom: `1px solid ${this.appearance.divider_border_color}`,
-        background: 'white',
+        background: 'transparent',
         color: this.appearance.values_text_color
       };
     }
@@ -630,6 +632,16 @@ export default {
             const item = e[1]
             // start validating
             if(item.type) {
+              if(item.renderCondition && item.renderCondition.method) {
+                item.renderCondition.method = new Function(`return ${item.renderCondition.method}`)()
+              }
+
+              if(item.hooks) {
+                for(const key in item.hooks) {
+                  item.hooks[key] = new Function(`return ${item.hooks[key]}`)()
+                }
+              }
+
               const scanForMissingProps = (requiredProps,_item,c) => {
                 return requiredProps.map(prop => {
                   if(Object.keys(_item).includes(prop) == false) {
