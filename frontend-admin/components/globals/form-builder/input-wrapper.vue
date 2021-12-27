@@ -141,8 +141,8 @@
             class="margin025 fullheight-percent flexcenter flex"
           >
             <div class="flex fullwidth">
-              <loading class="" v-if="loading || xloading" />
-              <checkAnimation v-if="showCheck" :check="showCheck" />
+                <loading class="" v-if="loading || xloading" />
+                <checkAnimation v-if="showCheck" :check="showCheck" />
             </div>
           </div>
         </div>
@@ -349,7 +349,6 @@ export default {
     onInput(input) {
       /** executes the onInput hook function from the input object data property,
       this method runs every time an input is changed */
-      console.log(input.value, this.data.value);
       if (
         this.data.value !=
         input.value /** it means the user changed the input value */
