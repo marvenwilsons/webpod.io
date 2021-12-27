@@ -1,40 +1,54 @@
 <template>
-  <div v-if="ready" style="max-width:600px; background: white;" :class="['fullwidth pad050 padright125 borderRad4', showUpdateControls ? 'paneBorder bg-update borderRad4' : '']" >
+  <div v-if="ready" :style="{background: showUpdateControls ? '#eceff1' : 'none'}" :class="['fullwidth pad050 borderRad4', showUpdateControls ? 'paneBorder bg-update borderRad4' : '']" >
     <div v-if="data.headDescription && showUpdateControls" class="marginbottom050 padleft025 " >
       <span class="text-secondary" >
         {{data.headDescription}}
       </span>
     </div>
     <!-- input -->
-    <div  class="flex spacebetween flexcenter fullwidth"  >
-      <div :class="['fullwidth flex relative borderRad4 relative', errors.length != 0 ? 'borderRad4 overflowhidden' : '', operation == 'w' ? 'paneBorder' : '', isActive ? 'paneShadow' : '']" 
-      :style="{background: 'white', border: inputBorderColor}" >
-        <div  v-if="loading || xloading" style="z-index: 999; background: #f5f7fabe; cursor: not-allowed" class="absolute fullwidth fullheight-percent" ></div>
-        <div class="fullwidth" > 
-          <!-- input mode -->
-          <slot v-if="showInput" :onInput="onInput" :allowMutationOnInput="allowMutationOnInput"  ></slot>
-          <!-- read mode -->
-          <div @click="updateMode(true)" v-if="!showInput" class="pad050 pointer text-regular" >
-            <!-- <span v-html="formatedReadModeData" ></span> -->
-            <div v-if="typeof data.value == 'string' && !data.mode" >{{data.value}}</div>
-            <div v-if="typeof data.value == 'number' && data.type == 'number'" >{{data.value}}</div>
-            <div v-if="data.type == 'select' || data.type == 'multiselect'" >{{data.options[data.value]}}</div>
-            <div v-if="data.type == 'checkbox'" >{{data.value ? 'Confirmed' : 'Not Confirmed'}}</div>
-            <div v-if="data.type == 'string' && data.mode == 'password' && data.value" >********</div>
-            <div v-if="data.type == 'minmax'" >
-              <div class="flex flexcenter flexstart" v-for="(minmaxVal,key) in data.value" :key="uid(minmaxVal)" >
-                <span class="text-secondary text-small flex1" >{{key}}</span> <span class="flex9" >{{minmaxVal}}</span>
+    <div  class="flex spacebetween flexcenter fullwidth flex"  >
+      <div class="flex flexcol fullwidth" >
+        <div class="marginbottom050" >
+          <strong>
+            {{inputKey}}
+          </strong>
+        </div>
+        <div :class="['fullwidth flex relative borderRad4 relative', errors.length != 0 ? 'borderRad4 overflowhidden' : '', operation == 'w' ? 'paneBorder' : '', isActive ? 'paneShadow' : '']" 
+        :style="{background: 'white'}" >
+          <div  v-if="loading || xloading" style="z-index: 999; background: #f5f7fabe; cursor: not-allowed" class="absolute fullwidth fullheight-percent" ></div>
+          <div :style="{border: inputBorderColor}" class="fullwidth borderRad4" > 
+            <!-- input mode -->
+            <slot v-if="showInput" :onInput="onInput" :allowMutationOnInput="allowMutationOnInput"  ></slot>
+            <!-- read mode -->
+            <div @click="updateMode(true)" v-if="!showInput" class="pad050 pointer text-regular" >
+              <!-- <span v-html="formatedReadModeData" ></span> -->
+              <div v-if="typeof data.value == 'string' && !data.mode" >{{data.value}}</div>
+              <div v-if="typeof data.value == 'number' && data.type == 'number'" >{{data.value}}</div>
+              <div v-if="data.type == 'select' || data.type == 'multiselect'" >{{data.options[data.value]}}</div>
+              <div v-if="data.type == 'checkbox'" >{{data.value ? 'Confirmed' : 'Not Confirmed'}}</div>
+              <div v-if="data.type == 'string' && data.mode == 'password' && data.value" >********</div>
+              <div v-if="data.type == 'minmax'" >
+                <div class="flex flexcenter flexstart" v-for="(minmaxVal,key) in data.value" :key="uid(minmaxVal)" >
+                  <span class="text-secondary text-small flex1" >{{key}}</span> <span class="flex9" >{{minmaxVal}}</span>
+                </div>
               </div>
+              <div v-if="Array.isArray(data.value)" > <v-chip small class="marginright025" v-for="item in data.value" :key="uid() + item" >{{item}}</v-chip> </div>
+              <div v-if="data.value == undefined" >Not Available</div>
             </div>
-            <div v-if="Array.isArray(data.value)" > <v-chip small class="marginright025" v-for="item in data.value" :key="uid() + item" >{{item}}</v-chip> </div>
-            <div v-if="data.value == undefined" >Not Available</div>
           </div>
+        <div id="edit-trigger" @click="updateMode(true)" v-if="operation == 'rw'" class="marginleft050 pointer clickable-span flex flexcenter" >
+          <svg id="pencil-filled" style="width:24px;height:24px; display:none" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
+          </svg>
+          <svg id="pencil-unfilled" style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M14.06,9L15,9.94L5.92,19H5V18.08L14.06,9M17.66,3C17.41,3 17.15,3.1 16.96,3.29L15.13,5.12L18.88,8.87L20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18.17,3.09 17.92,3 17.66,3M14.06,6.19L3,17.25V21H6.75L17.81,9.94L14.06,6.19Z" />
+          </svg>
+        </div>
         </div>
       </div>
-      <div @click="updateMode(true)" v-if="operation == 'rw'" class="marginleft050 pointer clickable-span" >edit</div>
 
       <!-- input state indicators -->
-      <div v-if="operation == 'w'" :class="['flex flexwrap flexend flexcenter', updating ? 'marginleft050' : '']" >
+      <div v-if="operation == 'w'" :class="['flex flexwrap flexend flexcenter', updating ? 'marginleft025 margintop125' : '']" >
         <!-- loading -->
         <loading class="marginleft050" v-if="loading || xloading" />
         <!-- check mark -->
@@ -96,11 +110,11 @@
     <!--  -->
     <div v-if="showUpdateControls" class="flex flexend pointer padtop025" >
       <span v-if="errors.length == 0 && showUpdateBtn"  @click="update" class="marginright050 clickable-span" >{{updateOnProgress ? 'updating ...' : 'update'}}</span>
-      <span v-if="updateOnProgress == false" @click="cancel" class="clickable-span" >close</span>
+      <span v-if="updateOnProgress == false" @click="cancel" class="clickable-span" >Close</span>
     </div>
     <!--  -->
     <div class="flex flexend pointer padtop025" >
-      <span v-if="showCancelUpdateDueServerError" @click="cancelUpdateDueServerError" class="clickable-span" >close</span>
+      <span v-if="showCancelUpdateDueServerError" @click="cancelUpdateDueServerError" class="clickable-span" >Close</span>
     </div>
   </div>
 </template>
@@ -252,5 +266,12 @@ export default {
 }
 .bg-update {
   background: #ECEFF1;
+  transition: 0.3s;
+}
+#edit-trigger:hover > #pencil-unfilled {
+  display: none;
+}
+#edit-trigger:hover > #pencil-filled {
+  display: block !important;
 }
 </style>

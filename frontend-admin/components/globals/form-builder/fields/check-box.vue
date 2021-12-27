@@ -47,6 +47,7 @@ export default {
   },
   mounted() {
     this.desc = this.data.content
+    this.value = this.data.value
   }
 }
 </script>

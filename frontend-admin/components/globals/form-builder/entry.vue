@@ -17,24 +17,25 @@
       <div class="margin125">
         <div
           class="flex flexcol"
+          style="border-bottom: 1px solid #eceff1;"
           v-for="(obj_key,obj_index) in final_model"
           :key="`-o-${obj_index}`"
         >
-          <div v-if="renderPaused != obj_index" class=" flex pad050 flexcol">
+          <div v-if="renderPaused != obj_index" class=" flex pad050">
             <!-- keys -->
-            <div
+            <!-- <div
               :id="`objectify-${obj_index}`"
               role="display object index"
-              :class="['flex3 pointer flexwrap padleft050 flex', editMode.includes(obj_index) ? 'padtop125 margintop025' : 'padtop125 margintop025']"
-              :style="{...get_keys_style, width:'50%'}"
+              :class="['borderred flex3 pointer flexwrap flex', editMode.includes(obj_index) ? 'padtop125 margintop025' : 'padtop125 margintop025']"
+              :style="{...get_keys_style, minWidth: '150px', maxWidth: '300px'}"
               :title="obj_key.hoverInfo"
             >
-                <span class="marginright050" style="color: #232729; font-weight:600;" >
+                <span class="" style="color: #232729; font-weight:600;" >
                     {{obj_index}}
                 </span>
-            </div>
+            </div> -->
             <!-- value -->
-            <div :style="{...get_value_style}" role="display object value" class="flex flex1 relative pad050 ">
+            <div :style="{...get_value_style}" role="display object value" class="flex flex1 relative pad050 fullwidth">
               <div v-if="disable_all_fields" id="disabler" class="absolute fullheight-percent fullwidth" style="z-index:100" ></div>
               <div
                 :style="{color: get_value_style.color}"
@@ -553,19 +554,19 @@ export default {
         // emit object changes
         this.$emit("onData", this.final_vanilla);
 
-        document.getElementById(`objectify-${key}`).classList.remove("err");
-        document
-          .getElementById(`objectify-${key}`)
-          .classList.remove("backgrounderr");
+        // document.getElementById(`objectify-${key}`).classList.remove("err");
+        // document
+        //   .getElementById(`objectify-${key}`)
+        //   .classList.remove("backgrounderr");
       } else {
         // show err
         targetInputWrapper.pushError(err)
 
         if (this.has_initial_input) {
-          document.getElementById(`objectify-${key}`).classList.add("err");
-          document
-            .getElementById(`objectify-${key}`)
-            .classList.add("backgrounderr");
+          // document.getElementById(`objectify-${key}`).classList.add("err");
+          // document
+          //   .getElementById(`objectify-${key}`)
+          //   .classList.add("backgrounderr");
 
           // triggers the real time error infomation to show the error
           this.err = err;

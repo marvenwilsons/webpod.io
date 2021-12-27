@@ -8,7 +8,9 @@
     </h1>
     {{error}}
     <NuxtLink to="/">
-      Home page
+      <div>
+        Home page
+      </div>
     </NuxtLink>
   </v-app>
 </template>

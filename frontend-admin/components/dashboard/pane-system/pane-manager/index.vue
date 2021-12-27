@@ -1,6 +1,6 @@
 <template>
 <!-- PANE MANAGER -->
-    <main v-if="ready" class="fullheight-percent flex relative" style="z-index: 900; overflow-x: auto; overflow-y: hidden;" >
+    <main v-if="ready" class="fullheight-percent flex relative" style="z-index: 900; overflow-x: hidden; overflow-y: hidden;" >
         <!-- each prop that is passed in the slot can be access in pane-system/index.vue component, which is the pane item component -->
         <!-- the <slot /> component represents the pane component -->
         <div id="paneManager" class="absolute flex fullheight-percent fullwidth" >

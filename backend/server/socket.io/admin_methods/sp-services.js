@@ -375,11 +375,11 @@ function getName() {
                     appendAfter: '.gmail',
                     operation: 'rw', // r -- read only values already supplied, rw -- readwrite values already supplied with updatable, w -- write values to be supplied
                     hooks: {
-                        onMount(input) {
+                        onMount: `function (input) {
                           // console.log('onMount', input)
               
-                        },
-                        onInput(input) {                          
+                        }`,
+                        onInput: `function(input) {                          
                           // simple data set
                           const sampleQueryResult = [
                               'how to delete instagram account',
@@ -390,19 +390,19 @@ function getName() {
                               'Marven Wilson',
                               'Psalm Pearson'
                           ]
-                        },
-                        onError(err) {
+                        }`,
+                        onError: `function (err) {
                           // console.log('on error', err)
-                        },
-                        onBlur(input) {
-                            // console.log('onBlur', input)
-                            // if(input.value != 'marven wilson') {
-                            //     input.error.push(`Invalid selection ${input.value} should be marven wilson`)
-                            // } else {
-                            //     input.check(true)
-                            // }
-                        },
-                        onUpdate(input) {
+                        }`,
+                        onBlur: `function(input) {
+                          // console.log('onBlur', input)
+                          // if(input.value != 'marven wilson') {
+                          //     input.error.push('')
+                          // } else {
+                          //     input.check(true)
+                          // }
+                        }`,
+                        onUpdate: `function (input) {
                             // console.log('onUpdate', input)
 
                             setTimeout(() => {
@@ -411,7 +411,7 @@ function getName() {
                                 input.update.done()
                                 // console.log('input value',input.value)
                             },300)
-                        }
+                        }`
                     }
                 },
                 name: {
@@ -430,13 +430,15 @@ function getName() {
                     ],
                     renderCondition: {
                         controllers: ["user information"],
-                        method: `schema => schema['user information'].value && schema['user information'].value.length > 5`
+                        method: `function (schema) {
+                          return schema['user information'].value && schema['user information'].value.length > 5
+                        }`
                     },
                     hooks: {
-                        onUpdate(n) {
+                        onUpdate: `function (n) {
                             console.log(n)
-                        },
-                        onUpdate(input) {
+                        }`,
+                        onUpdate: `function (input) {
                             console.log('onUpdate',input)
                             setTimeout(() => {
                                 console.log('done')
@@ -444,7 +446,7 @@ function getName() {
                                 input.update.done()
                                 // console.log('input value',input.value)
                             },300)
-                        }
+                        }`
                     }
                 },
                 tabindex: {
@@ -458,7 +460,7 @@ function getName() {
                     appendAfter: '.00',
                     renderCondition: {
                         controllers: ["user information", "name"],
-                        method: `schema => {
+                        method: `function(schema) {
                             if (schema['user information'].value) {
                                 return (
                                     schema['user information'].value.length > 2 &&
@@ -468,18 +470,18 @@ function getName() {
                         }`
                     },
                     hooks: {
-                        onInput(input) {
+                        onInput: `function (input) {
                           //   console.log('number',input.value)
-                        },
-                        onBlur(input) {
+                        }`,
+                        onBlur: `function(input) {
                             
-                        },
-                        onUpdate(input) {
-                            // console.log('onUpdate number', input)
-                            setTimeout(() => {
-                                input.update.done()
-                            }, 300)
-                        }
+                        }`,
+                        onUpdate: `function(input) {
+                          // console.log('onUpdate number', input)
+                          setTimeout(() => {
+                              input.update.done()
+                          }, 300)
+                        }`
                     }
                 },
                 isAList: {
@@ -495,14 +497,16 @@ function getName() {
                         "dq-studio global attribute: re renders element repeatedly",
                     renderCondition: {
                         controllers: ["tabindex"],
-                        method: `schema => schema.tabindex.value == 5`
+                        method: `function (schema) {
+                          return schema.tabindex.value == 5
+                        }`,
                     },
                     hooks: {
-                        onUpdate(n) {
-                            setTimeout(() => {
-                                n.update.done()
-                            }, 300)
-                        }
+                      onUpdate: `function (n) {
+                        setTimeout(() => {
+                            n.update.done()
+                        }, 300)
+                      }`
                     }
                 },
                 /**
@@ -516,16 +520,17 @@ function getName() {
                         "dq-studio global attribute: re renders element repeatedly",
                     renderCondition: {
                         controllers: ["isAList", "tabindex"],
-                        method: `schema =>
-                            schema.isAList.value == 0 &&
-                            schema.tabindex.value == 5`
+                        method: `function (schema) {
+                          return schema.isAList.value == 0 &&
+                          schema.tabindex.value == 5
+                        }`
                     },
                     hooks: {
-                        onUpdate(n) {
+                        onUpdate:` function (n) {
                             setTimeout(() => {
                                 n.update.done()
                             },300)
-                        }
+                        }`
                     }
                 },
                 /**
@@ -565,7 +570,7 @@ function getName() {
                         }`
                     },
                     hooks: {
-                        onBlur(input) {
+                        onBlur: `function(input) {
                             // console.log('Blurred', input)
                             input.loading(true)
                             input.setDescription('checking please wait ...')
@@ -575,12 +580,12 @@ function getName() {
                                 input.setDescription(null)
                                 input.check(true)
                             },1500)
-                        },
-                        onUpdate(n) {
+                        }`,
+                        onUpdate: `function(n) {
                             setTimeout(() => {
                                 n.update.done()
                             }, 300)
-                        }
+                        }`
                     }
                 },
                 password: {
@@ -612,11 +617,11 @@ function getName() {
                         includeNumericCharacters: 2
                     },
                     hooks: {
-                        onUpdate(n) {
+                        onUpdate: `function(n) {
                             setTimeout(() => {
                                 n.update.done()
                             }, 300)
-                        }
+                        }`
                     }
                 },
                 multiselect: {
@@ -628,28 +633,31 @@ function getName() {
                     controllers: ["list origin from", "isAList"],
                     method: `schema =>
                         schema["list origin from"].value == 0 &&
-                        schema.isAList.value == 0`
+                        schema.isAList.value == 0`,
+                    method: `function(schema) {
+                      schema["list origin from"].value == 0 && schema.isAList.value == 0
+                    }`
                   },
                   hooks: {
-                    onMount(input) {
+                    onMount: `function(input) {
                         // console.log('onMount multiselect', input)
                         // input.multiselect.addOption('test')
-                    },
-                    onInput(input) {
+                    }`,
+                    onInput: `function(input) {
                         // console.log('onInput', input)
-                    },
-                    onEmpty(input) {
+                    }`,
+                    onEmpty:` function(input) {
                         input.error.push('This field is required')
                         // console.log('its empty!', input)
-                    },
-                    onError() {
+                    }`,
+                    onError: `function() {
                         // console.log('Whaaaaaaat?')
-                    },
-                    onUpdate(n) {
+                    }`,
+                    onUpdate: `function(n) {
                         setTimeout(() => {
                             n.update.done()
                         }, 300)
-                    }
+                    }`
                   }
                 },
                 tags: {
@@ -664,16 +672,16 @@ function getName() {
                   hoverInfo: 'tags',
                   renderCondition: {
                       controllers: ["list origin from", "isAList"],
-                      method: `schema =>
-                          schema["list origin from"].value == 0 &&
-                          schema.isAList.value == 0`
+                      method: `function(schema) {
+                        schema["list origin from"].value == 0 && schema.isAList.value == 0
+                      }`
                   },
                   hooks: {
-                      onUpdate(n) {
+                      onUpdate: `function(n) {
                           setTimeout(() => {
                             n.update.done()
                           },300)
-                      }
+                      }`
                   }
                 },
                 "EXR Range2": {
@@ -691,14 +699,17 @@ function getName() {
                         controllers: ["list origin from", "isAList"],
                         method: `schema =>
                             schema["list origin from"].value == 0 &&
-                            schema.isAList.value == 0`
+                            schema.isAList.value == 0`,
+                        method: `function(schema) {
+                          schema["list origin from"].value == 0 && schema.isAList.value == 0
+                        }`
                     },
                     hooks: {
-                        onUpdate(n) {
+                        onUpdate: `function(n) {
                             setTimeout(() => {
                                 n.update.done()
                             }, 100)
-                        }
+                        }`
                     }
                 },
                 "Comments" : {
@@ -707,13 +718,15 @@ function getName() {
                     hoverInfo: 'Comments',
                     maxlength: 200,
                     hooks: {
-                        onInput() {
+                        onInput: `function() {
                             console.log('textarea onInput')
-                        },
-                        onUpdate(input) {
-                            console.log('onUpdate', input)
-                            input.update.done()
-                        }
+                        }`,
+                        onUpdate: `function(n) {
+                            console.log('onUpdate', n)
+                            setTimeout(() => {
+                              n.update.done()
+                            }, 500)
+                        }`
                     }
                 },
                 "Agreement" : {
@@ -725,7 +738,7 @@ function getName() {
                     hoverInfo: 'Agreement',
                     description: 'disclosure aggreement',
                     hooks: {
-                        onInput: `function() {
+                        onInput: `function(n) {
                           console.log('onInput agreement', n)
                         }`,
                         onUpdate: `function(n) {

@@ -1,2 +1,16 @@
 for sending images from server to client using socket.io
 ==> https://gist.github.com/companje/b95e735650f1cd2e2a41
+
+About use case for v-html
+==> https://stackoverflow.com/questions/55262267/does-vue-by-default-provide-security-for-or-protects-against-xss
+==> https://www.raymondcamden.com/2019/11/26/sanitizing-html-in-vuejs
+==> https://www.npmjs.com/package/vue-sanitize
+
+video streaming express nuxt
+==> https://www.smashingmagazine.com/2021/04/building-video-streaming-app-nuxtjs-node-express/
+
+TODO
+==> Fix Form Builder
+  - checkbox is broken
+==> Media Fetching
+==> Service Maker
