@@ -1,7 +1,10 @@
 <template>
-  <main class="flex flexcenter marginleft050" >
-		<div :style="{borderLeftColor: check ? '#1E88E5' : 'none', borderColor: check ? '#1E88E5' : 'none'}" :class="[check ? 'load-complete circle-loader' : 'circle-loader']">
-			<div class="checkmark draw" :style="{display: check ? 'block' : ''}"></div>
+  <main class="flex flexcenter fullheight-percent relative" >
+		<div 
+		:style="{borderLeftColor: check ? '#1E88E5' : 'none', borderColor: check ? '#1E88E5' : 'none', marginLeft: '5px', marginTop: '2px', }" 
+		:class="[check ? 'load-complete circle-loader' : 'circle-loader']"
+		>
+			<div class="checkmark draw" :style="{display: check ? 'flex' : ''}"></div>
 		</div>
 	</main>
 </template>
