@@ -531,8 +531,8 @@ export default {
 
         return output;
     },
-    data_change({ err, data, key }) {
-      console.log('DATA_CHANGE', key, '\n -',data)
+    data_change({ err, value, key }) {
+      console.log('DATA_CHANGE', key, '\n -',value)
       if (!this.change_occurs) {
         this.change_occurs = true;
       }
@@ -541,7 +541,7 @@ export default {
       if (!err) {
         targetInputWrapper.pushError([])
         // change default value to final model
-        this.final_model[key].value = data;
+        this.final_model[key].value = value;
         //
         if (!this.has_initial_input) {
           this.has_initial_input = true;
@@ -577,7 +577,7 @@ export default {
           this.$emit("onError", {
             err,
             key,
-            data
+            value
           });
         }
       }

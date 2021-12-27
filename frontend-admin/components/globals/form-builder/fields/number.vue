@@ -30,20 +30,20 @@ export default {
             if (this.data.max < current_input) {
                 this.$emit("onChange", {
                     err: `The value of ${this._key} exceeds the defined maximum value of ${this.data.max}`,
-                    data: null,
+                    value: null,
                     key: this._key
                 })
             } else if (this.data.min > current_input) {
                 this.$emit("onChange", {
                     err: `The value of ${this._key} outstep's the defined minimum value of ${this.data.max}`,
-                    data: null,
+                    value: null,
                     key: this._key
                 })
             } else {
                 if(this.inputIsActive == true) {
                     this.$emit("onChange", {
                         err: null,
-                        data: current_input,
+                        value: current_input,
                         key: this._key
                     })
                 }

@@ -40,7 +40,7 @@ export default {
       }
       this.$emit("onChange", {
         err: null,
-        data: n,
+        value: n,
         key: this._key,
       })
     }

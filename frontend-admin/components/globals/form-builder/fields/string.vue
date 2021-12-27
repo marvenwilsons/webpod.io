@@ -205,7 +205,7 @@ export default {
           // emit an event containing the current value of the input
           this.$emit("onChange", {
             err: null,
-            data: current_string_being_input,
+            value: current_string_being_input,
             key: this._key,
             // when autocomplete is acitve it will return a set of methods from autocomplete component else it will return empty functions to avoid error in case executed
             autoCompleteHooks: this.get_autocomp_component_methods()
@@ -231,7 +231,7 @@ export default {
         // emit an event with errors
         this.$emit("onChange", {
           err: errors,
-          data: null,
+          value: null,
           autoCompleteHooks: this.autoCompleteHooks_empty,
           key: this._key
         })
@@ -263,7 +263,7 @@ export default {
           this.$parent.pushError('Password does not match')
           this.$emit("onChange", {
             err: ['password does not match'],
-            data: null,
+            value: null,
             autoCompleteHooks: this.autoCompleteHooks_empty,
             key: this._key
           })
@@ -277,7 +277,7 @@ export default {
 
           this.$emit("onChange", {
             err: null,
-            data: this.text_input_model,
+            value: this.text_input_model,
             key: this._key,
             // when autocomplete is acitve it will return a set of methods from autocomplete component else it will return empty functions to avoid error in case executed
             autoCompleteHooks: this.get_autocomp_component_methods()

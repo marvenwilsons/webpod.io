@@ -55,7 +55,7 @@ export default {
 
             this.$emit("onChange", {
                 err: null,
-                data: this.data.options.indexOf(current),
+                value: this.data.options.indexOf(current),
                 key: this._key
             })
         },

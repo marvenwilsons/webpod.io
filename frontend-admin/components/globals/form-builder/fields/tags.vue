@@ -182,13 +182,13 @@ export default {
       if(this.errors.length == 2) {
         this.$emit("onChange", {
           err: this.errors.join(' & '),
-          data: null,
+          value: null,
           key: this._key
         })
       } else if(this.errors.length == 1) {
         this.$emit("onChange", {
           err: this.errors[0],
-          data: null,
+          value: null,
           key: this._key
         })
 

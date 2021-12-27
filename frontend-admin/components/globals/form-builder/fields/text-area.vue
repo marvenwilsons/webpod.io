@@ -1,5 +1,5 @@
 <template>
-  <main   class="flex flexcol relative" >
+  <main   class="flex flexcol relative" style="overflow:hidden;" >
     <textarea v-model="txt" :maxlength="data.maxlength || null" :tabindex="parseInt(key_index)" class="fullwidth pad050 fullheight-percent" cols="20" rows="10"></textarea>
     <div class="absolute fullwidth padright050 padbottom025 flex flexend" style="bottom:0;"  >
       <small v-if="data.maxlength" style="background:white;" >{{txt.length}}/{{data.maxlength}}</small>
@@ -23,7 +23,7 @@ export default {
 
       this.$emit("onChange", {
         err: null,
-        data: n,
+        value: n,
         key: this._key,
       })
     }

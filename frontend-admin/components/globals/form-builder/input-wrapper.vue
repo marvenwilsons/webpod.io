@@ -1,18 +1,22 @@
 <template>
   <div v-if="ready" :style="{background: showUpdateControls ? '#eceff1' : 'none'}" :class="['fullwidth pad050 borderRad4', showUpdateControls ? 'paneBorder bg-update borderRad4' : '']" >
-    <div v-if="data.headDescription && showUpdateControls" class="marginbottom050 padleft025 " >
-      <span class="text-secondary" >
-        {{data.headDescription}}
-      </span>
-    </div>
+    
     <!-- input -->
     <div  class="flex spacebetween flexcenter fullwidth flex"  >
       <div class="flex flexcol fullwidth" >
-        <div class="marginbottom050" >
+        <!-- key -->
+        <div class="marginbottom050 marginleft025" >
           <strong>
             {{inputKey}}
           </strong>
         </div>
+        <!-- Description text -->
+        <div v-if="data.headDescription && showUpdateControls" class="marginbottom050 padleft025 " >
+          <span class="text-small" >
+            {{data.headDescription}}
+          </span>
+        </div>
+        <!-- Input -->
         <div :class="['fullwidth flex relative borderRad4 relative', errors.length != 0 ? 'borderRad4 overflowhidden' : '', operation == 'w' ? 'paneBorder' : '', isActive ? 'paneShadow' : '']" 
         :style="{background: 'white'}" >
           <div  v-if="loading || xloading" style="z-index: 999; background: #f5f7fabe; cursor: not-allowed" class="absolute fullwidth fullheight-percent" ></div>
@@ -20,7 +24,7 @@
             <!-- input mode -->
             <slot v-if="showInput" :onInput="onInput" :allowMutationOnInput="allowMutationOnInput"  ></slot>
             <!-- read mode -->
-            <div @click="updateMode(true)" v-if="!showInput" class="pad050 pointer text-regular" >
+            <div @click="updateMode(true)" v-if="!showInput" id="input-read-mode" class="pad050 pointer text-regular " >
               <!-- <span v-html="formatedReadModeData" ></span> -->
               <div v-if="typeof data.value == 'string' && !data.mode" >{{data.value}}</div>
               <div v-if="typeof data.value == 'number' && data.type == 'number'" >{{data.value}}</div>
@@ -107,14 +111,32 @@
           </div>
         </div>
       </div>
-    <!--  -->
+    <!-- Update Trigger -->
     <div v-if="showUpdateControls" class="flex flexend pointer padtop025" >
-      <span v-if="errors.length == 0 && showUpdateBtn"  @click="update" class="marginright050 clickable-span" >{{updateOnProgress ? 'updating ...' : 'update'}}</span>
-      <span v-if="updateOnProgress == false" @click="cancel" class="clickable-span" >Close</span>
+      <!-- Begin update process -->
+      <span v-if="errors.length == 0 && showUpdateBtn && isUpdateAllowed && !showCheck"
+        style="border:1px solid #1976d2"
+        class="flat_action marginright050 clickable-span borderRad4" >
+        <strong>
+          <span v-if="updateOnProgress" >Updating ...</span>
+          <span  class="borderRad4" @click="update" v-if="!updateOnProgress" >Update</span>
+        </strong>
+      </span>
+      <!-- To cancel or close the update mode -->
+      <span v-if="updateOnProgress == false" @click="cancel" 
+      class="clickable-span flat_action borderRad4" 
+      style="border:1px solid #1976d2"
+      >
+        <strong>Close</strong>
+      </span>
     </div>
-    <!--  -->
+    <!-- Cacel Trigger -->
     <div class="flex flexend pointer padtop025" >
-      <span v-if="showCancelUpdateDueServerError" @click="cancelUpdateDueServerError" class="clickable-span" >Close</span>
+      <span v-if="showCancelUpdateDueServerError" 
+      @click="cancelUpdateDueServerError" 
+      class="clickable-span flat_action" >
+        Close
+      </span>
     </div>
   </div>
 </template>
@@ -141,6 +163,7 @@ export default {
     allowMutationOnInput: true,
     inputObject: undefined,
     showCancelUpdateDueServerError: false,
+    isUpdateAllowed: false
   }),
   computed: {
     inputBorderColor() {
@@ -171,26 +194,39 @@ export default {
           this.showCancelUpdateDueServerError = true
         }
       }
+    },
+    showUpdateControls() {
+      if(this.showUpdateControls == false) {
+        this.isUpdateAllowed = false
+      }
     }
   },
   methods: {
     onInput(input) { /** executes the onInput hook function from the input object data property,
       this method runs every time an input is changed */
-      this.inputObject = input
-      if(input.autoCompleteHooks != undefined) {
-        this.hookMethods.autocomplete = input.autoCompleteHooks
-      }
+      console.log(input.value, this.data.value)
+      if(this.data.value != input.value /** it means the user changed the input value */) {
 
-      const executeHookFunction = () => {
-        if(this.currentHooks.includes('onInput')) {
-          this.data.hooks.onInput({
-            value: input.data,
-            ...this.hookMethods
-          })
+        this.isUpdateAllowed = true
+        this.showCheck = false
+
+        this.inputObject = input
+
+        if(input.autoCompleteHooks != undefined) {
+          this.hookMethods.autocomplete = input.autoCompleteHooks
         }
-      }
 
-      executeHookFunction() 
+        const executeHookFunction = () => {
+          if(this.currentHooks.includes('onInput')) {
+            this.data.hooks.onInput({
+              value: input.data,
+              ...this.hookMethods
+            })
+          }
+        }
+
+        executeHookFunction() 
+      }
     },
     pushError(err) { /** Push new string to the errors array */
       if(Array.isArray(err)) {
@@ -264,7 +300,7 @@ export default {
 .clickable-span {
   color: #1E88E5;
 }
-.bg-update {
+.bg-update, #input-read-mode:hover {
   background: #ECEFF1;
   transition: 0.3s;
 }
@@ -274,4 +310,5 @@ export default {
 #edit-trigger:hover > #pencil-filled {
   display: block !important;
 }
+
 </style>

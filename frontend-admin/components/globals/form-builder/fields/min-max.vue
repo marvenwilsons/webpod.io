@@ -55,7 +55,7 @@ export default {
             }
             this.$emit("onChange", {
                 err: null,
-                data: {
+                value: {
                     min: parseInt(this.min),
                     max: parseInt(this.max)
                 },
@@ -79,7 +79,7 @@ export default {
 
             this.$emit("onChange", {
                 err: null,
-                data: {
+                value: {
                     min: parseInt(this.min),
                     max: parseInt(this.max)
                 },
