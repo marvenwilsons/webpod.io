@@ -1,0 +1,15 @@
+{
+    "javascript.format.enable": false,
+    "json.format.enable": false,
+    "pgFormatter.commaEnd": false,
+    "vetur.format.defaultFormatter.css": "none",
+    "vetur.format.defaultFormatter.html": "none",
+    "vetur.format.defaultFormatter.js": "none",
+    "vetur.format.defaultFormatter.less": "none",
+    "vetur.format.defaultFormatter.postcss": "none",
+    "vetur.format.defaultFormatter.pug": "none",
+    "vetur.format.defaultFormatter.sass": "none",
+    "vetur.format.defaultFormatter.scss": "none",
+    "editor.formatOnSave": false,
+    "editor.fontSize": 13
+}
