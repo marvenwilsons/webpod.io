@@ -1,5 +1,5 @@
 <template>
-  <div v-if="ready" class="flex flexcol" style="gap:1px;" >
+  <div v-if="ready" class="flex flexcol" style="gap:5px;" >
     <div
       v-for="(item,index) in mData"
       :key="index * 321 + uid()"
@@ -8,7 +8,8 @@
       :config="item.viewConfig"
       :hooks="typeof item.viewHooks == 'string' ? convertToHook(item.viewHooks): item.viewHooks"
       :ref="`${currentId}${index}`"
-      :class="['paneItemBg borderRad4 paneBorder']"
+      :class="[' borderRad4 ']"
+      style="background: white;"
     >
     <!-- {{item}} {{typeof item.viewHooks}} -->
     </div>
