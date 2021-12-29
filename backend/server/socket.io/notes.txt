@@ -11,6 +11,6 @@ video streaming express nuxt
 
 TODO
 ==> Fix Form Builder
-  - checkbox is broken
+  - tags is broken
 ==> Media Fetching
 ==> Service Maker

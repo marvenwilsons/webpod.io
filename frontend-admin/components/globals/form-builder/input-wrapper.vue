@@ -66,30 +66,19 @@
                 <div v-if="data.type == 'checkbox'">
                   {{ data.value ? "Confirmed" : "Not Confirmed" }}
                 </div>
-                <div
-                  v-if="
-                    data.type == 'string' &&
-                    data.mode == 'password' &&
-                    data.value
-                  "
-                >
+                <div v-if="data.type == 'string' && data.mode == 'password' && data.value">
                   ********
                 </div>
                 <div v-if="data.type == 'minmax'">
-                  <div
-                    class="flex flexcenter flexstart"
-                    v-for="(minmaxVal, key) in data.value"
-                    :key="uid(minmaxVal)"
-                  >
-                    <span class="text-secondary text-small flex1">{{
-                      key
-                    }}</span>
+                  <div class="flex flexcenter flexstart" v-for="(minmaxVal, key) in data.value" :key="uid(minmaxVal)">
+                    <span class="text-secondary text-small flex1">
+                      {{ key }}
+                    </span>
                     <span class="flex9">{{ minmaxVal }}</span>
                   </div>
                 </div>
                 <div v-if="Array.isArray(data.value)">
                   <v-chip
-                    small
                     class="marginright025"
                     v-for="item in data.value"
                     :key="uid() + item"

@@ -1,41 +1,31 @@
 <template>
-  <div class="fullwidth flex padleft050 flexwrap pad025"  @keydown="keydown" >
+  <div class="fullwidth flex padleft050 flexwrap padbottom025"  @keydown="keydown" >
     <div 
-        :style="{border: `1px solid ${appearance.select_chip_border_color}`, background:appearance.select_chip_bg_color, maxHeight: '25px'}"
-        :class="[`${currentId}_s_opts`, 'padright025 padleft025 s_opts pointer ']" 
+        :class="[`${currentId}_s_opts`, 'borderRad4 padleft025 s_opts pointer ']" 
         v-for="(so,si) in selected_opts" :key="`${so}-${si}`"
-        @mouseover="onhover(true,si,`${currentId}_s_opts`)"
-        @mouseleave="onhover(false,si,`${currentId}_s_opts`)"
         >
-        <div class="flex flexcenter" >
-            <div class="padleft025" >
-                <span style="white-space: nowrap;" >{{so}}</span> 
-            </div>
+        <v-chip class="margintop025" >
+          <span style="white-space: nowrap; color: #2c3234;" > {{so}}</span> 
+          <!-- close btn -->
             <div 
             @click.prevent="removeSelection(so)" 
-            @mouseover="onhover(true,si,`${currentId}_s_opts_close`)"
-            @mouseleave="onhover(false,si,`${currentId}_s_opts_close`)"
-            :style="{border:`1px solid ${appearance.select_chip_border_color}`}" 
-            :class="[`${currentId}_s_opts_close`, 'marginleft025 padleft025 padright025 flex flexcenter s_opts_close']" 
+            :class="[`${currentId}_s_opts_close`, 'marginleft025 padleft025 padright025 flex flexcenter s_opts_close pointer']" 
             >
-                <span :style="{color: appearance.chip_close}" >
+                <span  >
                     <svg style="width:11px;height:11px" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
                     </svg>
                 </span>
             </div>
-        </div>
+        </v-chip>
     </div>
     <!-- input and add button -->
     <div class="flex marginright025" style="padding-right:2px;" >
       <input :id="currentId" v-model="text" onkeypress="this.style.width = ((this.value.length + 1) * 9) + 'px';" 
-        class="marginleft025 pad025" :tabindex="parseInt(key_index)"  type="text"
-        style="min-width:100px;"
+        class="marginleft025 pad025 invisible-input fullwidth" :tabindex="parseInt(key_index)"  type="text"
+        style="min-width:100%;"
         @blur="inputIsSelected = false" @focus="inputIsSelected = true"
       >
-      <!-- <svg @click="updateTags" style="width:20px;height:20px; padding-top:4px;" class="flex flexcenter pointer" viewBox="0 0 24 24">
-        <path fill="currentColor" d="M17,13H13V17H11V13H7V11H11V7H13V11H17M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z" />
-      </svg> -->
     </div>
   </div>
 </template>
@@ -216,7 +206,7 @@ export default {
       if(this.errors.length == 0) {
         this.$emit("onChange", {
           err: null,
-          data: this.selected_opts,
+          value: this.selected_opts,
           key: this._key
         })
       }
@@ -277,3 +267,9 @@ export default {
   
 }
 </script>
+
+<style >
+.invisible-input:focus, .invisible-input:active {
+  outline: none !important;
+}
+</style>
