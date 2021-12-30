@@ -108,6 +108,11 @@ export default {
             // _ECEE-2-js locates the most parent component and executes removePaneCollectionItem from that component
             // paneIndex is the current position of the object in the array in paneCollection
             this.$parent.$parent.$parent.removePaneCollectionItem(this.paneIndex)()
+            this.ready = false
+
+            setTimeout(() => {
+                this.ready = true
+            }, 0);
         },
         /** Pane direct related methods */
         setPaneData(url,cb) {

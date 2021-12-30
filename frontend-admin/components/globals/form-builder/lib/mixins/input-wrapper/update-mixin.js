@@ -49,7 +49,6 @@ export default {
         this.setCheck(true)
       } else {
         this.setCheck(false)
-        console.log('error handle')
       }
       
     },
