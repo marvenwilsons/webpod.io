@@ -52,41 +52,42 @@
                 id="input-read-mode"
                 class="pad050 pointer text-regular"
               >
-                <div v-if="typeof data.value == 'string' && !data.mode">
-                  {{ data.value }}
+                <div v-if="typeof getLatestDataValue == 'string' && !data.mode">
+                  {{ getLatestDataValue }}
                 </div>
                 <div
-                  v-if="typeof data.value == 'number' && data.type == 'number'"
+                  v-if="typeof getLatestDataValue == 'number' && data.type == 'number'"
                 >
-                  {{ data.value }}
+                  {{ getLatestDataValue}}
                 </div>
                 <div v-if="data.type == 'select' || data.type == 'multiselect'">
-                  {{ data.options[data.value] }}
+                  {{ data.options[getLatestDataValue] }}
                 </div>
                 <div v-if="data.type == 'checkbox'">
-                  {{ data.value ? "Confirmed" : "Not Confirmed" }}
+                  {{ getLatestDataValue ? "Confirmed" : "Not Confirmed" }}
                 </div>
-                <div v-if="data.type == 'string' && data.mode == 'password' && data.value">
+                <div v-if="data.type == 'string' && data.mode == 'password' && getLatestDataValue">
                   ********
                 </div>
                 <div v-if="data.type == 'minmax'">
-                  <div class="flex flexcenter flexstart" v-for="(minmaxVal, key) in data.value" :key="uid(minmaxVal)">
+                  <div class="flex flexcenter flexstart" v-for="(minmaxVal, key) in getLatestDataValue" :key="uid(minmaxVal)">
                     <span class="text-secondary text-small flex1">
                       {{ key }}
                     </span>
                     <span class="flex9">{{ minmaxVal }}</span>
                   </div>
                 </div>
-                <div v-if="Array.isArray(data.value)">
+                <div v-if="Array.isArray(getLatestDataValue)">
                   <v-chip
                     class="marginright025"
-                    v-for="item in data.value"
+                    v-for="item in getLatestDataValue"
                     :key="uid() + item"
                     >{{ item }}</v-chip
                   >
                 </div>
-                <div v-if="data.value == undefined">Not Available</div>
+                <div v-if="getLatestDataValue == undefined">Not Available</div>
               </div>
+              <!-- end of read mode -->
             </div>
             <div
               id="edit-trigger"
@@ -294,6 +295,7 @@ export default {
     inputObject: undefined,
     showCancelUpdateDueServerError: false,
     isUpdateAllowed: false,
+    $value: undefined
   }),
   computed: {
     inputBorderColor() {
@@ -302,6 +304,9 @@ export default {
         : `${this.isActive ? "2px" : "1px"} solid ${
             this.isActive ? "#7986CB" : "#ECEFF1"
           }`;
+    },
+    getLatestDataValue() {
+      return this.data.value
     },
     formatedReadModeData() {
       if (this.data.value) {
@@ -316,6 +321,9 @@ export default {
     },
   },
   watch: {
+    // 'data.value'(e) {
+    //   console.log('changed!',e)
+    // },
     errors() {
       /** Execute the onError hook function from the input object data property */
       if (this.currentHooks.includes("onError") && this.errors.length != 0) {
@@ -361,6 +369,8 @@ export default {
         };
 
         executeHookFunction();
+
+        this.$value = input
       }
     },
     pushError(err) {
@@ -416,7 +426,7 @@ export default {
       setDescription: this.setDescription,
       setDescriptionHtml: this.setDescriptionHtml,
       loading: this.setLoading,
-      formData: this.formData,
+      formData: this.data,
       check: this.setCheck,
       error: {
         push: this.pushError,

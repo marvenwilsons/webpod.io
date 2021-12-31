@@ -1,5 +1,5 @@
 <template>
-    <div v-if="ready" class="borderred" >
+    <div v-if="ready" class="" >
         <entry
             @onChange="onchange"
             @onError="onerror"
@@ -7,6 +7,8 @@
             @onEmpty="onempty"
             @onRemoveProp="onremoveprop"
             @onData="ondata"
+            @updateInputValue="updateInputValue"
+            :hooks="hooks"
             :config="{
               operation: 'rw',
               useColorMode: false,
@@ -22,7 +24,8 @@
 import entry from './entry.vue'
 export default {
   components: {entry},
-  props: ['myData','config','hooks'],
+  props: ['myData','config', 'paneIndex', 'hooks'],
+  
   data: () => ({
     value: undefined,
     d: undefined,
@@ -72,6 +75,10 @@ export default {
     },
     ondata(e) {
       // console.log(e)
+    },
+    updateInputValue({key,value}) {
+      this.myData[key].value = value
+      this.d = this.myData
     }
   }
 }

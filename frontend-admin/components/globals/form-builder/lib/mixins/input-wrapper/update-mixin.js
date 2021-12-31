@@ -39,7 +39,6 @@ export default {
       if(this.inputObject != undefined) {
         this.$parent.data_change(this.inputObject/** data in the main component */) 
       }
-
       //
       this.setLoading(false)
       this.allowMutationOnInput = false
@@ -47,6 +46,11 @@ export default {
 
       if(this.errors.length == 0) {
         this.setCheck(true)
+
+        this.$emit('updateInputValue', {
+          key: this.inputKey,
+          value: this.$value.value
+        })
       } else {
         this.setCheck(false)
       }
@@ -62,7 +66,7 @@ export default {
             update: {
               done: this.done
             },
-            value: this.inputObject.data,
+            value: this.formData[this.inputKey],
             ...this.hookMethods
           })
           this.updateOnProgress = true

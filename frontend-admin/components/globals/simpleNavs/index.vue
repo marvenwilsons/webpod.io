@@ -85,8 +85,6 @@ export default {
     mounted() {
         // console.log('simpleNavs loaded', this.myData)
         this.navs = utils.copy(this.myData)
-
-        console.log(this.hooks)
     },
     components: {
         item

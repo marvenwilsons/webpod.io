@@ -74,6 +74,7 @@
                 :inputKey="obj_index"
                 :loading="false"
                 :formData="final_vanilla"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
                 >
                   <template v-slot={onInput,allowMutationOnInput} >
                     <div
@@ -106,6 +107,7 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput} >
                   <div
@@ -130,6 +132,7 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput} >
                   <div
@@ -155,6 +158,7 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput} >
                   <div
@@ -192,6 +196,7 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput} >
                   <multiselect
@@ -227,6 +232,7 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput}>
                   <tags
@@ -264,6 +270,7 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput}>
                   <txtarea
@@ -283,6 +290,8 @@
                 :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
                 :formData="final_vanilla"
                 :loading="false"
+                :original_data="config.data"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
               >
                 <template v-slot={onInput,allowMutationOnInput}>
                   <chbox
@@ -325,11 +334,14 @@ import inputWrapper from './input-wrapper.vue'
 import txtarea  from './fields/text-area.vue'
 import chbox from './fields/check-box.vue'
 import m from './lib/m'
+import sysywg from './fields/sysywig.vue'
+import cal from './fields/calendar.vue'
+import textEditor from './fields/text-editor.vue'
 
 export default {
-  props: ["config", "theme"],
+  props: ["config", "theme" , "hooks"],
   mixins: [m],
-  components: { num, str, sel, MinMax, multiselect, tags, inputWrapper, txtarea, chbox },
+  components: { num, str, sel, MinMax, multiselect, tags, inputWrapper, txtarea, chbox, sysywg, cal, textEditor },
   computed: {
     /**
      * return type Object
@@ -532,7 +544,10 @@ export default {
         return output;
     },
     data_change({ err, value, key }) {
-      console.log('DATA_CHANGE', key, '\n -',value)
+      if(value == undefined) {
+        console.error(key, 'is undefined')
+      }
+
       if (!this.change_occurs) {
         this.change_occurs = true;
       }
