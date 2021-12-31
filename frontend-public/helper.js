@@ -167,7 +167,7 @@ export default {
             const hostContainerWidth = Math.round(hostContainer.getBoundingClientRect().width)
             if(paneContainerWidth > hostContainerWidth) {
                 setTimeout(() => {
-                    hostContainer.scrollTo({ top: 0, left: paneContainerWidth, behavior: 'smooth' })
+                    hostContainer.scrollTo({ top: 0, left: paneContainerWidth, behavior: 'auto' }) 
                 },50)
             }
         },

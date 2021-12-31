@@ -65,16 +65,10 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
     } else {
         location.href = '/login'
     }
+
     setTimeout(() => {
         dash.loading(false)
         dash.showDashboard(true)
-
-        
-        // setTimeout(() => {
-        //     setTimeout(() => {
-        //         sidebar.close()
-        //     }, 1000)
-        // }, 5000)
-    },1000)
+    },500)
 
 }

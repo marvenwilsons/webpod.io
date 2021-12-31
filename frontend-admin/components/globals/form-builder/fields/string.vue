@@ -41,7 +41,7 @@
           :tabindex="parseInt(parseInt(key_index.split(',')[1]))" 
           class="padtop025 padbottom025 fullwidth" placeholder="confirm password" 
           v-model="confirm_password_value" type="password"
-          @focus="confirm_password_field_is_active = true" @blur="confirm_password_field_is_active = false"
+          @focus="confirm_password_field_is_active = true" 
           :id="currentId + 'p'"
         >
     </div>

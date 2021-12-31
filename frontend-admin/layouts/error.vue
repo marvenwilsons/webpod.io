@@ -1,5 +1,5 @@
 <template>
-  <div class="" dark style="background: #e6f2fa;" >
+  <div class="" dark style="background: #e6f2fa; min-width: 500px;" >
     <h1 v-if="error.statusCode === 404">
       {{ pageNotFound }}
     </h1>

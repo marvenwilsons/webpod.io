@@ -452,7 +452,7 @@ export default {
 .bg-update,
 #input-read-mode:hover {
   background: #eceff1;
-  transition: 0.3s;
+  transition: 0.3ms;
 }
 #edit-trigger:hover > #pencil-unfilled {
   display: none;
@@ -461,6 +461,6 @@ export default {
   display: block !important;
 }
 #fb-input-wrapper {
-  transition: 0.3s !important;
+  transition: 0.3ms !important;
 }
 </style>

@@ -24,7 +24,6 @@
                     ref="paneActivator" v-slot="{ready}" 
                     :style="{minWidth:'100%' || '600px',maxWidth:data.paneConfig.width || '600px', paddingLeft:'0px', paddingRight:'0px'}" 
                     class=" " >
-                    <v-slide-x-transition mode="in-out" >
                         <Pane
                             v-if="ready"
                             :id="`pane${paneIndex}`"
@@ -34,7 +33,6 @@
                             :paneIndex="paneIndex"
                             :paneCollection="getPaneCollection"
                         />
-                    </v-slide-x-transition>
                 </PaneActivator>
             </template>
         </PaneManager>
@@ -51,7 +49,8 @@ export default {
     data: () => ({
         paneCollection: [],
         onEmpty: undefined,
-        onPaneCollectionChange: undefined
+        onPaneCollectionChange: undefined,
+        dashboardMethods: undefined
     }),
     computed: {
         getPaneCollection() {
@@ -133,7 +132,7 @@ export default {
                             setTimeout(() => {
                                 this.$refs.paneActivator.ready = true // to re render a pane with a posibility of a new data
                                 slideToEnd()
-                            },0)
+                            },100)
                         } else {
                             // add new pane
                             this.paneCollection.splice(paneIndexOrigin + 1, 0, paneItemObject)
