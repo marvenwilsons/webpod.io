@@ -1,5 +1,9 @@
 <template>
-    <div></div>
+    <div>
+        <monacoEditor 
+          :code="data.value" >
+        </monacoEditor>
+    </div>
 </template>
 
 <script>
