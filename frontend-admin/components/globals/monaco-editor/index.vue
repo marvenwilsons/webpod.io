@@ -1,24 +1,22 @@
 <template>
-  <client-only>
       <div v-if="ready" id="app">
       <MonacoEditor
         width="100%"
-        height="700"
+        height="400"
         theme="vs-dark"
         language="javascript"
         :options="options"
-        :value="myData"
+        :value="code"
         @change="onChange"
       ></MonacoEditor>
     </div>
-  </client-only>
 </template>
 
 <script>
 // import MonacoEditor from 'monaco-editor-vue';
 export default {
   name: "App",
-  props: ['myData'],
+  props: ['code'],
   components: {
     MonacoEditor: () => process.client && import('monaco-editor-vue')
   },
@@ -36,16 +34,18 @@ export default {
   }),
   methods: {
     onChange(value) {
+      // emit change here, to be reflected
       // console.log(value);
     }
   },
   mounted() {
-    setTimeout(() => {
-      this.ready = false
-      setTimeout(() => {
-        this.ready = true
-      },500)
-    },10)
+    this.ready = true
+    // setTimeout(() => {
+    //   this.ready = false
+    //   setTimeout(() => {
+    //     this.ready = true
+    //   },500)
+    // },10)
     this.value =
 `(paneCollection,pane,view,paneIndex) => ({
     /** 
