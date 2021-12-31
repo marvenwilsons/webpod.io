@@ -1,7 +1,7 @@
 <template>
     <div style="z-index:100;" class="fullheight-percent flex flexenter" >
         <v-scale-transition>
-            <div v-if="showModal" :id="modalUid"  class="pad050 borderRad4 paneShadow paneItemBg" 
+            <div v-if="showModal" style="background: white;" :id="modalUid" class="pad050 borderRad4 paneShadow" 
                 :style="{
                     zIndex:'200',
                     border: '1px solid rgba(54, 54, 54, 0.096)',

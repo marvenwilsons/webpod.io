@@ -119,7 +119,7 @@ export default {
             console.log('history click',i)
             try {
                 const el = document.getElementById(`pane${i}`)
-                el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"})
+                el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
             } catch(err) {}
         }
     },
