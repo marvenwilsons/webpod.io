@@ -173,4 +173,7 @@ export default {
     background: #1565c0a8;
     z-index: 900;
 }
+html {
+    overflow: hidden !important;
+}
 </style>
