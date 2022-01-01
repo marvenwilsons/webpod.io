@@ -1,7 +1,12 @@
 <template>
     <div>
         <monacoEditor 
-          :code="data.value" >
+          :code="data.value"
+          :lang="data.lang"
+          :readOnly="data.readOnly"
+          :height="data.height"
+          @onChange="onChange"
+        >
         </monacoEditor>
     </div>
 </template>
@@ -15,7 +20,13 @@ export default {
 
     }),
     methods: {
-        
+        onChange(e) {
+            this.$emit('onChange',{
+                err: null,
+                value: e,
+                key: this._key
+            })
+        }
     }
 }
 </script>

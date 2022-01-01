@@ -39,6 +39,10 @@ export default {
       { 
         rel: 'stylesheet', 
         href: 'http://fonts.cdnfonts.com/css/monaco' 
+      },
+      { 
+        rel: 'stylesheet', 
+        href: 'http://fonts.cdnfonts.com/css/sf-mono' 
       }
     ],
     script: [
