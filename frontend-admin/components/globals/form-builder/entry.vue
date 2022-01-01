@@ -302,6 +302,28 @@
                   ></chbox>
                 </template>
               </inputWrapper>
+              <!-- **************************** text-editor -->
+              <inputWrapper
+                :data="obj_key" 
+                :inputKey="obj_index" 
+                :ref="`${currentId}_${obj_index}`" 
+                v-if="obj_key.type == 'text-editor' && config.operation === 'rw'" 
+                :errState="err_key == obj_index" :errMsg="err" :errKey="err_key" 
+                :formData="final_vanilla"
+                :loading="false"
+                :original_data="config.data"
+                @updateInputValue="(e) => {$emit('updateInputValue',e)}"
+              >
+                <template v-slot={onInput,allowMutationOnInput} >
+                  <text-editor
+                    @onChange="(arg) => { onInput(arg), allowMutationOnInput ? data_change(arg) : null }"
+                    :_key="obj_index"
+                    :data="obj_key"
+                    :key_index="obj_key.tab_index"
+                  >
+                  </text-editor>
+                </template>
+              </inputWrapper>
             </div>
           </div>
           <!-- end -->
@@ -641,7 +663,7 @@ export default {
           return
         } else {
           // Add type here, Add new type
-          const validTypes = ['string','number','select','multiselect','number','minmax', 'tags', 'textarea', 'checkbox']
+          const validTypes = ['string','number','select','multiselect','number','minmax', 'tags', 'textarea', 'checkbox', 'text-editor']
           // validate each item
           const validationResult = Object.entries(this.config.data) // retunrs an array of array presenting the object by formating ['key', value]
           .map((e,i) => {
