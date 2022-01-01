@@ -234,7 +234,7 @@
             <strong>
               <!-- <span v-if="updateOnProgress" >Updating ...</span> -->
               <span class="borderRad4" @click="update" v-if="!updateOnProgress"
-                >Update</span
+                >Save</span
               >
             </strong>
           </span>

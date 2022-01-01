@@ -2,12 +2,15 @@
       <div v-if="ready" id="app">
       <MonacoEditor
         width="100%"
-        height="400"
         theme="vs-dark"
-        language="javascript"
+        :height="height || '400px'"
         :options="options"
         :value="code"
+        :hints= "[
+        'function'
+        ]"
         @change="onChange"
+        style="font-family: Monaco;"
       ></MonacoEditor>
     </div>
 </template>
@@ -16,7 +19,7 @@
 // import MonacoEditor from 'monaco-editor-vue';
 export default {
   name: "App",
-  props: ['code'],
+  props: ['code','lang', 'readOnly','height'],
   components: {
     MonacoEditor: () => process.client && import('monaco-editor-vue')
   },
@@ -25,27 +28,36 @@ export default {
     options: {
       //Monaco Editor Options
       language: 'javascript',
-      fontSize: "16",
+      fontSize: "13",
       fontFamily: "monospace",
       fontWeight: 800,
       formatOnPaste: true,
+      readOnly: true,
     },
     value: undefined
   }),
   methods: {
     onChange(value) {
       // emit change here, to be reflected
-      // console.log(value);
+      this.$emit('onChange', value)
     }
   },
   mounted() {
-    this.ready = true
-    // setTimeout(() => {
-    //   this.ready = false
-    //   setTimeout(() => {
-    //     this.ready = true
-    //   },500)
-    // },10)
+    // if(process.client) {
+    //   const m = import('monaco-editor-vue')
+    //   console.log(m)
+    // }
+    if(this.lang) {
+      this.options.language = this.lang
+    }
+
+    if(this.readOnly) {
+      this.options.readOnly = this.readOnly
+    }
+
+    setTimeout(() => {
+      this.ready = true
+    })
     this.value =
 `(paneCollection,pane,view,paneIndex) => ({
     /** 

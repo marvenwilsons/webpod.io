@@ -3,7 +3,7 @@
         <v-app id="dq-init-page" class="fullheight-VH relative overflowhidden flex flexcenter smth flexcenter" >
         <div id="bgContainer2" style="width:100%;height:100%;" class="fullwidth  fullheight-percent absolute" ></div>
         <!-- <img id="lleaves" class="absolute" src="ganapathy.jpg" alt=""> -->
-        <div style="background:  rgb(26,118,210); background: linear-gradient(180deg, rgba(26,118,210,1) 49%, rgba(4,19,42,1) 100%);" class="absolute fullwidth fullheight-percent" >test</div>
+        <div style="background:  rgb(26,118,210); background: linear-gradient(180deg, rgba(26,118,210,1) 49%, rgba(4,19,42,1) 100%);" class="absolute fullwidth fullheight-percent" ></div>
 
         <!-- blur div here -->
         <div id="loginOverlay" class="absolute fullwidth fullheight-percent" >
