@@ -36,6 +36,10 @@ export default {
         rel: 'stylesheet', 
         href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' 
       },
+      { 
+        rel: 'stylesheet', 
+        href: 'http://fonts.cdnfonts.com/css/monaco' 
+      }
     ],
     script: [
       // {
@@ -117,8 +121,8 @@ export default {
   build: {
     plugins: [
       new MonacoWebpackPlugin({
-        languages: ['javascript', 'python', 'java'],
-        features: ['!gotoSymbol'],
+        languages: ['javascript', 'python', 'scss'],
+        features: ['!gotoSymbol','checkJs'],
       })
     ],
     transpile: ['vue-easytable','monaco-editor-vue','monaco-editor-webpack-plugin'],
