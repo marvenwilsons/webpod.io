@@ -2,21 +2,21 @@
       <div v-if="ready" id="app">
       <MonacoEditor
         width="100%"
-        theme="vs-dark"
+        theme="vs-light"
         :height="height || '400px'"
         :options="options"
         :value="code"
-        :hints= "[
-        'function'
-        ]"
         @change="onChange"
-        style="font-family: Monaco;"
+        :editorMounted="editorDidMount"
       ></MonacoEditor>
     </div>
 </template>
 
 <script>
 // import MonacoEditor from 'monaco-editor-vue';
+// https://www.npmjs.com/package/monaco-editor-vue
+// https://bestofreactjs.com/repo/suren-atoyan-monaco-react-react-rich-text-editing
+// https://programmer.help/blogs/using-monaco-to-realize-code-highlighting-in-vue-element.html
 export default {
   name: "App",
   props: ['code','lang', 'readOnly','height'],
@@ -29,10 +29,10 @@ export default {
       //Monaco Editor Options
       language: 'javascript',
       fontSize: "13",
-      fontFamily: "monospace",
+      fontFamily: "Monaco",
       fontWeight: 800,
       formatOnPaste: true,
-      readOnly: true,
+      readOnly: false,
     },
     value: undefined
   }),
@@ -40,20 +40,22 @@ export default {
     onChange(value) {
       // emit change here, to be reflected
       this.$emit('onChange', value)
+    },
+    editorDidMount(editor) {
+      this.$emit('onMount', true)
+      console.log('editor', editor)
     }
   },
-  mounted() {
-    // if(process.client) {
-    //   const m = import('monaco-editor-vue')
-    //   console.log(m)
-    // }
+  ç() {
+    if(process.client) {
+      const m = import('monaco-editor-vue')
+      // console.log(m)
+    }
     if(this.lang) {
       this.options.language = this.lang
     }
 
-    if(this.readOnly) {
-      this.options.readOnly = this.readOnly
-    }
+    this.options.readOnly = this.readOnly
 
     setTimeout(() => {
       this.ready = true

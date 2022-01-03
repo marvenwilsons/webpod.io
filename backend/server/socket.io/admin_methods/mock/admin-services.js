@@ -11,201 +11,204 @@ module.exports =  {
     menu_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','uniview'],
     services: [
       {
-      name: 'Dashboard',
-      description: 'a sample service',
-      userRoleTitle: '',
-      body: {
-        view: 'simpleNavs', // the name of the view, its a vue component registered globally
-        viewConfig: {
-          ribbons: {
-            'Add New': ['Dashboard', 'Test 2'],
-            'Create New': [],
-            'Delete': ['one','bulk']
+        name: 'Dashboard',
+        description: 'a sample service',
+        userRoleTitle: '',
+        body: {
+          view: 'simpleNavs', // the name of the view, its a vue component registered globally
+          viewConfig: {
+            ribbons: {
+              'Add New': ['Dashboard', 'Test 2'],
+              'Create New': [],
+              'Delete': ['one','bulk']
+            },
+            view_versions: ['v1','v2','v3','v4'], // will be mapped to Dashboard/v1
+            default_view: 'v1'
           },
-          view_versions: ['v1','v2','v3','v4'], // will be mapped to Dashboard/v1
-          default_view: 'v1'
-        },
-        viewData: [
-          {
-              name: 'Pane Services',
-              items: [
-                {
-                    name: 'Pane Modal',
-                    itemIcon: 'mdi-poll',
-                    additionalContent: [
-                        {
-                            type: 'text',
-                            title: 'Description',
-                            body: "In user interface design for computer applications, a modal window is a graphical control element subordinate to an application's main window. A modal window creates a mode that disables the main window but keeps it visible, with the modal window as a child window in front of it."
-                        },
-                        {
-                            type: 'events',
-                            title: 'Other Services',
-                            body: [
-                                {
-                                    title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                    eventName: 'myEvent'
-                                },
-                                {
-                                    title: 'Click and you will be directed to a dq service',
-                                    eventName: 'myEvent'
-                                },
-                                {
-                                    title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                    eventName: 'myEvent'
-                                },
-                                {
-                                    title: 'Click and you will be directed to a dq service',
-                                    eventName: 'myEvent'
-                                }
-                            ]
-                        },
-                        {
-                            type: 'events',
-                            title: 'Tutorials',
-                            body: [
-                                {
-                                    title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                    eventName: 'myEvent'
-                                },
-                                {
-                                    title: 'Click and you will be directed to a dq service',
-                                    eventName: 'myEvent'
-                                },
-                                {
-                                    title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
-                                    eventName: 'myEvent'
-                                },
-                                {
-                                    title: 'Click and you will be directed to a dq service',
-                                    eventName: 'myEvent'
-                                }
-                            ]
-                        },
-                    ],
-                    events: ['Spawn Error', "Spawn Info", "Spawn Warning"],
-                    warning: null,
-                    style: {
-                      width: '500px'
-                    }
-                },
-                {
-                    name: 'Pane Collection',
-                    itemIcon: 'mdi-grain',
-                    additionalContent: undefined,
-                    events: ['Add New Pane Item', 'Copy And Insert Pane', 'Remove this pane item'],
-                    style: {
-                      width: '400px'
-                    }
-                },
-                {
-                    name: 'View',
-                    itemIcon: 'mdi-border-all',
-                    additionalContent: undefined,
-                    events: ['Update view data','Change view'],
-                    style: {
-                      width: '400px'
-                    }
-                }
-              ]
-          },
-          {
-              name: 'Core Applications',
-              items: [
+          viewData: [
+            {
+                name: 'Pane Services',
+                items: [
                   {
-                      name: 'System Services',
-                      itemIcon: 'mdi-account',
-                      events: ['View All Services', "Create New Service"],
-                      warning: null
+                      name: 'Pane Modal',
+                      itemIcon: 'mdi-poll',
+                      additionalContent: [
+                          {
+                              type: 'text',
+                              title: 'Description',
+                              body: "In user interface design for computer applications, a modal window is a graphical control element subordinate to an application's main window. A modal window creates a mode that disables the main window but keeps it visible, with the modal window as a child window in front of it."
+                          },
+                          {
+                              type: 'events',
+                              title: 'Other Services',
+                              body: [
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  }
+                              ]
+                          },
+                          {
+                              type: 'events',
+                              title: 'Tutorials',
+                              body: [
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service this is a verly long tile like super long',
+                                      eventName: 'myEvent'
+                                  },
+                                  {
+                                      title: 'Click and you will be directed to a dq service',
+                                      eventName: 'myEvent'
+                                  }
+                              ]
+                          },
+                      ],
+                      events: ['Spawn Error', "Spawn Info", "Spawn Warning"],
+                      warning: null,
+                      style: {
+                        width: '500px'
+                      }
                   },
                   {
-                      name: 'Explore & Install Services',
+                      name: 'Pane Collection',
+                      itemIcon: 'mdi-grain',
+                      additionalContent: undefined,
+                      events: ['Add New Pane Item', 'Copy And Insert Pane', 'Remove this pane item'],
+                      style: {
+                        width: '400px'
+                      }
+                  },
+                  {
+                      name: 'View',
                       itemIcon: 'mdi-border-all',
                       additionalContent: undefined,
-                      events: ['Explore Mar']
-                  },
-              ]
-          }
-        ],
-        // viewHooks is used to read properties within the specified view component and sometimes execute view methods
-        // each view has its own viewHooks, to know the viewHooks on every views, a documentation will be provided
-        viewHooks: stringify((paneCollection,pane,view) => ({
-            onRibbonClick(e) {
-              console.log('ribbon has benn clicked', e)
+                      events: ['Update view data','Change view'],
+                      style: {
+                        width: '400px'
+                      }
+                  }
+                ]
             },
-            onNavClick(simpleNavs) {
-              switch(simpleNavs.clickedOn) {
-                // spawn error
-                case 'Spawn Error':
-                  console.log('spawing error')
-                  pane.spawnModal({
-                    view: 'error', // Info, Warning, Error, Custom, Loading
-                    viewData: {
-                      msg: 'This is an error msg'
-                    }, // view ralated config
-                    modalConfig: {
-                      isClosable: true
-                    }
-                  })
-                break;
-                
-                // spawn info
-                case 'Spawn Info':
-                  pane.spawnModal({
-                    view: 'info', // Info, Warning, Error, Custom, Loading
-                    viewData: {
-                        msg: 'The quick brown fox jumps over the lazy dog, the quick brown fox jumps over the lazy dog.'
-                    }, // view ralated config
-                    modalConfig: {
+            {
+                name: 'Core Applications',
+                items: [
+                    {
+                        name: 'System Services',
+                        itemIcon: 'mdi-account',
+                        events: ['View All Services', "Create New Service"],
+                        warning: null
+                    },
+                    {
+                        name: 'Explore & Install Services',
+                        itemIcon: 'mdi-border-all',
+                        additionalContent: undefined,
+                        events: ['Explore Mar']
+                    },
+                ]
+            }
+          ],
+          // viewHooks is used to read properties within the specified view component and sometimes execute view methods
+          // each view has its own viewHooks, to know the viewHooks on every views, a documentation will be provided
+          viewHooks: stringify((paneCollection,pane,view) => ({
+              onRibbonClick(e) {
+                console.log('ribbon has benn clicked!!', e)
+                console.log(paneCollection)
+              },
+              onNavClick(simpleNavs) {
+                switch(simpleNavs.clickedOn) {
+                  // spawn error
+                  case 'Spawn Error':
+                    console.log('spawing error')
+                    console.log(pane)
+                    pane.setPaneData(['test','test2'])
+                    pane.spawnModal({
+                      view: 'error', // Info, Warning, Error, Custom, Loading
+                      viewData: {
+                        msg: 'This is an error msg'
+                      }, // view ralated config
+                      modalConfig: {
                         isClosable: true
-                    }
-                  })
-                break;
-      
-                // spawn warning
-                case 'Spawn Warning':
-                  pane.spawnModal({
-                    view: 'warning', // Info, Warning, Error, Custom, Loading
-                    viewData: {
-                        msg: 'Hello world'
-                    }, // view ralated config
-                    modalConfig: {
-                        isClosable: true
-                    }
-                  })
-                break;
-      
-                case 'Create New Service':
-                  // 1. get the service
-                  // 2. spawn a new pane using the service
-                  console.log('Dashboard')
+                      }
+                    })
+                  break;
                   
-                  // pane.getService(Create New Service','sample activator string').then((res) => {
-                  //   console.log('res', res)
-                  // })
-                break;
+                  // spawn info
+                  case 'Spawn Info':
+                    pane.spawnModal({
+                      view: 'info', // Info, Warning, Error, Custom, Loading
+                      viewData: {
+                          msg: 'The quick brown fox jumps over the lazy dog, the quick brown fox jumps over the lazy dog.'
+                      }, // view ralated config
+                      modalConfig: {
+                          isClosable: true
+                      }
+                    })
+                  break;
+        
+                  // spawn warning
+                  case 'Spawn Warning':
+                    pane.spawnModal({
+                      view: 'warning', // Info, Warning, Error, Custom, Loading
+                      viewData: {
+                          msg: 'Hello world'
+                      }, // view ralated config
+                      modalConfig: {
+                          isClosable: true
+                      }
+                    })
+                  break;
+        
+                  case 'Create New Service':
+                    // 1. get the service
+                    // 2. spawn a new pane using the service
+                    console.log('Dashboard')
+                    
+                    // pane.getService(Create New Service','sample activator string').then((res) => {
+                    //   console.log('res', res)
+                    // })
+                  break;
+                }
               }
-            }
           })),
-        paneConfig: {
-            title: 'My Dashboard',
-            isClosable: false,
-        },
-        paneHooks: stringify((paneCollection,pane,view) => ({
-            
-            onMount() {
-              // pane.setPaneData('https://jsonplaceholder.typicode.com/todos',(data) => {
-              // })
-            },
-            onModalEvent() {
-              // console.log('test')
-            },
-            // onViewEvent is used to handle view emitted events
-            onViewEvent() {
-    
-            }
-        }))
-      }
+          paneConfig: {
+              title: 'My Dashboard',
+              isClosable: false,
+          },
+          paneHooks: stringify((paneCollection,pane,view) => ({
+              
+              onMount() {
+                // pane.setPaneData('https://jsonplaceholder.typicode.com/todos',(data) => {
+                // })
+              },
+              onModalEvent() {
+                // console.log('test')
+              },
+              // onViewEvent is used to handle view emitted events
+              onViewEvent() {
+      
+              }
+          }))
+        }
       },
       {
         name: 'uniview',
@@ -407,9 +410,10 @@ function getName() {
                             // console.log('onUpdate', input)
 
                             setTimeout(() => {
-                                // console.log('done')
                                 // input.error.push('Cannot reach server, please try again later')
-                                input.update.done()
+
+                                // reach out to server here an update the target property in database
+                                input.update.done('hello world')
                                 // console.log('input value',input.value)
                             },300)
                         })
@@ -436,18 +440,11 @@ function getName() {
                         })
                     },
                     hooks: {
-                        onUpdate: stringify(function (n) {
-                            console.log(n)
-                        }),
-                        onUpdate: stringify(function (input) {
-                            console.log('onUpdate',input)
-                            setTimeout(() => {
-                                console.log('done')
-                                // input.error.push('Cannot reach server, please try again later')
-                                input.update.done()
-                                // console.log('input value',input.value)
-                            },300)
-                        })
+                      onUpdate: stringify(function(n) {
+                          setTimeout(() => {
+                              n.update.done()
+                          }, 300)
+                      })
                     }
                 },
                 tabindex: {
@@ -510,9 +507,7 @@ function getName() {
                       })
                     }
                 },
-                /**
-                 * list origin from depends on isAList value
-                 */
+                // list origin from depends on isAList value
                 "list origin from": {
                     type: "select",
                     options: ["models", "collections"],
@@ -534,9 +529,7 @@ function getName() {
                         })
                     }
                 },
-                /**
-                 * Collections list and Models depends on isAList value and list origin from value
-                 */
+                // Collections list and Models depends on isAList value and list origin from value
                 "collections list": {
                     type: "string",
                     minChar: 1,
@@ -560,8 +553,8 @@ function getName() {
                     maxChar: 900,
                     allowWhiteSpace: false,
                     allowSpecialChars: true,
+                    hoverInfo: 'test',
                     mode: null,
-                    hoverInfo: null,
                     value: null,
                     renderCondition: {
                         controllers: ["list origin from", "isAList"],
@@ -571,18 +564,10 @@ function getName() {
                       })
                     },
                     hooks: {
-                        onBlur: stringify(function(input) {
-                          // console.log('Blurred', input)
-                          input.loading(true)
-                          input.setDescription('checking please wait ...')
+                      onBlur: stringify(function(n) {
 
-                          setTimeout(() => {
-                              input.loading(false)
-                              input.setDescription(null)
-                              input.check(true)
-                          },1500)
                       }),
-                        onUpdate: stringify(function(n) {
+                      onUpdate: stringify(function(n) {
                           setTimeout(() => {
                               n.update.done()
                           }, 300)
@@ -618,7 +603,7 @@ function getName() {
                         includeNumericCharacters: 2
                     },
                     hooks: {
-                        onUpdate: stringify(function(n) {
+                      onUpdate: stringify(function(n) {
                           setTimeout(() => {
                               n.update.done()
                           }, 300)
@@ -762,12 +747,28 @@ function getName() {
                         onUpdate: stringify(function(n) {
                           setTimeout(() => {
                               n.update.done()
+                              n.formData.value = true
                           }, 1000)
                       })
                     }
+                },
+                "onUpdate Hook": {
+                  type: 'text-editor',
+                  value: "function onLoad(input) {\n\twebpod.alert('hello world')\n}\n",
+                  lang: 'javascript', // js phyton scss only
+                  readOnly: true,
+                  hoverInfo: 'test',
+                  height: '200px',
+                  hooks: {
+                    onUpdate: stringify(function(n) {
+                      setTimeout(() => {
+                          n.update.done()
+                          n.formData.value = true
+                      }, 1000)
+                    })
+                  }
                 }
               },
-            //   
               viewConfig: {
                   /**
                    * form mode - data to be sumbmitted, empty forms
@@ -777,7 +778,12 @@ function getName() {
                   mode: 'form',
                   title: 'Sample Form Group 1',
                   operation: 'rw'
-              }
+              },
+              viewHooks: stringify((paneCollection,pane,view) => ({
+                test() {
+                  console.log(pane)
+                }
+              }))
             }
           ],
         },
