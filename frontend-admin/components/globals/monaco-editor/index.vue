@@ -46,7 +46,7 @@ export default {
       console.log('editor', editor)
     }
   },
-  ç() {
+  mounted() {
     if(process.client) {
       const m = import('monaco-editor-vue')
       // console.log(m)

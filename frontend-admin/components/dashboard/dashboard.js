@@ -69,7 +69,6 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
     setTimeout(() => {
         dash.loading(false)
         dash.showDashboard(true)
-        console.log(alert)
         window.webpod = Object.seal({
             dashboardMethods: {...dash}
         })
