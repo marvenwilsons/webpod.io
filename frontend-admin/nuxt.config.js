@@ -43,6 +43,38 @@ export default {
       { 
         rel: 'stylesheet', 
         href: 'http://fonts.cdnfonts.com/css/sf-mono' 
+      },
+      { 
+        rel: 'stylesheet', 
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.css' 
+      },
+      { 
+        rel: 'stylesheet', 
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/codemirror.min.css' 
+      },
+      { 
+        rel: 'stylesheet', 
+        href: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/theme/base16-light.min.css' 
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.65.0/lib/codemirror.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.65.0/theme/monokai.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.32.0/addon/hint/show-hint.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.32.0/addon/fold/foldgutter.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.32.0/addon/lint/lint.css'
       }
     ],
     script: [
@@ -50,7 +82,38 @@ export default {
       //   src: 'https://cdn.socket.io/4.3.2/socket.io.min.js',
       //   integrity: "sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs",
       //   crossorigin: "anonymous"
-      // },
+      // }
+      {src:'https://unpkg.com/codemirror@5.65.0/lib/codemirror.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/mode/javascript/javascript.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/mode/xml/xml.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/javascript-hint.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/show-hint.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/anyword-hint.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/css-hint.js'},
+      // close tags
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/closebrackets.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/closetag.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/continuelist.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/matchbrackets.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/matchtags.js'},
+      {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/trailingspace.js'},
+      // gutter folds
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/brace-fold.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/comment-fold.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/foldcode.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/foldgutter.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/indent-fold.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/markdown-fold.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/fold/xml-fold.js'},
+      //lint
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/css-lint.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/html-lint.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/javascript-lint.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/json-lint.js'},
+      {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/lint.js'},
+      // auto refresh
+      {src: 'https://unpkg.com/codemirror@5.65.0/addon/display/autorefresh.js'}
+
     ]
   },
 

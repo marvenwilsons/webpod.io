@@ -14,10 +14,14 @@ export default {
     data: () => ({
         ready:true,
         cmOptions: {},
-        code: ''
+        code: `function myScript(){ \n\treturn 100;\n}\n`
     }),
     mounted() {
         const cm = CodeMirror
+        // cm(document.body, {
+        //     value: "function myScript(){return 100;}\n",
+        //     mode:  "javascript"
+        // })
         const codeMirrorEditorInstance = cm.fromTextArea(document.getElementById('cm-editor'), {
             tabSize: 4,
             mode: 'text/javascript',
@@ -32,7 +36,7 @@ export default {
             selectionsMayTouch: true,
             autocorrect: true,
             spellcheck: true,
-            autoFocus: true,
+            autofocus: true,
             matchBrackets: true,
             autoCloseBrackets: true,
             styleActiveLine: true,
@@ -41,7 +45,8 @@ export default {
             tabMode: "indent",
             fixedGutter: true,
             gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-            lint: true
+            lint: true,
+            autoRefresh: true
         });
         var excludedIntelliSenseTriggerKeys = {
             "8": "backspace",
@@ -105,9 +110,11 @@ export default {
                 CodeMirror.commands.autocomplete(editor, null, {completeSingle: false});
             }
         })
-
-        codeMirrorEditorInstance.refresh()
-
+        codeMirrorEditorInstance.getDoc().setValue(this.code)
+        setTimeout(() => {
+            codeMirrorEditorInstance.refresh()
+            console.log('refresh')
+        },50)
     }
 }
 </script>
