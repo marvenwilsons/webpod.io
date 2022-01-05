@@ -66,7 +66,11 @@ export default {
       },
       {
         rel: 'stylesheet',
-        href: 'https://unpkg.com/codemirror@5.32.0/addon/hint/show-hint.css'
+        href: 'https://unpkg.com/codemirror@5.65.0/addon/hint/show-hint.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.65.0/addon/hint/css-hint.css'
       },
       {
         rel: 'stylesheet',
@@ -75,6 +79,10 @@ export default {
       {
         rel: 'stylesheet',
         href: 'https://unpkg.com/codemirror@5.32.0/addon/lint/lint.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'https://unpkg.com/codemirror@5.65.0/theme/mdn-like.css'
       }
     ],
     script: [
@@ -84,12 +92,7 @@ export default {
       //   crossorigin: "anonymous"
       // }
       {src:'https://unpkg.com/codemirror@5.65.0/lib/codemirror.js'},
-      {src:'https://unpkg.com/codemirror@5.65.0/mode/javascript/javascript.js'},
-      {src:'https://unpkg.com/codemirror@5.65.0/mode/xml/xml.js'},
-      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/javascript-hint.js'},
-      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/show-hint.js'},
-      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/anyword-hint.js'},
-      {src:'https://unpkg.com/codemirror@5.32.0/addon/hint/css-hint.js'},
+   
       // close tags
       {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/closebrackets.js'},
       {src:'https://unpkg.com/codemirror@5.32.0/addon/edit/closetag.js'},
@@ -112,7 +115,20 @@ export default {
       {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/json-lint.js'},
       {src: 'https://unpkg.com/codemirror@5.32.0/addon/lint/lint.js'},
       // auto refresh
-      {src: 'https://unpkg.com/codemirror@5.65.0/addon/display/autorefresh.js'}
+      {src: 'https://unpkg.com/codemirror@5.65.0/addon/display/autorefresh.js'},
+      // mode
+      {src: 'https://unpkg.com/codemirror@5.65.0/mode/css/css.js'},
+      {src: 'https://unpkg.com/codemirror@5.65.0/mode/xml/xml.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/mode/javascript/javascript.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/mode/xml/xml.js'},
+      // hints
+      {src: 'https://unpkg.com/codemirror@5.65.0/addon/hint/xml-hint.js'},
+      {src: 'https://unpkg.com/codemirror@5.65.0/addon/hint/css-hint.js'},
+      {src: 'https://unpkg.com/codemirror@5.65.0/addon/hint/html-hint.js'},
+      {src: 'https://unpkg.com/codemirror@5.65.0/addon/hint/sql-hint.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/addon/hint/javascript-hint.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/addon/hint/show-hint.js'},
+      {src:'https://unpkg.com/codemirror@5.65.0/addon/hint/anyword-hint.js'},
 
     ]
   },
