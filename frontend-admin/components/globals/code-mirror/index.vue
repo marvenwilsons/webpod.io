@@ -20,7 +20,7 @@ export default {
             const codeMirrorEditorInstance = CodeMirror.fromTextArea(document.getElementById(`cm-editor${this.currentUid}`), {
                 tabSize: 4,
                 mode: this.lang || 'text',
-                theme: this.theme || 'mdn-like', //mdn-like, monokai, default
+                theme: this.theme || 'mdn-like', //mdn-like, monokai, default, base16-light
                 lineNumbers: true,
                 lineWrapping: true,
                 line: true,
@@ -43,7 +43,11 @@ export default {
                 autoRefresh: true,
                 readOnly: false,
             })
-            
+
+            // Register code value
+            codeMirrorEditorInstance.getDoc().setValue(this.code || `function myScript(){ \n\treturn 100;\n}\n`)
+
+            // autocomplete hints
             const excludedIntelliSenseTriggerKeys = {
                 "8": "backspace",
                 "9": "tab",
@@ -95,7 +99,6 @@ export default {
                 "220": "backslash",
                 "222": "quote"
             }
-            codeMirrorEditorInstance.getDoc().setValue(this.code || `function myScript(){ \n\treturn 100;\n}\n`)
             codeMirrorEditorInstance.on("keyup", function(editor,event) {
                 if (
                     !(event.ctrlKey) &&
@@ -106,6 +109,22 @@ export default {
                     CodeMirror.commands.autocomplete(editor, null, {completeSingle: false});
                 }
             })
+            const codeMirrorJavascriptHintMethod = CodeMirror.hint.javascript;
+            CodeMirror.hint.javascript = function(cm /** { curOp, display, doc, getTextArea, options, save, state, toTextArea _handlers } */) {
+                const userInputHint = codeMirrorJavascriptHintMethod(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
+                const userCurrentInput = cm.display.input.prevInput
+                if(userCurrentInput === 'pane.') {
+                    const hints = ["showPane","removePane","updatePane"]
+                    hints.map(hint => {
+                        if(!userInputHint.list.includes(hint)) {
+                            userInputHint.list.push(hint);
+                        }
+                    })
+                }
+                return userInputHint;
+            };
+
+            // refresh
             setTimeout(() => {
                 codeMirrorEditorInstance.refresh()
             },50)
@@ -121,13 +140,19 @@ export default {
 }
 .CodeMirror-linenumber {
     padding: 1px 8px 0 5px;
-    color: #c8d2d7 ;
+    color: #266564 !important;
     font-size: 14px;
 }
 .cm-keyword{
-    font-weight: bold !important;
+    font-weight: 500 !important;
 }
 .cm-string {
     font-style: normal !important;
+}
+.cm-s-base16-light.CodeMirror {
+    background: #e4f5f5 !important;
+}
+.CodeMirror-gutters {
+    background: #edf5fd !important;
 }
 </style>

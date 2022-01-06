@@ -14,15 +14,16 @@
     "d3": "^7.1.1",
     "dompurify": "^2.3.3",
     "gsap": "^3.8.0",
-    "nuxt": "^2.15.7",
-    "socket.io-client": "^4.3.2",
-    "vuetify": "^2.5.5",
-    "vue-prism-editor": "1.0.1",
-    "prismjs": "^1.25.0",
     "monaco-editor-vue": "^1.0.10",
     "monaco-editor-webpack-plugin": "1.8.0",
+    "nuxt": "^2.15.7",
     "nuxt-element-ui": "^1.0.10",
-    "vue-easytable": "^2.8.3"
+    "prismjs": "^1.25.0",
+    "socket.io-client": "^4.3.2",
+    "vue-codemirror": "^4.0.6",
+    "vue-easytable": "^2.8.3",
+    "vue-prism-editor": "1.0.1",
+    "vuetify": "^2.5.5"
   },
   "devDependencies": {
     "@nuxtjs/vuetify": "^1.12.1",

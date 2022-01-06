@@ -30,9 +30,14 @@ Vue.component("doc", doc)
 import monacoEditor from '@/components/globals/monaco-editor/index.vue'
 Vue.component("monacoEditor", monacoEditor)
 
-// code editor
-import codeEditor from '@/components/globals/vue-prism-editor/index.vue'
-Vue.component("codeEditor", codeEditor)
+// code-mirror
+import codeMirror from '@/components/globals/code-mirror/index.vue'
+Vue.component("codeEditor", codeMirror)
+
+
+// // code editor
+// import codeEditor from '@/components/globals/vue-prism-editor/index.vue'
+// Vue.component("codeEditor", codeEditor)
 
 // ribbon
 import ribbon from '@/components/globals/ribbon/index.vue'
