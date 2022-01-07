@@ -8,9 +8,10 @@
 // https://michaelsboost.com/kodeWeave/editor/#d956c96bdee0cdd1ce9193aee78353ac
 // https://stackoverflow.com/questions/13744176/codemirror-autocomplete-after-any-keyup
 // https://github.com/emmetio/codemirror-plugin
+// https://codemirror.net/2/demo/matchhighlighter.html
 import m  from '@/m'
 export default {
-    props: ['code','lang','theme'],
+    props: ['code','lang','theme','readOnly'],
     mixins: [m],
     data: () => ({
         ready:true,
@@ -48,7 +49,14 @@ export default {
                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                 lint: false,
                 autoRefresh: true,
-                readOnly: false,
+                readOnly: this.readOnly || false,
+                styleActiveLine: true,
+                styleActiveSelected: true,
+                highlightSelectionMatches: {
+                    minChars: 1,
+                    style:'matchhighlight'
+                },
+                styleActiveLine: true
             })
 
             // Register code value
@@ -188,5 +196,15 @@ export default {
 }
 .cm-comment {
     color: #828282 !important;
+}
+.cm-matchhighlight {
+  background: #d7d4f0 !important
+}
+.CodeMirror-activeline-background {
+    background: #f1f6fb !important;
+    border-left: 4px solid #c0d5ec;
+}
+.CodeMirror-code {
+    margin-left: 1px !important;
 }
 </style>
