@@ -1,5 +1,7 @@
 <template>
-    <textarea :id="`cm-editor${currentUid}`" />
+    <client-only>
+        <textarea :id="`cm-editor${currentUid}`" />
+    </client-only>
 </template>
 
 <script>
@@ -14,14 +16,19 @@ export default {
         ready:true,
         currentUid: undefined
     }),
+    methods: {
+        onChange(code) {
+            this.$emit('onChange', code)
+        }
+    },
     mounted() {
         this.currentUid = this.uid()
         setTimeout(() => {
             const codeMirrorEditorInstance = CodeMirror.fromTextArea(document.getElementById(`cm-editor${this.currentUid}`), {
                 tabSize: 4,
                 mode: this.lang || 'text',
-                theme: this.theme || 'mdn-like', //mdn-like, monokai, default, base16-light
-                lineNumbers: true,
+                theme: this.theme || 'default', //mdn-like, monokai, default, base16-light
+                lineNumbers: false,
                 lineWrapping: true,
                 line: true,
                 autoCloseTags: true,
@@ -39,7 +46,7 @@ export default {
                 tabMode: "indent",
                 fixedGutter: true,
                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
-                lint: true,
+                lint: false,
                 autoRefresh: true,
                 readOnly: false,
             })
@@ -115,14 +122,23 @@ export default {
                 const userCurrentInput = cm.display.input.prevInput
                 if(userCurrentInput === 'pane.') {
                     const hints = ["showPane","removePane","updatePane"]
+
+                    // custom specific hints
                     hints.map(hint => {
                         if(!userInputHint.list.includes(hint)) {
                             userInputHint.list.push(hint);
                         }
                     })
                 }
+                
+                // console.log('-->', cm.getValue())
+
                 return userInputHint;
             };
+
+            codeMirrorEditorInstance.on('change', (editor) => {
+                this.onChange(editor.getValue())
+            })
 
             // refresh
             setTimeout(() => {
@@ -135,24 +151,42 @@ export default {
 
 <style>
 .CodeMirror {
-    font-family: Monaco;
+    font-family: 'Menlo';
     font-size: 14px;
 }
 .CodeMirror-linenumber {
     padding: 1px 8px 0 5px;
-    color: #266564 !important;
+    /* color: #266564 !important; */
     font-size: 14px;
 }
+.CodeMirror-matchingbracket {
+    color: #20bbfc !important;
+}
 .cm-keyword{
-    font-weight: 500 !important;
+    color: #c30771 !important;
+}
+.cm-def, .cm-variable {
+    color: #005f87 !important;
+}
+.cm-property {
+    color: #6636b4 !important;
 }
 .cm-string {
     font-style: normal !important;
+    color: #008ec4 !important;
 }
-.cm-s-base16-light.CodeMirror {
+/* .cm-s-base16-light.CodeMirror {
     background: #e4f5f5 !important;
-}
+} */
 .CodeMirror-gutters {
-    background: #edf5fd !important;
+    background: #e7eff8;
+    /* width: 20px; */
+}
+
+.CodeMirror.cm-s-default {
+    background: #f1f6fb !important;
+}
+.cm-comment {
+    color: #828282 !important;
 }
 </style>
