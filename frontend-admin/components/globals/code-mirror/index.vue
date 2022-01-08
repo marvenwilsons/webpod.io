@@ -1,7 +1,17 @@
 <template>
-    <client-only>
-        <textarea :id="`cm-editor${currentUid}`" />
-    </client-only>
+    <section  class="relative" >
+        <div v-if="err" class="pad025" style="border-left: 5px solid red; color: red; font-family: Menlo">
+            {{err}}
+        </div>
+        <main style="border: 1px solid #dfe7ed;" >
+            <div v-if="playable" @click="$emit('onPlay')" class="absolute pointer pad025" style="z-index: 100; right: 0;">
+                <svg class="playable-editor-btn-filled" style="width:24px;height:24px; " viewBox="0 0 24 24">
+                    <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                </svg>
+            </div>
+            <textarea :id="`cm-editor${currentUid}`" />
+        </main>
+    </section>
 </template>
 
 <script>
@@ -11,15 +21,36 @@
 // https://codemirror.net/2/demo/matchhighlighter.html
 import m  from '@/m'
 export default {
-    props: ['code','lang','theme','readOnly'],
+    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps'],
     mixins: [m],
     data: () => ({
         ready:true,
-        currentUid: undefined
+        currentUid: undefined,
+        documentation: {
+            properties: {
+                code: '<String> The initial code value that will presented in the code editor. Default is empty.',
+                lang: '<String> The language mode of code editor, available langunage are, text, javascript, css, html',
+                readOnly: '<Boolean> If set to true, user will not be able to update or write in the code editor. Default value is false.',
+                playable: '<Boolean> if set to true',
+                codemirrorProps: '<Object> codemirror native properties that will be embbeded on run time.'
+            },
+            events: {
+                onChange: '<{code,editor}> Dispatched every user input',
+                onPlay: "<codeMirrorInstance> Dispatched whenever the editor's play button is clicked",
+                onBlur: "<codeMirrorInstance> Fires whenever the editor is unfocused.",
+                onFocus: "<codeMirrorInstance> Fires whenever the editor is focused."
+            }
+        }
     }),
     methods: {
-        onChange(code) {
-            this.$emit('onChange', code)
+        onChange(code,editor) {
+            this.$emit('onChange', {code, editor})
+        },
+        onBlur(codeMirrorInstance) {
+            this.$emit('onBlur', codeMirrorInstance)
+        },
+        onFocus(codeMirrorInstance) {
+            this.$emit('onFocus',codeMirrorInstance)
         }
     },
     mounted() {
@@ -27,7 +58,7 @@ export default {
         setTimeout(() => {
             const codeMirrorEditorInstance = CodeMirror.fromTextArea(document.getElementById(`cm-editor${this.currentUid}`), {
                 tabSize: 4,
-                mode: this.lang || 'text',
+                mode: this.lang || 'javascript',
                 theme: this.theme || 'default', //mdn-like, monokai, default, base16-light
                 lineNumbers: false,
                 lineWrapping: true,
@@ -42,7 +73,6 @@ export default {
                 autofocus: true,
                 matchBrackets: true,
                 autoCloseBrackets: true,
-                styleActiveLine: true,
                 foldGutter: true,
                 tabMode: "indent",
                 fixedGutter: true,
@@ -50,13 +80,13 @@ export default {
                 lint: false,
                 autoRefresh: true,
                 readOnly: this.readOnly || false,
-                styleActiveLine: true,
+                styleActiveLine: false,
                 styleActiveSelected: true,
+                ...this.codemirrorProps,
                 highlightSelectionMatches: {
                     minChars: 1,
                     style:'matchhighlight'
                 },
-                styleActiveLine: true
             })
 
             // Register code value
@@ -145,7 +175,15 @@ export default {
             };
 
             codeMirrorEditorInstance.on('change', (editor) => {
-                this.onChange(editor.getValue())
+                this.onChange(editor.getValue(),editor)
+            })
+
+            codeMirrorEditorInstance.on('focus', (editor) => {
+                this.onFocus(editor)
+            })
+
+            codeMirrorEditorInstance.on('blur', (editor) => {
+                this.onBlur(editor)
             })
 
             // refresh
@@ -206,5 +244,12 @@ export default {
 }
 .CodeMirror-code {
     margin-left: 1px !important;
+}
+.playable-editor-btn-filled:hover {
+    color: #86a6bd;
+    transition: 0.3s;
+}
+.playable-editor-btn-filled {
+    color: #86a6bd70;
 }
 </style>
