@@ -4,7 +4,7 @@
             {{err}}
         </div>
         <main style="border: 1px solid #dfe7ed;" >
-            <div v-if="playable" @click="$emit('onPlay')" class="absolute pointer pad025" style="z-index: 100; right: 0;">
+            <div v-if="playable" @click="onPlay" class="absolute pointer pad025" style="z-index: 100; right: 0;">
                 <svg class="playable-editor-btn-filled" style="width:24px;height:24px; " viewBox="0 0 24 24">
                     <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
                 </svg>
@@ -21,22 +21,24 @@
 // https://codemirror.net/2/demo/matchhighlighter.html
 import m  from '@/m'
 export default {
-    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps'],
+    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder'],
     mixins: [m],
     data: () => ({
         ready:true,
         currentUid: undefined,
+        _code: '// silent',
         documentation: {
             properties: {
                 code: '<String> The initial code value that will presented in the code editor. Default is empty.',
                 lang: '<String> The language mode of code editor, available langunage are, text, javascript, css, html',
                 readOnly: '<Boolean> If set to true, user will not be able to update or write in the code editor. Default value is false.',
                 playable: '<Boolean> if set to true',
-                codemirrorProps: '<Object> codemirror native properties that will be embbeded on run time.'
+                codemirrorProps: '<Object> codemirror native properties that will be embbeded on run time.',
+                hintHanlder: '<Function> A function that executes everytime user types something in editor that passes a userCurrentInput and userInputHintList to manage the hinting.'
             },
             events: {
                 onChange: '<{code,editor}> Dispatched every user input',
-                onPlay: "<codeMirrorInstance> Dispatched whenever the editor's play button is clicked",
+                onPlay: "<code> Dispatched whenever the editor's play button is clicked",
                 onBlur: "<codeMirrorInstance> Fires whenever the editor is unfocused.",
                 onFocus: "<codeMirrorInstance> Fires whenever the editor is focused."
             }
@@ -51,6 +53,14 @@ export default {
         },
         onFocus(codeMirrorInstance) {
             this.$emit('onFocus',codeMirrorInstance)
+        },
+        onPlay() {
+            this.$emit('onPlay',this._code || this.code)
+        },
+        hintManager(userCurrentInput,userInputHintList) {
+            if(this.hintHanlder && typeof this.hintHanlder == 'function') {
+                this.hintHanlder(userCurrentInput,userInputHintList)
+            }
         }
     },
     mounted() {
@@ -66,11 +76,11 @@ export default {
                 autoCloseTags: true,
                 indentUnit: 4,
                 indentWithTabs: true,
-                showCursorWhenSelecting: true,
+                showCursorWhenSelecting: this.readOnly == true ? true : false,
                 selectionsMayTouch: true,
                 autocorrect: true,
                 spellcheck: true,
-                autofocus: true,
+                autofocus: false,
                 matchBrackets: true,
                 autoCloseBrackets: true,
                 foldGutter: true,
@@ -79,7 +89,8 @@ export default {
                 gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
                 lint: false,
                 autoRefresh: true,
-                readOnly: this.readOnly || false,
+                readOnly: this.readOnly != undefined ? this.readOnly : true,
+                showCursorWhenSelecting: this.readOnly != undefined && this.readOnly == true ? true : false,
                 styleActiveLine: false,
                 styleActiveSelected: true,
                 ...this.codemirrorProps,
@@ -90,7 +101,7 @@ export default {
             })
 
             // Register code value
-            codeMirrorEditorInstance.getDoc().setValue(this.code || `function myScript(){ \n\treturn 100;\n}\n`)
+            codeMirrorEditorInstance.getDoc().setValue(this.code || `// silent`)
 
             // autocomplete hints
             const excludedIntelliSenseTriggerKeys = {
@@ -155,38 +166,33 @@ export default {
                 }
             })
             const codeMirrorJavascriptHintMethod = CodeMirror.hint.javascript;
-            CodeMirror.hint.javascript = function(cm /** { curOp, display, doc, getTextArea, options, save, state, toTextArea _handlers } */) {
+            CodeMirror.hint.javascript = (cm /** { curOp, display, doc, getTextArea, options, save, state, toTextArea _handlers } */) => {
                 const userInputHint = codeMirrorJavascriptHintMethod(cm) || {from: cm.getCursor(), to: cm.getCursor(), list: []};
                 const userCurrentInput = cm.display.input.prevInput
-                if(userCurrentInput === 'pane.') {
-                    const hints = ["showPane","removePane","updatePane"]
-
-                    // custom specific hints
-                    hints.map(hint => {
-                        if(!userInputHint.list.includes(hint)) {
-                            userInputHint.list.push(hint);
-                        }
-                    })
-                }
-                
-                // console.log('-->', cm.getValue())
-
+                this.hintManager(userCurrentInput,userInputHint.list)
                 return userInputHint;
             };
 
+            // on change event
             codeMirrorEditorInstance.on('change', (editor) => {
-                this.onChange(editor.getValue(),editor)
+                const code = editor.getValue()
+                this._code = code
+                this.onChange(code,editor)
             })
-
+            // on focus event
             codeMirrorEditorInstance.on('focus', (editor) => {
                 this.onFocus(editor)
             })
-
+            // on blur event
             codeMirrorEditorInstance.on('blur', (editor) => {
                 this.onBlur(editor)
             })
-
-            // refresh
+            // hide cursor on readonly
+            if(this.readOnly == true || this.readOnly == undefined) {
+                const codeMirrorElement = codeMirrorEditorInstance.getWrapperElement()
+                codeMirrorElement.classList.add('CodeMirror-readonly');
+            }
+            // refresh on load
             setTimeout(() => {
                 codeMirrorEditorInstance.refresh()
             },50)
@@ -251,5 +257,8 @@ export default {
 }
 .playable-editor-btn-filled {
     color: #86a6bd70;
+}
+.CodeMirror-readonly .CodeMirror-cursor {
+  display: none !important
 }
 </style>
