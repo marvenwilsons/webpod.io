@@ -4,7 +4,7 @@
             {{err}}
         </div>
         <main class="relative" style="border: 1px solid #dfe7ed;" >
-            <div v-if="playable" @click="onPlay" class="absolute pointer pad025" style="z-index: 100; right: 0;">
+            <div v-if="playable && playButtonIsShowing" @click="onPlay" class="absolute pointer pad025" style="z-index: 100; right: 0;">
                 <svg class="playable-editor-btn-filled" style="width:24px;height:24px; " viewBox="0 0 24 24">
                     <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
                 </svg>
@@ -16,8 +16,7 @@
             <textarea :id="`cm-editor${currentUid}`" />
         </main>
         <!-- log window -->
-        <v-fade-transition>
-            <div v-if="logWindowIsShowing" style="background: #f1f6fb; font-family: Menlo; min-height: 200px;" class="text-small pad025 relative fullheight-percent flex flexcol" >
+        <div v-if="logWindowIsShowing" style="background: #f1f6fb; font-family: Menlo; min-height: 200px;" class="text-small2 pad025 relative fullheight-percent flex flexcol" >
             <div>
                 <div class="flex spacebetween flexcenter" style="right: 0;" >
                     <div>
@@ -35,18 +34,17 @@
             </div>
             <div @scroll="scrollToBottomIsActive = false" :id="`wp-logWindowParent-${currentUid}`" style="overflow:auto;" class="relative fullheight-percent flex flex1 flexcol" >
                 <div :id="`wp-logwindow-${currentUid}`" class="absolute fullheight-percent" >
-                    <div :style="{color: log.type == 'success' && 'green' || log.type == 'error' && 'red'}" v-for="log in logs" :key="uid(log)" :id="uid(log)" >
+                    <div :style="{color: log.type == 'success' && 'green' || log.type == 'error' && 'red', fontWeight: 600}" v-for="(log, logIndex) in logs" :key="uid(logIndex)" :id="uid(log)" >
                         {{log.type == 'info' ? 'ℹ' : ''}}
                         {{log.type == 'success' ? '✔' : '' }}
                         {{log.type == 'error' ? '❌' : '' }}
                         {{log.type == undefined ? '>' : '' }}
                         {{log.msg}}
                     </div>
-                    <div style="height: 10px;" :id="`wp-lastLog-${currentUid}`" ></div>
+                    <div style="height: 15px;" :id="`wp-lastLog-${currentUid}`" ></div>
                 </div>
             </div>
         </div>
-        </v-fade-transition>
     </section>
 </template>
 
@@ -68,6 +66,8 @@ export default {
         showExectionMaskIndicator: false,
         logs: [],
         scrollToBottomIsActive: true,
+        playButtonIsShowing: true,
+        hasADuplicateLog: false,
         logWindowIsShowing: false,
         documentation: {
             properties: {
@@ -113,15 +113,11 @@ export default {
             this.$emit('onFocus',codeMirrorInstance)
         },
         onPlay() {
-            if(this.blockEditorOnPlay == true) {
-                this.$emit('onPlay',{code: this._code || this.code, stop: this.stopExecution, log: this.log})
-                this.showExectionMaskIndicator = true
-            } else {
-                this.$emit('onPlay', {code: this._code || this.code, stop: null, log: this.log})
-            }
-
+            this.$emit('onPlay', {code: this._code || this.code, stop: this.stopExecution, log: this.log})
+            this.showExectionMaskIndicator = true
             if(this.playable == true) {
                 this.logWindowIsShowing = true
+                this.playButtonIsShowing = false
                 this.logs.push({
                     type: undefined,
                     msg: "executing code ..."
@@ -130,16 +126,43 @@ export default {
         },
         log(log) {
             if(typeof log == 'string') {
-                this.logs.push({
-                    type: undefined,
-                    msg: log
-                })
+                if(this.hasADuplicateLog == false) {
+                    this.logs.push({
+                        type: undefined,
+                        msg: log
+                    })  
+                }
+
+                setTimeout(() => {
+                    const lastItemLog = this.logs[this.logs.length - 1]
+                    const logIndex = this.logs.length - 1
+                    
+
+                    if(lastItemLog.msg.split(' ')[0] == log.split(' ')[0] ) {
+                        this.hasADuplicateLog = true
+                        this.logs[logIndex].msg = log
+                    } else {
+                        this.hasADuplicateLog = false
+                        this.logs.push({
+                            type: undefined,
+                            msg: log
+                        })  
+                    }
+                }, 0)
             } else if(typeof log == 'object') {
                 this.logs.push(log)
             }
+
+            
+            
         },
         stopExecution() {
             this.showExectionMaskIndicator = false
+            this.playButtonIsShowing = true
+            this.logs.push({
+                type: 'info',
+                msg: 'execution done.'
+            })
         },
         hintManager(userCurrentInput,userInputHintList) {
             if(this.hintHanlder && typeof this.hintHanlder == 'function') {
@@ -151,7 +174,7 @@ export default {
             setTimeout(() => {
                 this.scrollToBottomIsActive = true
             }, 100)
-        }
+        },
     },
     mounted() {
         this.currentUid = this.uid()
@@ -294,12 +317,12 @@ export default {
 <style>
 .CodeMirror {
     font-family: 'Menlo';
-    font-size: 14px;
+    font-size: 13px;
 }
 .CodeMirror-linenumber {
     padding: 1px 8px 0 5px;
     /* color: #266564 !important; */
-    font-size: 14px;
+    font-size: 13px;
 }
 .CodeMirror-matchingbracket {
     color: #20bbfc !important;
