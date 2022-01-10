@@ -1,9 +1,9 @@
 <template>
-    <div>
-        <div v-if="editorMounted == false"  class="flex flexcenter pad125" >
+    <div class="relative" >
+        <!-- <div v-if="editorMounted == false"  class="flex flexcenter pad125" >
             loading ...
-        </div>
-        <monacoEditor 
+        </div> -->
+        <!-- <monacoEditor 
           :code="data.value"
           :lang="data.lang"
           :readOnly="data.readOnly"
@@ -11,7 +11,16 @@
           @onChange="onChange"
           @onMount="onEditorMount"
         >
-        </monacoEditor>
+        </monacoEditor> -->
+        
+        <codeEditor
+          :code="data.value"
+          :lang="data.lang"
+          :readOnly="data.readOnly"
+          :playable="data.playable"
+          @onChange="onChange"
+          @onPlay="onPlay"
+        ></codeEditor>
     </div>
 </template>
 
@@ -30,9 +39,12 @@ export default {
         onChange(e) {
             this.$emit('onChange',{
                 err: null,
-                value: e,
+                value: e.code,
                 key: this._key
             })
+        },
+        onPlay(code) {
+            console.log('code', code)
         }
     },
     mounted() {

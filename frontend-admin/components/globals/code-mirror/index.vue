@@ -1,16 +1,52 @@
 <template>
     <section  class="relative" >
-        <div v-if="err" class="pad025" style="border-left: 5px solid red; color: red; font-family: Menlo">
+        <div v-if="err" class="pad025" style="border-left: 5px solid red; color: red; font-family: Menlo;">
             {{err}}
         </div>
-        <main style="border: 1px solid #dfe7ed;" >
+        <main class="relative" style="border: 1px solid #dfe7ed;" >
             <div v-if="playable" @click="onPlay" class="absolute pointer pad025" style="z-index: 100; right: 0;">
                 <svg class="playable-editor-btn-filled" style="width:24px;height:24px; " viewBox="0 0 24 24">
                     <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
                 </svg>
             </div>
+            <div role="execution mask" v-if="showExectionMaskIndicator" style="background:#86a6bd70; z-index: 101;" class="fullwidth fullheight-percent absolute" >
+                <div v-if="executionIsStoppable" class="flex fullwidth flexend" ><el-button @click="$emit('onStopExecutionRequest')">stop execution</el-button></div>
+                <div class="flex flexcenter fullheight-percent" ><playingAnimation/></div>
+            </div>
             <textarea :id="`cm-editor${currentUid}`" />
         </main>
+        <!-- log window -->
+        <v-fade-transition>
+            <div v-if="logWindowIsShowing" style="background: #f1f6fb; font-family: Menlo; min-height: 200px;" class="text-small pad025 relative fullheight-percent flex flexcol" >
+            <div>
+                <div class="flex spacebetween flexcenter" style="right: 0;" >
+                    <div>
+                        <span class="text-small" >OUTPUT LOG</span>
+                    </div>
+                    <div>
+                        <svg @click="logs = [], resetLogWindowBehaviour()" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#c2c6cb" d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z" />
+                        </svg>
+                        <!-- <svg @click="logWindowIsShowing = false" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#c2c6cb" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                        </svg> -->
+                    </div>
+                </div>
+            </div>
+            <div @scroll="scrollToBottomIsActive = false" :id="`wp-logWindowParent-${currentUid}`" style="overflow:auto;" class="relative fullheight-percent flex flex1 flexcol" >
+                <div :id="`wp-logwindow-${currentUid}`" class="absolute fullheight-percent" >
+                    <div :style="{color: log.type == 'success' && 'green' || log.type == 'error' && 'red'}" v-for="log in logs" :key="uid(log)" :id="uid(log)" >
+                        {{log.type == 'info' ? 'ℹ' : ''}}
+                        {{log.type == 'success' ? '✔' : '' }}
+                        {{log.type == 'error' ? '❌' : '' }}
+                        {{log.type == undefined ? '>' : '' }}
+                        {{log.msg}}
+                    </div>
+                    <div style="height: 10px;" :id="`wp-lastLog-${currentUid}`" ></div>
+                </div>
+            </div>
+        </div>
+        </v-fade-transition>
     </section>
 </template>
 
@@ -20,13 +56,19 @@
 // https://github.com/emmetio/codemirror-plugin
 // https://codemirror.net/2/demo/matchhighlighter.html
 import m  from '@/m'
+import playingAnimation from './playing-animation.vue'
 export default {
-    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder'],
+    components: {playingAnimation},
+    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder','blockEditorOnPlay','executionIsStoppable'],
     mixins: [m],
     data: () => ({
         ready:true,
         currentUid: undefined,
         _code: '// silent',
+        showExectionMaskIndicator: false,
+        logs: [],
+        scrollToBottomIsActive: true,
+        logWindowIsShowing: false,
         documentation: {
             properties: {
                 code: '<String> The initial code value that will presented in the code editor. Default is empty.',
@@ -34,16 +76,32 @@ export default {
                 readOnly: '<Boolean> If set to true, user will not be able to update or write in the code editor. Default value is false.',
                 playable: '<Boolean> if set to true',
                 codemirrorProps: '<Object> codemirror native properties that will be embbeded on run time.',
-                hintHanlder: '<Function> A function that executes everytime user types something in editor that passes a userCurrentInput and userInputHintList to manage the hinting.'
+                hintHanlder: '<Function> A function that executes everytime user types something in editor that passes a userCurrentInput and userInputHintList to manage the hinting.',
+                blockEditorOnPlay: `<Boolean> Disables the editor when the play button is clicked and can only un block the editor when the current process is stop by 
+                    clicking the stop button or throwing an error. It also defines an executable callback function stop() in onPlay event handler.`
             },
             events: {
                 onChange: '<{code,editor}> Dispatched every user input',
-                onPlay: "<code> Dispatched whenever the editor's play button is clicked",
+                onPlay: "<code:string,stopExecution:function> Dispatched whenever the editor's play button is clicked",
                 onBlur: "<codeMirrorInstance> Fires whenever the editor is unfocused.",
-                onFocus: "<codeMirrorInstance> Fires whenever the editor is focused."
+                onFocus: "<codeMirrorInstance> Fires whenever the editor is focused.",
+                onStopExecutionRequest: 'Executes a user defined functon when the stop execution button is clicked.'
             }
         }
     }),
+    watch: {
+        logs() {
+            const lastLog = document.getElementById(`wp-lastLog-${this.currentUid}`)
+            const logParentWindow = document.getElementById(`wp-logWindowParent-${this.currentUid}`)
+            if(this.scrollToBottomIsActive == true) {
+                if(logParentWindow) {
+                    if(lastLog) {
+                        this.scrollParentToChild(logParentWindow,lastLog)
+                    }
+                }
+            }
+        }
+    },
     methods: {
         onChange(code,editor) {
             this.$emit('onChange', {code, editor})
@@ -55,12 +113,44 @@ export default {
             this.$emit('onFocus',codeMirrorInstance)
         },
         onPlay() {
-            this.$emit('onPlay',this._code || this.code)
+            if(this.blockEditorOnPlay == true) {
+                this.$emit('onPlay',{code: this._code || this.code, stop: this.stopExecution, log: this.log})
+                this.showExectionMaskIndicator = true
+            } else {
+                this.$emit('onPlay', {code: this._code || this.code, stop: null, log: this.log})
+            }
+
+            if(this.playable == true) {
+                this.logWindowIsShowing = true
+                this.logs.push({
+                    type: undefined,
+                    msg: "executing code ..."
+                })
+            }
+        },
+        log(log) {
+            if(typeof log == 'string') {
+                this.logs.push({
+                    type: undefined,
+                    msg: log
+                })
+            } else if(typeof log == 'object') {
+                this.logs.push(log)
+            }
+        },
+        stopExecution() {
+            this.showExectionMaskIndicator = false
         },
         hintManager(userCurrentInput,userInputHintList) {
             if(this.hintHanlder && typeof this.hintHanlder == 'function') {
                 this.hintHanlder(userCurrentInput,userInputHintList)
             }
+        },
+        // component logic methods
+        resetLogWindowBehaviour() {
+            setTimeout(() => {
+                this.scrollToBottomIsActive = true
+            }, 100)
         }
     },
     mounted() {
