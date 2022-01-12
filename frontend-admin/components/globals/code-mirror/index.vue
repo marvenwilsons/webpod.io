@@ -16,35 +16,11 @@
             <textarea :id="`cm-editor${currentUid}`" />
         </main>
         <!-- log window -->
-        <div v-if="logWindowIsShowing" style="background: #f1f6fb; font-family: Menlo; min-height: 200px;" class="text-small2 pad025 relative fullheight-percent flex flexcol" >
-            <div>
-                <div class="flex spacebetween flexcenter" style="right: 0;" >
-                    <div>
-                        <span class="text-small" >OUTPUT LOG</span>
-                    </div>
-                    <div>
-                        <svg @click="logs = [], resetLogWindowBehaviour()" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
-                            <path fill="#c2c6cb" d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z" />
-                        </svg>
-                        <!-- <svg @click="logWindowIsShowing = false" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
-                            <path fill="#c2c6cb" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                        </svg> -->
-                    </div>
-                </div>
-            </div>
-            <div @scroll="scrollToBottomIsActive = false" :id="`wp-logWindowParent-${currentUid}`" style="overflow:auto;" class="relative fullheight-percent flex flex1 flexcol" >
-                <div :id="`wp-logwindow-${currentUid}`" class="absolute fullheight-percent" >
-                    <div :style="{color: log.type == 'success' && 'green' || log.type == 'error' && 'red', fontWeight: 600}" v-for="(log, logIndex) in logs" :key="uid(logIndex)" :id="uid(log)" >
-                        {{log.type == 'info' ? 'ℹ' : ''}}
-                        {{log.type == 'success' ? '✔' : '' }}
-                        {{log.type == 'error' ? '❌' : '' }}
-                        {{log.type == undefined ? '>' : '' }}
-                        {{log.msg}}
-                    </div>
-                    <div style="height: 15px;" :id="`wp-lastLog-${currentUid}`" ></div>
-                </div>
-            </div>
-        </div>
+        <logWindow
+            :logWindowIsShowing="logWindowIsShowing"
+            :logs="logs"
+            ref="logWindow"
+        ></logWindow>
     </section>
 </template>
 
@@ -55,9 +31,10 @@
 // https://codemirror.net/2/demo/matchhighlighter.html
 import m  from '@/m'
 import playingAnimation from './playing-animation.vue'
+import logWindow from './log-window.vue'
 export default {
-    components: {playingAnimation},
-    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder','blockEditorOnPlay','executionIsStoppable'],
+    components: {playingAnimation, logWindow},
+    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder','executionIsStoppable','convertCodeAsFunctionOnPlay'],
     mixins: [m],
     data: () => ({
         ready:true,
@@ -77,8 +54,7 @@ export default {
                 playable: '<Boolean> if set to true',
                 codemirrorProps: '<Object> codemirror native properties that will be embbeded on run time.',
                 hintHanlder: '<Function> A function that executes everytime user types something in editor that passes a userCurrentInput and userInputHintList to manage the hinting.',
-                blockEditorOnPlay: `<Boolean> Disables the editor when the play button is clicked and can only un block the editor when the current process is stop by 
-                    clicking the stop button or throwing an error. It also defines an executable callback function stop() in onPlay event handler.`
+                convertCodeAsFunctionOnPlay: '<Function> Convert the code string into function onPlay'
             },
             events: {
                 onChange: '<{code,editor}> Dispatched every user input',
@@ -89,19 +65,6 @@ export default {
             }
         }
     }),
-    watch: {
-        logs() {
-            const lastLog = document.getElementById(`wp-lastLog-${this.currentUid}`)
-            const logParentWindow = document.getElementById(`wp-logWindowParent-${this.currentUid}`)
-            if(this.scrollToBottomIsActive == true) {
-                if(logParentWindow) {
-                    if(lastLog) {
-                        this.scrollParentToChild(logParentWindow,lastLog)
-                    }
-                }
-            }
-        }
-    },
     methods: {
         onChange(code,editor) {
             this.$emit('onChange', {code, editor})
@@ -113,53 +76,28 @@ export default {
             this.$emit('onFocus',codeMirrorInstance)
         },
         onPlay() {
-            this.$emit('onPlay', {code: this._code || this.code, stop: this.stopExecution, log: this.log})
+            const convertedCodeToFunction = new Function(`return ${this._code || this.code}`)
+            const c = this.convertCodeAsFunctionOnPlay == true ? convertedCodeToFunction : this._code || this.code
+            
             this.showExectionMaskIndicator = true
             if(this.playable == true) {
                 this.logWindowIsShowing = true
                 this.playButtonIsShowing = false
-                this.logs.push({
-                    type: undefined,
-                    msg: "executing code ..."
-                })
-            }
-        },
-        log(log) {
-            if(typeof log == 'string') {
-                if(this.hasADuplicateLog == false) {
-                    this.logs.push({
-                        type: undefined,
-                        msg: log
-                    })  
-                }
-
                 setTimeout(() => {
-                    const lastItemLog = this.logs[this.logs.length - 1]
-                    const logIndex = this.logs.length - 1
-                    
-
-                    if(lastItemLog.msg.split(' ')[0] == log.split(' ')[0] ) {
-                        this.hasADuplicateLog = true
-                        this.logs[logIndex].msg = log
-                    } else {
-                        this.hasADuplicateLog = false
-                        this.logs.push({
-                            type: undefined,
-                            msg: log
-                        })  
-                    }
-                }, 0)
-            } else if(typeof log == 'object') {
-                this.logs.push(log)
+                    const logWindow = this.$refs.logWindow
+                    console.log('logWindow', logWindow)
+                    this.$emit('onPlay', {code: c, stop: this.stopExecution, log: logWindow.log})
+                    logWindow.logs.push({
+                        type: undefined,
+                        msg: "executing code ..."
+                    })
+                },0)
             }
-
-            
-            
         },
         stopExecution() {
             this.showExectionMaskIndicator = false
             this.playButtonIsShowing = true
-            this.logs.push({
+            this.$refs.logWindow.logs.push({
                 type: 'info',
                 msg: 'execution done.'
             })
