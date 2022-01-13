@@ -52,8 +52,11 @@
                 id="input-read-mode"
                 class="pad050 pointer text-regular"
               >
-                <div v-if="typeof getLatestDataValue == 'string' && !data.mode">
-                  {{ getLatestDataValue }}
+                <div style="max-height: 100px;" v-if="typeof getLatestDataValue == 'string' && !data.mode">
+                  <div v-if="data.type == 'text-editor'" >Open Code Editor</div>
+                  <div v-if="data.type != 'text-editor'" >
+                    {{ getLatestDataValue }}
+                  </div>
                 </div>
                 <div
                   v-if="typeof getLatestDataValue == 'number' && data.type == 'number'"
