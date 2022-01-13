@@ -6,9 +6,11 @@
                     <span class="text-small" >OUTPUT LOG</span>
                 </div>
                 <div>
-                    <svg @click="logs = [], resetLogWindowBehaviour()" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
-                        <path fill="#c2c6cb" d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z" />
-                    </svg>
+                    <el-tooltip class="pad025" content="clear log" effect="light" placement="top-start" >
+                        <svg @click="logs = [], resetLogWindowBehaviour()" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#c2c6cb" d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z" />
+                        </svg>
+                    </el-tooltip>
                     <!-- <svg @click="logWindowIsShowing = false" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
                         <path fill="#c2c6cb" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
                     </svg> -->
@@ -16,15 +18,21 @@
             </div>
         </div>
         <div @scroll="scrollToBottomIsActive = false" :id="`wp-logWindowParent-${currentUid}`" style="overflow:auto;" class="relative fullheight-percent flex flex1 flexcol" >
-            <div :id="`wp-logwindow-${currentUid}`" class="absolute fullheight-percent" >
-                <div :style="{color: log.type == 'success' && 'green' || log.type == 'error' && 'red', fontWeight: 600}" v-for="(log, logIndex) in logs" :key="uid(logIndex)" :id="uid(log)" >
+            <div :id="`wp-logwindow-${currentUid}`" class="absolute fullheight-percent flex flexcol fullwidth" >
+                <div :style="{color: log.type == 'success' && 'green' || log.type == 'error' && 'red'}" v-for="(log, logIndex) in logs" :key="uid(logIndex)" :id="uid(log)" >
                     {{log.type == 'info' ? 'ℹ' : ''}}
                     {{log.type == 'success' ? '✔' : '' }}
                     {{log.type == 'error' ? '❌' : '' }}
                     {{log.type == undefined ? '￫' : '' }}
                     {{log.msg}}
                 </div>
-                <div style="height: 15px;" :id="`wp-lastLog-${currentUid}`" ></div>
+                <div class="fullwidth flex" style="min-height: 15px;" :id="`wp-lastLog-${currentUid}`" >
+                    <div v-if="showCmdLine && useCmdLine" class="fullwidth flex" >
+                        <div class="flex" >
+                            <span class="marginright025" >➥</span> <input @keypress.enter="cmdEnter" v-model="cmd" class="fullwidth" type="text">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -34,25 +42,28 @@
 import m from '@/m'
 export default {
     mixins: [m],
-    props: ['logWindowIsShowing','outputLogs'],
     props: {
         logWindowIsShowing: {type: Boolean, default: false},
         outputLogs: {type: Array, default() {
             return []
-        }}
+        }},
+        useCmdLine: {type: Boolean, default: false}
     },
     data: () => ({
         logs: [],
         currentUid: '',
+        showCmdLine: false,
         documentation: {
             properties: {
                 outputLogs: `<Array> an array of string to be displayed in the log window`,
-                logWindowIsShowing: '<Boolean> Hides and shows the log window'
+                logWindowIsShowing: '<Boolean> Hides and shows the log window',
+                useCmdLine: `<Boolean> Enables command line input`
             },
             methods: {
                 log: `<Function> pushes a new log to the logs array.`
             }
-        }
+        },
+        cmd: undefined
     }),
     watch: {
         logs() {
@@ -65,7 +76,8 @@ export default {
                     }
                 }
             }
-        }
+        },
+        
     },
     methods: {
         log(log) {
@@ -100,6 +112,15 @@ export default {
             
             
         },
+        resetLogWindowBehaviour() {
+            this.logs = []
+        },
+        cmdEnter() {
+            this.log(this.cmd)
+            setTimeout(() => {
+                this.cmd = undefined
+            },0)
+        }
     },
     mounted() {
         this.logs = this.outputLogs
@@ -109,5 +130,9 @@ export default {
 </script>
 
 <style>
-
+.el-tooltip__popper{
+    padding: 5px !important;
+    font-family: 'Monaco';
+    font-size: 70%;
+}
 </style>
