@@ -18,8 +18,10 @@
           :lang="data.lang"
           :readOnly="data.readOnly"
           :playable="data.playable"
+          :useCmdLine="data.useCmdLine"
           @onChange="onChange"
           @onPlay="onPlay"
+          @onCmd="onCmd"
         ></codeEditor>
     </div>
 </template>
@@ -43,14 +45,16 @@ export default {
                 key: this._key
             })
         },
-        onPlay(code) {
-            console.log('code', code)
+        onPlay(cb) {
+            if(this.data.hooks && this.data.hooks.onPlay) {
+                this.data.hooks.onPlay(cb)
+            }
+        },
+        onCmd(cb) {
+            if(this.data.hooks && this.data.hooks.onCmd) {
+                this.data.hooks.onCmd(cb)
+            }
         }
     },
-    mounted() {
-        // webpod.dashboardMethods.alert(`
-        // <h1>hello world</h1>
-        // `)
-    }
 }
 </script>
