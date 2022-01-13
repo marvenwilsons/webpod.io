@@ -83,6 +83,10 @@ export default {
       {
         rel: 'stylesheet',
         href: 'https://unpkg.com/codemirror@5.65.0/theme/mdn-like.css'
+      },
+      {
+        rel: 'stylesheet',
+        href: 'http://fonts.cdnfonts.com/css/menlo'
       }
     ],
     script: [
@@ -129,6 +133,9 @@ export default {
       {src:'https://unpkg.com/codemirror@5.65.0/addon/hint/javascript-hint.js'},
       {src:'https://unpkg.com/codemirror@5.65.0/addon/hint/show-hint.js'},
       {src:'https://unpkg.com/codemirror@5.65.0/addon/hint/anyword-hint.js'},
+      // search
+      {src: 'https://www.unpkg.com/codemirror@5.65.0/addon/search/match-highlighter.js'},
+      {src: 'https://www.unpkg.com/codemirror@5.65.0/addon/selection/active-line.js'}
 
     ]
   },
