@@ -106,6 +106,9 @@ export default {
             // if cmd line is enabled
             if(this.$refs.logWindow.useCmdLine == true) {
                 this.$refs.logWindow.showCmdLine = false
+            }
+
+            if(this.$refs.logWindow.logs.length) {
                 this.$refs.logWindow.scrollToBottomIsActive = true
             }
         },
@@ -168,9 +171,7 @@ export default {
             }
         },
         closeConsole() {
-            if(this.useCmdLine) {
-                this.logWindowIsShowing = false
-            }
+            this.logWindowIsShowing = false
         }
     },
     mounted() {
