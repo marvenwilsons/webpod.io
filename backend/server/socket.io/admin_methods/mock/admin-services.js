@@ -756,15 +756,47 @@ function getName() {
                   type: 'text-editor',
                   value: "function onLoad(input) {\n\twebpod.alert('hello world')\n}\n",
                   lang: 'javascript', // js phyton scss only
-                  readOnly: true,
+                  readOnly: false,
+                  playable: true,
                   hoverInfo: 'test',
                   height: '200px',
+                  useCmdLine: false,
                   hooks: {
                     onUpdate: stringify(function(n) {
                       setTimeout(() => {
                           n.update.done()
                           n.formData.value = true
                       }, 1000)
+                    }),
+                    onPlay: stringify(function(n) {
+                      console.log('onPlay in server', n)
+                      let v = 0
+                      const i = setInterval(() => {
+                        v++
+                        
+                        if(v == 201 || v == 101) {
+                          n.log({
+                            type: 'success',
+                            msg: `installed ${v} component`
+                          })
+                        } else {
+                          n.log(`building ${v}`)
+                        }
+
+                        if(v == 400) {
+                          clearInterval(i)
+                          setTimeout(() => {
+                            n.stop()
+                          },100)
+                        }
+                      }, 5)
+
+                    }),
+                    onCmd: stringify(function(p) {
+                      if(p.cmd.split(' ')[0] == 'alert') {
+                        p.dashboardMethods.alert(p.cmd.replace('alert',''))
+                      }
+                      // console.log('onCmd', p)
                     })
                   }
                 }
