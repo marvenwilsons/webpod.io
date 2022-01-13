@@ -19,7 +19,9 @@
         <logWindow
             :logWindowIsShowing="logWindowIsShowing"
             :logs="logs"
+            :useCmdLine="useCmdLine"
             ref="logWindow"
+            @onCmd="onCmd"
         ></logWindow>
     </section>
 </template>
@@ -34,7 +36,7 @@ import playingAnimation from './playing-animation.vue'
 import logWindow from './log-window.vue'
 export default {
     components: {playingAnimation, logWindow},
-    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder','executionIsStoppable','convertCodeAsFunctionOnPlay'],
+    props: ['code','lang','readOnly','playable', 'err', 'codemirrorProps', 'hintHanlder','executionIsStoppable','convertCodeAsFunctionOnPlay', 'useCmdLine'],
     mixins: [m],
     data: () => ({
         ready:true,
@@ -42,7 +44,6 @@ export default {
         _code: '// silent',
         showExectionMaskIndicator: false,
         logs: [],
-        scrollToBottomIsActive: true,
         playButtonIsShowing: true,
         hasADuplicateLog: false,
         logWindowIsShowing: false,
@@ -54,7 +55,8 @@ export default {
                 playable: '<Boolean> if set to true',
                 codemirrorProps: '<Object> codemirror native properties that will be embbeded on run time.',
                 hintHanlder: '<Function> A function that executes everytime user types something in editor that passes a userCurrentInput and userInputHintList to manage the hinting.',
-                convertCodeAsFunctionOnPlay: '<Function> Convert the code string into function onPlay'
+                convertCodeAsFunctionOnPlay: '<Function> Convert the code string into function onPlay',
+                useCmdLine: `<Boolean> Enables command line input`
             },
             events: {
                 onChange: '<{code,editor}> Dispatched every user input',
@@ -85,7 +87,6 @@ export default {
                 this.playButtonIsShowing = false
                 setTimeout(() => {
                     const logWindow = this.$refs.logWindow
-                    console.log('logWindow', logWindow)
                     this.$emit('onPlay', {code: c, stop: this.stopExecution, log: logWindow.log})
                     logWindow.logs.push({
                         type: undefined,
@@ -93,14 +94,24 @@ export default {
                     })
                 },0)
             }
+
+            // if cmd line is enabled
+            if(this.$refs.logWindow.useCmdLine == true) {
+                this.$refs.logWindow.showCmdLine = false
+            }
         },
         stopExecution() {
             this.showExectionMaskIndicator = false
             this.playButtonIsShowing = true
             this.$refs.logWindow.logs.push({
                 type: 'info',
-                msg: 'execution done.'
+                msg:`execution done.` 
             })
+            
+            // if cmd line is enabled
+            if(this.$refs.logWindow.useCmdLine == true) {
+                this.$refs.logWindow.showCmdLine = true
+            }
         },
         hintManager(userCurrentInput,userInputHintList) {
             if(this.hintHanlder && typeof this.hintHanlder == 'function') {
@@ -110,9 +121,36 @@ export default {
         // component logic methods
         resetLogWindowBehaviour() {
             setTimeout(() => {
-                this.scrollToBottomIsActive = true
+                const logWindow = this.$refs.logWindow
+                logWindow.scrollToBottomIsActive = true
             }, 100)
         },
+        onCmd(cmd) {
+            const convertedCodeToFunction = new Function(`return ${this._code || this.code}`)
+            const c = this.convertCodeAsFunctionOnPlay == true ? convertedCodeToFunction : this._code || this.code
+            const logWindow = this.$refs.logWindow
+            if(cmd != undefined) {
+                logWindow.log(cmd)
+                this.$emit('onCmd',{
+                    cmd: cmd,
+                    code: c,
+                    log: logWindow.log,
+                    ...webpod
+                })
+            } else if(cmd == '' || cmd.trim() == '') {
+                logWindow.log('_')
+            } 
+            
+            if(cmd == 'clear') {
+                logWindow.resetLogWindowBehaviour()
+            }
+
+            if(cmd == 'code play') {
+                this.onPlay()
+            }
+
+            console.log(logWindow.logs.length)
+        }
     },
     mounted() {
         this.currentUid = this.uid()
