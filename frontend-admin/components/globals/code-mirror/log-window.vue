@@ -11,9 +11,11 @@
                             <path fill="#c2c6cb" d="M19.36,2.72L20.78,4.14L15.06,9.85C16.13,11.39 16.28,13.24 15.38,14.44L9.06,8.12C10.26,7.22 12.11,7.37 13.65,8.44L19.36,2.72M5.93,17.57C3.92,15.56 2.69,13.16 2.35,10.92L7.23,8.83L14.67,16.27L12.58,21.15C10.34,20.81 7.94,19.58 5.93,17.57Z" />
                         </svg>
                     </el-tooltip>
-                    <!-- <svg @click="logWindowIsShowing = false" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
-                        <path fill="#c2c6cb" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
-                    </svg> -->
+                    <el-tooltip class="pad025" content="close console" effect="light" placement="top-start" >
+                        <svg @click="closeConsole()" class="pointer" style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <path fill="#c2c6cb" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+                        </svg>
+                    </el-tooltip>
                 </div>
             </div>
         </div>
@@ -23,14 +25,14 @@
                     {{log.type == 'info' ? 'ℹ' : ''}}
                     {{log.type == 'success' ? '✔' : '' }}
                     {{log.type == 'error' ? '❌' : '' }}
-                    {{log.type == undefined ? '' : '' }}
+                    {{log.type == undefined ? '›' : '' }}
                     {{log.msg}}
                 </div>
                 <div class="fullwidth flex" style="min-height: 15px; max-height: 15px;" :id="`wp-lastLog-${currentUid}`" >
                     <div v-if="showCmdLine && useCmdLine" class="fullwidth flex" >
                         <div class="flex" >
-                            <span style="align-self: flex-end;" class="marginright025" >➥</span> 
-                            <input style="align-self: flex-end;" @keypress.enter="cmdEnter" v-model="cmd" class="fullwidth" type="text">
+                            <span style="align-self: flex-end;" class="marginright025" >»</span> 
+                            <input :id="`cmdinput-${currentUid}`" style="align-self: flex-end;" @keypress.enter="cmdEnter" v-model="cmd" class="fullwidth" type="text">
                         </div>
                     </div>
                 </div>
@@ -55,14 +57,16 @@ export default {
         currentUid: '',
         showCmdLine: false,
         scrollToBottomIsActive: true,
+        _logWindowIsShowing: undefined,
         documentation: {
             properties: {
                 outputLogs: `<Array> an array of string to be displayed in the log window`,
                 logWindowIsShowing: '<Boolean> Hides and shows the log window',
-                useCmdLine: `<Boolean> Enables command line input`
+                useCmdLine: `<Boolean> Enables command line input`,
             },
             methods: {
-                log: `<Function> pushes a new log to the logs array.`
+                log: `<Function> pushes a new log to the logs array.`, 
+                cmdFocus: `<Function> When executed the input will be focused`
             }
         },
         cmd: ''
@@ -130,6 +134,14 @@ export default {
                 this.cmd = ''
             },0)
 
+        },
+        cmdFocus() {
+            setTimeout(() => {
+                document.getElementById(`cmdinput-${this.currentUid}`).focus()
+            },10)
+        },
+        closeConsole() {
+            this.$emit('closeConsole')
         }
     },
     mounted() {
@@ -140,9 +152,8 @@ export default {
 </script>
 
 <style>
-.el-tooltip__popper{
-    padding: 5px !important;
+.el-tooltip__popper.is-light{
     font-family: 'Monaco';
-    font-size: 70%;
+    padding: 10px !important;
 }
 </style>

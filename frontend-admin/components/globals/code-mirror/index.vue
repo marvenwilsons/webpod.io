@@ -4,10 +4,17 @@
             {{err}}
         </div>
         <main class="relative" style="border: 1px solid #dfe7ed;" >
-            <div v-if="playable && playButtonIsShowing" @click="onPlay" class="absolute pointer pad025" style="z-index: 100; right: 0;">
-                <svg class="playable-editor-btn-filled" style="width:24px;height:24px; " viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
-                </svg>
+            <div v-if="playable && playButtonIsShowing"  class="absolute pointer pad025" style="z-index: 100; right: 0;">
+                <el-tooltip v-if="this.useCmdLine" class="pad025" content="open console" effect="light" placement="top-start" >
+                    <svg v-if="this.useCmdLine" @click="openConsole" class="playable-editor-btn-filled" style="width:24px;height:24px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M20,19V7H4V19H20M20,3A2,2 0 0,1 22,5V19A2,2 0 0,1 20,21H4A2,2 0 0,1 2,19V5C2,3.89 2.9,3 4,3H20M13,17V15H18V17H13M9.58,13L5.57,9H8.4L11.7,12.3C12.09,12.69 12.09,13.33 11.7,13.72L8.42,17H5.59L9.58,13Z" />
+                    </svg>
+                </el-tooltip>
+                <el-tooltip class="pad025" content="play code" effect="light" placement="top-start" >
+                    <svg @click="onPlay" class="playable-editor-btn-filled" style="width:24px;height:24px; " viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M8,5.14V19.14L19,12.14L8,5.14Z" />
+                    </svg>
+                </el-tooltip>
             </div>
             <div role="execution mask" v-if="showExectionMaskIndicator" style="background:#86a6bd70; z-index: 101;" class="fullwidth fullheight-percent absolute" >
                 <div v-if="executionIsStoppable" class="flex fullwidth flexend" ><el-button @click="$emit('onStopExecutionRequest')">stop execution</el-button></div>
@@ -22,6 +29,7 @@
             :useCmdLine="useCmdLine"
             ref="logWindow"
             @onCmd="onCmd"
+            @closeConsole="closeConsole"
         ></logWindow>
     </section>
 </template>
@@ -98,6 +106,7 @@ export default {
             // if cmd line is enabled
             if(this.$refs.logWindow.useCmdLine == true) {
                 this.$refs.logWindow.showCmdLine = false
+                this.$refs.logWindow.scrollToBottomIsActive = true
             }
         },
         stopExecution() {
@@ -111,6 +120,7 @@ export default {
             // if cmd line is enabled
             if(this.$refs.logWindow.useCmdLine == true) {
                 this.$refs.logWindow.showCmdLine = true
+                this.$refs.logWindow.cmdFocus()
             }
         },
         hintManager(userCurrentInput,userInputHintList) {
@@ -148,8 +158,19 @@ export default {
             if(cmd == 'code play') {
                 this.onPlay()
             }
-
-            console.log(logWindow.logs.length)
+        },
+        openConsole() {
+            if(this.useCmdLine) {
+                const logWindow = this.$refs.logWindow
+                logWindow.showCmdLine = true
+                this.logWindowIsShowing = true
+                logWindow.cmdFocus()
+            }
+        },
+        closeConsole() {
+            if(this.useCmdLine) {
+                this.logWindowIsShowing = false
+            }
         }
     },
     mounted() {
