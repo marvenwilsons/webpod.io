@@ -32,7 +32,7 @@ export default {
 
 <style>
 .flat_action_plain:hover {
-  background: #d3d3d4;
+  background: #e7eff8;
   text-decoration: underline;
   cursor: pointer;
 }
@@ -43,7 +43,7 @@ export default {
   padding-right: 13px;
 }
 .flat_action:hover {
-  background: #d3d3d4;
+  background: #e7eff8;
   padding: 6px;
   padding-left: 13px;
   padding-right: 13px;
