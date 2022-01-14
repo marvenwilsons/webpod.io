@@ -174,8 +174,44 @@ export default {
             this.logWindowIsShowing = false
         }
     },
-    mounted() {
+    async mounted() {
         this.currentUid = this.uid()
+        const CodeMirror = await import('codemirror/lib/codemirror')
+        await import ('codemirror/addon/edit/closebrackets')
+        await import ('codemirror/addon/edit/closetag')
+        await import ('codemirror/addon/edit/continuelist')
+        await import ('codemirror/addon/edit/matchbrackets')
+        await import ('codemirror/addon/edit/matchtags')
+        await import ('codemirror/addon/edit/trailingspace')
+        
+        await import ('codemirror/addon/fold/brace-fold')
+        await import ('codemirror/addon/fold/comment-fold')
+        await import ('codemirror/addon/fold/foldcode')
+        await import ('codemirror/addon/fold/foldgutter')
+        await import ('codemirror/addon/fold/indent-fold')
+        await import ('codemirror/addon/fold/markdown-fold')
+        await import ('codemirror/addon/fold/xml-fold')
+
+        await import ('codemirror/addon/lint/css-lint')
+        // await import ('codemirror/addon/lint/html-lint.js')
+        await import ('codemirror/addon/lint/javascript-lint')
+        await import ('codemirror/addon/lint/json-lint')
+        await import ('codemirror/addon/lint/lint')
+
+        await import ('codemirror/addon/display/autorefresh')
+
+        await import ('codemirror/mode/css/css.js')
+        await import ('codemirror/mode/xml/xml.js')
+        await import ('codemirror/mode/javascript/javascript.js')
+
+        await import ('codemirror/addon/hint/xml-hint.js')
+        await import ('codemirror/addon/hint/css-hint.js')
+        await import ('codemirror/addon/hint/html-hint.js')
+        await import ('codemirror/addon/hint/sql-hint.js')
+        await import ('codemirror/addon/hint/javascript-hint.js')
+        await import ('codemirror/addon/hint/show-hint.js')
+        await import ('codemirror/addon/hint/anyword-hint.js')
+
         setTimeout(() => {
             const codeMirrorEditorInstance = CodeMirror.fromTextArea(document.getElementById(`cm-editor${this.currentUid}`), {
                 tabSize: 4,
