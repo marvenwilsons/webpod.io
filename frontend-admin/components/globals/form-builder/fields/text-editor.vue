@@ -13,16 +13,18 @@
         >
         </monacoEditor> -->
         
-        <codeEditor
-          :code="data.value"
-          :lang="data.lang"
-          :readOnly="data.readOnly"
-          :playable="data.playable"
-          :useCmdLine="data.useCmdLine"
-          @onChange="onChange"
-          @onPlay="onPlay"
-          @onCmd="onCmd"
-        ></codeEditor>
+        <client-only>
+            <codeEditor
+            :code="data.value"
+            :lang="data.lang"
+            :readOnly="data.readOnly"
+            :playable="data.playable"
+            :useCmdLine="data.useCmdLine"
+            @onChange="onChange"
+            @onPlay="onPlay"
+            @onCmd="onCmd"
+            ></codeEditor>
+        </client-only>
     </div>
 </template>
 
