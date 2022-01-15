@@ -1,20 +1,6 @@
 <template>
-    <div class="relative" >
-        <!-- <div v-if="editorMounted == false"  class="flex flexcenter pad125" >
-            loading ...
-        </div> -->
-        <!-- <monacoEditor 
-          :code="data.value"
-          :lang="data.lang"
-          :readOnly="data.readOnly"
-          :height="data.height"
-          @onChange="onChange"
-          @onMount="onEditorMount"
-        >
-        </monacoEditor> -->
-        
-        <client-only>
-            <codeEditor
+    <client-only>
+        <codeEditor
             :code="data.value"
             :lang="data.lang"
             :readOnly="data.readOnly"
@@ -23,9 +9,8 @@
             @onChange="onChange"
             @onPlay="onPlay"
             @onCmd="onCmd"
-            ></codeEditor>
-        </client-only>
-    </div>
+        ></codeEditor>
+    </client-only>
 </template>
 
 <script>
