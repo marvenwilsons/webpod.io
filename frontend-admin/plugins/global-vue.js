@@ -63,6 +63,10 @@ import { VeTable, VePagination, VeIcon, VeLoading, VeLocale } from "vue-easytabl
 Vue.use(VeTable);
 Vue.component("ve-table", VeTable)
 
+// dropdown
+import dropDown from '@/components/globals/dropdown/index.vue'
+Vue.component("dropDown", dropDown)
+
 // CodeMirror Essentials
 import ('codemirror/addon/edit/closebrackets')
 import ('codemirror/addon/edit/closetag')
