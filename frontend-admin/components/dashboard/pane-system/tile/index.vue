@@ -1,8 +1,18 @@
 <template>
     <div>
-        <v-btn @click="addNewTile" >
-            Add New Tile
-        </v-btn>
+        <div class="flex spacebetween padleft050 padright050" >
+            <div>
+                <v-btn @click="addNewTile" >
+                    Add New Tile
+                </v-btn>
+                <v-btn>
+                    select all
+                </v-btn>
+            </div>
+            <v-btn @click="saveLayout" >
+                Save
+            </v-btn>
+        </div>
         <div
             class="wp-dash-grid" 
             :style="{'grid-template-rows': `repeat(${maxRows}, 100px)`,}"
@@ -20,22 +30,23 @@
                 'overflow':'auto'
             }"
             >
-                <div>
-                    <!-- <h6 style="margin:0;" >{{item.name}} : {{item.id}}</h6> -->
+                <div class="relative" >
+                    <div style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute paneBorder" >
+                        <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
+                        <!-- dropDown component is handled by options.js -->
+                        <dropDown
+                            :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
+                            :options="options"
+                            :divideOptionsBefore="['Move down','Expand height','100% width']"
+                            :disabledOptions="disabledOptions"
+                            @command="handleDropDownCommand"
+                        />
+                    </div>
                     <div>
-                        <input @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
+                        view content here
                     </div>
-                    <!-- <div class="pad025 paneBorder margin050 flex flexcol" >
-                        <strong>row ⇅</strong>
-                        <div>start: <input v-model="item.rowStart" type="number"></div>
-                        <div>end: <input v-model="item.rowEnd" type="number"></div>
-                    </div>
-                    <div class="pad025 paneBorder margin050 flex flexcol" >
-                        <strong>column ⭤ </strong>
-                        <div>start: <input v-model="item.colStart" type="number"></div>
-                        <div>end: <input v-model="item.colEnd" type="number"></div>
-                    </div> -->
-                    <div class="pad025 paneBorder margin050 flex flexcol" >
+                    
+                    <!-- <div style="" class="pad025 paneBorder margin050 flex flexcol" >
                         <strong>move {{maxRows}}</strong>
                         <div class="flex spacearound" >
                             <v-btn @click="move('left',item.id,item_index)" small >
@@ -53,7 +64,6 @@
                                 bottom {{item.rowStart}} | {{item.rowEnd}}
                             </v-btn>
                         </div>
-                        <hr>
                         <div class="flex flexcol spacearound paneBorder margin050" >
                             <v-btn @click="height('add',item.id,item_index)" small >
                                 add height
@@ -70,7 +80,7 @@
                                 minus width
                             </v-btn>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
@@ -91,22 +101,23 @@
  *  - if define in one row
  */
 import m from '@/m'
+import optionHandler from './options'
 export default {
-    mixins: [m],
+    mixins: [m,optionHandler],
     data: () => ({
-        areaNames: ['one','two','three','four','five','six','seven','eight','nine','ten'],
         tiles: [
             {name: 'comp2', id:'comp2_a', rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false},
             {name: 'comp22', id:'comp2_b', rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false},
-            // {name: 'comp1', id:'comp1_a', rowStart: 1, rowEnd: 1, colStart: 1, colEnd: 1},
-            // {name: 'comp1', id:'comp1_b', rowStart: 1, rowEnd: 1, colStart: 1, colEnd: 1},
         ],
         maxRows: 4,
-        nodeSelectedIndex: undefined
+        nodeSelectedIndex: undefined,
     }),
     watch: {
         nodeSelectedIndex(e) {
             console.log(e)
+        },
+        tiles() {
+            // to avoid overlapping
         }
     },
     methods: {
@@ -230,7 +241,11 @@ export default {
             }
         },
         addNewTile() {
+            console.log('trigger smart placement')
             this.tiles.push({name: 'comp22', id:this.uid(), rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false})
+        },
+        saveLayout() {
+            console.log('saving layout',this.tiles)
         }
     }
 }
@@ -257,5 +272,13 @@ export default {
 }
 .wp-dash-grid-item {
     background: white !important;
+}
+/* .wp-dash-grid-item:hover > div > .tile-btn {
+    display: flex !important;
+    transition: 0.3ms !important;
+} */
+
+.tile-item > button {
+    padding: 0 !important;
 }
 </style>
