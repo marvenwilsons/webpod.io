@@ -17,8 +17,59 @@ export default {
         disabledOptions: []
     }),
     methods: {
-        handleDropDownCommand(cmdClicked) {
-            console.log(cmdClicked)
+        handleDropDownCommand(cmd,itemIndex,item,tiles) {
+            switch(cmd) {
+                case 'Remove tile':
+                    tiles = tiles.splice(itemIndex,1)
+                    this.ready = false
+                    setTimeout(() => {  
+                        this.ready = true
+                    },0)
+                break;
+                case '100% width':
+                    this.width('add',item.id,itemIndex)
+                    this.width('add',item.id,itemIndex)
+                    this.width('add',item.id,itemIndex)
+                    this.width('add',item.id,itemIndex)
+                break;
+                case '50% width':
+                    this.width('add',item.id,itemIndex)
+                break;
+                // Move
+                case 'Move down':
+                    this.move('bottom',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                case 'Move up':
+                    this.move('top',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                case 'Move left':
+                    this.move('left',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                case 'Move right':
+                    this.move('right',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                // Dimentions
+                case 'Expand height':
+                    this.height('add',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                case 'Decrease height':
+                    this.height('minus',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                case 'Expand width':
+                    this.width('add',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+                case 'Decrease width':
+                    this.width('minus',item.id,itemIndex)
+                    this.clearSelectedNode()
+                break;
+            }
         }
     }
 }
