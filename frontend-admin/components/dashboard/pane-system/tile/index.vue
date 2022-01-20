@@ -1,21 +1,35 @@
 <template>
-    <div>
+    <div style="max-width:1920px" >
+        <!-- <div>{{sessionHistory}}</div> -->
         <div class="flex spacebetween padleft050 padright050" >
-            <div>
-                <v-btn @click="addNewTile" >
+            <div class="flex" >
+                <v-btn plain small @click="addNewTile" >
                     Add New Tile
                 </v-btn>
-                <v-btn>
-                    select all
-                </v-btn>
+                <div v-if="sessionHistory.length" >
+                    <v-btn plain small >
+                        <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
+                        </svg>
+                    </v-btn>
+                    <v-btn plain small >
+                        <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
+                        </svg>
+                    </v-btn>
+                </div>
             </div>
-            <v-btn @click="saveLayout" >
+            <v-btn plain @click="saveLayout" >
                 Save
             </v-btn>
         </div>
         <div
+            v-if="ready"
             class="wp-dash-grid" 
-            :style="{'grid-template-rows': `repeat(${maxRows}, 100px)`,}"
+            :style="{
+                'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
+                'min-width': `${minTileWidth}`
+            }"
             @keydown="keydown"
             >
             <div v-for="(item,item_index) in tiles" 
@@ -39,48 +53,13 @@
                             :options="options"
                             :divideOptionsBefore="['Move down','Expand height','100% width']"
                             :disabledOptions="disabledOptions"
-                            @command="handleDropDownCommand"
+                            @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
                         />
                     </div>
-                    <div>
-                        view content here
+                    <div style="background: white;">
+                        <!-- view content here -->
+                        {{item.id}}|{{item_index}}
                     </div>
-                    
-                    <!-- <div style="" class="pad025 paneBorder margin050 flex flexcol" >
-                        <strong>move {{maxRows}}</strong>
-                        <div class="flex spacearound" >
-                            <v-btn @click="move('left',item.id,item_index)" small >
-                                left {{item.colStart}} | {{item.colEnd}}
-                            </v-btn>
-                            <v-btn @click="move('right',item.id,item_index)" small >
-                                right {{item.colStart}} | {{item.colEnd}}
-                            </v-btn>
-                        </div>
-                        <div class="flex spacearound margintop050" >
-                            <v-btn @click="move('top',item.id,item_index)" small >
-                                top {{item.rowStart}} | {{item.rowEnd}}
-                            </v-btn>
-                            <v-btn @click="move('bottom',item.id,item_index)" small >
-                                bottom {{item.rowStart}} | {{item.rowEnd}}
-                            </v-btn>
-                        </div>
-                        <div class="flex flexcol spacearound paneBorder margin050" >
-                            <v-btn @click="height('add',item.id,item_index)" small >
-                                add height
-                            </v-btn>
-                            <v-btn @click="height('minus',item.id,item_index)" small >
-                                minus height
-                            </v-btn>
-                        </div>
-                        <div class="flex flexcol spacearound paneBorder margin050" >
-                            <v-btn @click="width('add',item.id,item_index)" small >
-                                add width
-                            </v-btn>
-                            <v-btn @click="width('minus',item.id,item_index)" small >
-                                minus width
-                            </v-btn>
-                        </div>
-                    </div> -->
                 </div>
             </div>
         </div>
@@ -88,22 +67,11 @@
 </template>
 
 <script>
-/**
- * Requirement and features for drag n drop behaviour
- * Parent of draggable element
- *  - should contain all the child draggable elements
- *  - should show the grid tiles in background on edit mode
- * Child elemenet (draggable)
- *  - abilitiy to resize its width and height
- *  - should not colide to other draggable element
- * 
- *  rules of defining a layout in upParsedLayout
- *  - if define in one row
- */
 import m from '@/m'
 import optionHandler from './options'
+import sessionHistory from './sessions-history'
 export default {
-    mixins: [m,optionHandler],
+    mixins: [m,optionHandler,sessionHistory],
     data: () => ({
         tiles: [
             {name: 'comp2', id:'comp2_a', rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false},
@@ -111,6 +79,9 @@ export default {
         ],
         maxRows: 4,
         nodeSelectedIndex: undefined,
+        minTileWidth: '50px',
+        minTileHeight: '50px',
+        ready: true
     }),
     watch: {
         nodeSelectedIndex(e) {
@@ -240,9 +211,15 @@ export default {
                 }
             }
         },
+        clearSelectedNode() {
+            if(this.nodeSelectedIndex != undefined) {
+                this.tiles[this.nodeSelectedIndex].selected = false
+                this.nodeSelectedIndex = undefined
+            }
+        },
         addNewTile() {
-            console.log('trigger smart placement')
             this.tiles.push({name: 'comp22', id:this.uid(), rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false})
+            this.clearSelectedNode()
         },
         saveLayout() {
             console.log('saving layout',this.tiles)
