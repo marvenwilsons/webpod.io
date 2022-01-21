@@ -21,19 +21,19 @@ export default {
             switch(cmd) {
                 case 'Remove tile':
                     tiles = tiles.splice(itemIndex,1)
-                    this.ready = false
-                    setTimeout(() => {  
-                        this.ready = true
-                    },0)
+                    this.addSessionEntry(tiles)
+                    this.refresh()
                 break;
                 case '100% width':
                     this.width('add',item.id,itemIndex)
                     this.width('add',item.id,itemIndex)
                     this.width('add',item.id,itemIndex)
                     this.width('add',item.id,itemIndex)
+                    this.addSessionEntry(tiles)
                 break;
                 case '50% width':
                     this.width('add',item.id,itemIndex)
+                    this.addSessionEntry(tiles)
                 break;
                 // Move
                 case 'Move down':

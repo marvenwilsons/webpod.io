@@ -1,28 +1,37 @@
 <template>
     <div style="max-width:1920px" >
-        <!-- <div>{{sessionHistory}}</div> -->
+        <!-- ribbon -->
         <div class="flex spacebetween padleft050 padright050" >
             <div class="flex" >
+                <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
                 <v-btn plain small @click="addNewTile" >
-                    Add New Tile
+                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                        <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                    </svg>
                 </v-btn>
-                <div v-if="sessionHistory.length" >
-                    <v-btn plain small >
-                        <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
-                        </svg>
-                    </v-btn>
-                    <v-btn plain small >
-                        <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
-                        </svg>
-                    </v-btn>
+                </el-tooltip>
+                <div v-if="sessionHistoryCollection && sessionHistoryCollection.length" >
+                    <el-tooltip  class="pad025" content="Undo" effect="light" placement="top-start" >
+                        <v-btn :disabled="undoBtnIsDisabled" @click="undo" plain small >
+                            <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
+                            </svg>
+                        </v-btn>
+                    </el-tooltip>
+                    <el-tooltip  class="pad025" content="Redo" effect="light" placement="top-start" >
+                        <v-btn :disabled="redoBtnIsDisabled" @click="redo" plain small >
+                            <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
+                            </svg>
+                        </v-btn>
+                    </el-tooltip>
                 </div>
             </div>
             <v-btn plain @click="saveLayout" >
                 Save
             </v-btn>
         </div>
+        <!-- tile presentation -->
         <div
             v-if="ready"
             class="wp-dash-grid" 
@@ -34,7 +43,7 @@
             >
             <div v-for="(item,item_index) in tiles" 
             :key="item_index" 
-            class="wp-dash-grid-item flex flexcol paneBorder borderRad4 pointer" 
+            class="wp-dash-grid-item flex flexcol borderRad4 pointer" 
             :style="{
                 'grid-area':`${item.id}`,
                 'grid-row-start':item.rowStart,
@@ -45,7 +54,7 @@
             }"
             >
                 <div class="relative" >
-                    <div style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute paneBorder" >
+                    <div style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
                         <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
                         <!-- dropDown component is handled by options.js -->
                         <dropDown
@@ -58,7 +67,8 @@
                     </div>
                     <div style="background: white;">
                         <!-- view content here -->
-                        {{item.id}}|{{item_index}}
+                        col:{{item.colStart}}-{{item.colEnd}} <br>
+                        row:{{item.rowStart}}-{{item.rowEnd}}
                     </div>
                 </div>
             </div>
@@ -73,10 +83,7 @@ import sessionHistory from './sessions-history'
 export default {
     mixins: [m,optionHandler,sessionHistory],
     data: () => ({
-        tiles: [
-            {name: 'comp2', id:'comp2_a', rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false},
-            {name: 'comp22', id:'comp2_b', rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false},
-        ],
+        tiles: [],
         maxRows: 4,
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
@@ -87,9 +94,6 @@ export default {
         nodeSelectedIndex(e) {
             console.log(e)
         },
-        tiles() {
-            // to avoid overlapping
-        }
     },
     methods: {
         removeUnwantedRows() {
@@ -114,6 +118,7 @@ export default {
             }
         },  
         move(moveDirection,id,index) {
+            this.actionHistory.push(`Move ${moveDirection}`)
             if(moveDirection == 'right') {
                 if(this.tiles[index].colStart - 1 != 3 ) {
                     this.tiles[index].colStart = this.tiles[index].colStart + 1
@@ -145,8 +150,12 @@ export default {
                 }
 
             }
+            setTimeout(() => {
+                this.addSessionEntry(this.copy(this.tiles))
+            }, 10)
         },
         height(mode,id,index) {
+            this.addSessionEntry(this.tiles)
             if(mode == 'add') {
                 // this.tiles[index].rowStart = this.tiles[index].rowStart
                 const newRowEndVal = this.tiles[index].rowEnd + 1
@@ -168,6 +177,7 @@ export default {
             }
         },
         width(mode,id,index) {
+            this.addSessionEntry(this.tiles)
             if(mode == 'add') {
                 if(this.tiles[index].colEnd != 5) {
                     this.tiles[index].colEnd = this.tiles[index].colEnd + 1
@@ -220,10 +230,21 @@ export default {
         addNewTile() {
             this.tiles.push({name: 'comp22', id:this.uid(), rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false})
             this.clearSelectedNode()
+            setTimeout(() => {
+                this.addSessionEntry(this.copy(this.tiles))
+            },50)
         },
         saveLayout() {
             console.log('saving layout',this.tiles)
+        },
+        refresh() {
+            this.ready = false
+            setTimeout(() => {
+                this.ready = true
+            },100)
         }
+    },
+    mounted() {
     }
 }
 </script>

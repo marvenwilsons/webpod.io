@@ -1,48 +1,54 @@
 export default {
     data: () => ({
         sessionHistoryCollection: [],
-        undoPointer: 0,
-        undoBtnIsDisabled: true,
-        redoBtnIsDisabled: true,
+        sessionHistoryPointer: 0,
+        undoBtnIsDisabled: false,
+        redoBtnIsDisabled: false,
+        initialTileSetIsEmpty: false
     }),
-    watch: {
-        sessionHistoryCollection(sessionHistory) {
-            if(sessionHistory.length > 0) {
-                this.undoBtnIsDisabled = false
-                this.redoBtnIsDisabled = false
-            } else {
-                this.undoBtnIsDisabled = true
-                this.redoBtnIsDisabled = true
-            }
-        },
-        undoPointer(point) {
-            if(point === -1) {
-                this.undoBtnIsDisabled = true
-            }
-        }
-    },
     methods: {
         addSessionEntry(tileSet) {
-            this.sessionHistoryCollection.push(this.copy(tileSet))
-            this.undoPointer = this.sessionHistoryCollection.length - 1
+            this.sessionHistoryCollection.push(tileSet)
+            this.sessionHistoryPointer = this.sessionHistoryCollection.length - 1
         },
         undo() {
-            console.log(this.undoPointer)
+            this.sessionHistoryPointer --
+            const pointer = this.sessionHistoryPointer
 
-            this.tiles = this.sessionHistoryCollection[this.undoPointer]
-            console.log(this.sessionHistoryCollection[this.undoPointer])
-            this.undoPointer--
-
-            // console.log(this.undoPointer)
+            if(pointer == 0) {
+                this.undoBtnIsDisabled = true
+                if(this.initialTileSetIsEmpty == true) {
+                    this.tiles = []
+                    this.refresh()
+                } else {
+                    this.tiles = this.sessionHistoryCollection[pointer]
+                }
+            } else {
+                this.tiles = this.sessionHistoryCollection[pointer]
+                this.undoBtnIsDisabled = false
+                this.redoBtnIsDisabled = false
+            }
         },
         redo() {
+            this.sessionHistoryPointer ++
+            const pointer = this.sessionHistoryPointer
 
-        },
-        replacePartsOfSessionHistoryCollection(sessionIndex) {
+            if(pointer == this.sessionHistoryCollection.length - 1) {
+                this.redoBtnIsDisabled = true
+            } else {
+                this.redoBtnIsDisabled = false
+                this.undoBtnIsDisabled = false
+            }
 
+            this.tiles = this.sessionHistoryCollection[pointer]
         }
     },
     mounted() {
-        // this.undoPointer = this.sessionHistoryCollection.length + 1
-    } 
+        if(this.tiles.length == 0) {
+            this.sessionHistoryCollection.push('empty')
+            this.initialTileSetIsEmpty = true
+        } else {
+            this.sessionHistoryCollection.push(this.tiles)
+        }
+    }
 }
