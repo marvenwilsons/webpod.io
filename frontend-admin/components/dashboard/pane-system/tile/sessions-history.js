@@ -6,6 +6,13 @@ export default {
         redoBtnIsDisabled: false,
         initialTileSetIsEmpty: false
     }),
+    watch: {
+        sessionHistoryPointer() {
+            const pointer = this.sessionHistoryPointer
+            this.undoBtnIsDisabled = pointer == 0
+            this.redoBtnIsDisabled = pointer == this.sessionHistoryCollection.length - 1
+        }
+    },
     methods: {
         addSessionEntry(tileSet) {
             this.sessionHistoryCollection.push(tileSet)
@@ -16,31 +23,19 @@ export default {
             const pointer = this.sessionHistoryPointer
 
             if(pointer == 0) {
-                this.undoBtnIsDisabled = true
                 if(this.initialTileSetIsEmpty == true) {
                     this.tiles = []
                     this.refresh()
-                } else {
-                    this.tiles = this.sessionHistoryCollection[pointer]
                 }
-            } else {
-                this.tiles = this.sessionHistoryCollection[pointer]
-                this.undoBtnIsDisabled = false
-                this.redoBtnIsDisabled = false
             }
+
+            this.tiles = this.sessionHistoryCollection[pointer]
+
         },
         redo() {
             this.sessionHistoryPointer ++
             const pointer = this.sessionHistoryPointer
-
-            if(pointer == this.sessionHistoryCollection.length - 1) {
-                this.redoBtnIsDisabled = true
-            } else {
-                this.redoBtnIsDisabled = false
-                this.undoBtnIsDisabled = false
-            }
-
-            this.tiles = this.sessionHistoryCollection[pointer]
+            this.tiles    = this.sessionHistoryCollection[pointer]
         }
     },
     mounted() {

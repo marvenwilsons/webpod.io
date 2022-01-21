@@ -1,6 +1,7 @@
 <template>
     <div style="max-width:1920px" >
         <!-- ribbon -->
+
         <div class="flex spacebetween padleft050 padright050" >
             <div class="flex" >
                 <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
@@ -118,7 +119,6 @@ export default {
             }
         },  
         move(moveDirection,id,index) {
-            this.actionHistory.push(`Move ${moveDirection}`)
             if(moveDirection == 'right') {
                 if(this.tiles[index].colStart - 1 != 3 ) {
                     this.tiles[index].colStart = this.tiles[index].colStart + 1
