@@ -15,8 +15,21 @@ export default {
     },
     methods: {
         addSessionEntry(tileSet) {
-            this.sessionHistoryCollection.push(tileSet)
-            this.sessionHistoryPointer = this.sessionHistoryCollection.length - 1
+            if(this.sessionHistoryPointer != this.sessionHistoryCollection.length - 1) {
+                // overwriting history
+
+                // remove all items in the array starting from the specified index
+                this.sessionHistoryCollection.splice(this.sessionHistoryPointer)
+                setTimeout(() => {
+                    // push a new history entry
+                    this.sessionHistoryCollection.push(tileSet)
+                    this.sessionHistoryPointer = this.sessionHistoryCollection.length - 1
+                },0)
+            } else {
+                this.sessionHistoryCollection.push(tileSet)
+                this.sessionHistoryPointer = this.sessionHistoryCollection.length - 1
+            }
+
         },
         undo() {
             this.sessionHistoryPointer --
