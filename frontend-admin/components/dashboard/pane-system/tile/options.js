@@ -25,14 +25,12 @@ export default {
                     this.refresh()
                 break;
                 case '100% width':
-                    this.width('add',item.id,itemIndex)
-                    this.width('add',item.id,itemIndex)
-                    this.width('add',item.id,itemIndex)
-                    this.width('add',item.id,itemIndex)
+                    tiles[itemIndex].colEnd = this.maxCol + 1
                     this.addSessionEntry(tiles)
                 break;
                 case '50% width':
-                    this.width('add',item.id,itemIndex)
+                    // this.width('add',item.id,itemIndex)
+                    tiles[itemIndex].colEnd = this.maxCol / 2 + 1
                     this.addSessionEntry(tiles)
                 break;
                 // Move

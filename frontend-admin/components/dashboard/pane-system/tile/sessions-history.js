@@ -53,7 +53,7 @@ export default {
     },
     mounted() {
         if(this.tiles.length == 0) {
-            this.sessionHistoryCollection.push('empty')
+            this.sessionHistoryCollection.push([])
             this.initialTileSetIsEmpty = true
         } else {
             this.sessionHistoryCollection.push(this.tiles)
