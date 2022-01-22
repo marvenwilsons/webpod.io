@@ -1,107 +1,100 @@
 <template>
-    <main class="flex spacebetween" >
-        <div :class="['fullwidth',editMode ? 'paneBorder' : '']" :style="{'max-width': !editMode && '1920px'}" >
+    <main class="flex spacebetween fullheight-percent paneBorder" >
+        <div :class="['fullwidth flex flexcol']" 
+        :style="{'max-width': !editMode && '1920px'}" >
             <!-- ribbon -->
-            <div v-if="editMode" style="background:#fbfbfb" class="flex spacebetween  flexcenter pad050" >
-                <div class="flex" >
-                    <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
-                    <v-btn plain small @click="addNewTile" >
-                        <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
-                        </svg>
-                    </v-btn>
-                    </el-tooltip>
-                    <div v-if="sessionHistoryCollection && sessionHistoryCollection.length" >
-                        <el-tooltip  class="pad025" content="Undo" effect="light" placement="top-start" >
-                            <v-btn :disabled="undoBtnIsDisabled" @click="undo" plain small >
-                                <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
-                                </svg>
-                            </v-btn>
+            <div>
+                <div v-if="editMode" style="background:#fbfbfb" class="flex spacebetween  flexcenter pad050" >
+                    <div class="flex" >
+                        <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
+                        <v-btn plain small @click="addNewTile" >
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+                            </svg>
+                        </v-btn>
                         </el-tooltip>
-                        <el-tooltip  class="pad025" content="Redo" effect="light" placement="top-start" >
-                            <v-btn :disabled="redoBtnIsDisabled" @click="redo" plain small >
-                                <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                    <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
-                                </svg>
-                            </v-btn>
-                        </el-tooltip>
+                        <div v-if="sessionHistoryCollection && sessionHistoryCollection.length" >
+                            <el-tooltip  class="pad025" content="Undo" effect="light" placement="top-start" >
+                                <v-btn :disabled="undoBtnIsDisabled" @click="undo" plain small >
+                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
+                                    </svg>
+                                </v-btn>
+                            </el-tooltip>
+                            <el-tooltip  class="pad025" content="Redo" effect="light" placement="top-start" >
+                                <v-btn :disabled="redoBtnIsDisabled" @click="redo" plain small >
+                                    <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
+                                    </svg>
+                                </v-btn>
+                            </el-tooltip>
+                        </div>
                     </div>
+                    <v-btn plain @click="saveLayout" >
+                        Save
+                    </v-btn>
                 </div>
-                <v-btn plain @click="saveLayout" >
-                    Save
-                </v-btn>
             </div>
             <!-- tile presentation -->
-            <div
-                v-if="ready"
-                class="wp-dash-grid" 
-                :style="{
-                    'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
-                    'min-width': `${minTileWidth}`,
-                    'grid-template-columns': `repeat(${maxCol}, 1fr)`
-                }"
-                @keydown="keydown"
-                >
-                <div v-for="(item,item_index) in tiles" 
-                :key="item_index" 
-                class="wp-dash-grid-item flex flexcol borderRad4 pointer" 
-                :style="{
-                    'grid-area':`${item.id}`,
-                    'grid-row-start':item.rowStart,
-                    'grid-row-end':item.rowEnd,
-                    'grid-column-start':item.colStart,
-                    'grid-column-end':item.colEnd,
-                    'overflow':'auto'
-                }"
-                >
-                    <div class="relative" >
-                        <div v-if="editMode" style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
-                            <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
-                            <!-- dropDown component is handled by options.js -->
-                            <dropDown
-                                :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
-                                :options="options"
-                                :divideOptionsBefore="['Move down','Expand height','100% width']"
-                                :disabledOptions="disabledOptions"
-                                @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
-                            />
-                        </div>
-                        <div style="background: white;">
-                            <!-- view content here -->
-                            col:{{item.colStart}}-{{item.colEnd}} <br>
-                            row:{{item.rowStart}}-{{item.rowEnd}}
+            <section style="overflow:auto;" class="flex1" >
+                <div
+                    v-if="ready"
+                    class="wp-dash-grid" 
+                    :style="{
+                        'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
+                        'min-width': `${minTileWidth}`,
+                        'grid-template-columns': `repeat(${maxCol}, 1fr)`
+                    }"
+                    @keydown="keydown">
+                    <div v-for="(item,item_index) in tiles" 
+                    :key="item_index" 
+                    class="wp-dash-grid-item flex flexcol borderRad4 pointer" 
+                    :style="{
+                        'grid-area':`${item.id}`,
+                        'grid-row-start':item.rowStart,
+                        'grid-row-end':item.rowEnd,
+                        'grid-column-start':item.colStart,
+                        'grid-column-end':item.colEnd,
+                        'overflow':'auto'
+                    }"
+                    >
+                        <div class="relative" >
+                            <div v-if="editMode" style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
+                                <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
+                                <!-- dropDown component is handled by options.js -->
+                                <dropDown
+                                    :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
+                                    :options="options"
+                                    :divideOptionsBefore="['Move down','Expand height','100% width']"
+                                    :disabledOptions="disabledOptions"
+                                    @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
+                                />
+                            </div>
+                            <div style="background: white;">
+                                <!-- view content here -->
+                                col:{{item.colStart}}-{{item.colEnd}} <br>
+                                row:{{item.rowStart}}-{{item.rowEnd}}
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </section>
         </div>
-        <div v-if="editMode" style="min-width:300px;background:#fbfbfb; font-family: 'Menlo'" class="pad125 text-small" >
-            <!-- <v-btn @click="editMode = !editMode" >toggle edit mode</v-btn> -->
+        <div v-if="editMode" 
+        style="min-width:300px;background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
+        class="pad125 text-small" >
             <div v-if="nodeSelectedIndex != undefined" >
                 <tile-setting-position></tile-setting-position>
-                <v-divider></v-divider>
-                <div class="flex flexcol" >
-                    <span class="overline" > SIZE </span>
-                    <div>
-                        width:
-                    </div>
-                    <div>
-                        height:
-                    </div>
-                </div>
-                <v-divider></v-divider>
-                <div>
-                    <span class="overline" > Z-INDEX </span>
-                </div>
-                <v-divider></v-divider>
-                <div>
-                    <span class="overline" > VIEW SETTINGS </span>
-                </div>
-                <v-divider></v-divider>
-                <div>
-                    <span class="overline" > BACKGROUND </span>
-                </div>
+                    <v-divider></v-divider>
+                <tile-setting-size></tile-setting-size>
+                    <v-divider></v-divider>
+                <tile-setting-z-index></tile-setting-z-index>
+                    <v-divider></v-divider>
+                <tile-view></tile-view>
+                    <!-- <v-divider></v-divider> -->
+                <!-- <div>
+                    <span class="overline" >TILE BACKGROUND COLOR </span>
+                </div> -->
             </div>
             <div v-else >
                 <span class="overline" >GRID SETTINGS</span>
@@ -115,9 +108,12 @@ import m from '@/m'
 import optionHandler from './options'
 import sessionHistory from './sessions-history'
 import tileSettingPosition from './tile-s-position.vue'
+import tileSettingSize from './tile-s-size.vue'
+import tileSettingZIndex from './tile-s-z-index.vue'
+import tileView from './tiles-s-view.vue'
 export default {
-    mixins: [m,optionHandler,sessionHistory],
-    components: {tileSettingPosition},
+    mixins: [m,optionHandler,sessionHistory,],
+    components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView},
     data: () => ({
         tiles: [],
         maxRows: 4,
