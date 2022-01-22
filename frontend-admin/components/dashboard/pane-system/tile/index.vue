@@ -1,5 +1,5 @@
 <template>
-    <main class="flex spacebetween fullheight-percent paneBorder" >
+    <main :class="['flex spacebetween fullheight-percent', editMode ? 'paneBorder' : '']" >
         <div :class="['fullwidth flex flexcol']" 
         :style="{'max-width': !editMode && '1920px'}" >
             <!-- ribbon -->
@@ -36,19 +36,28 @@
                 </div>
             </div>
             <!-- tile presentation -->
-            <section style="overflow:auto;" class="flex1" >
+            <section id="tile-presentation" style="overflow:auto;" class="flex1" >
                 <div
                     v-if="ready"
-                    class="wp-dash-grid" 
+                    class="wp-dash-grid relative" 
+                    @keydown="keydown"
+                    :id="`grid-${currentUid}`"
                     :style="{
                         'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
                         'min-width': `${minTileWidth}`,
                         'grid-template-columns': `repeat(${maxCol}, 1fr)`
                     }"
-                    @keydown="keydown">
+                >
+                    <grid-guides
+                     v-if="useGridGuides"
+                     :maxRows="maxRows"
+                     :maxCol="maxCol"
+                     :minTileWidth="minTileWidth"
+                     :minTileHeight="minTileHeight"
+                    ></grid-guides>
                     <div v-for="(item,item_index) in tiles" 
                     :key="item_index" 
-                    class="wp-dash-grid-item flex flexcol borderRad4 pointer" 
+                    class="wp-dash-grid-item flex flexcol pointer" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
@@ -107,22 +116,26 @@
 import m from '@/m'
 import optionHandler from './options'
 import sessionHistory from './sessions-history'
+import gridGuides from './grid-guides.vue'
+
 import tileSettingPosition from './tile-s-position.vue'
 import tileSettingSize from './tile-s-size.vue'
 import tileSettingZIndex from './tile-s-z-index.vue'
 import tileView from './tiles-s-view.vue'
 export default {
-    mixins: [m,optionHandler,sessionHistory,],
-    components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView},
+    mixins: [m,optionHandler,sessionHistory],
+    components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides},
     data: () => ({
         tiles: [],
         maxRows: 4,
-        maxCol: 4,
+        maxCol: 6,
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
         minTileHeight: '50px',
         ready: true,
-        editMode: true
+        editMode: true,
+        currentUid: undefined,
+        useGridGuides: false
     }),
     methods: {
         removeUnwantedRows() {
@@ -148,7 +161,7 @@ export default {
         },  
         move(moveDirection,id,index) {
             if(moveDirection == 'right') {
-                if(this.tiles[index].colStart - 1 != this.maxCol - 1 ) {
+                if(this.tiles[index].colEnd != this.maxCol + 1) {
                     this.tiles[index].colStart = this.tiles[index].colStart + 1
                     this.tiles[index].colEnd = this.tiles[index].colEnd + 1
                 }
@@ -273,7 +286,8 @@ export default {
             },100)
         }
     },
-    mounted() {
+    created() {
+        this.currentUid = this.uid()
     }
 }
 </script>
