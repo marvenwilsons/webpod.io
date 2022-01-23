@@ -72,6 +72,9 @@ export default {
                 onBlur: "<codeMirrorInstance> Fires whenever the editor is unfocused.",
                 onFocus: "<codeMirrorInstance> Fires whenever the editor is focused.",
                 onStopExecutionRequest: 'Executes a user defined functon when the stop execution button is clicked.'
+            },
+            methods: {
+                getCode: '<Function> Returns the typed code in the editor'
             }
         }
     }),
@@ -172,6 +175,9 @@ export default {
         },
         closeConsole() {
             this.logWindowIsShowing = false
+        },
+        getCode() {
+            return `${this._code || this.code}`
         }
     },
     mounted() {

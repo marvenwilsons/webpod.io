@@ -68,41 +68,46 @@ import dropDown from '@/components/globals/dropdown/index.vue'
 Vue.component("dropDown", dropDown)
 
 // CodeMirror Essentials
-import ('codemirror/addon/edit/closebrackets')
-import ('codemirror/addon/edit/closetag')
-import ('codemirror/addon/edit/continuelist')
-import ('codemirror/addon/edit/matchbrackets')
-import ('codemirror/addon/edit/matchtags')
-import ('codemirror/addon/edit/trailingspace')
-import ('codemirror/addon/fold/brace-fold')
-import ('codemirror/addon/fold/comment-fold')
-import ('codemirror/addon/fold/foldcode')
-import ('codemirror/addon/fold/foldgutter')
-import ('codemirror/addon/fold/indent-fold')
-import ('codemirror/addon/fold/markdown-fold')
-import ('codemirror/addon/fold/xml-fold')
-import ('codemirror/addon/lint/css-lint')
-import ('codemirror/addon/lint/javascript-lint')
-import ('codemirror/addon/lint/json-lint')
-import ('codemirror/addon/lint/lint')
-import ('codemirror/addon/display/autorefresh')
-import ('codemirror/mode/css/css.js')
-import ('codemirror/mode/xml/xml.js')
-import ('codemirror/mode/javascript/javascript.js')
-import ('codemirror/addon/hint/xml-hint.js')
-import ('codemirror/addon/hint/css-hint.js')
-import ('codemirror/addon/hint/html-hint.js')
-import ('codemirror/addon/hint/sql-hint.js')
-import ('codemirror/addon/hint/javascript-hint.js')
-import ('codemirror/addon/hint/show-hint.js')
-import ('codemirror/addon/hint/anyword-hint.js')
+
+import "./codemirror/addon/hint/show-hint.css"
+
+import "./codemirror/addon/lint/lint.css"
+import "./codemirror/addon/fold/foldgutter.css"
 
 
 
 export default async ({ app }, inject) => {
-    // Inject $hello(msg) in Vue, context and store.
-    const CodeMirror = await import ('codemirror/lib/codemirror')
+    await import ('./codemirror/addon/edit/closebrackets')
+    await import ('./codemirror/addon/edit/closetag')
+    await import ('./codemirror/addon/edit/continuelist')
+    await import ('./codemirror/addon/edit/matchbrackets')
+    await import ('./codemirror/addon/edit/matchtags')
+    await import ('./codemirror/addon/edit/trailingspace')
+    await import ('./codemirror/addon/fold/brace-fold')
+    await import ('./codemirror/addon/fold/comment-fold')
+    await import ('./codemirror/addon/fold/foldcode')
+    await import ('./codemirror/addon/fold/foldgutter')
+    await import ('./codemirror/addon/fold/indent-fold')
+    await import ('./codemirror/addon/fold/markdown-fold')
+    await import ('./codemirror/addon/fold/xml-fold')
+    await import ('./codemirror/addon/lint/css-lint')
+    await import ('./codemirror/addon/lint/javascript-lint')
+    await import ('./codemirror/addon/lint/json-lint')
+    await import ('./codemirror/addon/lint/lint')
+    await import ('./codemirror/addon/display/autorefresh')
+    await import ('./codemirror/mode/css/css.js')
+    await import ('./codemirror/mode/xml/xml.js')
+    await import ('./codemirror/mode/javascript/javascript.js')
 
+    await import ('./codemirror/addon/hint/show-hint.js')
+    await import ('./codemirror/addon/hint/javascript-hint.js')
+    await import ('./codemirror/addon/hint/xml-hint.js')
+    await import ('./codemirror/addon/hint/css-hint.js')
+    await import ('./codemirror/addon/hint/html-hint.js')
+    await import ('./codemirror/addon/hint/sql-hint.js')
+    await import ('./codemirror/addon/hint/anyword-hint.js')
+    // Inject $hello(msg) in Vue, context and store.
+    const CodeMirror = await import ('./codemirror/lib/codemirror')
     inject('CodeMirror', CodeMirror)
 }
 
