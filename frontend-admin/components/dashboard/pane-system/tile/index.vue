@@ -7,7 +7,7 @@
                 <div v-if="editMode" style="background:#fbfbfb" class="flex spacebetween  flexcenter pad050" >
                     <div class="flex" >
                         <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
-                        <v-btn plain small @click="addNewTile" >
+                        <v-btn icon plain small @click="addNewTile" >
                             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                                 <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                             </svg>
@@ -15,14 +15,14 @@
                         </el-tooltip>
                         <div v-if="sessionHistoryCollection && sessionHistoryCollection.length" >
                             <el-tooltip  class="pad025" content="Undo" effect="light" placement="top-start" >
-                                <v-btn :disabled="undoBtnIsDisabled" @click="undo" plain small >
+                                <v-btn icon :disabled="undoBtnIsDisabled" @click="undo" plain small >
                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
                                     </svg>
                                 </v-btn>
                             </el-tooltip>
                             <el-tooltip  class="pad025" content="Redo" effect="light" placement="top-start" >
-                                <v-btn :disabled="redoBtnIsDisabled" @click="redo" plain small >
+                                <v-btn icon :disabled="redoBtnIsDisabled" @click="redo" plain small >
                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
                                     </svg>
@@ -30,9 +30,22 @@
                             </el-tooltip>
                         </div>
                     </div>
-                    <v-btn plain @click="saveLayout" >
-                        Save
-                    </v-btn>
+                    <el-tooltip  class="pad025" content="Save Layout" effect="light" placement="top-start" >
+                        <v-btn plain icon @click="saveLayout" >
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                <path fill="currentColor" d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
+                            </svg>
+                        </v-btn>
+                    </el-tooltip>
+                    <div>
+                    <el-tooltip  class="pad025" content="Refresh Editor" effect="light" placement="top-start" >
+                        <v-btn plain @click="refresh" icon class="pointer flex flexccenter pad025 ribbon-item" >
+                            <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+                                <path fill="gray" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
+                            </svg>
+                        </v-btn>     
+                    </el-tooltip>
+                    </div>
                 </div>
             </div>
             <!-- tile presentation -->
@@ -104,6 +117,8 @@
                 <tile-view />
                     <v-divider />
                 <tile-custom-css />
+                    <v-divider />
+                <custom-classes />
             </div>
             <div v-else class="flex flexcol" >
                 <span class="overline" >GRID SETTINGS</span>
@@ -126,11 +141,12 @@ import tileSettingSize from './tile-s-size.vue'
 import tileSettingZIndex from './tile-s-z-index.vue'
 import tileView from './tiles-s-view.vue'
 import tileCustomCss from './tile-custom-css.vue'
+import customClasses from './cutom-classes.vue'
 
 export default {
     mixins: [m,optionHandler,sessionHistory],
     components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
-    tileCustomCss
+    tileCustomCss,customClasses
     },
     data: () => ({
         tiles: [],
@@ -355,5 +371,8 @@ export default {
 }
 .text-gray {
     color: #737373;
+}
+.ribbon-item:hover {
+    color: black;
 }
 </style>

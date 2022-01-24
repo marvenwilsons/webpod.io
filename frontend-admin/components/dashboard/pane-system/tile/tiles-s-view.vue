@@ -1,6 +1,9 @@
 <template>
     <div>
-        <span class="overline" > TILE VIEW </span>
+        <span class="overline" > TILE VIEW </span> <br>
+        <div  class="caption marginbottom125">
+            Tile view is an app instance, select an app and its instance to be displayed on the tile
+        </div>
         <div class="paneBorder flat_action flex flexcenter" >
             Select Tile View
         </div>

@@ -1,7 +1,7 @@
 export default {
     data: () => ({
         options: [
-            {title:'Mark select'},
+            {title:'Clone', d: 'M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z'},
             {title:'Remove tile', d: 'M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z'},
             {title:'100% width', d: 'M18.17,12L15,8.83L16.41,7.41L21,12L16.41,16.58L15,15.17L18.17,12M5.83,12L9,15.17L7.59,16.59L3,12L7.59,7.42L9,8.83L5.83,12Z'},
             {title:'50% width'},
@@ -19,6 +19,9 @@ export default {
     methods: {
         handleDropDownCommand(cmd,itemIndex,item,tiles) {
             switch(cmd) {
+                case 'Clone':
+                    this.addNewTile(true,itemIndex)
+                break;
                 case 'Remove tile':
                     tiles = tiles.splice(itemIndex,1)
                     this.addSessionEntry(tiles)

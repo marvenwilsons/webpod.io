@@ -1,7 +1,7 @@
 <template>
     <div class="flex flexcol" >
-        <span class="overline" > TILE CUSTOM STYLE </span>
-        <span class="margintop050 marginbottom125" >
+        <span class="overline" > TILE CUSTOM STYLE </span> <br>
+        <span class="marginbottom125 caption" >
             Style to be applied for this selected tile only.
         </span>
         <div>
