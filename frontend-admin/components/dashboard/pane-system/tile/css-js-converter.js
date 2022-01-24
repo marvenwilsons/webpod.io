@@ -95,7 +95,6 @@ function convertoToJS(tokens){
 	var items = [];
 	var actualItem = null;
 	var actualProp = null;
-	debugger;
 	function readSelector(token){
 
 		 
@@ -146,8 +145,8 @@ function convertoToJS(tokens){
 	}
 
 	function readValue(token){
-
-		actualItem.values[actualProp].push(token);
+		// actualItem.values[actualProp].push(token);
+		actualItem.values[actualProp] = token
 
 		return readFinal;
 	}
@@ -163,7 +162,6 @@ function convertoToJS(tokens){
 	var i = 0;
 	tokens.forEach(function(token){
 		i++;
-		console.log("processing " + i);
 		nextAction = nextAction(token);		
 
 	});
@@ -173,11 +171,12 @@ function convertoToJS(tokens){
 }
 
 function renderJS(items){
-
-	var objects = ["var styles = {"];
-	objects = objects.concat(items.map(renderItem).join(","));
-	objects.push("}");
-	return objects.join("\n");
+	// console.log('items',items.values)
+	// var objects = ["var styles = {"];
+	// objects = objects.concat(items.map(renderItem).join(","));
+	// objects.push("}");
+	// return objects.join("\n");
+	return items[0]
 }
 
 function renderItem(item){
