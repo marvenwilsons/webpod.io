@@ -13,9 +13,12 @@
             ></codeEditor>
         </div>
         <div class="flex flexend margintop025" >
-            <div @click="apply" class="caption pad025 paneBorder flat_action" >
+            <v-btn :loading="isLoading" plain tile @click="apply" class="caption pad025 paneBorder flat_action" >
                 APPLY
-            </div>
+                <template v-slot:loader>
+                    <span>saving ...</span>
+                </template>
+            </v-btn>
         </div>
     </div>
 </template>
@@ -25,7 +28,8 @@ import cssConvertToJs from './addons/css-js-converter'
 import jsToCss from './addons/js-css-converter'
 export default {
     data: () => ({
-        code: ''
+        code: '',
+        isLoading: false
     }),
     mounted() {
         const parentElement = this.$parent
@@ -36,12 +40,18 @@ export default {
     },
     methods: {
         apply() {
+            this.isLoading = true
+
             const cssStringCodeFromEditor = this.$refs.co.getCode()
             const cssConvertedToJs = cssConvertToJs(cssStringCodeFromEditor)
             const cssObject = cssConvertedToJs.values
 
             const parentElement = this.$parent
             parentElement.tiles[parentElement.nodeSelectedIndex].customStyle = cssObject
+
+            setTimeout(() => {
+                this.isLoading = false
+            }, 500)
         }
     }
 }

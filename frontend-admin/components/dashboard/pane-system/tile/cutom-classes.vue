@@ -11,9 +11,12 @@
             ></codeEditor>
         </div>
         <div class="flex flexend margintop025" >
-            <div @click="apply" class="caption pad025 paneBorder flat_action" >
+            <v-btn :loading="isLoading" plain tile @click="apply" class="caption pad025 paneBorder flat_action" >
                 APPLY
-            </div>
+                <template v-slot:loader>
+                    <span>saving ...</span>
+                </template>
+            </v-btn>
         </div>
     </div>
 </template>
@@ -21,10 +24,16 @@
 <script>
 export default {
     data: () => ({
-        code: ''
+        code: '',
+        isLoading: false
     }),
     methods: {
         apply() {
+            this.isLoading = true
+            setTimeout(() => {
+                this.isLoading = false
+            },500)
+
             const classesString = this.$refs.co.getCode()
             const classesArray = classesString.split('\n').filter(e => e != "")
             const parent = this.$parent
