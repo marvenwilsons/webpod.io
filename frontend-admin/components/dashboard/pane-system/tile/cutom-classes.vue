@@ -11,7 +11,9 @@
             ></codeEditor>
         </div>
         <div class="flex flexend margintop025" >
-            
+            <div @click="apply" class="caption pad025 paneBorder flat_action" >
+                APPLY
+            </div>
         </div>
     </div>
 </template>
@@ -19,7 +21,41 @@
 <script>
 export default {
     data: () => ({
-        code: '[]'
-    })
+        code: ''
+    }),
+    methods: {
+        apply() {
+            const classesString = this.$refs.co.getCode()
+            const classesArray = classesString.split('\n').filter(e => e != "")
+            const parent = this.$parent
+
+            if(classesArray.length == 0) {
+                parent.tiles[parent.nodeSelectedIndex].customClasses = []
+            } else {
+                let selectedTileCustomClassArray = parent.tiles[parent.nodeSelectedIndex].customClasses
+
+                if(selectedTileCustomClassArray.length > classesArray.length) {
+                    // it means the user deleted some classes
+                    parent.tiles[parent.nodeSelectedIndex].customClasses = []
+                    setTimeout(() => {
+                        classesArray.map(e => {
+                            !parent.tiles[parent.nodeSelectedIndex].customClasses.includes(e) &&
+                            selectedTileCustomClassArray.push(e)
+                        })
+                    },0)
+                } else {
+                    // it means the user added some classes
+                    classesArray.map(e => {
+                        !selectedTileCustomClassArray.includes(e) &&
+                        selectedTileCustomClassArray.push(e)
+                    })
+                }
+            }
+        }
+    },
+    mounted() {
+        const parent = this.$parent
+        this.code = parent.tiles[parent.nodeSelectedIndex].customClasses.join('\n')
+    }
 }
 </script>
