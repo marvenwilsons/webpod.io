@@ -9,10 +9,10 @@
         </div>
         <div style="border-left: 1px solid #efefef;" class="marginleft050">
             <div class="flat_action flex spacebetween" >
-                View Data <code>{} | []</code>
+                View Data <code> <i>{} | []</i> </code>
             </div>
             <div class="flat_action flex spacebetween" >
-                View Config <code>{}</code>
+                View Config <code> <i>{}</i> </code>
             </div>
             <div class="flat_action flex spacebetween" >
                 View Hooks <code><i>fn()</i></code>

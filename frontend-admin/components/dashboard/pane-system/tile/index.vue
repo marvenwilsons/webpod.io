@@ -70,7 +70,7 @@
                     ></grid-guides>
                     <div v-for="(item,item_index) in tiles" 
                     :key="item_index" 
-                    class="wp-dash-grid-item flex flexcol pointer" 
+                    :class="['wp-dash-grid-item flex flexcol pointer', ...item.customClasses]" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
@@ -306,6 +306,7 @@ export default {
                     colEnd: this.tiles[tileIndex].colEnd, 
                     selected: false,
                     customStyle: this.tiles[tileIndex].customStyle,
+                    customClasses: [],
                     isAClone: this.tiles[tileIndex].id
                 })
             } else {
@@ -317,6 +318,7 @@ export default {
                     colStart: 1, 
                     colEnd: 2, 
                     selected: false,
+                    customClasses: [],
                     customStyle: {}
                 })
             }
