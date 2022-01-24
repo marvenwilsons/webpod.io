@@ -33,13 +33,10 @@
         <section 
             :style="{zIndex:1, overflow: paneModalisActive ? '':'auto'}" 
             class="fullheight-percent relative" >
+            <!-- <section class="marginleft125 fullheight-percent" >
+                <tileSystem></tileSystem>
+            </section> -->
             <section role="content" class="absolute fullwidth pad050" >
-                <!-- component use here should be registered globally  -->
-                <!-- <div class="pad025 margin025 borderRad4" style="max-height:300px; overflow-y: auto; " >
-                    <code>
-                        {{this.paneCollection[this.paneIndex]}}
-                    </code>
-                </div> -->
                 <div
                     class="fullheight-percent borderRad4  pad125" 
                     :is="this.paneCollection[this.paneIndex].view"
@@ -69,8 +66,9 @@ import PaneModal from './pane-modal'
 import service from '../../services/index'
 import paneTitle from './pane-title.vue'
 import paneRibbon from './pane-ribbon.vue'
+import tileSystem from '../tile/index.vue'
 export default {
-    components: {PaneModal, paneTitle, paneRibbon},
+    components: {PaneModal, paneTitle, paneRibbon, tileSystem},
     props: ['data','paneIndex','paneCollection'],
     data: () => ({
         paneWidth: '100%',

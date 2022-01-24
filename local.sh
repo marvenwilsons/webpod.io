@@ -7,10 +7,10 @@ echo '*                                        *'
 echo '******************************************'
 echo ''
 
-# docker rm -f $(docker ps -aq)
-# docker network rm $(docker network ls -q)
-# docker image rm $(docker image ls -q)
-# docker container rm --force Admin
+docker rm -f $(docker ps -aq)
+docker network rm $(docker network ls -q)
+docker image rm $(docker image ls -q)
+docker container rm --force Admin
 
 # 1. generate docker-compose file
 cd config/app_starter

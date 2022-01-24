@@ -31,6 +31,7 @@
 <script>
 import m from '@/m'
 export default {
+    name:"wp-dropdown",
     mixins: [m],
     props: ['options','svgTrigger','divideOptionsBefore','disabledOptions'],
     methods: {

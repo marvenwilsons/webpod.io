@@ -1,5 +1,4 @@
 import colors from 'vuetify/es5/util/colors'
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin')
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
@@ -66,22 +65,6 @@ export default {
       },
       {
         rel: 'stylesheet',
-        href: 'https://unpkg.com/codemirror@5.65.0/addon/hint/show-hint.css'
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://unpkg.com/codemirror@5.65.0/addon/hint/css-hint.css'
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://unpkg.com/codemirror@5.32.0/addon/fold/foldgutter.css'
-      },
-      {
-        rel: 'stylesheet',
-        href: 'https://unpkg.com/codemirror@5.32.0/addon/lint/lint.css'
-      },
-      {
-        rel: 'stylesheet',
         href: 'https://unpkg.com/codemirror@5.65.0/theme/mdn-like.css'
       },
       {
@@ -95,7 +78,6 @@ export default {
       //   integrity: "sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs",
       //   crossorigin: "anonymous"
       // }
-      // {src:'https://unpkg.com/codemirror@5.65.0/lib/codemirror.js'},
     ]
   },
 
@@ -168,13 +150,8 @@ export default {
     API_URL: process.env.API_URL
   },
   build: {
-    plugins: [
-      new MonacoWebpackPlugin({
-        languages: ['javascript', 'python', 'scss'],
-        features: ['!gotoSymbol','checkJs'],
-      })
-    ],
-    transpile: ['vue-easytable','monaco-editor-vue','monaco-editor-webpack-plugin'],
+    plugins: [],
+    transpile: ['vue-easytable'],
     extend(config, ctx) {
       config.module.rules.push({
         test: /\.(ogg|mp3|wav|mpe?g)$/i,

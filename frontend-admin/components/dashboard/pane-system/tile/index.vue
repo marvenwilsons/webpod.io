@@ -93,20 +93,21 @@
         style="min-width:300px;background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
         class="pad125 text-small" >
             <div v-if="nodeSelectedIndex != undefined" >
-                <tile-setting-position></tile-setting-position>
-                    <v-divider></v-divider>
+                <tile-setting-position/>
+                    <v-divider />
                 <tile-setting-size></tile-setting-size>
-                    <v-divider></v-divider>
-                <tile-setting-z-index></tile-setting-z-index>
-                    <v-divider></v-divider>
-                <tile-view></tile-view>
-                    <!-- <v-divider></v-divider> -->
-                <!-- <div>
-                    <span class="overline" >TILE BACKGROUND COLOR </span>
-                </div> -->
+                    <v-divider />
+                <tile-setting-z-index />
+                    <v-divider />
+                <tile-view />
+                    <v-divider />
+                <tile-custom-css />
             </div>
-            <div v-else >
+            <div v-else class="flex flexcol" >
                 <span class="overline" >GRID SETTINGS</span>
+                <span class="overline" >TILE CUSTOM STYLE</span>
+                <span class="text-small" >Style to be applied on every tile</span>
+                <span class="overline" >SERVICE SETTINGS</span>
             </div>
         </div>
     </main>
@@ -122,9 +123,13 @@ import tileSettingPosition from './tile-s-position.vue'
 import tileSettingSize from './tile-s-size.vue'
 import tileSettingZIndex from './tile-s-z-index.vue'
 import tileView from './tiles-s-view.vue'
+import tileCustomCss from './tile-custom-css.vue'
+
 export default {
     mixins: [m,optionHandler,sessionHistory],
-    components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides},
+    components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
+    tileCustomCss
+    },
     data: () => ({
         tiles: [],
         maxRows: 4,
@@ -155,8 +160,6 @@ export default {
                         this.maxRows-- // remove rows
                     }
                 }
-
-                console.log('maxRowEnd', maxRowEnd, 'maxRows', this.maxRows)
             }
         },  
         move(moveDirection,id,index) {
@@ -233,7 +236,7 @@ export default {
             }
         },
         nodeSelect(e,index) {
-            if(e.target.value == 'on') {
+            if(e.target.checked) {
                 this.tiles[index].selected = true
                 this.tiles.map((tile,tile_index) => {
                     if(tile.selected) {
@@ -244,6 +247,7 @@ export default {
                 })
                 this.nodeSelectedIndex = index
             } else {
+                this.nodeSelectedIndex = undefined
                 this.tiles[index].selected = false
             }
         },

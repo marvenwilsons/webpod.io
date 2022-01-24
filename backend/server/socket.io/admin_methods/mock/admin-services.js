@@ -17,11 +17,11 @@ module.exports =  {
         body: {
           view: 'simpleNavs', // the name of the view, its a vue component registered globally
           viewConfig: {
-            ribbons: {
-              'Add New': ['Dashboard', 'Test 2'],
-              'Create New': [],
-              'Delete': ['one','bulk']
-            },
+            // ribbons: {
+            //   'Add New': ['Dashboard', 'Test 2'],
+            //   'Create New': [],
+            //   'Delete': ['one','bulk']
+            // },
             view_versions: ['v1','v2','v3','v4'], // will be mapped to Dashboard/v1
             default_view: 'v1'
           },
@@ -799,7 +799,8 @@ function getName() {
                       // console.log('onCmd', p)
                     })
                   }
-                }
+                },
+                
               },
               viewConfig: {
                   /**

@@ -16,6 +16,7 @@ import { createStore } from './store.js'
 import nuxt_plugin_plugin_c3a58924 from 'nuxt_plugin_plugin_c3a58924' // Source: ./components/plugin.js (mode: 'all')
 import nuxt_plugin_plugin_651b6f40 from 'nuxt_plugin_plugin_651b6f40' // Source: ./vuetify/plugin.js (mode: 'all')
 import nuxt_plugin_globalvue_51588865 from 'nuxt_plugin_globalvue_51588865' // Source: ../plugins/global-vue.js (mode: 'client')
+import nuxt_plugin_elementui_72a9ed1c from 'nuxt_plugin_elementui_72a9ed1c' // Source: ../plugins/element-ui.js (mode: 'client')
 
 // Component: <ClientOnly>
 Vue.component(ClientOnly.name, ClientOnly)
@@ -83,7 +84,7 @@ async function createApp(ssrContext, config = {}) {
   // here we inject the router and store to all child components,
   // making them available everywhere as `this.$router` and `this.$store`.
   const app = {
-    head: {"titleTemplate":"","title":"Admin","htmlAttrs":{"lang":"en"},"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Lobster&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Oswald:wght@700&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Rochester&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Funpkg.com\u002Felement-ui\u002Flib\u002Ftheme-chalk\u002Findex.css"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"style":[],"script":[]},
+    head: {"titleTemplate":"","title":"Admin","htmlAttrs":{"lang":"en"},"meta":[{"charset":"utf-8"},{"name":"viewport","content":"width=device-width, initial-scale=1"},{"hid":"description","name":"description","content":""},{"name":"format-detection","content":"telephone=no"}],"link":[{"rel":"icon","type":"image\u002Fx-icon","href":"\u002Ffavicon.ico"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Lobster&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Oswald:wght@700&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Rochester&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap"},{"rel":"stylesheet","href":"https:\u002F\u002Funpkg.com\u002Felement-ui\u002Flib\u002Ftheme-chalk\u002Findex.css"},{"rel":"stylesheet","href":"http:\u002F\u002Ffonts.cdnfonts.com\u002Fcss\u002Fmonaco"},{"rel":"stylesheet","href":"http:\u002F\u002Ffonts.cdnfonts.com\u002Fcss\u002Fsf-mono"},{"rel":"stylesheet","href":"https:\u002F\u002Fcdnjs.cloudflare.com\u002Fajax\u002Flibs\u002Fcodemirror\u002F5.65.0\u002Fcodemirror.min.css"},{"rel":"stylesheet","href":"https:\u002F\u002Fcdnjs.cloudflare.com\u002Fajax\u002Flibs\u002Fcodemirror\u002F5.65.0\u002Fcodemirror.min.css"},{"rel":"stylesheet","href":"https:\u002F\u002Fcdnjs.cloudflare.com\u002Fajax\u002Flibs\u002Fcodemirror\u002F5.65.0\u002Ftheme\u002Fbase16-light.min.css"},{"rel":"stylesheet","href":"https:\u002F\u002Funpkg.com\u002Fcodemirror@5.65.0\u002Flib\u002Fcodemirror.css"},{"rel":"stylesheet","href":"https:\u002F\u002Funpkg.com\u002Fcodemirror@5.65.0\u002Ftheme\u002Fmonokai.css"},{"rel":"stylesheet","href":"https:\u002F\u002Funpkg.com\u002Fcodemirror@5.65.0\u002Ftheme\u002Fmdn-like.css"},{"rel":"stylesheet","href":"http:\u002F\u002Ffonts.cdnfonts.com\u002Fcss\u002Fmenlo"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Ffonts.googleapis.com\u002Fcss?family=Roboto:100,300,400,500,700,900&display=swap"},{"rel":"stylesheet","type":"text\u002Fcss","href":"https:\u002F\u002Fcdn.jsdelivr.net\u002Fnpm\u002F@mdi\u002Ffont@latest\u002Fcss\u002Fmaterialdesignicons.min.css"}],"script":[],"style":[]},
 
     store,
     router,
@@ -222,6 +223,10 @@ async function createApp(ssrContext, config = {}) {
 
   if (process.client && typeof nuxt_plugin_globalvue_51588865 === 'function') {
     await nuxt_plugin_globalvue_51588865(app.context, inject)
+  }
+
+  if (process.client && typeof nuxt_plugin_elementui_72a9ed1c === 'function') {
+    await nuxt_plugin_elementui_72a9ed1c(app.context, inject)
   }
 
   // Lock enablePreview in context

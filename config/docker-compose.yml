@@ -12,7 +12,7 @@ services:
       - "HOST=backend"
       - "ADMIN_SERVER_PORT=8000"
       - "PUBLIC_SERVER_PORT=9000"
-      - "API_URL=aar_N5v3z5Bcu81lUDxaJvjZhjkr6vPdecbrMPdLVX1a"
+      - "API_URL=aar_wyVwyoyEYvGb51N7XNdcPfHOJ6fO510wmQGMsLMB"
       - "JWT_SECRET=sample_jwt_secret_you_should_change_this"
     volumes:
       - "../backend:/usr/src/backend"
@@ -32,7 +32,7 @@ services:
       - "APP_HOST=frontend-admin"
       - "APP_PORT=5000"
       - "ADMIN_ROUTE=wpadmin"
-      - "API_URL=aar_N5v3z5Bcu81lUDxaJvjZhjkr6vPdecbrMPdLVX1a"
+      - "API_URL=aar_wyVwyoyEYvGb51N7XNdcPfHOJ6fO510wmQGMsLMB"
       - "API_BASE=backend:8000"
     networks:
       - "admin-network"
@@ -59,7 +59,7 @@ services:
       - "APP_HOST=frontend-public"
       - "APP_PORT=3000"
       - "APP_NAME=sample.com"
-      - "API_URL=par_9XMnpb0Vl5g3rwXWPQKVuMgAoBxl5KZ9eK4HAeBh"
+      - "API_URL=par_ZtCclvxOyIurJRQfxbMa8Da43X4qEQScYIZcXERP"
     networks:
       - "public-network"
     volumes:
@@ -93,7 +93,7 @@ services:
       - "NGINX_PORT=80"
       - "PUBLIC_FRONTEND_SERVER_UPSTREAM=frontend-public:3000"
       - "PUBLIC_BACKEND_UPSTREAM=backend:9000"
-      - "PUBLIC_API_LINK=par_9XMnpb0Vl5g3rwXWPQKVuMgAoBxl5KZ9eK4HAeBh"
+      - "PUBLIC_API_LINK=par_ZtCclvxOyIurJRQfxbMa8Da43X4qEQScYIZcXERP"
       - "ADMIN_FRONTEND_SERVER_UPSTREAM=frontend-admin:5000"
       - "ADMIN_DASHBOARD_PUBLIC_LINK=wpadmin"
       - "ADMIN_BACKEND_SERVER=backend:8000"

@@ -9,11 +9,26 @@ About use case for v-html
 video streaming express nuxt
 ==> https://www.smashingmagazine.com/2021/04/building-video-streaming-app-nuxtjs-node-express/
 
+awesome UI
+==> http://bernardo-castilho.github.io/DragDropTouch/demo/index.htm <--- table
+==> https://www.grapecity.com/wijmo/demos/reference-samples/DynamicDashboard/vue3/dist/ <-- awesome dashboard
+
+drag n drop libraries
+==> https://github.com/nichollascarter/subjx <--- drag n drop with rotate
+==> https://anseki.github.io/plain-draggable/ <-- well documented and has a rich API
+==> https://jqueryui.com/draggable/ <-- good old jquery
+
+jquery
+==> https://gist.github.com/ansidev/46a715dd319cef546646383eac13ec5f <-- if you ever need jquery in nuxt
+
+useful stackoverflow content about grid
+==> https://stackoverflow.com/questions/43129360/css-grid-wrapping
+
 TODO
 ==> Bugs
 ==> Form Builder Features
   ✓ Tags                  
-  ✕ Code Editor           
+  ✓ Code Editor           
   ✕ Calendar              
 ==> Media Fetching
 ==> Service Maker
