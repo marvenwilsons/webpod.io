@@ -23,6 +23,10 @@ export default {
                     this.addNewTile(true,itemIndex)
                 break;
                 case 'Remove tile':
+                    if(this.nodeSelectedIndex == itemIndex) {
+                        this.nodeSelectedIndex = undefined
+                    }
+                    
                     tiles = tiles.splice(itemIndex,1)
                     this.addSessionEntry(tiles)
                     this.refresh()
