@@ -25,19 +25,9 @@ Vue.component("uniview",uniview)
 import doc from '@/components/globals/doc/index.vue'
 Vue.component("doc", doc)
 
-
-// monaco-editor
-import monacoEditor from '@/components/globals/monaco-editor/index.vue'
-Vue.component("monacoEditor", monacoEditor)
-
 // code-mirror
 import codeMirror from '@/components/globals/code-mirror/index.vue'
 Vue.component("codeEditor", codeMirror)
-
-
-// // code editor
-// import codeEditor from '@/components/globals/vue-prism-editor/index.vue'
-// Vue.component("codeEditor", codeEditor)
 
 // ribbon
 import ribbon from '@/components/globals/ribbon/index.vue'
@@ -50,8 +40,6 @@ Vue.component("Loading", Loading)
 // table
 import table from '@/components/globals/table/index.vue'
 Vue.component("dtable", table)
-
-
 
 // form builder
 import formBuilder from '@/components/globals/form-builder/index.vue'
@@ -67,10 +55,8 @@ Vue.component("ve-table", VeTable)
 import dropDown from '@/components/globals/dropdown/index.vue'
 Vue.component("dropDown", dropDown)
 
-// CodeMirror Essentials
-
+// CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
-
 import "./codemirror/addon/lint/lint.css"
 import "./codemirror/addon/fold/foldgutter.css"
 
@@ -121,13 +107,9 @@ export default async ({ app }, inject) => {
 // import heading from '@/components/globals/heading/index.vue'
 // import todoList from '@/components/globals/todo-list/index.vue'
 
-
-
 // Vue.component("lazy", lazy)
 // Vue.component("Objectify", objectify)
 // Vue.component("rezcon", ContentRect)
-// Vue.component("codeEditor",codeEditor)
-// Vue.component("ribbon", ribbon)
 // Vue.component("textField", textField)
 // Vue.component("field", field)
 // Vue.component("heading", heading)

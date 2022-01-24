@@ -21,7 +21,7 @@ export default {
   name: "App",
   props: ['code','lang', 'readOnly','height'],
   components: {
-    MonacoEditor: () => process.client && import('monaco-editor-vue')
+    // MonacoEditor: () => process.client && import('monaco-editor-vue')
   },
   data: () => ({
     ready: true,
@@ -48,7 +48,7 @@ export default {
   },
   mounted() {
     if(process.client) {
-      const m = import('monaco-editor-vue')
+      // const m = import('monaco-editor-vue')
       // console.log(m)
     }
     if(this.lang) {
