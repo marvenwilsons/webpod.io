@@ -9,6 +9,7 @@
                 :readOnly="false"
                 :lang="'css'"
                 ref="co"
+                :code="code"
             ></codeEditor>
         </div>
         <div class="flex flexend margintop025" >
@@ -20,16 +21,27 @@
 </template>
 
 <script>
-import cssConvertToJs from './css-js-converter'
+import cssConvertToJs from './addons/css-js-converter'
+import jsToCss from './addons/js-css-converter'
 export default {
+    data: () => ({
+        code: ''
+    }),
     mounted() {
-        console.log(this.$refs.co.documentation)
+        const parentElement = this.$parent
+        const tileCustomStyleObject = parentElement.tiles[parentElement.nodeSelectedIndex].customStyle
+        console.log('saf', jsToCss(tileCustomStyleObject).replace(' ','\n\t'))
+        const cssString = `${parentElement.tiles[parentElement.nodeSelectedIndex].id} {\n \t${jsToCss(tileCustomStyleObject)} \n}`
+        this.code = cssString
     },
     methods: {
         apply() {
             const cssStringCodeFromEditor = this.$refs.co.getCode()
             const cssConvertedToJs = cssConvertToJs(cssStringCodeFromEditor)
-            console.log('css to js ', cssConvertedToJs.values)
+            const cssObject = cssConvertedToJs.values
+
+            const parentElement = this.$parent
+            parentElement.tiles[parentElement.nodeSelectedIndex].customStyle = cssObject
         }
     }
 }

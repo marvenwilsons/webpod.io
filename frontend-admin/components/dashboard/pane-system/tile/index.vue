@@ -64,10 +64,12 @@
                         'grid-row-end':item.rowEnd,
                         'grid-column-start':item.colStart,
                         'grid-column-end':item.colEnd,
-                        'overflow':'auto'
+                        'overflow':'auto',
+                        background:'white',
+                        ...item.customStyle,
                     }"
                     >
-                        <div class="relative" >
+                        <div class="relative fullheight-percent" >
                             <div v-if="editMode" style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
                                 <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
                                 <!-- dropDown component is handled by options.js -->
@@ -79,7 +81,7 @@
                                     @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
                                 />
                             </div>
-                            <div style="background: white;">
+                            <div class="fullheight-percent"  >
                                 <!-- view content here -->
                                 col:{{item.colStart}}-{{item.colEnd}} <br>
                                 row:{{item.rowStart}}-{{item.rowEnd}}
@@ -274,7 +276,16 @@ export default {
             }
         },
         addNewTile() {
-            this.tiles.push({name: 'comp22', id:this.uid(), rowStart: 1, rowEnd: 2, colStart: 1, colEnd: 2, selected: false})
+            this.tiles.push({
+                name: undefined, 
+                id:this.uid(), 
+                rowStart: 1, 
+                rowEnd: 2, 
+                colStart: 1, 
+                colEnd: 2, 
+                selected: false,
+                customStyle: {}
+            })
             this.clearSelectedNode()
             setTimeout(() => {
                 this.addSessionEntry(this.copy(this.tiles))
@@ -314,9 +325,6 @@ export default {
     ; */
     padding: 10px;
     transition: 1s !important;
-}
-.wp-dash-grid-item {
-    background: white !important;
 }
 /* .wp-dash-grid-item:hover > div > .tile-btn {
     display: flex !important;
