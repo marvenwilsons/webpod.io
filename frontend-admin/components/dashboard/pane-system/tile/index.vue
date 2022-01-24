@@ -92,7 +92,7 @@
             </section>
         </div>
         <div v-if="editMode" 
-        style="min-width:300px;background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
+        style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
         class="pad125 text-small" >
             <div v-if="nodeSelectedIndex != undefined" >
                 <tile-setting-position/>
@@ -247,7 +247,11 @@ export default {
                         }
                     }
                 })
-                this.nodeSelectedIndex = index
+
+                this.nodeSelectedIndex = undefined
+                setTimeout(() => {
+                    this.nodeSelectedIndex = index
+                },10)
             } else {
                 this.nodeSelectedIndex = undefined
                 this.tiles[index].selected = false
@@ -275,21 +279,36 @@ export default {
                 this.nodeSelectedIndex = undefined
             }
         },
-        addNewTile() {
-            this.tiles.push({
-                name: undefined, 
-                id:this.uid(), 
-                rowStart: 1, 
-                rowEnd: 2, 
-                colStart: 1, 
-                colEnd: 2, 
-                selected: false,
-                customStyle: {}
-            })
+        addNewTile(isClone,tileIndex) {
+            if(isClone == true) {
+                this.tiles.push({
+                    name: undefined, 
+                    id:this.uid(), 
+                    rowStart: this.tiles[tileIndex].rowStart, 
+                    rowEnd: this.tiles[tileIndex].rowEnd, 
+                    colStart: this.tiles[tileIndex].colStart, 
+                    colEnd: this.tiles[tileIndex].colEnd, 
+                    selected: false,
+                    customStyle: this.tiles[tileIndex].customStyle,
+                    isAClone: this.tiles[tileIndex].id
+                })
+            } else {
+                this.tiles.push({
+                    name: undefined, 
+                    id:this.uid(), 
+                    rowStart: 1, 
+                    rowEnd: 2, 
+                    colStart: 1, 
+                    colEnd: 2, 
+                    selected: false,
+                    customStyle: {}
+                })
+            }
+            
             this.clearSelectedNode()
             setTimeout(() => {
                 this.addSessionEntry(this.copy(this.tiles))
-            },50)
+            },0)
         },
         saveLayout() {
             console.log('saving layout',this.tiles)
