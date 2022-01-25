@@ -69,7 +69,7 @@
                      :minTileHeight="minTileHeight"
                     ></grid-guides>
                     <div v-for="(item,item_index) in tiles" 
-                    :key="item_index" 
+                    :key="uid(item_index)" 
                     :class="['wp-dash-grid-item flex flexcol pointer', ...item.customClasses]" 
                     :style="{
                         'grid-area':`${item.id}`,
@@ -78,6 +78,7 @@
                         'grid-column-start':item.colStart,
                         'grid-column-end':item.colEnd,
                         'overflow':'auto',
+                        justifySelf: item.align,
                         background:'white',
                         ...item.customStyle,
                     }"
@@ -114,9 +115,11 @@
                     <v-divider />
                 <tile-setting-z-index />
                     <v-divider />
+                <align-self />
+                    <v-divider />
                 <tile-view />
                     <v-divider />
-                <tile-custom-css />
+                <tile-custom-css v-if="ready" />
                     <v-divider />
                 <custom-classes />
             </div>
@@ -129,7 +132,8 @@
         </div>
     </main>
 </template>
-
+// https://github.com/ThibaultJanBeyer/DragSelect
+// https://github.com/ThibaultJanBeyer/dragNdrop
 <script>
 import m from '@/m'
 import optionHandler from './options'
@@ -142,11 +146,12 @@ import tileSettingZIndex from './tile-s-z-index.vue'
 import tileView from './tiles-s-view.vue'
 import tileCustomCss from './tile-custom-css.vue'
 import customClasses from './cutom-classes.vue'
+import alignSelf from './self-align.vue'
 
 export default {
     mixins: [m,optionHandler,sessionHistory],
     components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
-    tileCustomCss,customClasses
+    tileCustomCss,customClasses,alignSelf
     },
     data: () => ({
         tiles: [],
@@ -319,7 +324,8 @@ export default {
                     colEnd: 2, 
                     selected: false,
                     customClasses: [],
-                    customStyle: {}
+                    customStyle: {},
+                    align: 'stretch'
                 })
             }
             
@@ -335,7 +341,7 @@ export default {
             this.ready = false
             setTimeout(() => {
                 this.ready = true
-            },100)
+            },0)
         }
     },
     created() {
