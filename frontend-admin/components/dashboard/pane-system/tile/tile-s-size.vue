@@ -25,7 +25,7 @@
                     </div>
                     <div class="marginleft025" >
                         <span>
-                            width
+                            horizontal span
                         </span>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
                     </div>
                     <div class="marginleft025" >
                         <span>
-                            height
+                            vertical span
                         </span>
                     </div>
                 </div>
