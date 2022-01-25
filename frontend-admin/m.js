@@ -68,7 +68,7 @@ export default {
           );
         }
       },
-      uid(str) {
+      uid() {
           function makeid(length) {
             var result           = [];
             var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -77,7 +77,7 @@ export default {
               result.push(characters.charAt(Math.floor(Math.random() * 
           charactersLength)));
             }
-            return result.join('') + str ? `-${str}` : '';
+            return result.join('');
           }
           return makeid(10)
       },
