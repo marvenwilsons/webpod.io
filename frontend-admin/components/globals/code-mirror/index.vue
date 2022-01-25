@@ -49,7 +49,7 @@ export default {
     data: () => ({
         ready:true,
         currentUid: undefined,
-        _code: '// silent',
+        _code: ' ',
         showExectionMaskIndicator: false,
         logs: [],
         playButtonIsShowing: true,
@@ -220,7 +220,7 @@ export default {
             })
 
             // Register code value
-            codeMirrorEditorInstance.getDoc().setValue(this.code || `// silent`)
+            codeMirrorEditorInstance.getDoc().setValue(this.code || ``)
 
             // autocomplete hints
             const excludedIntelliSenseTriggerKeys = {
