@@ -92,7 +92,10 @@ export default async ({ app }, inject) => {
     await import ('./codemirror/addon/hint/html-hint.js')
     await import ('./codemirror/addon/hint/sql-hint.js')
     await import ('./codemirror/addon/hint/anyword-hint.js')
-    // Inject $hello(msg) in Vue, context and store.
+
+    const DragSelect = await import('dragselect')
+    inject('DragSelect', DragSelect.default)
+    
     const CodeMirror = await import ('./codemirror/lib/codemirror')
     inject('CodeMirror', CodeMirror)
 }
