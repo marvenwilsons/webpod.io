@@ -1,7 +1,8 @@
 <template>
     <main :class="['flex spacebetween fullheight-percent', editMode ? 'paneBorder' : '']" >
         <div :class="['fullwidth flex flexcol']" 
-        :style="{'max-width': !editMode && '1920px'}" >
+            :style="{'max-width': !editMode && '1920px'}" 
+        >
             <!-- ribbon -->
             <div>
                 <div v-if="editMode" style="background:#fbfbfb" class="flex spacebetween  flexcenter pad050" >
@@ -84,7 +85,9 @@
                     :style="{
                         'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
                         'min-width': `${minTileWidth}`,
-                        'grid-template-columns': `repeat(${maxCol}, 1fr)`
+                        'grid-template-columns': `repeat(${maxCol}, 1fr)`,
+                        'grid-gap': gridGap
+
                     }"
                 >
                     <grid-guides
@@ -98,7 +101,7 @@
                     <div v-for="(item,item_index) in tiles" 
                     :key="item.id" 
                     :id="`${item.id}-${item_index}`"
-                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer ', ...item.customClasses]" 
+                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '', ...item.customClasses]" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
@@ -123,10 +126,9 @@
                                     @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
                                 />
                             </div>
-                            <div class="fullheight-percent"  >
+                            <div class="fullheight-percent fullwidth"  >
                                 <!-- view content here -->
-                                col:{{item.colStart}}-{{item.colEnd}} <br>
-                                row:{{item.rowStart}}-{{item.rowEnd}}
+
                             </div>
                         </div>
                     </div>
@@ -134,8 +136,9 @@
             </section>
         </div>
         <div v-if="editMode && !previewIsOn" 
-        style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
-        class="pad125 text-small" >
+            style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
+            class="pad125 text-small" 
+        >
             <div v-if="nodeSelectedIndex != undefined" >
                 <tile-setting-position/>
                     <v-divider />
@@ -184,7 +187,8 @@ export default {
     data: () => ({
         tiles: [],
         maxRows: 4,
-        maxCol: 6,
+        maxCol: 4,
+        gridGap: '5px',
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
         minTileHeight: '50px',
@@ -310,20 +314,20 @@ export default {
             }
         },
         keydown(e) {
-            // if(this.nodeSelectedIndex != undefined) {
-            //     if(e.key == 'ArrowRight') {
-            //         this.move('right',null,this.nodeSelectedIndex)
-            //     }
-            //     if(e.key == 'ArrowLeft') {
-            //         this.move('left',null,this.nodeSelectedIndex)
-            //     }
-            //     if(e.key == 'ArrowDown') {
-            //         this.move('bottom',null,this.nodeSelectedIndex)
-            //     }
-            //     if(e.key == 'ArrowUp') {
-            //         this.move('top',null,this.nodeSelectedIndex)
-            //     }
-            // }
+            if(this.nodeSelectedIndex != undefined && this.selectionToolIsActivated == false) {
+                if(e.key == 'ArrowRight') {
+                    this.move('right',null,this.nodeSelectedIndex)
+                }
+                if(e.key == 'ArrowLeft') {
+                    this.move('left',null,this.nodeSelectedIndex)
+                }
+                if(e.key == 'ArrowDown') {
+                    this.move('bottom',null,this.nodeSelectedIndex)
+                }
+                if(e.key == 'ArrowUp') {
+                    this.move('top',null,this.nodeSelectedIndex)
+                }
+            }
         },
         clearSelectedNode() {
             if(this.nodeSelectedIndex != undefined) {
@@ -343,7 +347,8 @@ export default {
                     selected: false,
                     customStyle: this.tiles[tileIndex].customStyle,
                     customClasses: [],
-                    isAClone: this.tiles[tileIndex].id
+                    isAClone: this.tiles[tileIndex].id,
+                    view: this.tiles[tileIndex].view
                 })
             } else {
                 this.tiles.push({
@@ -356,6 +361,7 @@ export default {
                     selected: false,
                     customClasses: [],
                     customStyle: {},
+                    view: undefined,
                     align: 'stretch'
                 })
             }
@@ -437,7 +443,6 @@ export default {
     grid-gap: 1em;
     grid-auto-rows: minmax(100px, auto) */
     display: grid;
-    grid-gap: 5px;
     /* column-gap: 20px; */
     /* grid-template-columns: repeat(4, 1fr); */
     /* grid-template-rows: repeat(4, 100px); */
