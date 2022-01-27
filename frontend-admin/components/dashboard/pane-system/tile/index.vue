@@ -179,6 +179,7 @@ export default {
         currentUid: undefined,
         useGridGuides: false,
         selectionToolIsActivated: false,
+        selectedNodesBySelectionTool: []
     }),
     methods: {
         removeUnwantedRows() {
@@ -294,20 +295,20 @@ export default {
             }
         },
         keydown(e) {
-            if(this.nodeSelectedIndex != undefined) {
-                if(e.key == 'ArrowRight') {
-                    this.move('right',null,this.nodeSelectedIndex)
-                }
-                if(e.key == 'ArrowLeft') {
-                    this.move('left',null,this.nodeSelectedIndex)
-                }
-                if(e.key == 'ArrowDown') {
-                    this.move('bottom',null,this.nodeSelectedIndex)
-                }
-                if(e.key == 'ArrowUp') {
-                    this.move('top',null,this.nodeSelectedIndex)
-                }
-            }
+            // if(this.nodeSelectedIndex != undefined) {
+            //     if(e.key == 'ArrowRight') {
+            //         this.move('right',null,this.nodeSelectedIndex)
+            //     }
+            //     if(e.key == 'ArrowLeft') {
+            //         this.move('left',null,this.nodeSelectedIndex)
+            //     }
+            //     if(e.key == 'ArrowDown') {
+            //         this.move('bottom',null,this.nodeSelectedIndex)
+            //     }
+            //     if(e.key == 'ArrowUp') {
+            //         this.move('top',null,this.nodeSelectedIndex)
+            //     }
+            // }
         },
         clearSelectedNode() {
             if(this.nodeSelectedIndex != undefined) {
@@ -374,23 +375,24 @@ export default {
                 ds.subscribe('callback', ({ items, event }) => {
                     if(items.length > 0) {
                         items.map(item => {
-                            if(!selectedTiles.includes(item.id)) {
-                                selectedTiles.push(item.id)
+                            if(!this.selectedNodesBySelectionTool.includes(item.id)) {
+                                this.selectedNodesBySelectionTool.push(item.id)
                                 item.style.border = '2px dashed #009aff'
                             } else {
-                                selectedTiles.splice(selectedTiles.indexOf(item.id), 1)
+                                this.selectedNodesBySelectionTool.splice(this.selectedNodesBySelectionTool.indexOf(item.id), 1)
                                 item.style.border  = 'none'
-                                console.log('spicing', selectedTiles)
                             }
                         })
                     } else {
-                        selectedTiles.map(item => {
+                        this.selectedNodesBySelectionTool.map(item => {
                             const el = document.getElementById(item)
                             el.style.border = 'none'
-                            selectedTiles = []
+                            this.selectedNodesBySelectionTool = []
                         })
                     }
                 })
+
+                
             }
 
             if(value == false) {
