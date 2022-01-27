@@ -8,7 +8,7 @@ module.exports =  {
     user: 'marvenwilsons',
     avatar: '',
     app_name: 'marvenwilsondonque.com',
-    menu_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','uniview'],
+    menu_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','uniview','unitile'],
     services: [
       {
         name: 'Dashboard',
@@ -821,6 +821,16 @@ function getName() {
           ],
         },
         
+      },
+      {
+        name: 'unitile',
+        body: {
+          paneConfig: {
+            title: 'Unitile',
+          },
+          view: 'unitile',
+          viewData: 'test'
+        }
       }
     ]
   }

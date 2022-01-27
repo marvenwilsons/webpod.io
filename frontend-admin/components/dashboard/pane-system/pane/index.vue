@@ -36,7 +36,7 @@
             <!-- <section class="marginleft125 fullheight-percent" >
                 <tileSystem></tileSystem>
             </section> -->
-            <section role="content" class="absolute fullwidth pad050" >
+            <section role="content" :class="['absolute fullwidth pad050', this.paneCollection[this.paneIndex].view == 'unitile' ? 'fullheight-percent' : '']" >
                 <div
                     class="fullheight-percent borderRad4  pad125" 
                     :is="this.paneCollection[this.paneIndex].view"
@@ -66,9 +66,8 @@ import PaneModal from './pane-modal'
 import service from '../../services/index'
 import paneTitle from './pane-title.vue'
 import paneRibbon from './pane-ribbon.vue'
-import tileSystem from '../tile/index.vue'
 export default {
-    components: {PaneModal, paneTitle, paneRibbon, tileSystem},
+    components: {PaneModal, paneTitle, paneRibbon},
     props: ['data','paneIndex','paneCollection'],
     data: () => ({
         paneWidth: '100%',

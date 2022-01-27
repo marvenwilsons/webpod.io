@@ -1,7 +1,7 @@
 <template>
-    <main :class="['flex spacebetween fullheight-percent', editMode ? 'paneBorder' : '']" >
+    <main :class="['flex spacebetween fullheight-percent', editMode ? '' : '']" >
         <div :class="['fullwidth flex flexcol']" 
-            :style="{'max-width': !editMode && '1920px'}" 
+            :style="{'max-width': !editMode && '1920px', 'border-top': '1px solid #d3d3d3', 'border-left': '1px solid #d3d3d3','border-bottom': '1px solid #d3d3d3'}" 
         >
             <!-- ribbon -->
             <div>
@@ -97,7 +97,6 @@
                      :minTileWidth="minTileWidth"
                      :minTileHeight="minTileHeight"
                     ></grid-guides>
-                    <!-- <div v-for="(item,item_index) in tiles" :key="item_index" :class="['selectable-nodes borderred']" >asdf</div> -->
                     <div v-for="(item,item_index) in tiles" 
                     :key="item.id" 
                     :id="`${item.id}-${item_index}`"
@@ -136,7 +135,11 @@
             </section>
         </div>
         <div v-if="editMode && !previewIsOn" 
-            style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
+            style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618; 
+            border-top: 1px solid #d3d3d3;
+            border-bottom: 1px solid #d3d3d3;
+            border-right: 1px solid #d3d3d3;
+            " 
             class="pad125 text-small" 
         >
             <div v-if="nodeSelectedIndex != undefined" >
@@ -398,7 +401,7 @@ export default {
                         items.map(item => {
                             if(!this.selectedNodesBySelectionTool.includes(item.id)) {
                                 this.selectedNodesBySelectionTool.push(item.id)
-                                item.style.border = '2px dashed #009aff'
+                                item.style.border = '1px dashed #d3d3d3'
                             } else {
                                 this.selectedNodesBySelectionTool.splice(this.selectedNodesBySelectionTool.indexOf(item.id), 1)
                                 item.style.border  = 'none'

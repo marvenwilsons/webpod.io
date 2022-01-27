@@ -2,7 +2,7 @@
     <div>
         <span class="overline" > ALIGN </span>
         <div class="flex" >
-            <div :style="{background: selected == 'start' ? 'lightgray' : '' }" >
+            <div :style="{background: selected == 'start' ? '#f0f0f0' : '' }" >
                 <el-tooltip  class="pad025" content="Align Start" effect="light" placement="top-start" >
                 <v-btn @click="selected = 'start'" plain block tile icon class="flat_action" >
                     <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -11,7 +11,7 @@
                 </v-btn>
                 </el-tooltip>
             </div>
-            <div :style="{background: selected == 'center' ? 'lightgray' : '' }" >
+            <div :style="{background: selected == 'center' ? '#f0f0f0' : '' }" >
                 <el-tooltip  class="pad025" content="Align Center" effect="light" placement="top-start" >
                 <v-btn @click="selected = 'center'" plain block tile icon class="flat_action" >
                     <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -20,7 +20,7 @@
                 </v-btn>
                 </el-tooltip>
             </div>
-            <div :style="{background: selected == 'end' ? 'lightgray' : '' }" >
+            <div :style="{background: selected == 'end' ? '#f0f0f0' : '' }" >
                 <el-tooltip  class="pad025" content="Align End" effect="light" placement="top-start" >
                 <v-btn @click="selected = 'end'" plain block tile icon class="flat_action" >
                     <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -29,7 +29,7 @@
                 </v-btn>
                 </el-tooltip>
             </div>
-            <div :style="{background: selected == 'stretch' ? 'lightgray' : '' }" >
+            <div :style="{background: selected == 'stretch' ? '#f0f0f0' : '' }" >
                 <el-tooltip  class="pad025" content="Stretch" effect="light" placement="top-start" >
                 <v-btn @click="selected = 'stretch'" plain block tile icon class="flat_action" >
                     <svg style="width:24px;height:24px" viewBox="0 0 24 24">

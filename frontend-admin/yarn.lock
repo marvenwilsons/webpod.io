@@ -3035,11 +3035,6 @@
     "chalk" "^2.4.1"
     "q" "^1.1.2"
 
-"codemirror@^5.41.0", "codemirror@^5.65.0":
-  "integrity" "sha512-gWEnHKEcz1Hyz7fsQWpK7P0sPI2/kSkRX2tc7DFA6TmZuDN75x/1ejnH/Pn8adYKrLEA1V2ww6L00GudHZbSKw=="
-  "resolved" "https://registry.npmjs.org/codemirror/-/codemirror-5.65.0.tgz"
-  "version" "5.65.0"
-
 "collect-v8-coverage@^1.0.0":
   "integrity" "sha512-iBPtljfCNcTKNAto0KEtDfZ3qzjJvqE3aTGZsbhjSBlorqpXJlaWWtPO35D+ZImoC3KWejX64o+yPGxhWSTzfg=="
   "resolved" "https://registry.npmjs.org/collect-v8-coverage/-/collect-v8-coverage-1.0.1.tgz"
@@ -4019,11 +4014,6 @@
   "resolved" "https://registry.npmjs.org/devalue/-/devalue-2.0.1.tgz"
   "version" "2.0.1"
 
-"diff-match-patch@^1.0.0":
-  "integrity" "sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw=="
-  "resolved" "https://registry.npmjs.org/diff-match-patch/-/diff-match-patch-1.0.5.tgz"
-  "version" "1.0.5"
-
 "diff-sequences@^27.0.6":
   "integrity" "sha512-ag6wfpBFyNXZ0p8pcuIDS//D8H062ZQJ3fzYxjpmeKjnz8W4pekL3AI8VohmyZmsWW2PWaHgjsmqR6L13101VQ=="
   "resolved" "https://registry.npmjs.org/diff-sequences/-/diff-sequences-27.0.6.tgz"
@@ -4144,6 +4134,11 @@
   "integrity" "sha512-I9OvvrHp4pIARv4+x9iuewrWycX6CcZtoAu1XrzPxc5UygMJXJZYmBsynku8IkrJwgypE5DGNjDPmPRhDCptUg=="
   "resolved" "https://registry.npmjs.org/dotenv/-/dotenv-9.0.2.tgz"
   "version" "9.0.2"
+
+"dragselect@^2.3.0":
+  "integrity" "sha512-aRctOLFpP6QqzJ0eThXElYvGt9l5st8ecYrcDgMZ2uM9Dq/C/6LGA2oaLmQBz5TqyA+mVvegi2aSGZJSbLxNmA=="
+  "resolved" "https://registry.npmjs.org/dragselect/-/dragselect-2.3.0.tgz"
+  "version" "2.3.0"
 
 "duplexer@^0.1.2":
   "integrity" "sha512-jtD6YG370ZCIi/9GTaJKQxWTZD045+4R4hTk/x1UyoqadyJ9x9CgSi1RlVDQF8U2sxLLSnFkCaMihqljHIWgMg=="
@@ -6772,31 +6767,6 @@
   "resolved" "https://registry.npmjs.org/mkdirp/-/mkdirp-1.0.4.tgz"
   "version" "1.0.4"
 
-"monaco-editor-vue@^1.0.10":
-  "integrity" "sha512-FO6rioCXkonKmDZYB2WDhDNekXuNJgjxoAPfzwYX+5NTMaxRJcWl3bcUByRpL6LQQ1bTEYLZ+ZdDpoJ+la2trQ=="
-  "resolved" "https://registry.npmjs.org/monaco-editor-vue/-/monaco-editor-vue-1.0.10.tgz"
-  "version" "1.0.10"
-  dependencies:
-    "monaco-editor" "^0.19.3"
-    "vue" "^2.6.11"
-
-"monaco-editor-webpack-plugin@1.8.0":
-  "integrity" "sha512-VOlhgz7A9j9Yks7xEwKRmsAkRh9cA2gWlRdHrdX6rT9ZjNNF13Td3zoe0T3zb6FVB8h8TDa4mFp3Ep0YCMvQsw=="
-  "resolved" "https://registry.npmjs.org/monaco-editor-webpack-plugin/-/monaco-editor-webpack-plugin-1.8.0.tgz"
-  "version" "1.8.0"
-  dependencies:
-    "loader-utils" "^1.2.3"
-
-"monaco-editor@^0.18.1":
-  "integrity" "sha512-fmL+RFZ2Hrezy+X/5ZczQW51LUmvzfcqOurnkCIRFTyjdVjzR7JvENzI6+VKBJzJdPh6EYL4RoWl92b2Hrk9fw=="
-  "resolved" "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.18.1.tgz"
-  "version" "0.18.1"
-
-"monaco-editor@^0.19.3":
-  "integrity" "sha512-2n1vJBVQF2Hhi7+r1mMeYsmlf18hjVb6E0v5SoMZyb4aeOmYPKun+CE3gYpiNA1KEvtSdaDHFBqH9d7Wd9vREg=="
-  "resolved" "https://registry.npmjs.org/monaco-editor/-/monaco-editor-0.19.3.tgz"
-  "version" "0.19.3"
-
 "move-concurrently@^1.0.1":
   "integrity" "sha1-viwAX9oy4LKa8fBdfEszIUxwH5I="
   "resolved" "https://registry.npmjs.org/move-concurrently/-/move-concurrently-1.0.1.tgz"
@@ -8203,11 +8173,6 @@
     "condense-newlines" "^0.2.1"
     "extend-shallow" "^2.0.1"
     "js-beautify" "^1.6.12"
-
-"prismjs@^1.25.0":
-  "integrity" "sha512-WCjJHl1KEWbnkQom1+SzftbtXMKQoezOCYs5rECqMN+jP+apI7ftoflyqigqzopSO3hMhTEb0mFClA8lkolgEg=="
-  "resolved" "https://registry.npmjs.org/prismjs/-/prismjs-1.25.0.tgz"
-  "version" "1.25.0"
 
 "process-nextick-args@~2.0.0":
   "integrity" "sha512-3ouUOpQhtgrbOa17J7+uxOTpITYWaGP7/AhoR3+A+/1e9skrzelGi/dXzEYyvbxubEF6Wn2ypscTKiKJFFn1ag=="
@@ -9899,14 +9864,6 @@
   "resolved" "https://registry.npmjs.org/vue-client-only/-/vue-client-only-2.1.0.tgz"
   "version" "2.1.0"
 
-"vue-codemirror@^4.0.6":
-  "integrity" "sha512-ilU7Uf0mqBNSSV3KT7FNEeRIxH4s1fmpG4TfHlzvXn0QiQAbkXS9lLfwuZpaBVEnpP5CSE62iGJjoliTuA8poQ=="
-  "resolved" "https://registry.npmjs.org/vue-codemirror/-/vue-codemirror-4.0.6.tgz"
-  "version" "4.0.6"
-  dependencies:
-    "codemirror" "^5.41.0"
-    "diff-match-patch" "^1.0.0"
-
 "vue-easytable@^2.8.3":
   "integrity" "sha512-Jll2FeCUaZusoce9YBYha5wYQVJXh7ZV+JAGnQyGekvzC5JpAREy3820H9uSxcK/iTgMbe5P1uzJk2NtsXlCsw=="
   "resolved" "https://registry.npmjs.org/vue-easytable/-/vue-easytable-2.12.3.tgz"
@@ -9962,11 +9919,6 @@
   "resolved" "https://registry.npmjs.org/vue-no-ssr/-/vue-no-ssr-1.1.1.tgz"
   "version" "1.1.1"
 
-"vue-prism-editor@1.0.1":
-  "integrity" "sha512-94/TX0gXpA5ZymAoJZ5nXPZhx0Q3Eio/uw1TLYdkDEVMg0Vgmu5O54n9UP3PYnU1zFMInLLXmXpCxbTMn5hTcw=="
-  "resolved" "https://registry.npmjs.org/vue-prism-editor/-/vue-prism-editor-1.0.1.tgz"
-  "version" "1.0.1"
-
 "vue-router@^3.5.1":
   "integrity" "sha512-FUlILrW3DGitS2h+Xaw8aRNvGTwtuaxrRkNSHWTizOfLUie7wuYwezeZ50iflRn8YPV5kxmU2LQuu3nM/b3Zsg=="
   "resolved" "https://registry.npmjs.org/vue-router/-/vue-router-3.5.3.tgz"
@@ -10007,7 +9959,7 @@
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue@^2.0.0", "vue@^2.5.17", "vue@^2.6.11", "vue@^2.6.12", "vue@^2.6.4", "vue@^2.x", "vue@2.x":
+"vue@^2.0.0", "vue@^2.5.17", "vue@^2.6.12", "vue@^2.6.4", "vue@^2.x", "vue@2.x":
   "integrity" "sha512-x2284lgYvjOMj3Za7kqzRcUSxBboHqtgRE2zlos1qWaOye5yUmHn42LB1250NJBLRwEcdrB0JRwyPTEPhfQjiQ=="
   "resolved" "https://registry.npmjs.org/vue/-/vue-2.6.14.tgz"
   "version" "2.6.14"
@@ -10135,7 +10087,7 @@
     "source-list-map" "^2.0.0"
     "source-map" "~0.6.1"
 
-"webpack@*", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0", "webpack@^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.0.0 || ^5.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.27.0 || ^5.0.0", "webpack@^4.36.0 || ^5.0.0", "webpack@^4.4.0 || ^5.0.0", "webpack@^4.46.0", "webpack@^4.5.0", "webpack@>=2", "webpack@>=4.0.0":
+"webpack@*", "webpack@^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0", "webpack@^3.0.0 || ^4.0.0", "webpack@^3.0.0 || ^4.0.0 || ^5.0.0", "webpack@^3.0.0 || ^4.1.0 || ^5.0.0-0", "webpack@^4.0.0", "webpack@^4.0.0 || ^5.0.0", "webpack@^4.27.0 || ^5.0.0", "webpack@^4.36.0 || ^5.0.0", "webpack@^4.4.0 || ^5.0.0", "webpack@^4.46.0", "webpack@>=2", "webpack@>=4.0.0":
   "integrity" "sha512-6jJuJjg8znb/xRItk7bkT0+Q7AHCYjjFnvKIWQPkNIOyRqoCGvkOs0ipeQzrqz4l5FtN5ZI/ukEHroeX/o1/5Q=="
   "resolved" "https://registry.npmjs.org/webpack/-/webpack-4.46.0.tgz"
   "version" "4.46.0"

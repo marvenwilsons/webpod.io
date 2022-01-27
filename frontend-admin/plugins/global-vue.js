@@ -55,6 +55,10 @@ Vue.component("ve-table", VeTable)
 import dropDown from '@/components/globals/dropdown/index.vue'
 Vue.component("dropDown", dropDown)
 
+// unitile
+import unitile from '@/components/globals/unitile/index.vue'
+Vue.component("unitile",unitile)
+
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
 import "./codemirror/addon/lint/lint.css"
