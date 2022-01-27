@@ -7,7 +7,7 @@
                 <div v-if="editMode" style="background:#fbfbfb" class="flex spacebetween  flexcenter pad050" >
                     <div class="flex" >
                         <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
-                            <v-btn :disabled="selectionToolIsActivated" icon plain small @click="addNewTile" >
+                            <v-btn :disabled="selectionToolIsActivated || previewIsOn" icon plain small @click="addNewTile" >
                                 <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                                     <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                                 </svg>
@@ -15,14 +15,14 @@
                         </el-tooltip>
                         <div v-if="sessionHistoryCollection && sessionHistoryCollection.length" >
                             <el-tooltip  class="pad025" content="Undo" effect="light" placement="top-start" >
-                                <v-btn icon :disabled="undoBtnIsDisabled" @click="undo" plain small >
+                                <v-btn icon :disabled="undoBtnIsDisabled || previewIsOn" @click="undo" plain small >
                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="M20 13.5C20 17.09 17.09 20 13.5 20H6V18H13.5C16 18 18 16 18 13.5S16 9 13.5 9H7.83L10.91 12.09L9.5 13.5L4 8L9.5 2.5L10.92 3.91L7.83 7H13.5C17.09 7 20 9.91 20 13.5Z" />
                                     </svg>
                                 </v-btn>
                             </el-tooltip>
                             <el-tooltip  class="pad025" content="Redo" effect="light" placement="top-start" >
-                                <v-btn icon :disabled="redoBtnIsDisabled" @click="redo" plain small >
+                                <v-btn icon :disabled="redoBtnIsDisabled || previewIsOn" @click="redo" plain small >
                                     <svg style="width:20px;height:20px" viewBox="0 0 24 24">
                                         <path fill="currentColor" d="M10.5 18H18V20H10.5C6.91 20 4 17.09 4 13.5S6.91 7 10.5 7H16.17L13.08 3.91L14.5 2.5L20 8L14.5 13.5L13.09 12.09L16.17 9H10.5C8 9 6 11 6 13.5S8 18 10.5 18Z" />
                                     </svg>
@@ -31,18 +31,32 @@
                         </div>
                     </div>
                     <div>
+                        <el-tooltip  class="pad025" content="Preview on" effect="light" placement="top-start" >
+                            <v-btn v-if="!previewIsOn" @click="preview(true)" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M12,9A3,3 0 0,1 15,12A3,3 0 0,1 12,15A3,3 0 0,1 9,12A3,3 0 0,1 12,9M12,4.5C17,4.5 21.27,7.61 23,12C21.27,16.39 17,19.5 12,19.5C7,19.5 2.73,16.39 1,12C2.73,7.61 7,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C15.76,17.5 19.17,15.36 20.82,12C19.17,8.64 15.76,6.5 12,6.5C8.24,6.5 4.83,8.64 3.18,12Z" />
+                                </svg>
+                            </v-btn>
+                        </el-tooltip>
+                        <el-tooltip  class="pad025" content="Preview off" effect="light" placement="top-start" >
+                            <v-btn v-if="previewIsOn" @click="preview(false)" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
+                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M2,5.27L3.28,4L20,20.72L18.73,22L15.65,18.92C14.5,19.3 13.28,19.5 12,19.5C7,19.5 2.73,16.39 1,12C1.69,10.24 2.79,8.69 4.19,7.46L2,5.27M12,9A3,3 0 0,1 15,12C15,12.35 14.94,12.69 14.83,13L11,9.17C11.31,9.06 11.65,9 12,9M12,4.5C17,4.5 21.27,7.61 23,12C22.18,14.08 20.79,15.88 19,17.19L17.58,15.76C18.94,14.82 20.06,13.54 20.82,12C19.17,8.64 15.76,6.5 12,6.5C10.91,6.5 9.84,6.68 8.84,7L7.3,5.47C8.74,4.85 10.33,4.5 12,4.5M3.18,12C4.83,15.36 8.24,17.5 12,17.5C12.69,17.5 13.37,17.43 14,17.29L11.72,15C10.29,14.85 9.15,13.71 9,12.28L5.6,8.87C4.61,9.72 3.78,10.78 3.18,12Z" />
+                                </svg>
+                            </v-btn>
+                        </el-tooltip>
                         <el-tooltip  class="pad025" :content="!selectionToolIsActivated ? 'Activate selection tool' : 'Deactivate selection tool'" effect="light" placement="top-start" >
-                        <v-btn @click="activateSelectionTool(true)" v-if="selectionToolIsActivated == false" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
-                            <svg  style="width:20px;height:20px" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M14,17H17V14H19V17H22V19H19V22H17V19H14V17M12,17V19H9V17H12M7,17V19H3V15H5V17H7M3,13V10H5V13H3M3,8V4H7V6H5V8H3M9,4H12V6H9V4M15,4H19V8H17V6H15V4M19,10V12H17V10H19Z" />
-                            </svg>
-                        </v-btn>
-                        <v-btn @click="activateSelectionTool(false)" v-if="selectionToolIsActivated == true" plain  icon class="pointer flex flexccenter pad025 ribbon-item"  >
-                            <svg  style="width:20px;height:20px" viewBox="0 0 24 24">
-                                <path fill="currentColor" d="M21 20C21 20.55 20.55 21 20 21H19V19H21V20M15 21V19H17V21H15M11 21V19H13V21H11M7 21V19H9V21H7M4 21C3.45 21 3 20.55 3 20V19H5V21H4M3 15H5V17H3V15M21 15V17H19V15H21M14.59 8L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41L14.59 8M3 11H5V13H3V11M21 11V13H19V11H21M3 7H5V9H3V7M21 7V9H19V7H21M4 3H5V5H3V4C3 3.45 3.45 3 4 3M20 3C20.55 3 21 3.45 21 4V5H19V3H20M15 5V3H17V5H15M11 5V3H13V5H11M7 5V3H9V5H7Z" />
-                            </svg>
-                        </v-btn>
-                    </el-tooltip>
+                            <v-btn :disabled="previewIsOn" @click="activateSelectionTool(true)" v-if="selectionToolIsActivated == false" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
+                                <svg  style="width:20px;height:20px" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M14,17H17V14H19V17H22V19H19V22H17V19H14V17M12,17V19H9V17H12M7,17V19H3V15H5V17H7M3,13V10H5V13H3M3,8V4H7V6H5V8H3M9,4H12V6H9V4M15,4H19V8H17V6H15V4M19,10V12H17V10H19Z" />
+                                </svg>
+                            </v-btn>
+                            <v-btn :disabled="previewIsOn" @click="activateSelectionTool(false)" v-if="selectionToolIsActivated == true" plain  icon class="pointer flex flexccenter pad025 ribbon-item"  >
+                                <svg  style="width:20px;height:20px" viewBox="0 0 24 24">
+                                    <path fill="currentColor" d="M21 20C21 20.55 20.55 21 20 21H19V19H21V20M15 21V19H17V21H15M11 21V19H13V21H11M7 21V19H9V21H7M4 21C3.45 21 3 20.55 3 20V19H5V21H4M3 15H5V17H3V15M21 15V17H19V15H21M14.59 8L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41L14.59 8M3 11H5V13H3V11M21 11V13H19V11H21M3 7H5V9H3V7M21 7V9H19V7H21M4 3H5V5H3V4C3 3.45 3.45 3 4 3M20 3C20.55 3 21 3.45 21 4V5H19V3H20M15 5V3H17V5H15M11 5V3H13V5H11M7 5V3H9V5H7Z" />
+                                </svg>
+                            </v-btn>
+                        </el-tooltip>
                     <el-tooltip  class="pad025" content="Refresh Editor" effect="light" placement="top-start" >
                         <v-btn plain @click="refresh" icon class="pointer flex flexccenter pad025 ribbon-item" >
                             <svg style="width:20px;height:20px" viewBox="0 0 24 24">
@@ -119,7 +133,7 @@
                 </div>
             </section>
         </div>
-        <div v-if="editMode" 
+        <div v-if="editMode && !previewIsOn" 
         style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618;" 
         class="pad125 text-small" >
             <div v-if="nodeSelectedIndex != undefined" >
@@ -179,7 +193,8 @@ export default {
         currentUid: undefined,
         useGridGuides: false,
         selectionToolIsActivated: false,
-        selectedNodesBySelectionTool: []
+        selectedNodesBySelectionTool: [],
+        previewIsOn: false
     }),
     methods: {
         removeUnwantedRows() {
@@ -404,6 +419,9 @@ export default {
                 }
                 this.refresh()
             }
+        },
+        preview(state) {
+            this.previewIsOn = state
         }
     },
     created() {
