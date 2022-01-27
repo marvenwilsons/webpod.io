@@ -40,7 +40,14 @@
 export default {
     methods: {
         move(direction) {
-            this.$parent.move(direction,null,this.$parent.nodeSelectedIndex)
+            if(this.$parent.selectionToolIsActivated) {
+                this.$parent.selectedNodesBySelectionTool.map(tileId => {
+                    const index = parseInt(tileId.split('-')[1])
+                    this.$parent.move(direction,null,index)
+                })
+            } else {
+                this.$parent.move(direction,null,this.$parent.nodeSelectedIndex)
+            }
         }
     }
 }
