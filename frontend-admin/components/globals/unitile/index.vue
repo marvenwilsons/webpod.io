@@ -1,7 +1,9 @@
 <template>
     <main :class="['flex spacebetween fullheight-percent', editMode ? '' : '']" >
         <div :class="['fullwidth flex flexcol']" 
-            :style="{'max-width': !editMode && '1920px', 'border-top': '1px solid #d3d3d3', 'border-left': '1px solid #d3d3d3','border-bottom': '1px solid #d3d3d3'}" 
+            :style="{'max-width': !editMode && '1920px', 
+                'border': editMode ? '1px solid #d3d3d3' : '', 
+            }" 
         >
             <!-- ribbon -->
             <div>
@@ -135,7 +137,7 @@
             </section>
         </div>
         <div v-if="editMode && !previewIsOn" 
-            style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; border-left: 1px solid #36363618; 
+            style="max-width:350px; min-width:350px; background:#fbfbfb; font-family: 'Menlo'; overflow: auto; 
             border-top: 1px solid #d3d3d3;
             border-bottom: 1px solid #d3d3d3;
             border-right: 1px solid #d3d3d3;
@@ -187,6 +189,7 @@ export default {
     components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
     tileCustomCss,customClasses,alignSelf
     },
+    props: ['myData','config', 'paneIndex', 'hooks'],
     data: () => ({
         tiles: [],
         maxRows: 4,
@@ -375,7 +378,7 @@ export default {
             },0)
         },
         saveLayout() {
-            console.log('saving layout',this.tiles)
+            this.hooks.onSaveLayout(this.tiles)
         },
         refresh() {
             this.ready = false
@@ -435,32 +438,41 @@ export default {
     },
     created() {
         this.currentUid = this.uid()
+        const _alert = webpod.dashboardMethods.alert
+
+        if(this.myData) {
+            if(!Array.isArray(this.myData)) {
+                _alert(`Error: Expected array but got an ${typeof this.myData}`)
+            } else {
+                
+                if(Object.keys(this.config).includes('editable')) {
+                    this.editMode = this.config.editable
+                } else {
+                    _alert('Error: Cannot find editable property in viewConfig')
+                }
+
+                this.myData.map(item => {
+                    if(typeof item != 'object') {
+                        alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
+                        location.reload()
+                    } else {
+                        this.tiles.push(item)
+                    }
+                })
+            }
+        } else {
+            _alert('Error: unitile data is undefined')
+        }
     }
 }
 </script>
 
 <style>
 .wp-dash-grid {
-    /* display: grid;
-    grid-template-columns: ;
-    grid-gap: 1em;
-    grid-auto-rows: minmax(100px, auto) */
     display: grid;
-    /* column-gap: 20px; */
-    /* grid-template-columns: repeat(4, 1fr); */
-    /* grid-template-rows: repeat(4, 100px); */
-    /* grid-template-columns: repeat(10, 200px); */
-    /* grid-auto-rows: minmax(50px, auto); */
-    /* grid-template-areas: 
-        'comp1 comp1 comp1'
-    ; */
     padding: 10px;
     transition: 1s !important;
 }
-/* .wp-dash-grid-item:hover > div > .tile-btn {
-    display: flex !important;
-    transition: 0.3ms !important;
-} */
 
 .tile-item > button {
     padding: 0 !important;

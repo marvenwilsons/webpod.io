@@ -1,11 +1,15 @@
-async function getUserServices(payload) {
+  async function getUserServices(payload) {
     // get services by querying the database using the user value
-  
+    console.log(payload)
     const mock_services_admin = require('./mock/admin-services')
   
     return new Promise(function(resolve,reject) {
       resolve(mock_services_admin)
     })
+  }
+
+  async function getDashboardResource() {
+
   }
   
   async function getServices(payload) {

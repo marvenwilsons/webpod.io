@@ -8,7 +8,7 @@ module.exports =  {
     user: 'marvenwilsons',
     avatar: '',
     app_name: 'marvenwilsondonque.com',
-    menu_items: ['Dashboard','Collections','Site','Apps','Services','Settings','Media','uniview','unitile'],
+    menu_items: ['Dashboard','Collections','Site','Services','Settings','Media','Apps','User & Roles','Layout Builder'],
     services: [
       {
         name: 'Dashboard',
@@ -823,13 +823,25 @@ function getName() {
         
       },
       {
-        name: 'unitile',
+        name: 'Layout Builder',
         body: {
           paneConfig: {
-            title: 'Unitile',
+            title: 'Layout Builder (unitile ver-alpha)',
           },
           view: 'unitile',
-          viewData: 'test'
+          viewData: [
+            
+          ],
+          viewHooks: stringify((paneCollection,pane,view) => ({
+            onSaveLayout(layout) {
+              layout.map(e => {
+                console.log('heheh',JSON.stringify(e))
+              })
+            }
+          })),
+          viewConfig: {
+            editable: true
+          }
         }
       }
     ]

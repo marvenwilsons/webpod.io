@@ -24,11 +24,47 @@ jquery
 useful stackoverflow content about grid
 ==> https://stackoverflow.com/questions/43129360/css-grid-wrapping
 
-TODO
+
+
+============================================  TODO  ============================================
 ==> Bugs
+|-------------------------|
+|       Sytem Pillars     |
+|-------------------------|
+==> Layout Builder
+  - Ability to list all instances
+  - Ability to Edit and Delete an instance
+  - Editor features
+==> Services
+  - List of all services
+  - CRUD services
+==> User & Role
+  - Able to see list of all users
+  - Ability to click on an item from list of users
+  - Ability to edit user basic info
+  - Ability to assign role into user
+  - Ability to attach a special feature to a user, like listen to user events, or user messages feature
+  - Ability to delete user
+  - Ability to see list of all roles
+  - Ability to edit a role
+  - Ability to delete a role
+==> Apps
+  - List All Apps
+  - Click an app from the apps list to see the instances of that app.
+  - Ability to open and edit an instance of an app
+  - Ability to Browse 3rd party apps
+  - Ability to install 3rd party apps
+  - Ability to create an instance of an app
+  - Ability to read docs from an app
+  - Ability to delete 3rd party app
+==> Media Files
+  - Ability to list Files
+  - View Files
+  - Sort Files
+  - delete Files
+
+System Essentail Apps
 ==> Form Builder Features
   ✓ Tags                  
   ✓ Code Editor           
   ✕ Calendar              
-==> Media Fetching
-==> Service Maker
