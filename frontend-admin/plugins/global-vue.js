@@ -59,6 +59,10 @@ Vue.component("dropDown", dropDown)
 import unitile from '@/components/globals/unitile/index.vue'
 Vue.component("unitile",unitile)
 
+// instancer
+import instancer from '@/components/globals/instancer/index.vue'
+Vue.component("instancer",instancer)
+
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
 import "./codemirror/addon/lint/lint.css"

@@ -13,11 +13,12 @@ module.exports = async (dashboard) => ({
     // dashboard.send('media')
   },
 
+  // onRequest is executed by admin-server.js
   async onRequest(request_name,user) {
     // console.log('** on request', request_name, user)
     switch(request_name) {
       case 'getUserServices':
-        const userServices = await procedures()[request_name]()
+        const userServices = await procedures()['getUserServices']()
 
         dashboard
           .exec('dash','setUser',{

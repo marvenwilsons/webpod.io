@@ -5,15 +5,17 @@ export default [
         menus: [
             {
                 name: 'Dashboard',
-                service: 'dashboard/master'
+                service: 'dashboard/master' // <serviceName>/<serviceVersion>
             },
             {
                 name: 'Collections',
-                service: 'collections/master'
+                service: 'collections/master',
+                useInstancer: true
             },
             {
                 name: 'Site',
-                service: 'services/master'
+                service: 'services/master',
+                useInstancer: true
             },
             {
                 name: 'My Settings',
@@ -25,7 +27,8 @@ export default [
             },
             {
                 name: 'Apps',
-                service: 'apps/master'
+                service: 'apps/master',
+                useInstancer: true
             },
             {
                 name: 'User & Roles',
@@ -33,7 +36,9 @@ export default [
             },
             {
                 name: 'Layout Builder',
-                service: 'layoutBuilder/master'
+                service: 'layoutBuilder/master',
+                useInstancer: true,
+                instaceTypes: ['Static Layout','Dynamic Layout','List Display Provider']
             }
         ],
     },

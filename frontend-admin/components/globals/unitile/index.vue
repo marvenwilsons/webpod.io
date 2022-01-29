@@ -440,6 +440,7 @@ export default {
         this.currentUid = this.uid()
         const _alert = webpod.dashboardMethods.alert
 
+        const {instances} = this.myData
         if(this.myData) {
             if(!Array.isArray(this.myData)) {
                 _alert(`Error: Expected array but got an ${typeof this.myData}`)
@@ -448,7 +449,8 @@ export default {
                 if(Object.keys(this.config).includes('editable')) {
                     this.editMode = this.config.editable
                 } else {
-                    _alert('Error: Cannot find editable property in viewConfig')
+                    _alert('Error: Cannot find editable property in viewConfig, defaulting to read only mode.')
+                    this.editMode = false
                 }
 
                 this.myData.map(item => {
