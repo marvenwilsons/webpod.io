@@ -55,14 +55,16 @@ io.on('connection', async function (socket) {
             dashboard_events.onRequest(name, payload.user)
 
             const requested_method = admin_methods()[name]
+            
+            if(requested_method) {
+              const request_response = await requested_method(payload)
 
-            const request_response = await requested_method(payload)
-
-            // response to request
-            socket.emit('notification', {
-              method_name: name,
-              payload: request_response
-            })
+              // response to request
+              socket.emit('notification', {
+                method_name: name,
+                payload: request_response
+              })
+            }
 
           } else {
             dashboard_events.onTokenExpire()
