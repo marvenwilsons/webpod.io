@@ -14,7 +14,7 @@ module.exports = async (dashboard) => ({
   },
 
   // onRequest is executed by admin-server.js
-  async onRequest(request_name,user) {
+  async onRequest(request_name,admin_username) {
     // console.log('** on request', request_name, user)
     switch(request_name) {
       case 'getUserServices':
@@ -33,11 +33,54 @@ module.exports = async (dashboard) => ({
 
       break;
       case 'getDashboardResource':
-        //  1. get user object
-        //  2. get user-role using the user object
-        //  3. get the required user services for that the menu items pointed to
-        //  4. Services requires an app instance data, locate the app and the required instance
-        //  5. Compose all and sent to client
+        const sys = procedures()
+        let dashboard_resource = {
+          admin: undefined,
+          role: undefined,
+          menu: undefined,
+          services: undefined
+        }
+        /**
+         * Get user query database for the user
+         * SELECT * FROM users WHERE username = payload.user
+         * it will return user's basic info and a role_id
+         * use that role_id to query the roles
+         * 
+         * Get user role
+         * SELECT * FROM roles WHERE role_id = user.role_id
+         * it will return a role_name and role_menu, role_menu is an array 
+         * containing object that properties are mapped to different tables.
+         * { role_menu object sample
+         *    menuId: 'rand string' -> points to menu table
+         *    serviceId: 'rand string' -> points to service table
+         *    serviceVersion: 'rand string' -> pointer to instances of a service table
+         * }
+         */
+
+        // get admin
+        const admin_basic_info = await sys.getAdmin(admin_username)
+        const { name, email, user, avatar, role_id } = admin_basic_info
+        dashboard.exec('dash','setUser', { name, email, user, avatar })
+        
+        
+        // get admin role
+        const role = await sys.getRole(role_id)
+        const { role_name, role_menu } = role
+        
+        // fetching admin menu and services
+        const each_menu = []
+        const each_selected_service_version = []
+        role_menu.map(({menu_id,service_id,service_version}) => {
+          each_menu.push(sys.getMenu(menu_id))
+        })
+
+        const dashboard_menu = await Promise.all(each_menu).then((value) => value.map(({menu_id,menu_name, use_instancer},_) => ({
+          menu_id,
+          menu_name,
+          use_instancer
+        })))
+        dashboard.exec('menu','setItems', dashboard_menu)
+
       break;
     }
   },
