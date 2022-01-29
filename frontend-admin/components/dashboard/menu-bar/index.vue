@@ -33,10 +33,10 @@
 <script>
 export default {
     data: () => ({
-        // TODO
         items: [],
         selected: undefined,
-        onSelected: undefined
+        onSelected: undefined,
+        menu: []
     }),
     watch: {
         selected() {
@@ -51,14 +51,23 @@ export default {
                 alert(`Error cannot set sidebar selected item '${this.selected}'`)
             }
         },
-        addItem(itemName) {
-            if(!this.items.includes(itemName)) {
-                // this.items.push(itemName)
+        addItem(item) {
+            if(!this.items.includes(item.menu_name)) {
+                this.items.push(item.menu_name)
+                this.menu.push(item)
             }
         },
+        getMenu() {
+            return this.menu
+        },
         setItems(items) {
-            this.items = items
-        }
+            this.items = items.map(item => {
+                if(item) {
+                    console.log(item.menu_name)
+                }
+            })
+            this.menu = items
+        },
     }
 }
 </script>
