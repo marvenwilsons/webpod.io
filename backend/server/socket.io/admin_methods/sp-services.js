@@ -86,37 +86,73 @@ async function getUserServices(payload) {
   // get services by querying the database using the user value
   console.log(payload)
   const mock_services_admin = require('./mock/admin-services')
-  if(payload != undefined) {
-    
-    /**
-     * Get user query database for the user
-     * SELECT * FROM users WHERE username = payload.user
-     * it will return user's basic info and a role_id
-     * use that role_id to query the roles
-     * 
-     * Get user role
-     * SELECT * FROM roles WHERE role_id = user.role_id
-     * it will return a role_name and role_menu, role_menu is an array 
-     * containing object that properties are mapped to different tables.
-     * { role_menu object sample
-     *    menuId: 'rand string' -> points to menu table
-     *    serviceId: 'rand string' -> points to service table
-     *    serviceVersion: 'rand string' -> pointer to instances of a service table
-     * }
-     */
-    const user = await mock_getUser(payload.user)
-    
-    // get user role, query the roles database
-    const {role_name,menus} = await mock_getUserRole(user.role)
-    
-    // get services
-    menus.map(menu => {
-      console.log(menu.service)
-    })
-  }
 
   return new Promise(function(resolve,reject) {
     resolve(mock_services_admin)
+  })
+}
+
+async function  getService(service_id) {
+  console.log(`=== getService ${service_id} ===`)
+
+  const mock_services = [
+    {
+      service_name: 'test-service',
+      service_id: 'service-id-dmni10'
+    },
+    {
+      service_name: 'test-service2',
+      service_id: 'service-id-dmni11'
+    }
+  ]
+
+  return new Promise((resolve,reject) => {
+    for(let i = 0; i < mock_services.length; i++) {
+      if(mock_services[i].service_id == service_id) {
+        resolve(mock_services[i])
+        break
+      } else {
+        // TODO
+      }
+    }
+  })
+}
+
+async function  getServiceVersion(service_id, version_name) {
+  // db("SELECT * FROM service_versions WHERE service_id = $1 AND version_name = $2", [service_id,version_name])
+  console.log(`=== getServiceVersion ${service_id} ===`)
+  const mock_service_versions = [
+    // mock value of one service but owns 10 version
+    {service_id: 'service-id-dmni10', version_id: 'ver-123', version_name: 'my-custom-version', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-124', version_name: 'my-custom-version1', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-125', version_name: 'my-custom-version2', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-126', version_name: 'my-custom-version3', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-127', version_name: 'my-custom-version4', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-128', version_name: 'my-custom-version5', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-130', version_name: 'my-custom-version6', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-131', version_name: 'my-custom-version7', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-132', version_name: 'my-custom-version8', version_data: ''},
+    {service_id: 'service-id-dmni10', version_id: 'ver-133', version_name: 'my-custom-version9', version_data: ''},
+  ]
+  
+
+  return new Promise((resolve,reject) => {
+    try {
+      for(let i = 0; i < mock_service_versions.length; i++) {
+        // console.log(`id:${service_id} name:${version_name}`)
+        if(mock_service_versions[i].service_id == service_id && mock_service_versions[i].version_name == version_name) {
+          console.log(`   > found service `, service_id)
+          resolve(mock_service_versions[i])
+        } else {
+          if(i === mock_service_versions.length - 1) {
+            const err = `<div> <strong>FATAL! </strong> Not found service version <strong>'${version_name}'</strong> with service_id </br>  <strong>'${service_id}'</strong> </div>`
+            reject(err)
+          }
+        }
+      }
+    } catch(err) {
+      console.log('yaw', err)
+    }
   })
 }
 
@@ -124,10 +160,6 @@ async function getUserServices(payload) {
 
   }
   
-  async function getServices(payload) {
-    const { user } = payload
-  
-  }
   
   async function getAllServices() {
   
@@ -159,6 +191,7 @@ async function getUserServices(payload) {
     alterService,
     dropService,
     insertNewService,
-    getServices,
-    getAllServices
+    getService,
+    getAllServices,
+    getServiceVersion
   }

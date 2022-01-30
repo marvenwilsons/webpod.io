@@ -1,16 +1,23 @@
 export default function (paneCollection, menu, topbar, service, dash, sidebar, socket) {
     dash.loading(true)
+    let dashboard_resource = {
+      admin: undefined,
+      admin_dash_settings: undefined,
+      role: undefined,
+      menu: undefined,
+      services: undefined
+    }
 
 /*********************************** DASHBOARD EVENT HANDLERS *************************************************/
     // watch the pane on empty
-    paneCollection.onEmpty = () => menu.setSelected('Dashboard')
+    // paneCollection.onEmpty = () => menu.setSelected('Dashboard')
     
     // fires everytime menu select property changes
     menu.onSelect = (selected_menu) => {
         // empty the pane before rendering a new pane
         paneCollection.paneCollection = []
         // get selected service view
-        const selectedService = service.getService(selected_menu)
+        const selectedService = service.getService(selected_menu) // instancer logic here`
         //
         paneCollection.onPaneCollectionChange = function() {
             const title = paneCollection.paneCollection.map(e => {
@@ -43,7 +50,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         dashboard_locations[e.location][e.action](e.payload)
     })
     socket.on('error', (payload) => {
-
+        
         console.error('err', payload)
         if(payload.message === 'authentication failed') {
             localStorage.removeItem('token'),
@@ -57,6 +64,13 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
     if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
         socket.emit('req', {
             name: 'getUserServices',
+            payload: {
+                token:localStorage.getItem('token'),
+                user: localStorage.getItem('user')
+            }
+        })
+        socket.emit('req', {
+            name: 'getDashboardResource',
             payload: {
                 token:localStorage.getItem('token'),
                 user: localStorage.getItem('user')

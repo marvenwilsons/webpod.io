@@ -28,18 +28,13 @@ module.exports = async (dashboard) => ({
           })
           .exec('topbar',   'setMsg',       userServices.app_name)
           .exec('service',  'setServices',  userServices.services)
-          .exec('menu',     'setItems',     userServices.menu_items)
-          .exec('menu',     'setSelected',  'Dashboard')
+          // .exec('menu',     'setItems',     userServices.menu_items)
+          // .exec('menu',     'setSelected',  'Dashboard')
 
       break;
       case 'getDashboardResource':
         const sys = procedures()
-        let dashboard_resource = {
-          admin: undefined,
-          role: undefined,
-          menu: undefined,
-          services: undefined
-        }
+        
         /**
          * Get user query database for the user
          * SELECT * FROM users WHERE username = payload.user
@@ -68,18 +63,44 @@ module.exports = async (dashboard) => ({
         const { role_name, role_menu } = role
         
         // fetching admin menu and services
-        const each_menu = []
-        const each_selected_service_version = []
-        role_menu.map(({menu_id,service_id,service_version}) => {
+        let each_menu = []
+        let selected_service_version = []
+        let selected_service = undefined
+        const x = role_menu.map(async ({menu_id,service_id,service_version_name}) => {
           each_menu.push(sys.getMenu(menu_id))
+          selected_service = sys.getService(service_id)
+
+          console.log('looking for service -> ', service_id,service_version_name)
+          selected_service_version.push(sys.getServiceVersion(service_id,service_version_name))
         })
 
-        const dashboard_menu = await Promise.all(each_menu).then((value) => value.map(({menu_id,menu_name, use_instancer},_) => ({
-          menu_id,
-          menu_name,
-          use_instancer
-        })))
-        dashboard.exec('menu','setItems', dashboard_menu)
+        // promise.all will fail if there is one failed promise, even if other promise resolves.
+        Promise.all(selected_service_version)
+        .then(({service_id,version_id,version_name,version_data,versions}) => {
+          // set dashboard services
+        }).catch(err => {
+          dashboard.exec('dash','alertError', {
+            message: err,
+            reload: true
+          })
+        })
+
+        Promise.all(each_menu)
+        .then((value) => value.map(({menu_id,menu_name, use_instancer},_) => {
+          // setting sidebar menu
+          dashboard.exec('menu','addItem', {menu_id,menu_name, use_instancer})
+          return {menu_id,menu_name, use_instancer}
+        }))
+        .then(data => {
+          dashboard.exec('menu','setSelected',  'Dashboard')
+        })
+
+
+        selected_service.then(({service_name,service_id}) => {
+          // set dashboard services
+        })
+        
+        
 
       break;
     }

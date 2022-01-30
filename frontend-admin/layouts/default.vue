@@ -27,7 +27,7 @@
                                 <div v-html="alertMsg" ></div>
                             </div>
                             <div class="margintop125 flex flexend">
-                                <el-button @click="() => {alertMsg = ''} " size="small" >Close</el-button>
+                                <el-button @click="closeAlert" size="small" >Close</el-button>
                             </div>
                         </div>
                     </div>
@@ -107,7 +107,8 @@ export default {
         sidebarWindowIsOpen: false,
         user: false,
         notifications: [],
-        alertMsg: undefined
+        alertMsg: undefined,
+        alertFunctionToBeExecutedOnClose: undefined
     }),
     created() {
         service.getAllServices(this)
@@ -121,6 +122,13 @@ export default {
                 const el = document.getElementById(`pane${i}`)
                 el.scrollIntoView({behavior: "auto", block: "center", inline: "center"})
             } catch(err) {}
+        },
+        closeAlert() {
+            this.alertMsg = ''
+
+            if(this.alertFunctionToBeExecutedOnClose != undefined) {
+                this.alertFunctionToBeExecutedOnClose()
+            }
         }
     },
     mounted() {
@@ -151,6 +159,19 @@ export default {
                 },
                 alert: (msg) => {
                     this.alertMsg = msg
+                },
+                alertError: (data) => {
+                    this.alertMsg = data.message
+
+                    if(data.reload && data.reload == true) {
+                        this.alertFunctionToBeExecutedOnClose = () => {
+                            location.reload()
+                        }
+                    }
+
+                    if(data.onClose) {
+                        this.alertFunctionToBeExecutedOnClose = data.onClose
+                    }
                 }
             }
 

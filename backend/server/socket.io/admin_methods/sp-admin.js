@@ -11,8 +11,19 @@ async function insertNewAdmin (payload) {
   }
 }
 
-async function getAdmin (payload) {
-
+async function getAdmin (user) {
+  console.log('=== getAdmin ===', user)
+  return new Promise((resolve,reject) => {
+    setTimeout(() => {
+      resolve({
+        name: 'Marven Wilson Donque',
+        email: 'marvenwilsons@gmail.com',
+        user: 'marvenwilsons',
+        avatar: '',
+        role_id: 'sample_kjadbv34'
+      })
+    }, 100);
+  })
 }
 
 async function getAllAdmins (payload) {
