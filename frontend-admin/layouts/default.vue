@@ -108,7 +108,9 @@ export default {
         user: false,
         notifications: [],
         alertMsg: undefined,
-        alertFunctionToBeExecutedOnClose: undefined
+        alertFunctionToBeExecutedOnClose: undefined,
+        menuMappingRole: {}, // role manefist file, does not hold any app data, values here is just like a map
+        serviceMappingRole: {}
     }),
     created() {
         service.getAllServices(this)
@@ -129,7 +131,30 @@ export default {
             if(this.alertFunctionToBeExecutedOnClose != undefined) {
                 this.alertFunctionToBeExecutedOnClose()
             }
-        }
+        },
+        constructDashboardServices(services) {
+            services.map(({service_id,instancer,version_data,version_id, version_name}) => {
+                this.serviceMappingRole[service_id][version_name] = {
+                    instancer,
+                    version_data,
+                    version_name
+                }
+            })
+        },
+        addMenuMappingRole(role) {
+            this.menuMappingRole[role.menu_id] = {
+                primary_version: role.primary_version,
+                service_id: role.service_id,
+                versions: role.versions
+            }
+        },
+        addServiceMappingRole(role) {
+            this.serviceMappingRole[role.service_id] = {}
+
+            role.versions.map(ver => {
+                this.serviceMappingRole[role.service_id][ver] = undefined
+            })
+        },
     },
     mounted() {
         try {
@@ -148,18 +173,10 @@ export default {
                 }
             }
             const dash = {
-                loading: (state) => {
-                    this.loading = state
-                },
-                showDashboard: (state) => {
-                    this.showDashboard = state
-                },
-                setUser: (o) => {
-                    this.user = o
-                },
-                alert: (msg) => {
-                    this.alertMsg = msg
-                },
+                loading: (state) => this.loading = state,
+                showDashboard: (state) => this.showDashboard = state,
+                setUser: (o) => this.user = o,
+                alert: (msg) => this.alertMsg = msg,
                 alertError: (data) => {
                     this.alertMsg = data.message
 
@@ -172,7 +189,13 @@ export default {
                     if(data.onClose) {
                         this.alertFunctionToBeExecutedOnClose = data.onClose
                     }
-                }
+                },
+                constructDashboardServices: (s) => this.constructDashboardServices(s),
+                addMenuMappingRole: (role) => this.addMenuMappingRole(role),
+                addServiceMappingRole: (role) => this.addServiceMappingRole(role),
+                setServices: (s) => this.setService(s),
+                menuMappingRole: this.menuMappingRole,
+                menuServiceMappingRole: this.serviceMappingRole,
             }
 
             dashboard(paneCollection,menu, topbar, service, dash, sidebar, this.socket)

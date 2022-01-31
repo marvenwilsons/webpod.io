@@ -65,39 +65,40 @@ module.exports = async (dashboard) => ({
         // fetching admin menu and services
         let each_menu = []
         let selected_service_version = []
-        let selected_service = undefined
-        const x = role_menu.map(async ({menu_id,service_id,service_version_name}) => {
-          each_menu.push(sys.getMenu(menu_id))
-          selected_service = sys.getService(service_id)
+        let selected_service = []
 
-          console.log('looking for service -> ', service_id,service_version_name)
-          selected_service_version.push(sys.getServiceVersion(service_id,service_version_name))
+        role_menu.map(async ({menu_id,service_id,primary_version,versions}) => {
+
+          dashboard.exec('dash','addMenuMappingRole',{menu_id,service_id,primary_version})
+          dashboard.exec('dash','addServiceMappingRole',{service_id,versions})
+
+          each_menu.push(sys.getMenu(menu_id))
+          selected_service.push(sys.getService(service_id))
+          selected_service_version.push(sys.getServiceVersion(service_id,primary_version))
+
+        })
+
+        Promise.all(each_menu).then((value) => value.map(({menu_id,menu_name},_) => {
+          // setting menubar menu
+          dashboard.exec('menu','addItem', {menu_id,menu_name})
+          dashboard.exec('menu','setSelected','Dashboard')
+        }))
+
+
+        Promise.all(selected_service).then((data) => {
+          console.log(data)
+          // set dashboard services
         })
 
         // promise.all will fail if there is one failed promise, even if other promise resolves.
-        Promise.all(selected_service_version)
-        .then(({service_id,version_id,version_name,version_data,versions}) => {
+        Promise.all(selected_service_version).then((data) => {
           // set dashboard services
+          dashboard.exec('dash','constructDashboardServices',data)
         }).catch(err => {
           dashboard.exec('dash','alertError', {
             message: err,
             reload: true
           })
-        })
-
-        Promise.all(each_menu)
-        .then((value) => value.map(({menu_id,menu_name, use_instancer},_) => {
-          // setting sidebar menu
-          dashboard.exec('menu','addItem', {menu_id,menu_name, use_instancer})
-          return {menu_id,menu_name, use_instancer}
-        }))
-        .then(data => {
-          dashboard.exec('menu','setSelected',  'Dashboard')
-        })
-
-
-        selected_service.then(({service_name,service_id}) => {
-          // set dashboard services
         })
         
         

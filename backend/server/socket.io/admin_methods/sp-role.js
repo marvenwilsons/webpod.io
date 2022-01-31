@@ -18,61 +18,61 @@ async function getRole (role_id) {
            */
           menu_id: 'menu-id-lkasdn1',
           service_id: 'service-id-dmni10', // 
-          service_version_name: 'my-custom-version', // primary vesion
+          primary_version: 'my-custom-version', // primary vesion
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2'] // user is allowed to toggle through versions
         },
         {
           menu_id: 'menu-id-lkasdn2',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version',
+          primary_version: 'my-custom-version',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn3',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version1',
+          primary_version: 'my-custom-version1',
           versions: ['my-custom-version', 'my-custom-version1']
         },
         {
           menu_id: 'menu-id-lkasdn4',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version2',
+          primary_version: 'my-custom-version2',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn5',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version3',
+          primary_version: 'my-custom-version3',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn6',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version4',
+          primary_version: 'my-custom-version4',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn7',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version5',
+          primary_version: 'my-custom-version5',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn8',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version6',
+          primary_version: 'my-custom-version6',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn9',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version7',
+          primary_version: 'my-custom-version7',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
         {
           menu_id: 'menu-id-lkasdn10',
           service_id: 'service-id-dmni10',
-          service_version_name: 'my-custom-version8',
+          primary_version: 'my-custom-version8',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         }
       ]

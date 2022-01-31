@@ -17,6 +17,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         // empty the pane before rendering a new pane
         paneCollection.paneCollection = []
         // get selected service view
+        // if service has an instancer object, it means the view data of the next service will be provided by the instancer
         const selectedService = service.getService(selected_menu) // instancer logic here`
         //
         paneCollection.onPaneCollectionChange = function() {
@@ -47,10 +48,17 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         
     socket.on('exec', (e) => {
         const dashboard_locations = { paneCollection, menu, topbar, service, dash, sidebar }
-        dashboard_locations[e.location][e.action](e.payload)
+        try {
+            dashboard_locations[e.location][e.action](e.payload)
+        } catch(err) {
+            dash.alertError({
+                message: `<span> <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed </span>`,
+                reload: true
+            })
+        }
     })
     socket.on('error', (payload) => {
-        
+
         console.error('err', payload)
         if(payload.message === 'authentication failed') {
             localStorage.removeItem('token'),
