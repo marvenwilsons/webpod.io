@@ -81,8 +81,9 @@ module.exports = async (dashboard) => ({
         Promise.all(each_menu).then((value) => value.map(({menu_id,menu_name},_) => {
           // setting menubar menu
           dashboard.exec('menu','addItem', {menu_id,menu_name})
+        })).then(() => {
           dashboard.exec('menu','setSelected','Dashboard')
-        }))
+        })
 
 
         Promise.all(selected_service).then((data) => {
@@ -109,6 +110,10 @@ module.exports = async (dashboard) => ({
 
   onTokenExpire() {
     console.log('token expired')
+    dashboard.exec('dash','alertError', {
+      message: 'Session expired you need to re-login',
+      reload: true
+    })
   },
 
   onSideBarItemClick() {

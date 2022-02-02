@@ -195,7 +195,7 @@ export default {
                 addServiceMappingRole: (role) => this.addServiceMappingRole(role),
                 setServices: (s) => this.setService(s),
                 menuMappingRole: this.menuMappingRole,
-                menuServiceMappingRole: this.serviceMappingRole,
+                serviceMappingRole: this.serviceMappingRole,
             }
 
             dashboard(paneCollection,menu, topbar, service, dash, sidebar, this.socket)

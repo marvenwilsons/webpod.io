@@ -218,10 +218,10 @@ export default {
         this.paneTitle = paneTitle || 'untitled'
 
         // extracting paneHooks
-        const paneHooks = this.paneCollection[this.paneIndex].paneHooks
+        const paneHooks = this.paneCollection[this.paneIndex].paneHooks || `() => {}`
 
         // extracting viewHooks
-        const viewHooks = this.paneCollection[this.paneIndex].viewHooks
+        const viewHooks = this.paneCollection[this.paneIndex].viewHooks || `() => ({onRibbonClick(){}, onNavClick() {}})`
 
         try {
             // pane methods

@@ -13,13 +13,53 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
     // paneCollection.onEmpty = () => menu.setSelected('Dashboard')
     
     // fires everytime menu select property changes
-    menu.onSelect = (selected_menu) => {
+    menu.onSelect = ({selected, menu}) => {
+        const menuMappingRole = dash.menuMappingRole
+        const serviceMappingRole = dash.serviceMappingRole
+        const primary_version = menuMappingRole[menu.menu_id].primary_version
+        const service_id = menuMappingRole[menu.menu_id].service_id
+        const view = serviceMappingRole[ service_id ][ primary_version ]
+        const { instancer, version_data, version_name } = view
+        let selected_service = undefined
+
+
+        if(instancer){
+            selected_service = {
+                body: {
+                    paneConfig: {
+                        isClosable: false,
+                        title: selected,
+                    },
+                    viewConfig: {},
+                    view: 'instancer',
+                    viewData: {
+                        instancer,
+                        version_data
+                    },
+                    viewHooks: () => ({
+                        onCreateInstance: (payload,data) => {
+                            // grab version data
+                            // populate its viewData with the payload
+                            // insert new pane
+                            const service = data.version_data.body
+                            service.viewData = payload
+                            webpod.paneCollection.insertPaneCollectionItem(0)(service)
+                        },
+                        onInstanceSelect() {
+
+                        }
+                    })
+                }
+            }
+        } else {
+            // if service has an instancer object, it means the view data of the next service willxcv be provided by the instancer
+            selected_service = service.getService(selected)
+        }
+
         // empty the pane before rendering a new pane
         paneCollection.paneCollection = []
         // get selected service view
-        // if service has an instancer object, it means the view data of the next service will be provided by the instancer
-        const selectedService = service.getService(selected_menu) // instancer logic here`
-        //
+        
         paneCollection.onPaneCollectionChange = function() {
             const title = paneCollection.paneCollection.map(e => {
                 return e.paneConfig.title || 'untitled'
@@ -29,7 +69,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         
         setTimeout(() => {
             try {
-                paneCollection.insertPaneCollectionItem(0)(selectedService.body)
+                paneCollection.insertPaneCollectionItem(0)(selected_service.body)
             }catch(err) {
                 location.reload()
             }
@@ -92,7 +132,8 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         dash.loading(false)
         dash.showDashboard(true)
         window.webpod = Object.seal({
-            dashboardMethods: {...dash}
+            dashboardMethods: {...dash},
+            paneCollection
         })
     },500)
 

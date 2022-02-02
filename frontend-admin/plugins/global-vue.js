@@ -63,6 +63,11 @@ Vue.component("unitile",unitile)
 import instancer from '@/components/globals/instancer/index.vue'
 Vue.component("instancer",instancer)
 
+// pane debugger
+import pd from '@/components/globals/pane-debugger/index.vue'
+Vue.component("pd",pd)
+
+
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
 import "./codemirror/addon/lint/lint.css"

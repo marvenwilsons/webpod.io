@@ -121,12 +121,41 @@ async function  getServiceVersion(service_id, version_name) {
   console.log(`=== getServiceVersion ${service_id} ===`)
 
   const ver9_instancer = {
-    instace_types: ['Static Layout','Dynamic Layout','List Display Provider']
+    instance_types: [
+      {
+        name: 'Static Layout',
+        desc: '',
+        svg: '',
+      },
+      {
+        name: 'Dynamic Layout',
+        desc: '',
+        svg: ''
+      },
+      {
+        name: 'List Display Provider',
+        desc: '',
+        svg: ''
+      }
+    ]
+  }
+
+  const sample_ver_data = {
+    body: {
+        paneConfig: {
+            isClosable: false,
+            title: 'sample',
+        },
+        viewConfig: {},
+        view: 'pd',
+        viewData: undefined,
+        viewHooks: ''
+    }
   }
 
   const mock_service_versions = [
     // mock value of one service but owns 10 version
-    {service_id: 'service-id-dmni10', version_id: 'ver-123', version_name: 'my-custom-version', version_data: '', instancer: ver9_instancer},
+    {service_id: 'service-id-dmni10', version_id: 'ver-123', version_name: 'my-custom-version', version_data: sample_ver_data, instancer: ver9_instancer},
     {service_id: 'service-id-dmni10', version_id: 'ver-124', version_name: 'my-custom-version1', version_data: ''},
     {service_id: 'service-id-dmni10', version_id: 'ver-125', version_name: 'my-custom-version2', version_data: ''},
     {service_id: 'service-id-dmni10', version_id: 'ver-126', version_name: 'my-custom-version3', version_data: ''},

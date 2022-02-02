@@ -40,7 +40,16 @@ export default {
     }),
     watch: {
         selected() {
-            this.onSelect(this.selected)
+            let menu = undefined
+
+            for(let i = 0; i < this.menu.length; i++) {
+                if(this.menu[i].menu_name == this.selected) {
+                    menu = this.menu[i]
+                    break
+                }
+            }
+
+            this.onSelect({selected: this.selected, menu})
         }
     },
     methods: {
