@@ -41,12 +41,13 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                             // grab version data
                             // populate its viewData with the payload
                             // insert new pane
-                            const service = data.version_data.body
-                            service.viewData = payload
-                            webpod.paneCollection.insertPaneCollectionItem(0)(service)
+                            
                         },
-                        onInstanceSelect() {
-
+                        onInstanceSelect(address) {
+                            console.log('select',address)
+                        },
+                        onInstanceRemove(address) {
+                            console.log('remove',address)
                         }
                     })
                 }
@@ -133,7 +134,15 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         dash.showDashboard(true)
         window.webpod = Object.seal({
             dashboardMethods: {...dash},
-            paneCollection
+            paneCollection,
+            server: {
+                fetchAppInstanceData: () => {
+                    console.log('fetching now', process.env.API_URL)
+                    // fetch(`${location.href}${process.env.API_URL}/test`)
+                    // .then(response => response.json())
+                    // .then(data => console.log(data));
+                }
+            }
         })
     },500)
 

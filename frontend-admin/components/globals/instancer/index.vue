@@ -39,25 +39,32 @@
         <div  class="pad125" style="background: white; max-width:1920px; ">
             <!-- instance list here -->
             <v-tabs color="#4e6795">
-                <v-tab>ALL</v-tab>
-                <v-tab>RECENT</v-tab>
-                <v-tab>PINNED</v-tab>
+                <!-- <v-tab>ALL</v-tab> -->
+                <!-- <v-tab>RECENT</v-tab> -->
+                <!-- <v-tab>PINNED</v-tab> -->
             </v-tabs>
             <div class="margintop125" >
                 <emptyBox v-if="instances.length == 0" />
                 <div>
                     <div style="border-bottom:3px solid whitesmoke;;" class="flex pad050" >
-                        <div class="fullwidth" style="font-weight:500;" >Name</div>
+                        <div class="fullwidth" style="font-weight:500;" >Title</div>
                         <div class="fullwidth" style="font-weight:500;"  >Modified</div>
                     </div>
-                    <div style="border-bottom:1px solid whitesmoke;" class="pointer " @click="instanceSelect" v-for="instance in instances" :key="uid(instance)">
+                    <div style="border-bottom:1px solid whitesmoke;" class="pointer " @click.stop="instanceSelect(instance)" v-for="instance in instances" :key="uid(instance)">
                         <v-hover v-slot="{ hover }" >
-                            <v-card v-ripple style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
+                            <v-card :disabled="clickedInstance == instance.title" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
+                                <v-progress-linear
+                                    :active="clickedInstance == instance.title"
+                                    :indeterminate="clickedInstance == instance.title"
+                                    absolute
+                                    bottom
+                                    color="primary"
+                                ></v-progress-linear>
                                 <div class="flex" >
                                     <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.title}}</div>
                                     <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.title}}</div>
-                                    <div class="padtop025 padbottom025 " >
-                                        <v-btn icon plain >
+                                    <div @click.stop="instanceRemove(instance)" class="padtop025 padbottom025 " >
+                                        <v-btn  icon plain >
                                             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                                                 <path fill="currentColor" d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" />
                                             </svg>
@@ -82,14 +89,36 @@ export default {
     props: ['myData', 'hooks'],
     data: () => ({
         instance_types: [],
-        instances: [{title: 'VID D23 23GDS'},{title: 'GFOADHF SDV'},{title: 'BD 3 DF'}]
+        instances: [{title: 'VID D23 23GDS'},{title: 'GFOADHF SDV'},{title: 'BD 3 DF'}],
+        clickedInstance: undefined,
+        disableAllInstance: false
     }),
     methods: {
         createInstance(n) {
-            this.hooks.onCreateInstance(n,this.myData)
-        },
-        instanceSelect(n) {
+            // this.hooks.onCreateInstance(n,this.myData)
 
+            const service = this.myData.version_data.body
+            service.viewData = n
+            webpod.paneCollection.insertPaneCollectionItem(0)(service)
+        },
+        instanceSelect(selected) {
+            this.clickedInstance = selected.title
+            const app_name = this.myData.version_data.body.view
+
+            this.$axios.get(`/test/`)
+            webpod.server.fetchAppInstanceData({
+                app_name: app_name,
+                instance_title: selected.title
+            })
+        },
+        instanceRemove(n) {
+            this.clickedInstance = n.title
+            const app_name = this.myData.version_data.body.view
+            this.hooks.onInstanceRemove(`${app_name}/${n.title}`)
+
+            setTimeout(() => {
+                this.clickedInstance = undefined
+            },1000)
         }
     },
     created() {

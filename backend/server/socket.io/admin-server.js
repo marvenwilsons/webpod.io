@@ -8,6 +8,10 @@ const io = socketio(server,{
   cookie: false
 })
 
+app.get('/test', () => {
+  console.log("hey")
+})
+
 const admin_methods = require('./admin_methods/index')
 const admin_auth = require('./admin_methods/admin_auth')
 const dashboard_event_handler = require('./admin_methods/dashboard-event-handler')
