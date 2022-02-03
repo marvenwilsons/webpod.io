@@ -17,12 +17,20 @@ drag n drop libraries
 ==> https://github.com/nichollascarter/subjx <--- drag n drop with rotate
 ==> https://anseki.github.io/plain-draggable/ <-- well documented and has a rich API
 ==> https://jqueryui.com/draggable/ <-- good old jquery
+==> https://jbaysolutions.github.io/vue-grid-layout/guide/#npm <-- vue grid
+
+flow chart
+==> https://joyceworks.github.io/flowchart-vue/
+==> https://github.com/joyceworks/flowchart-vue
 
 jquery
 ==> https://gist.github.com/ansidev/46a715dd319cef546646383eac13ec5f <-- if you ever need jquery in nuxt
 
 useful stackoverflow content about grid
 ==> https://stackoverflow.com/questions/43129360/css-grid-wrapping
+
+SVG Manipulation
+==> https://vuejs.org/v2/examples/svg.html
 
 
 
