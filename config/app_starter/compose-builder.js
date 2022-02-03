@@ -144,6 +144,7 @@ const nginx_container = {
     { ADMIN_FRONTEND_SERVER_UPSTREAM:   'frontend-admin:' + adminPort },
     { ADMIN_DASHBOARD_PUBLIC_LINK:      app_config.admin_route },
     { ADMIN_BACKEND_SERVER:             'backend:' + app_config.backend.admin_server_port },
+    { ADMIN_EXPRESS_ROUTE:                    app_config.backend.admin_api_route},
     // PG ADMIN
     { PGADMIN_URL:                      app_config.pg_admin.PGADMIN_URL }
   ],
