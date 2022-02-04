@@ -1,3 +1,4 @@
+import appFetch from "./app-fetch"
 export default function (paneCollection, menu, topbar, service, dash, sidebar, socket) {
     dash.loading(true)
     let dashboard_resource = {
@@ -35,21 +36,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                     viewData: {
                         instancer,
                         version_data
-                    },
-                    viewHooks: () => ({
-                        onCreateInstance: (payload,data) => {
-                            // grab version data
-                            // populate its viewData with the payload
-                            // insert new pane
-                            
-                        },
-                        onInstanceSelect(address) {
-                            console.log('select',address)
-                        },
-                        onInstanceRemove(address) {
-                            console.log('remove',address)
-                        }
-                    })
+                    }
                 }
             }
         } else {
@@ -136,12 +123,10 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
             dashboardMethods: {...dash},
             paneCollection,
             server: {
-                fetchAppInstanceData: ({app_name,instance_title},cb) => {
-                    console.log('query', `${process.env.API_URL}/apps/?app_name=${app_name}&instance_title=${instance_title}`)
-                    fetch(`${process.env.API_URL}/apps/${app_name}/${instance_title}`)
-                    .then(response => response.json())
-                    .then(data => cb(data))
-                }
+                apps: {...appFetch},
+                collections: {},
+                users: {},
+                roles: {}
             }
         })
     },500)

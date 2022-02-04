@@ -8,6 +8,10 @@ const io = socketio(server,{
   cookie: false
 })
 
+const mock_app_data = [
+  
+]
+
 app.get('/apps', (req,res) => {
   // returns an array of all apps installed
   // example: [{app_name: 'unitile'},{app_name: 'uniview'}]
@@ -15,9 +19,19 @@ app.get('/apps', (req,res) => {
 })
 app.get('/apps/:app_name', (req,res) => {
   // returns all app instances basic info
-  // example instance object: {last_modified, title, last_modified_by}
+  // example instance object: {last_modified, title, modified_by}
   // example route call: /apps/unitile
   // access: req.params
+  setTimeout(() => {
+    res.json([
+      {title: 'VID D23 23GDS',modified: '05/03/2022', modified_by: 'Marven Wilson Donque'},
+      {title: 'GFOADHF SDV', modified: '04/02/2022', modified_by: 'Kill kla'},
+      {title: 'BD 3 DF', modified: '05/11/2021', modified_by: 'Kill kla'},
+      {title: 'Custom 1', modified: '05/11/2021', modified_by: 'Kill kla'},
+      {title: 'Custom 2', modified: '05/11/2021', modified_by: 'Kill kla'},
+      {title: 'App page', modified: '05/11/2021', modified_by: 'Kill kla'},
+    ])
+  },2000)
 })
 app.delete('/apps/:app_name', (req,res) => {
 
@@ -30,6 +44,7 @@ app.post('/apps/:app_name', (req,res) => {
 app.get('/apps/:app_name/:instance_title', (req,res) => {
   // returns a specific app instance project data
   // access: req.params
+  const {app_name, instance_title} = req.params
   console.log('apps2', req.params)
 
 })

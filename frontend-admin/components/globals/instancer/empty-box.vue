@@ -251,7 +251,7 @@
             >
         </metadata>
         </svg>
-        <div class="absolute margintop125 padtop125 caption text--secondary text-uppercase " >
+        <div class="absolute margintop125 padtop125 caption text--secondary text-uppercase  text-center" >
             NOTHING IN HERE AT THE MOMENT
         </div>
     </div>

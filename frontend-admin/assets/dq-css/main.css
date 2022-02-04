@@ -248,11 +248,11 @@ img {
   cursor: pointer !important;
 }
 
-.notallowed {
+.not-allowed {
   cursor: not-allowed;
 }
 
-.colorinherit {
+.color-inherit {
   color: inherit;
 }
 .borderRad4{

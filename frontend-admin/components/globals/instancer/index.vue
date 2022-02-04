@@ -36,46 +36,70 @@
         <div class="marginbottom125 text-uppercase" >
             <span style="font-weight:500; color: #424242;" >Existing Projects</span>
         </div>
-        <div  class="pad125" style="background: white; max-width:1920px; ">
+        <div :elevation="0" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
+            <div v-if="loadProtocolIsDone == false" class="fullheight-percent fullwidth text-center" >
+                <v-progress-circular
+                    :active="true"
+                    :indeterminate="true"
+                    :size="40"
+                    center
+                    color="primary"
+                ></v-progress-circular>
+            </div>
             <!-- instance list here -->
-            <v-tabs color="#4e6795">
-                <!-- <v-tab>ALL</v-tab> -->
-                <!-- <v-tab>RECENT</v-tab> -->
-                <!-- <v-tab>PINNED</v-tab> -->
-            </v-tabs>
-            <div class="margintop125" >
-                <emptyBox v-if="instances.length == 0" />
-                <div>
-                    <div style="border-bottom:3px solid whitesmoke;;" class="flex pad050" >
-                        <div class="fullwidth" style="font-weight:500;" >Title</div>
-                        <div class="fullwidth" style="font-weight:500;"  >Modified</div>
-                    </div>
-                    <div style="border-bottom:1px solid whitesmoke;" class="pointer " @click.stop="instanceSelect(instance)" v-for="instance in instances" :key="uid(instance)">
-                        <v-hover v-slot="{ hover }" >
-                            <v-card :disabled="clickedInstance == instance.title" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
-                                <v-progress-linear
-                                    :active="clickedInstance == instance.title"
-                                    :indeterminate="clickedInstance == instance.title"
-                                    absolute
-                                    bottom
-                                    color="primary"
-                                ></v-progress-linear>
-                                <div class="flex" >
-                                    <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.title}}</div>
-                                    <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.title}}</div>
-                                    <div @click.stop="instanceRemove(instance)" class="padtop025 padbottom025 " >
-                                        <v-btn  icon plain >
-                                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" />
-                                            </svg>
-                                        </v-btn>
+            <!-- <v-expand-transition>
+                <v-tabs v-if="instances.length > 0 && loadProtocolIsDone" color="#4e6795">
+                    <v-tab>ALL</v-tab>
+                    <v-tab>RECENT</v-tab>
+                    <v-tab>PINNED</v-tab>
+                </v-tabs>
+            </v-expand-transition> -->
+            <v-expand-transition>
+                <div v-if="loadProtocolIsDone" class="margintop125 fullwidth" >
+                    <v-expand-transition>
+                        <emptyBox v-if="instances.length == 0 && loadProtocolIsDone" />
+                    </v-expand-transition>
+                    <div class="fullwidth" >
+                        <v-expand-transition>
+                            <div v-if="instances.length > 0" style="border-bottom:3px solid whitesmoke;;" class="flex pad050" >
+                                <div class="fullwidth" style="font-weight:500;" >Title</div>
+                                <div class="fullwidth" style="font-weight:500;"  >Last Modified</div>
+                                <div class="fullwidth" style="font-weight:500;"  >Modified By</div>
+                                <div class="" style="font-weight:500;"  >Action</div>
+                            </div>
+                        </v-expand-transition>
+                        <div style="border-bottom:1px solid whitesmoke;" 
+                            :class="[clickedInstance == instance.title ? 'not-allowed' : 'pointer']"
+                            @click.once=" clickedInstance == instance.title ? () => {} : instanceSelect(instance)" 
+                            v-for="instance in instances" :key="uid(instance)"
+                        >
+                            <v-hover v-slot="{ hover }" >
+                                <v-card :disabled="clickedInstance == instance.title" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
+                                    <v-progress-linear
+                                        :active="clickedInstance == instance.title"
+                                        :indeterminate="clickedInstance == instance.title"
+                                        absolute
+                                        bottom
+                                        color="primary"
+                                    ></v-progress-linear>
+                                    <div class="flex" >
+                                        <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.title}}</div>
+                                        <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified}}</div>
+                                        <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified_by}}</div>
+                                        <div @click.stop="instanceRemove(instance)" class="padtop025 padbottom025 " >
+                                            <v-btn  icon plain >
+                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                    <path fill="currentColor" d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" />
+                                                </svg>
+                                            </v-btn>
+                                        </div>
                                     </div>
-                                </div>
-                            </v-card>
-                        </v-hover>
+                                </v-card>
+                            </v-hover>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </v-expand-transition>
         </div>
     </main>
 </template>
@@ -89,36 +113,42 @@ export default {
     props: ['myData', 'hooks'],
     data: () => ({
         instance_types: [],
-        instances: [{title: 'VID D23 23GDS'},{title: 'GFOADHF SDV'},{title: 'BD 3 DF'}],
+        instances: [],
         clickedInstance: undefined,
-        disableAllInstance: false
+        disableAllInstance: false,
+        appName: undefined,
+        loadProtocolIsDone: false
     }),
     methods: {
+        fetchAppInstances() {
+            webpod.server.apps.fetchAppInstances({
+                app_name: this.appName
+            })
+        },
         createInstance(n) {
-            // this.hooks.onCreateInstance(n,this.myData)
-
             const service = this.myData.version_data.body
             service.viewData = n
             webpod.paneCollection.insertPaneCollectionItem(0)(service)
         },
         instanceSelect(selected) {
             this.clickedInstance = selected.title
-            const app_name = this.myData.version_data.body.view
 
-            // this.$axios.get(`/test/`)
-            webpod.server.fetchAppInstanceData({
-                app_name: app_name,
+            webpod.server.apps.fetchAppInstance({
+                app_name: this.appName,
                 instance_title: selected.title
+            }, (data) => {
+                this.clickedInstance = undefined
             })
         },
-        instanceRemove(n) {
-            this.clickedInstance = n.title
-            const app_name = this.myData.version_data.body.view
-            this.hooks.onInstanceRemove(`${app_name}/${n.title}`)
+        instanceRemove(selected) {
+            this.clickedInstance = selected.title
 
-            setTimeout(() => {
+            webpod.server.apps.removeAppInstance({
+                app_name: this.appName,
+                instance_title: selected.title
+            }, (data) => {
                 this.clickedInstance = undefined
-            },1000)
+            })
         }
     },
     created() {
@@ -134,6 +164,13 @@ export default {
             webpod.dashboardMethods.alertError({
                 message: 'Invalid version_data',
                 reload: true
+            })
+        } else {
+            this.appName = this.myData.version_data.body.view
+
+            webpod.server.apps.fetchAppInstances(this.appName,(data) => {
+                this.instances = data
+                this.loadProtocolIsDone = true
             })
         }
     }
