@@ -105,7 +105,7 @@ export default {
             this.clickedInstance = selected.title
             const app_name = this.myData.version_data.body.view
 
-            this.$axios.get(`/test/`)
+            // this.$axios.get(`/test/`)
             webpod.server.fetchAppInstanceData({
                 app_name: app_name,
                 instance_title: selected.title

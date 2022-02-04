@@ -136,11 +136,11 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
             dashboardMethods: {...dash},
             paneCollection,
             server: {
-                fetchAppInstanceData: () => {
-                    console.log('fetching now', process.env.API_URL)
-                    // fetch(`${location.href}${process.env.API_URL}/test`)
-                    // .then(response => response.json())
-                    // .then(data => console.log(data));
+                fetchAppInstanceData: ({app_name,instance_title},cb) => {
+                    console.log('query', `${process.env.API_URL}/apps/?app_name=${app_name}&instance_title=${instance_title}`)
+                    fetch(`${process.env.API_URL}/apps/${app_name}/${instance_title}`)
+                    .then(response => response.json())
+                    .then(data => cb(data))
                 }
             }
         })

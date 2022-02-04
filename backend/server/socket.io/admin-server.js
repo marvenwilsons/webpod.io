@@ -8,9 +8,38 @@ const io = socketio(server,{
   cookie: false
 })
 
-app.get('/test', () => {
-  console.log("hey")
+app.get('/apps', (req,res) => {
+  // returns an array of all apps installed
+  // example: [{app_name: 'unitile'},{app_name: 'uniview'}]
+  console.log('apps', req.query)
 })
+app.get('/apps/:app_name', (req,res) => {
+  // returns all app instances basic info
+  // example instance object: {last_modified, title, last_modified_by}
+  // example route call: /apps/unitile
+  // access: req.params
+})
+app.delete('/apps/:app_name', (req,res) => {
+
+})
+app.post('/apps/:app_name', (req,res) => {
+
+})
+
+// manage specific app data instance
+app.get('/apps/:app_name/:instance_title', (req,res) => {
+  // returns a specific app instance project data
+  // access: req.params
+  console.log('apps2', req.params)
+
+})
+app.delete('/apps/:app_name/:instance_title', () => {
+  // returns a specific app instance project data
+  // access: req.params
+})
+app.post('/apps/:app_name/:instance_title', () => {
+})
+
 
 const admin_methods = require('./admin_methods/index')
 const admin_auth = require('./admin_methods/admin_auth')
