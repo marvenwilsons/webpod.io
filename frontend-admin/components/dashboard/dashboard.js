@@ -127,6 +127,10 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                 collections: {},
                 users: {},
                 roles: {}
+            },
+            dashSettings: {
+                'Pane Slide': 'yes',
+                'Slide on history click':'yes'
             }
         })
     },500)

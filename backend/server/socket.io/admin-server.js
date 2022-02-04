@@ -45,7 +45,57 @@ app.get('/apps/:app_name/:instance_title', (req,res) => {
   // returns a specific app instance project data
   // access: req.params
   const {app_name, instance_title} = req.params
-  console.log('apps2', req.params)
+  // query the app_instances table
+
+  const sample_response = {
+    app_name: '',
+    instance_data: '',
+    last_modified: '',
+    modified_by: '',
+    instance_title: '',
+    allowed_users: '',
+    history: ''
+  }
+
+  const stringify = function (fn) {
+      return fn.toString()
+  }
+
+
+  sample_response.app_name = 'unitile'
+  sample_response.last_modified = '05/03/2022'
+  sample_response.modified_by = 'Marven Wilson Donque'
+  sample_response.instance_title = instance_title
+  sample_response.allowed_users = ['Marven Wilson Donque', 'Janny Ann']
+  sample_response.history = ['EIW231s']
+  sample_response.instance_data = {
+    name: 'Layout Builder',
+    body: {
+      paneConfig: {
+        title: 'Layout Builder (unitile ver-alpha)',
+      },
+      view: 'unitile',
+      viewData: [
+        {"id":"kxTbRahwYk","rowStart":2,"rowEnd":3,"colStart":1,"colEnd":3,"selected":false,"customClasses":[],"customStyle":{},"align":"stretch"},
+        {"id":"wRxrs27gOf","rowStart":2,"rowEnd":3,"colStart":3,"colEnd":5,"selected":false,"customStyle":{},"customClasses":[],"isAClone":"kxTbRahwYk"},
+        {"id":"DViGBGR20e","rowStart":1,"rowEnd":2,"colStart":1,"colEnd":5,"selected":false,"customClasses":[],"customStyle":{},"align":"stretch"}
+      ],
+      viewHooks: stringify((paneCollection,pane,view) => ({
+        onSaveLayout(layout) {
+          layout.map(e => {
+            console.log('heheh',JSON.stringify(e))
+          })
+        }
+      })),
+      viewConfig: {
+        editable: true
+      }
+    }
+  }
+
+  setTimeout(() => {
+    res.json(sample_response)
+  },4000)
 
 })
 app.delete('/apps/:app_name/:instance_title', () => {

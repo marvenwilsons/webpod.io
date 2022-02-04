@@ -69,12 +69,12 @@
                             </div>
                         </v-expand-transition>
                         <div style="border-bottom:1px solid whitesmoke;" 
-                            :class="[clickedInstance == instance.title ? 'not-allowed' : 'pointer']"
-                            @click.once=" clickedInstance == instance.title ? () => {} : instanceSelect(instance)" 
+                            :class="[disableAll ? 'not-allowed' : 'pointer']"
+                            @click.once="disableAll ? () => {} : instanceSelect(instance)" 
                             v-for="instance in instances" :key="uid(instance)"
                         >
                             <v-hover v-slot="{ hover }" >
-                                <v-card :disabled="clickedInstance == instance.title" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
+                                <v-card :disabled="disableAll" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
                                     <v-progress-linear
                                         :active="clickedInstance == instance.title"
                                         :indeterminate="clickedInstance == instance.title"
@@ -117,7 +117,8 @@ export default {
         clickedInstance: undefined,
         disableAllInstance: false,
         appName: undefined,
-        loadProtocolIsDone: false
+        loadProtocolIsDone: false,
+        disableAll: false
     }),
     methods: {
         fetchAppInstances() {
@@ -132,12 +133,17 @@ export default {
         },
         instanceSelect(selected) {
             this.clickedInstance = selected.title
+            this.disableAll = true
 
             webpod.server.apps.fetchAppInstance({
                 app_name: this.appName,
                 instance_title: selected.title
             }, (data) => {
+                webpod.paneCollection.insertPaneCollectionItem(0)(data.instance_data.body)
                 this.clickedInstance = undefined
+                setTimeout(() => {
+                    this.disableAll = false
+                }, 1000)
             })
         },
         instanceRemove(selected) {
@@ -148,6 +154,7 @@ export default {
                 instance_title: selected.title
             }, (data) => {
                 this.clickedInstance = undefined
+                this.instances = data
             })
         }
     },

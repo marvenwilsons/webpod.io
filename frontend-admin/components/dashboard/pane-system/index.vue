@@ -113,7 +113,7 @@ export default {
                         try {
                             setTimeout(() => {
                             const el = document.getElementById(`pane${paneIndexOrigin + 1}`)
-                                // el.scrollIntoView({behavior: "smooth", block: "center", inline: "center"})
+                                el.scrollIntoView({behavior: webpod.dashSettings['Pane Slide'] == 'yes' ? 'smooth' : 'auto', block: "center", inline: "center"})
                             },100)
                         } catch(err) {}
                     }
