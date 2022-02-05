@@ -39,7 +39,24 @@ export default {
                 }
             }
         } else {
-
+            console.log('remove from db')
         }
+    },
+    update(payload,cb) {
+        const app_name = webpod.paneCollection.paneCollection[webpod.session.paneOnFocus].view
+        const instance_title = webpod.session.appInstanceOnFocus
+        const url = `${process.env.API_URL}/apps/${app_name}/${instance_title}`
+        
+        const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        };
+        fetch(url, requestOptions)
+            .then(response => response.json())
+            .then(data => {
+                cb(data)
+            });
+        
     }
 }

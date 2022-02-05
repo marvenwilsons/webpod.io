@@ -120,6 +120,7 @@ export default {
     methods: {
         historyClick(i) {
             console.log('history click',i)
+            webpod.session.paneOnFocus = i
             try {
                 const el = document.getElementById(`pane${i}`)
                 el.scrollIntoView({behavior: webpod.dashSettings['Slide on history click'] == 'yes' ? 'smooth' : 'auto', block: "center", inline: "center"})

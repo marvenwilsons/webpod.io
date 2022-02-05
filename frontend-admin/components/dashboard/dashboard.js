@@ -53,6 +53,9 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                 return e.paneConfig.title || 'untitled'
             })
             topbar.history.panes = title
+            if(webpod) {
+                webpod.session.paneOnFocus = title.length - 1
+            }
         }
         
         setTimeout(() => {
@@ -128,11 +131,15 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                 users: {},
                 roles: {}
             },
+            session: {
+                paneOnFocus: 0,
+                appInstanceOnFocus: undefined
+            },
             dashSettings: {
                 'Pane Slide': 'yes',
                 'Slide on history click':'yes'
             }
         })
-    },500)
+    },0)
 
 }

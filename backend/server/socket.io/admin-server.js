@@ -8,9 +8,8 @@ const io = socketio(server,{
   cookie: false
 })
 
-const mock_app_data = [
-  
-]
+const bodyParser = require('body-parser')
+app.use(bodyParser.json({ extended: false }))
 
 app.get('/apps', (req,res) => {
   // returns an array of all apps installed
@@ -98,11 +97,35 @@ app.get('/apps/:app_name/:instance_title', (req,res) => {
   },4000)
 
 })
-app.delete('/apps/:app_name/:instance_title', () => {
+app.delete('/apps/:app_name/:instance_title', (req,res) => {
   // returns a specific app instance project data
   // access: req.params
+  console.log(req.params)
+  setTimeout(() => {
+    res.json({
+      message: 'success'
+    })
+  },1000)
 })
-app.post('/apps/:app_name/:instance_title', () => {
+app.post('/apps/:app_name/:instance_title', (req,res) => {
+  // add new
+  console.log("adding",req.body)
+  setTimeout(() => {
+    res.json({
+      message: 'success'
+    })
+  },1000)
+})
+app.put('/apps/:app_name/:instance_title', (req,res) => {
+  // update existing
+  const address = req.params
+  const body = req.body
+
+  setTimeout(() => {
+    res.json({
+      message: 'success'
+    })
+  },1000)
 })
 
 

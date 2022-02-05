@@ -134,6 +134,7 @@ export default {
         instanceSelect(selected) {
             this.clickedInstance = selected.title
             this.disableAll = true
+            webpod.session.appInstanceOnFocus = selected.title
 
             webpod.server.apps.fetchAppInstance({
                 app_name: this.appName,
@@ -148,6 +149,7 @@ export default {
         },
         instanceRemove(selected) {
             this.clickedInstance = selected.title
+            this.disableAll = true
 
             webpod.server.apps.removeAppInstance({
                 app_name: this.appName,

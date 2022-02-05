@@ -379,6 +379,11 @@ export default {
         },
         saveLayout() {
             this.hooks.onSaveLayout(this.tiles)
+            webpod.server.apps.update(this.tiles, (response) => {
+                if(response.message == 'success') {
+                    // saving is successfull
+                }
+            })
         },
         refresh() {
             this.ready = false
