@@ -200,19 +200,42 @@ export default {
             webpod.dashboardMethods.setModalState.hide()
             this.renameData = undefined
             this.renameError = undefined
+            this.renameNewValue = undefined
+            this.renameOnProgress = false
         },
-        renameStart(selected) {
+        renameStart() {
             const validate = (value) => {
                 let error = undefined
                 if(value == undefined || value.trim() == '' ) error = 'this field is required'
                 if((value || '').length > 20) error = 'Max 20 characters'
+
+                for(let x = 0; x < this.instances.length - 1; x++) {
+                   if(this.instances[x].title === value) {
+                       error = `${value} already exist`
+                       break
+                   }
+                }
+
                 return error || 'passed'
             }
 
             const validationResult = validate(this.renameNewValue)
 
             if(validationResult === 'passed') {
-                webpod.server.apps.renameAppInstanceTitle(this.renameNewValue,this.renameData)
+                webpod.server.apps.renameAppInstanceTitle(this.renameNewValue,this.renameData,(data) => {
+                    if(data.message == 'OK') {
+                        console.log('done rename', this.renameData.title)
+                        for(let i = 0; i < this.instances.length - 1; i++) {
+                            if(this.instances[i].title === this.renameData.title) {
+                                this.instances[i].title = data.new_title
+                                setTimeout(() => {
+                                    this.cancelRename()
+                                },10)
+                                break
+                            }
+                        }
+                    }
+                })
                 this.renameOnProgress = true
                 this.renameError = undefined
             } else {

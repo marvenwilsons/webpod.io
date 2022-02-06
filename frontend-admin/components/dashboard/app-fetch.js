@@ -45,7 +45,7 @@ export default {
             fetch(url, {method: 'DELETE'})
             .then(response => response.json())
             .then(data => {
-                if(data.message == 'success') {
+                if(data.message == 'OK') {
                     webpod.server.apps.fetchAppInstances({app_name}, (d) => {
                         cb(_d ? _d : d)
                     })
@@ -95,10 +95,24 @@ export default {
         })
         
     },
-    renameAppInstanceTitle: function (new_title,instance_info) {
+    renameAppInstanceTitle: function (new_title,instance_info,cb) {
         const app_name = instance_info.instance_from
         const instance_title = instance_info.title
-        const url = `${process.env.API_URL}/apps/${app_name}/${instance_title}?rename_title=${new_title}`
+        const url = `${process.env.API_URL}/apps/${app_name}/${instance_title}?rename=${new_title}`
         console.log('rename',url)
+        const request_options = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+        };
+        fetch(url, request_options)
+        .then(response => response.json())
+        .then(data => {
+            cb(data)
+        }).catch(err => {
+            webpod.dashboardMethods.alertError({
+                message: `<span>An error occured while updating app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
+                reload: true
+            })
+        })
     }
 }

@@ -115,22 +115,33 @@ app.post('/apps/:app_name/:instance_title', (req,res) => {
   console.log("adding",req.body)
   setTimeout(() => {
     res.json({
-      message: 'success'
+      message: 'OK'
     })
   },1000)
 })
 app.put('/apps/:app_name/:instance_title', (req,res) => {
   // update existing
-  const address = req.params
+  const {app_name, instance_title} = req.params
   const body = req.body
+  const query = req.query
 
-  console.log(body)
+  if(query.rename) {
+    console.log('renaming ', instance_title, 'to', query.rename)
+    setTimeout(() => {
+      res.json({
+        message: 'OK',
+        new_title: query.rename
+      })
+    },1000)
+  } else {
+    setTimeout(() => {
+      res.json({
+        message: 'OK'
+      })
+    },500)
+  }
 
-  setTimeout(() => {
-    res.json({
-      message: 'success'
-    })
-  },1000)
+  
 })
 
 
