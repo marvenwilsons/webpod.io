@@ -63,12 +63,34 @@
                         bottom
                         color="primary"
                     ></v-progress-linear>
-                    <v-card-text class=" " style="padding:0;" >give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
+                    <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
                     <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
            
                     <div class="flex fullwidth flexend" >
                         <v-btn :disabled="renameOnProgress"  @click="cancelRename" plain > cancel </v-btn>
                         <v-btn :disabled="renameOnProgress" @click="renameStart" plain > rename </v-btn>
+                    </div>
+                </v-card>
+            </portal>
+            <portal v-if="true" to="modal" >
+                <v-card style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
+                    <v-progress-linear
+                        :active="createNewProjectOnProgress"
+                        :indeterminate="createNewProjectOnProgress"
+                        absolute
+                        bottom
+                        color="primary"
+                    ></v-progress-linear>
+                    <v-card-text class=" " style="padding:0;" >Give a title name for this project</v-card-text>
+                    <v-text-field 
+                        :error="newProjectError != undefined" 
+                        :error-messages="newProjectError" 
+                        v-model="newProjectTitle"  
+                        :disabled="createNewProjectOnProgress" 
+                    />
+                    <div class="flex fullwidth flexend" >
+                        <v-btn :disabled="createNewProjectOnProgress"  @click="cancelNewProjectInstanceCreation" plain > cancel </v-btn>
+                        <v-btn :disabled="createNewProjectOnProgress" @click="startCreation" plain > create </v-btn>
                     </div>
                 </v-card>
             </portal>
@@ -142,26 +164,41 @@ export default {
         appName: undefined,
         loadProtocolIsDone: false,
         disableAll: false,
+        // rename data properties
         renameData: false,
         renameNewValue: '',
         renameOnProgress: false,
-        renameError: undefined
+        renameError: undefined,
+        // new project data properties
+        promptForNewProjectTitle: false,
+        createNewProjectOnProgress: false,
+        newProjectTitle: undefined,
+        newProjectError: undefined,
+        newProjectService: undefined
     }),
     watch: {
         renameNewValue() {
             this.renameError = undefined
+        },
+        newProjectTitle() {
+            this.newProjectError = undefined
         }
     },
     methods: {
+        // instance CRUD
         fetchAppInstances() {
             webpod.server.apps.fetchAppInstances({
                 app_name: this.appName
             })
         },
         createInstance(n) {
+            console.log('this is',n)
             const service = this.myData.version_data.body
             service.viewData = n
-            webpod.paneCollection.insertPaneCollectionItem(0)(service)
+            this.promptForNewProjectTitle = true
+            webpod.dashboardMethods.setModalState.show()
+            this.newProjectService = service
+            // webpod.paneCollection.insertPaneCollectionItem(0)(service)
         },
         instanceSelect(selected) {
             this.clickedInstance = selected.title
@@ -192,6 +229,39 @@ export default {
                 this.disableAll = false
             })
         },
+        validateInstanceTitle(value) {
+            let error = undefined
+            if(value == undefined || value.trim() == '' ) error = 'this field is required'
+            if((value || '').length > 20) error = 'Max 20 characters'
+            for(let x = 0; x < this.instances.length - 1; x++) {
+               if(this.instances[x].title === value) {
+                   error = `${value} already exist`
+                   break
+               }
+            }
+            return error || 'passed'
+        },
+        // create new project instance
+        cancelNewProjectInstanceCreation() {
+            this.promptForNewProjectTitle = false
+            webpod.dashboardMethods.setModalState.hide()
+            this.newProjectError = undefined
+            this.newProjectTitle = undefined
+            this.newProjectService = undefined
+            this.createNewProjectOnProgress = false
+        },
+        startCreation() {
+            const validationResult = this.validateInstanceTitle(this.newProjectTitle)
+            if(validationResult === 'passed') {
+                this.createNewProjectOnProgress = true
+                this.newProjectService.paneConfig.title = `${this.newProjectService.paneConfig.title}:${this.newProjectTitle}` 
+                webpod.paneCollection.insertPaneCollectionItem(0)(this.newProjectService)
+                this.cancelNewProjectInstanceCreation()
+            } else {
+                this.newProjectError = validationResult
+            }
+        },
+        // rename methods
         setRenameEnv(selected) {
             webpod.dashboardMethods.setModalState.show()
             this.renameData = selected
@@ -204,27 +274,11 @@ export default {
             this.renameOnProgress = false
         },
         renameStart() {
-            const validate = (value) => {
-                let error = undefined
-                if(value == undefined || value.trim() == '' ) error = 'this field is required'
-                if((value || '').length > 20) error = 'Max 20 characters'
-
-                for(let x = 0; x < this.instances.length - 1; x++) {
-                   if(this.instances[x].title === value) {
-                       error = `${value} already exist`
-                       break
-                   }
-                }
-
-                return error || 'passed'
-            }
-
-            const validationResult = validate(this.renameNewValue)
+            const validationResult = this.validateInstanceTitle(this.renameNewValue)
 
             if(validationResult === 'passed') {
                 webpod.server.apps.renameAppInstanceTitle(this.renameNewValue,this.renameData,(data) => {
                     if(data.message == 'OK') {
-                        console.log('done rename', this.renameData.title)
                         for(let i = 0; i < this.instances.length - 1; i++) {
                             if(this.instances[i].title === this.renameData.title) {
                                 this.instances[i].title = data.new_title
