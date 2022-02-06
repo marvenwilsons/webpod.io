@@ -17,9 +17,9 @@
      mode === 'is-email' && utils.stringValidator.isEmail(value)
  
      if(mode === 'has-setof-chars') {
-         const {ArrayOfCharacters, CharacterToCompare} = value
-         const res = ArrayOfCharacters.map(charSet => {
-             return RegExp(`${charSet}`, "").exec(CharacterToCompare) != null;
+         const {characters, charcter_to_test} = value
+         const res = characters.map(charSet => {
+             return RegExp(`${charSet}`, "").exec(charcter_to_test) != null;
          });
          const isTrue = (current) => current === true 
          return res.every(isTrue)
@@ -107,39 +107,7 @@
          return true
      }
  }
- utils.commonStringValidations = {
-     // string should not have whitspaces
-     // string should not have special characters
-     // string should be defined
-     vs1: function(name,string,minCharLen,allowNumbers) {
-         if(allowNumbers === false) {
-             if(utils.validateString({mode:'has-number', value: string}) === true) {
-                 throw `invalid-${name}: ${name} should not have numbers`
-             }
-         } 
-         
-         if(utils.validateString({mode:'has-whitespace', value: string}) === true ) {
-             throw `invalid-${name}: ${name} should not have any whitespaces`
-         } 
-         
-         if(utils.validateString({mode:'has-special-character', value: string}) === true ) {
-             throw `invalid-${name}: ${name} should not have special characters`
-         } 
-         
-         if(utils.validateString({mode:'is-required', value: string}) === true) {
-             throw `invalid-${name}: ${name} cannot be left undefined, ${name} is required`
-         } 
-         
-         if(minCharLen) {
-             if(string.length < minCharLen) {
-                 throw `invalid-${name}: ${name} should at least have a minimum of ${minCharLen} characters`
-             }
-         } 
- 
-         return string
-     }
- }
- utils.hasSetOfKeys = (ArrayOfKeys, ObjectToCompare) => {            
+ utils.objectHasSetOfKeys = (ArrayOfKeys, ObjectToCompare) => {            
      let res = []
      Object.keys(ObjectToCompare).map(e => {
          if(ArrayOfKeys.indexOf(e) != -1) {

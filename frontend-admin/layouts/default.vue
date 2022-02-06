@@ -1,6 +1,8 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main style="background: #1565c0a8;" class="relative" >
+            <portal-target v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" name="modal" />
+
             <v-fade-transition>
                 <main>
                     <!-- loading -->
@@ -21,7 +23,7 @@
                     </div>
                     <!-- Alert -->
                     <div v-if="alertMsg && !loading" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
-                        <div class="pad125 borderRad4 margin125" 
+                        <v-card class="pad125 borderRad4 margin125" 
                             style="background:white; color: #3f444a; min-width: 400px; max-width: 1080px;" >
                             <div style="max-height:500px; overflow-x: auto;" >
                                 <div v-html="alertMsg" ></div>
@@ -29,7 +31,7 @@
                             <div class="margintop125 flex flexend">
                                 <el-button @click="closeAlert" size="small" >Close</el-button>
                             </div>
-                        </div>
+                        </v-card>
                     </div>
                     <!-- Editors -->
                     <div v-if="editor" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter" >
@@ -174,6 +176,10 @@ export default {
                 }
             }
             const dash = {
+                setModalState: {
+                    show: _ => this.showModal = true,
+                    hide: _ => this.showModal = false,
+                },
                 loading: (state) => this.loading = state,
                 showDashboard: (state) => this.showDashboard = state,
                 setUser: (o) => this.user = o,
@@ -215,7 +221,7 @@ export default {
     font-family: 'Merriweather', serif !important;
 }
 .modal-wrapper {
-    background: #1565c0a8;
+    background: #1565c03a;
     z-index: 900;
 }
 html {

@@ -67,6 +67,9 @@ Vue.component("instancer",instancer)
 import pd from '@/components/globals/pane-debugger/index.vue'
 Vue.component("pd",pd)
 
+import PortalVue from 'portal-vue'
+Vue.use(PortalVue)
+
 
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"

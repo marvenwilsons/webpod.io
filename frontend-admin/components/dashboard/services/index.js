@@ -46,7 +46,19 @@ export default {
       
       return selectedService
     } else {
-      alert(`Cannot find service "${serviceName}" in the services array, please make sure the service name has no typo or the service is registered properly by checking the name property of the service object`)
+      return {
+        body: {
+          paneConfig: {
+            isClosable: false,
+            title: 'No service assigned',
+          },
+          viewConfig: {},
+          view: 'pd',
+          viewData: undefined,
+          viewHooks: ''
+        }
+      }
+      // alert(`Cannot find service "${serviceName}" in the services array, please make sure the service name has no typo or the service is registered properly by checking the name property of the service object`)
     }
   }
 }

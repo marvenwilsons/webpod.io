@@ -102,6 +102,7 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/vuetify
     '@nuxtjs/vuetify',
+    'portal-vue/nuxt'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules

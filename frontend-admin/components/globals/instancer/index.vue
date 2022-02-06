@@ -54,6 +54,24 @@
                     <v-tab>PINNED</v-tab>
                 </v-tabs>
             </v-expand-transition> -->
+            <portal v-if="renameData" to="modal">
+                <v-card style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
+                    <v-progress-linear
+                        :active="renameOnProgress"
+                        :indeterminate="renameOnProgress"
+                        absolute
+                        bottom
+                        color="primary"
+                    ></v-progress-linear>
+                    <v-card-text class=" " style="padding:0;" >give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
+                    <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
+           
+                    <div class="flex fullwidth flexend" >
+                        <v-btn :disabled="renameOnProgress"  @click="cancelRename" plain > cancel </v-btn>
+                        <v-btn :disabled="renameOnProgress" @click="renameStart" plain > rename </v-btn>
+                    </div>
+                </v-card>
+            </portal>
             <v-expand-transition>
                 <div v-if="loadProtocolIsDone" class="margintop125 fullwidth" >
                     <v-expand-transition>
@@ -65,7 +83,7 @@
                                 <div class="fullwidth" style="font-weight:500;" >Title</div>
                                 <div class="fullwidth" style="font-weight:500;"  >Last Modified</div>
                                 <div class="fullwidth" style="font-weight:500;"  >Modified By</div>
-                                <div class="" style="font-weight:500;"  >Action</div>
+                                <div class="padright125" style="font-weight:500;"  >Action</div>
                             </div>
                         </v-expand-transition>
                         <div style="border-bottom:1px solid whitesmoke;" 
@@ -86,10 +104,15 @@
                                         <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.title}}</div>
                                         <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified}}</div>
                                         <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified_by}}</div>
-                                        <div @click.stop="instanceRemove(instance)" class="padtop025 padbottom025 " >
-                                            <v-btn  icon plain >
+                                        <div  class="padtop025 padbottom025 flex" >
+                                            <v-btn @click.stop="instanceRemove(instance)" icon plain >
                                                 <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                                                     <path fill="currentColor" d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" />
+                                                </svg>
+                                            </v-btn>
+                                            <v-btn @click.stop="setRenameEnv(instance)" icon plain >
+                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                                                    <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
                                                 </svg>
                                             </v-btn>
                                         </div>
@@ -118,8 +141,17 @@ export default {
         disableAllInstance: false,
         appName: undefined,
         loadProtocolIsDone: false,
-        disableAll: false
+        disableAll: false,
+        renameData: false,
+        renameNewValue: '',
+        renameOnProgress: false,
+        renameError: undefined
     }),
+    watch: {
+        renameNewValue() {
+            this.renameError = undefined
+        }
+    },
     methods: {
         fetchAppInstances() {
             webpod.server.apps.fetchAppInstances({
@@ -157,7 +189,36 @@ export default {
             }, (data) => {
                 this.clickedInstance = undefined
                 this.instances = data
+                this.disableAll = false
             })
+        },
+        setRenameEnv(selected) {
+            webpod.dashboardMethods.setModalState.show()
+            this.renameData = selected
+        },
+        cancelRename() {
+            webpod.dashboardMethods.setModalState.hide()
+            this.renameData = undefined
+            this.renameError = undefined
+        },
+        renameStart(selected) {
+            const validate = (value) => {
+                let error = undefined
+                if(value == undefined || value.trim() == '' ) error = 'this field is required'
+                if((value || '').length > 20) error = 'Max 20 characters'
+                return error || 'passed'
+            }
+
+            const validationResult = validate(this.renameNewValue)
+
+            if(validationResult === 'passed') {
+                webpod.server.apps.renameAppInstanceTitle(this.renameNewValue,this.renameData)
+                this.renameOnProgress = true
+                this.renameError = undefined
+            } else {
+                this.renameError = validationResult
+            }
+            
         }
     },
     created() {
