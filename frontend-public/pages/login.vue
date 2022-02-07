@@ -13,11 +13,18 @@
         <!-- form -->
         <div style="z-index:3; overflow: hidden;" :class="['fullheight-VH', 'flex', 'flexcenter smth']" >
             <div class="flex flexcenter" >
-                <section
+                <v-card
                     v-if="ready"
                     id="login-s"
                     style="background:white; max-width:400px; margin-top:-120px;" 
                     class="pad125 margintop125 marginbottom125 flex flexcenter" >
+                    <v-progress-linear
+                        :active="showProgress"
+                        :indeterminate="showProgress"
+                        absolute
+                        bottom
+                        color="primary"
+                    ></v-progress-linear>
                     <div class="padleft125 padright125 padbottom125 flex flexcol" >
                         <div class="flex flexcol flexcenter fullwidth" >
                             <!-- logo -->
@@ -30,16 +37,16 @@
                         <main class="relative flex" style="overflow:hidden;" >  
                             <div
                                 :style="{minWidth: showForms ? '0px' : '319px'}"
-                                class="smth"
+                                class="smth bordrred"
                             ></div>
                             <!-- email or username -->
-                            <signInForm @retrieveAccount="retrieveAccount" ref="signInForm" />
+                            <signInForm id="webpod-signin" @retrieveAccount="retrieveAccount" ref="signInForm" />
                             <!-- password -->
-                            <passwordForm @forgotPassword="forgotPassword" @backToSignIn="backToSignIn" ref="passwordForm" />
+                            <passwordForm id="webpod-password" @forgotPassword="forgotPassword" @backToSignIn="backToSignIn" ref="passwordForm" />
                         </main>
                         
                         <v-expand-transition>
-                            <div v-if="showForms" class="flex flexend margintop125" >
+                            <div v-if="showForms && showBtn" class="flex flexend margintop125" >
                                 <v-btn tabindex="0" :loading="currentForm.isLoading" @click="next" color="primary" >
                                     <strong>
                                         {{currentForm.btnText}}
@@ -48,7 +55,7 @@
                             </div>
                         </v-expand-transition>
                     </div>
-                </section>
+                </v-card>
             </div>
         </div>
     </v-app>
@@ -86,7 +93,9 @@ export default {
         },
         currentForm: undefined,
         ready: false,
-        showForms: false
+        showForms: false,
+        showBtn: true,
+        showProgress: true
     }),
     methods: {
         slideToLeft() {
@@ -94,8 +103,8 @@ export default {
             this.$refs.passwordForm.currentPosition = '-319'
         },
         slideToRight() {
-            this.$refs.signInForm.currentPosition  = '0'
-            this.$refs.passwordForm.currentPosition = '319'
+            // this.$refs.signInForm.currentPosition  = '0'
+            // this.$refs.passwordForm.currentPosition = '319'
         },
         forgotPassword() {
 
@@ -106,10 +115,12 @@ export default {
              * so you cannot go back to sign-in while its validating the password
              */
             if(this.$refs.passwordForm.isLoading == false) {
-                this.slideToRight()
+                // this.slideToRight()
                 this.$refs.signInForm.showForm = true
                 this.currentForm = this.$refs.signInForm
                 this.currentForm.isLoading = false
+                const el = document.getElementById(`webpod-signin`)
+                el.scrollIntoView({behavior: 'smooth', block: "center", inline: "center"})
             }
         },
         next() {
@@ -121,6 +132,9 @@ export default {
                      * get if the email or username supplied exist in the database
                      */
                     case 'Sign in': 
+                        this.showBtn = false
+                        this.showProgress = true
+
                         // console.log('sign in', `${process.env.api_url}/user/confirm_user`)
                         setTimeout(() => {
                             this.$axios.$get(`${this.api}/user/confirm_user`, {
@@ -128,15 +142,25 @@ export default {
                             })
                             .then(({isSuccess, msg}) => {
                                 if(isSuccess) {
-                                    this.slideToLeft()
+                                    // this.slideToLeft()
                                     this.currentForm = this.$refs.passwordForm
                                     this.currentForm.user = this.$refs.signInForm.value
                                     this.currentForm.opacity = 1
                                     this.currentForm.isLoading = false
                                     setTimeout(() => {
-                                        document.getElementById('password-field').focus()
-                                    }, 500);
+                                        const el = document.getElementById(`webpod-password`)
+                                        el.scrollIntoView({behavior: 'smooth', block: "center", inline: "center"})
+                                        setTimeout(() => {
+                                            document.getElementById('password-field').focus()
+                                            this.showProgress = false
+                                            setTimeout(() => {
+                                                this.showBtn = true
+                                            },100)
+                                        },500)
+                                    }, 10);
                                 } else {
+                                    this.showProgress = false
+                                    this.showBtn = true
                                     this.currentForm.error = msg
                                     this.currentForm.isLoading = false
                                 }
@@ -165,6 +189,8 @@ export default {
                      * payload: email or username and password
                      */
                     case 'Input Password':
+                        this.showBtn = false
+                        this.showProgress = true
                         this.currentForm.disabled = true
                         this.$axios.$post(`${this.api}/user/signin`, {
                             user: this.$refs.signInForm.value,
@@ -172,13 +198,17 @@ export default {
                         })
                         .then(({isSuccess, content, msg}) => {
                             if(isSuccess) {
-                                localStorage.setItem('token', content.token)
-                                localStorage.setItem('user', content.user)
-                                location.href = '/wpadmin'
+                                setTimeout(() => {
+                                    localStorage.setItem('token', content.token)
+                                    localStorage.setItem('user', content.user)
+                                    location.href = '/wpadmin'
+                                },500)
                             } else {
                                 this.currentForm.disabled = false
                                 this.currentForm.error = msg
                                 this.currentForm.isLoading = false
+                                this.showBtn = true
+                                this.showProgress = false
                             }
                         })
                     break
@@ -215,6 +245,7 @@ export default {
             this.showForms = true
             this.$refs.signInForm.showForm = true
             this.currentForm = this.$refs.signInForm
+            this.showProgress = false
         }, 1000);
     }
 }
