@@ -1,11 +1,12 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main style="background: #1565c0a8;" class="relative" >
-            <portal-target v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" name="modal" />
-
             <v-fade-transition>
-                <main>
-                    <!-- loading -->
+                <portal-target v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" name="modal" />
+            </v-fade-transition>    
+            <main>
+                <!-- loading -->
+                <v-fade-transition>
                     <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
                         <div  class="pad125 modalShadow flexcenter" >
                             <div class="flex flexcol relative" >
@@ -21,7 +22,9 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Alert -->
+                </v-fade-transition>
+                <!-- Alert -->
+                <v-fade-transition>
                     <div v-if="alertMsg && !loading" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
                         <v-card class="pad125 borderRad4 margin125" 
                             style="background:white; color: #3f444a; min-width: 400px; max-width: 1080px;" >
@@ -33,14 +36,16 @@
                             </div>
                         </v-card>
                     </div>
-                    <!-- Editors -->
+                </v-fade-transition>
+                <!-- Editors -->
+                <v-fade-transition>
                     <div v-if="editor" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter" >
                         <div style="background:#f5f5f5;" class="fullwidth fullheight-percent relative" >
                             <div @click="() => {editor = undefined}" class="absolute pointer" style="right:0;" >x</div>
                         </div>
                     </div>
-                </main>
-            </v-fade-transition>
+                </v-fade-transition>
+            </main>
             <main v-show="showDashboard" class="flex fullheight-percent" style="background:#7fccff;" >
 
                 <!-- BACKGROUND -->
