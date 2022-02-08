@@ -201,7 +201,16 @@ export default {
                                 setTimeout(() => {
                                     localStorage.setItem('token', content.token)
                                     localStorage.setItem('user', content.user)
-                                    location.href = '/wpadmin'
+                                    
+                                    this.currentForm= undefined
+                                    this.ready= false
+                                    this.showForms= false
+                                    this.showBtn= true
+                                    this.showProgress= true
+
+                                    setTimeout(() => {
+                                        location.href = '/wpadmin'
+                                    },100)
                                 },500)
                             } else {
                                 this.currentForm.disabled = false
