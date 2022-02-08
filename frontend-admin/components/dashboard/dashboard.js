@@ -34,7 +34,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
                     viewConfig: {},
                     view: 'instancer',
                     viewData: {
-                        instancer,
+                        instancer: {...instancer},
                         version_data
                     }
                 }

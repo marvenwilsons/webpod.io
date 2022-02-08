@@ -123,17 +123,17 @@ async function  getServiceVersion(service_id, version_name) {
   const ver9_instancer = {
     instance_types: [
       {
-        name: 'Static Layout',
+        type: 'Static Layout',
         desc: '',
         svg: '',
       },
       {
-        name: 'Dynamic Layout',
+        type: 'Dynamic Layout',
         desc: '',
         svg: ''
       },
       {
-        name: 'List Display Provider',
+        type: 'List Display Provider',
         desc: '',
         svg: ''
       }

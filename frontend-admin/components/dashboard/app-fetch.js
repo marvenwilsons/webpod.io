@@ -38,6 +38,25 @@ export default {
             })
         }
     },
+    insertAppInstance: function ({app_name,instance_title}, cb) {
+        const url = `${process.env.API_URL}/apps/${app_name}/${instance_title}`
+        
+        const request_options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            // body: JSON.stringify(payload) no payload because it will only create an empty entry
+        };
+        fetch(url, request_options)
+        .then(response => response.json())
+        .then(data => {
+            cb(data)
+        }).catch(err => {
+            webpod.dashboardMethods.alertError({
+                message: `<span>An error occured while inserting app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
+                reload: true
+            })
+        })
+    },
     removeAppInstance: function  ({app_name,instance_title}, cb) {
         const url = `${process.env.API_URL}/apps/${app_name}/${instance_title}`
 

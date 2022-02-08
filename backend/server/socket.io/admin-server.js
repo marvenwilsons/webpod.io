@@ -37,7 +37,7 @@ app.delete('/apps/:app_name', (req,res) => {
 
 })
 app.post('/apps/:app_name', (req,res) => {
-
+  console.log('posting!')
 })
 // manage specific app data instance
 app.get('/apps/:app_name/:instance_title', (req,res) => {
@@ -93,10 +93,10 @@ app.get('/apps/:app_name/:instance_title', (req,res) => {
   }
 
   setTimeout(() => {
-    // res.json(sample_response)
-    res.status(400).send({
-      message: 'This is an error!'
-   })
+    res.json(sample_response)
+  //   res.status(400).send({
+  //     message: 'This is an error!'
+  //  })
   },4000)
 
 })
@@ -111,8 +111,7 @@ app.delete('/apps/:app_name/:instance_title', (req,res) => {
   },1000)
 })
 app.post('/apps/:app_name/:instance_title', (req,res) => {
-  // add new
-  console.log("adding",req.body)
+  // inset an app instance with an empty viewData
   setTimeout(() => {
     res.json({
       message: 'OK'
