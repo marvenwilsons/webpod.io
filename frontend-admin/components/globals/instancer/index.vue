@@ -74,7 +74,14 @@
                 <v-card   v-if="lastModifiedModal" tile style="min-width: 400px;" class="pad125" >
                     <div class="pad125" >
                         <div>
-                            <v-card-title style="padding-left:0" >Filter By Date</v-card-title>
+                            <div class="flex spacebetween" >
+                                <v-card-title style="padding-left:0" >
+                                    Filter By Date
+                                </v-card-title>
+                                <div style="margin-top:10px;" class="text--secondary" >
+                                    <v-chip>{{dateFilterItemsFound}} {{dateFilterItemsFound > 1 ? 'items' : 'item'}} found</v-chip>
+                                </div> 
+                            </div>
                             <v-card-subtitle style="padding-left:0" >Filtering app instances by a specific date range</v-card-subtitle>
                         </div>
                         <div>
@@ -93,6 +100,7 @@
                             hide-details
                             label="Select Month"
                             v-model="selectedModifiedMonth"
+                            :disabled="selectedModifiedYear == undefined"
                             ></v-select>
                         </div>
                         <div class="margintop125" >
@@ -102,19 +110,22 @@
                             hide-details
                             label="Select Day"
                             v-model="selectedModifiedDay"
+                            :disabled="selectedModifiedMonth == undefined"
                             ></v-select>
                         </div>
-                        <div class="flex fullwidth flexend margintop125" >
+                        
+                        <div class="flex fullwidth flexend margintop125 flexcenter" >
                             <v-card-actions>
                                 <v-btn @click="showLastModifiedModal(false)" plain text > 
-                                CLEAR 
-                            </v-btn>
-                            <v-btn :disabled="filterByDateButtonIsDisable" @click="filterByDate" plain text > 
-                                FILTER
-                            </v-btn>
+                                    CLEAR 
+                                </v-btn>
+                                <v-btn :disabled="filterByDateButtonIsDisable" @click="filterByDate" plain text > 
+                                    FILTER
+                                </v-btn>
                             </v-card-actions>
                         </div>
                     </div>
+                    
                 </v-card>
             </portal>
             <portal  to="modal" >
@@ -298,7 +309,8 @@ export default {
         selectedModifiedMonth: undefined,
         selectedModifiedDay: undefined,
         filterByDateButtonIsDisable: true,
-        isBeenFilteredOnce: false
+        isBeenFilteredOnce: false,
+        dateFilterItemsFound: undefined
         
     }),
     watch: {
@@ -320,6 +332,35 @@ export default {
         selectedModifiedYear() {
             if(this.selectedModifiedYear != undefined) {
                 this.filterByDateButtonIsDisable = false
+                
+                const filtered =  this.instancesCopy.filter(e => {
+                    const dateInfo = e.modified_date.split('/')
+                    const year = dateInfo[2]
+                    return this.selectedModifiedYear == year
+                })
+                this.dateFilterItemsFound = filtered.length
+            }
+        },
+        selectedModifiedMonth() {
+            if(this.selectedModifiedMonth != undefined) {
+                
+                const filtered =  this.instances.filter(e => {
+                    const dateInfo = e.modified_date.split('/')
+                    const month = dateInfo[0]
+                    return this.selectedModifiedMonth == month
+                })
+                this.dateFilterItemsFound = filtered.length
+            }
+        },
+        selectedModifiedDay() {
+            if(this.selectedModifiedDay != undefined) {
+                
+                const filtered =  this.instances.filter(e => {
+                    const dateInfo = e.modified_date.split('/')
+                    const day = dateInfo[1]
+                    return this.selectedModifiedDay == day
+                })
+                this.dateFilterItemsFound = filtered.length
             }
         }
     },
@@ -466,9 +507,11 @@ export default {
             if(admin == 'Show All') {
                 this.instances = this.instancesCopy
             } else {
-                this.instances = this.instancesCopy.filter(item => {
-                    return item.modified_by === admin
-                })
+                if(this.isBeenFilteredOnce) {
+                    this.instances =  this.instances.filter(item => item.modified_by === admin)
+                } else {
+                    this.instances = this.instancesCopy.filter(item => item.modified_by === admin)
+                }
             }
             
         },
@@ -493,27 +536,29 @@ export default {
         },
         filterByDate() {
             webpod.dash.modal.hide(() => {
-
                 if(this.selectedModifiedYear) {
                     this.isBeenFilteredOnce = true
                     const filtered =  this.instancesCopy.filter(e => {
                         const dateInfo = e.modified_date.split('/')
                         const year = dateInfo[2]
                         const month = dateInfo[0]
+                        const day = dateInfo[1]
+
 
                         if(!this.selectedModifiedMonth) {
                             return this.selectedModifiedYear == year
                         } else {
-                            return this.selectedModifiedMonth == month && this.selectedModifiedYear == year
+                            if(this.selectedModifiedDay) {
+                                return this.selectedModifiedMonth == month && this.selectedModifiedYear == year && this.selectedModifiedDay == day
+                            } else {
+                                return this.selectedModifiedMonth == month && this.selectedModifiedYear == year
+                            }   
                         }
                     })
-
                     if(filtered.length == 0) {
                         this.isBeenFilteredOnce = false
                     }
-
                     this.instances = filtered
-
                 }
             })
         }
@@ -537,6 +582,7 @@ export default {
 
             webpod.server.apps.fetchAppInstances(this.appName,(data) => {
                 this.instances = data
+                this.dateFilterItemsFound = this.instances.length
                 this.loadProtocolIsDone = true
 
                 this.instancesCopy = Object.seal(this.copy(this.instances))

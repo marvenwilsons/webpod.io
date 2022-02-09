@@ -18,6 +18,7 @@ drag n drop libraries
 ==> https://anseki.github.io/plain-draggable/ <-- well documented and has a rich API
 ==> https://jqueryui.com/draggable/ <-- good old jquery
 ==> https://jbaysolutions.github.io/vue-grid-layout/guide/#npm <-- vue grid
+==> https://interactjs.io/docs/draggable/
 
 flow chart
 ==> https://joyceworks.github.io/flowchart-vue/
