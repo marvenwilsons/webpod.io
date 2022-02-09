@@ -70,6 +70,9 @@ Vue.component("pd",pd)
 import PortalVue from 'portal-vue'
 Vue.use(PortalVue)
 
+import draggable from '@/components/globals/draggable/index.vue'
+Vue.component("draggable",draggable)
+
 
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
@@ -114,6 +117,9 @@ export default async ({ app }, inject) => {
     
     const CodeMirror = await import ('./codemirror/lib/codemirror')
     inject('CodeMirror', CodeMirror)
+
+    const interact = await import('interactjs')
+    inject('interact', interact.default)
 }
 
 

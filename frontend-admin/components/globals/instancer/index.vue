@@ -54,24 +54,24 @@
             </v-expand-transition> -->
             <!-- Modals -->
             <portal to="modal">
-                <v-card v-if="renameData" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
-                    <v-progress-linear
-                        :active="renameOnProgress"
-                        :indeterminate="renameOnProgress"
-                        absolute
-                        bottom
-                        color="primary"
-                    ></v-progress-linear>
-                    <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
-                    <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
-                    <div class="flex fullwidth flexend" >
-                        <v-btn :ripple="false" :disabled="renameOnProgress"  @click="cancelRename" plain text  > cancel </v-btn>
-                        <v-btn :ripple="false" :disabled="renameOnProgress" @click="renameStart" plain text  > {{renameOnProgress == true ? 'renaming ...' : 'rename'}} </v-btn>
-                    </div>
-                </v-card>
+                    <v-card v-if="renameData" tile  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
+                        <v-progress-linear
+                            :active="renameOnProgress"
+                            :indeterminate="renameOnProgress"
+                            absolute
+                            bottom
+                            color="primary"
+                        ></v-progress-linear>
+                        <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
+                        <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
+                        <div class="flex fullwidth flexend" >
+                            <v-btn :ripple="false" :disabled="renameOnProgress"  @click="cancelRename" plain text  > cancel </v-btn>
+                            <v-btn :ripple="false" :disabled="renameOnProgress" @click="renameStart" plain text  > {{renameOnProgress == true ? 'renaming ...' : 'rename'}} </v-btn>
+                        </div>
+                    </v-card>
             </portal>
             <portal to="modal">
-                <v-card  v-if="lastModifiedModal" style="min-width: 400px;" class="pad125" >
+                <v-card   v-if="lastModifiedModal" tile style="min-width: 400px;" class="pad125" >
                     <div class="pad125" >
                         <div>
                             <v-card-title style="padding-left:0" >Filter By Date</v-card-title>
@@ -118,7 +118,7 @@
                 </v-card>
             </portal>
             <portal  to="modal" >
-                <v-card v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
+                <v-card tile v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
                     <v-progress-linear
                         :active="createNewProjectOnProgress"
                         :indeterminate="createNewProjectOnProgress"
@@ -336,8 +336,8 @@ export default {
             service.viewData = n
             this.promptForNewProjectTitle = true
             webpod.dash.modal.show()
+            webpod.dash.modal.closeOnBlur(false)
             this.newProjectService = service
-            // webpod.paneCollection.insertPaneCollectionItem(0)(service)
         },
         instanceSelect(selected,cb) {
             this.clickedInstance = selected.title
@@ -418,6 +418,12 @@ export default {
         // rename methods
         setRenameEnv(selected) {
             webpod.dash.modal.show()
+            webpod.dash.modal.onClose(() => {
+                this.renameData = undefined
+                this.renameError = undefined
+                this.renameNewValue = undefined
+                this.renameOnProgress = false
+            })
             this.renameData = selected
         },
         cancelRename() {
@@ -454,7 +460,6 @@ export default {
             } else {
                 this.renameError = validationResult
             }
-            
         },
         // data arrange and sorting
         filterByModified(admin) {

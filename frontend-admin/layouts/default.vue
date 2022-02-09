@@ -3,7 +3,9 @@
         <v-main  style="background: #1565c0a8;" class="relative " >
             <v-fade-transition>
                 <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                    <portal-target :class="[shakeModal ? 'err_shake' : '']" name="modal" />
+                    <draggable v-if="showModal" >
+                        <portal-target :class="[shakeModal ? 'err_shake' : '']" name="modal" />
+                    </draggable>
                 </div>
             </v-fade-transition>    
             <main>
