@@ -24,12 +24,12 @@ app.get('/apps/:app_name', (req,res) => {
   
   setTimeout(() => {
     res.json([
-      {title: 'VID D23 23GDS',modified: '05/03/2022', modified_by: 'Marven Wilson Donque', instance_from: 'unitile'},
-      {title: 'GFOADHF SDV', modified: '04/02/2022', modified_by: 'Kill kla', instance_from: 'unitile'},
-      {title: 'BD 3 DF', modified: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
-      {title: 'Custom 1', modified: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
-      {title: 'Custom 2', modified: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
-      {title: 'App page', modified: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
+      {title: 'VID D23 23GDS',modified_date: '05/03/2022', modified_by: 'Marven Wilson Donque', instance_from: 'unitile'},
+      {title: 'GFOADHF SDV', modified_date: '04/02/2022', modified_by: 'Kill kla', instance_from: 'unitile'},
+      {title: 'BD 3 DF', modified_date: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
+      {title: 'Custom 1', modified_date: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
+      {title: 'Custom 2', modified_date: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
+      {title: 'App page', modified_date: '05/11/2021', modified_by: 'Kill kla', instance_from: 'unitile'},
     ])
   },2000)
 })
@@ -123,10 +123,10 @@ app.put('/apps/:app_name/:instance_title', (req,res) => {
   const {app_name, instance_title} = req.params
   const body = req.body
   const query = req.query
-
   if(query.rename) {
     console.log('renaming ', instance_title, 'to', query.rename)
     setTimeout(() => {
+      console.log('renaming response OK')
       res.json({
         message: 'OK',
         new_title: query.rename

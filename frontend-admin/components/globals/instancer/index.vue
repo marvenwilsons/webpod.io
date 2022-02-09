@@ -37,15 +37,13 @@
             <span style="font-weight:500; color: #424242;" >Existing Projects</span>
         </div>
         <div :elevation="0" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
-            <div v-if="loadProtocolIsDone == false" class="fullheight-percent fullwidth text-center" >
-                <v-progress-circular
-                    :active="true"
-                    :indeterminate="true"
-                    :size="40"
-                    center
-                    color="primary"
-                ></v-progress-circular>
-            </div>
+             <v-progress-linear
+                v-if="loadProtocolIsDone == false"
+                :active="true"
+                :indeterminate="true"
+                bottom
+                color="primary"
+            ></v-progress-linear>
             <!-- instance list here -->
             <!-- <v-expand-transition>
                 <v-tabs v-if="instances.length > 0 && loadProtocolIsDone" color="#4e6795">
@@ -54,8 +52,9 @@
                     <v-tab>PINNED</v-tab>
                 </v-tabs>
             </v-expand-transition> -->
-            <portal v-if="renameData" to="modal">
-                <v-card style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
+            <!-- Modals -->
+            <portal to="modal">
+                <v-card v-if="renameData" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
                     <v-progress-linear
                         :active="renameOnProgress"
                         :indeterminate="renameOnProgress"
@@ -65,15 +64,56 @@
                     ></v-progress-linear>
                     <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
                     <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
-           
                     <div class="flex fullwidth flexend" >
                         <v-btn :ripple="false" :disabled="renameOnProgress"  @click="cancelRename" plain text  > cancel </v-btn>
                         <v-btn :ripple="false" :disabled="renameOnProgress" @click="renameStart" plain text  > {{renameOnProgress == true ? 'renaming ...' : 'rename'}} </v-btn>
                     </div>
                 </v-card>
             </portal>
-            <portal v-if="true" to="modal" >
-                <v-card style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
+            <portal to="modal">
+                <v-card  v-if="lastModifiedModal" style="min-width: 400px;" class="pad125" >
+                    <div>
+                        Filter data by date
+                    </div>
+                    <div class="flex" >
+                        <v-select
+                        :items="lastModfiedYears"
+                        menu-props="auto"
+                        hide-details
+                        label="Select Year"
+                        v-model="selectedModifiedYear"
+                        ></v-select>
+                    </div>
+                    <div class="margintop125" >
+                        <v-select
+                        :items="lastModfiedMonths"
+                        menu-props="auto"
+                        hide-details
+                        label="Select Month"
+                        v-model="selectedModifiedMonth"
+                        ></v-select>
+                    </div>
+                    <div class="margintop125" >
+                        <v-select
+                        :items="lastModfiedDays"
+                        menu-props="auto"
+                        hide-details
+                        label="Select Day"
+                        v-model="selectedModifiedDay"
+                        ></v-select>
+                    </div>
+                    <div class="flex fullwidth flexend margintop125" >
+                        <v-btn @click="showLastModifiedModal(false)" plain text > 
+                            CLOSE 
+                        </v-btn>
+                        <v-btn :disabled="filterByDateButtonIsDisable" @click="filterByDate" plain text > 
+                            FILTER
+                        </v-btn>
+                    </div>
+                </v-card>
+            </portal>
+            <portal  to="modal" >
+                <v-card v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
                     <v-progress-linear
                         :active="createNewProjectOnProgress"
                         :indeterminate="createNewProjectOnProgress"
@@ -94,6 +134,7 @@
                     </div>
                 </v-card>
             </portal>
+            <!-- Modal end -->
             <v-expand-transition>
                 <div v-if="loadProtocolIsDone" class="margintop125 fullwidth" >
                     <v-expand-transition>
@@ -108,12 +149,16 @@
                         <v-expand-transition>
                             <div v-if="instances.length > 0" style="border-bottom:3px solid whitesmoke;;" class="flex pad050" >
                                 <div class="fullwidth " style="font-weight:500; margin-left:60px;" >Title</div>
+                                <!-- Last Modified -->
                                 <div class="fullwidth flex flexcenter flexstart " style="font-weight:500;"  >
                                     Last Modified
-                                    <svg class="pointer" style="width:20px;height:20px" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                                    </svg>
+                                    <v-btn @click="showLastModifiedModal(true)" plain text icon small :ripple="false" >
+                                        <svg class="pointer" style="width:20px;height:20px" viewBox="0 0 24 24">
+                                            <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
+                                        </svg>
+                                    </v-btn>
                                 </div>
+                                <!-- Modified By Dropdown -->
                                 <div class="fullwidth flex flexcenter flexstart relative " style="font-weight:500;"  >
                                     <span class="" >Modified By</span>
                                     <v-menu offset-y>
@@ -141,6 +186,7 @@
                                         </v-list>
                                     </v-menu>
                                 </div>
+                                <!-- Actions -->
                                 <div class="padright125 " style="font-weight:500;"  >Action</div>
                             </div>
                         </v-expand-transition>
@@ -168,7 +214,7 @@
                                             </svg>
                                         </div>
                                         <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart marginleft125" >{{instance.title}}</div>
-                                        <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified}}</div>
+                                        <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified_date}}</div>
                                         <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified_by}}</div>
                                         <div  class="padtop025 padbottom025 flex" >
                                             <v-btn @click.stop="instanceRemove(instance)" icon plain >
@@ -227,7 +273,16 @@ export default {
         // search query
         searchQuery: undefined,
         // modified by
-        modifiedByAdminList: []
+        modifiedByAdminList: [],
+        lastModifiedModal: false,
+        lastModfiedYears: [],
+        lastModfiedMonths: [],
+        lastModfiedDays: [],
+        selectedModifiedYear: undefined,
+        selectedModifiedMonth: undefined,
+        selectedModifiedDay: undefined,
+        filterByDateButtonIsDisable: true
+        
     }),
     watch: {
         renameNewValue() {
@@ -244,6 +299,11 @@ export default {
             } else {
                 this.instances = this.instancesCopy
             }
+        },
+        selectedModifiedYear() {
+            if(this.selectedModifiedYear != undefined) {
+                this.filterByDateButtonIsDisable = false
+            }
         }
     },
     methods: {
@@ -253,12 +313,12 @@ export default {
                 app_name: this.appName
             })
         },
+        // create new project instance
         createInstance(n) {
-            console.log('this is',n)
             const service = this.myData.version_data.body
             service.viewData = n
             this.promptForNewProjectTitle = true
-            webpod.dashboardMethods.setModalState.show()
+            webpod.dashboardMethods.modal.show()
             this.newProjectService = service
             // webpod.paneCollection.insertPaneCollectionItem(0)(service)
         },
@@ -304,14 +364,15 @@ export default {
             }
             return error || 'passed'
         },
-        // create new project instance
         cancelNewProjectInstanceCreation() {
             this.promptForNewProjectTitle = false
-            webpod.dashboardMethods.setModalState.hide()
-            this.newProjectError = undefined
-            this.newProjectTitle = undefined
-            this.newProjectService = undefined
-            this.createNewProjectOnProgress = false
+            webpod.dashboardMethods.modal.hide(() => {
+                this.newProjectError = undefined
+                this.newProjectTitle = undefined
+                this.newProjectService = undefined
+                this.createNewProjectOnProgress = false
+            })
+            
         },
         startCreation() {
             const validationResult = this.validateInstanceTitle(this.newProjectTitle)
@@ -339,15 +400,17 @@ export default {
         },
         // rename methods
         setRenameEnv(selected) {
-            webpod.dashboardMethods.setModalState.show()
+            webpod.dashboardMethods.modal.show()
             this.renameData = selected
         },
         cancelRename() {
-            webpod.dashboardMethods.setModalState.hide()
-            this.renameData = undefined
-            this.renameError = undefined
-            this.renameNewValue = undefined
-            this.renameOnProgress = false
+            webpod.dashboardMethods.modal.hide(() => {
+                this.renameData = undefined
+                this.renameError = undefined
+                this.renameNewValue = undefined
+                this.renameOnProgress = false
+            })
+            
         },
         renameStart() {
             this.renameOnProgress = false
@@ -384,6 +447,26 @@ export default {
                 })
             }
             
+        },
+        showLastModifiedModal(state) {
+            this.lastModifiedModal = state
+            if(state) {
+                webpod.dashboardMethods.modal.show()
+                webpod.dashboardMethods.modal.onClose(() => {
+                    console.log('hey')
+                    this.selectedModifiedYear = undefined
+                    this.selectedModifiedMonth = undefined
+                    this.selectedModifiedDay = undefined
+                })
+            } else {
+                webpod.dashboardMethods.modal.hide()
+            }
+        },
+        filterByDate() {
+            webpod.dashboardMethods.modal.hide(() => {
+                console.log(this.selectedModifiedYear)
+                console.log(this.selectedModifiedMonth)
+            })
         }
     },
     created() {
@@ -412,6 +495,14 @@ export default {
                     if(!this.modifiedByAdminList.includes(e.modified_by)) {
                         this.modifiedByAdminList.push(e.modified_by)
                     }
+                    const dateInfo = e.modified_date.split('/')
+                    const month = dateInfo[0]
+                    const day = dateInfo[1]
+                    const year = dateInfo[2]
+
+                    if(!this.lastModfiedYears.includes(year)) this.lastModfiedYears.push(year)
+                    if(!this.lastModfiedMonths.includes(month)) this.lastModfiedMonths.push(month)
+                    if(!this.lastModfiedDays.includes(day)) this.lastModfiedDays.push(day)
                 })
                 this.modifiedByAdminList.push('Show All')
 
