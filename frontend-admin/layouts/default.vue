@@ -168,7 +168,7 @@ export default {
         },
         closeModal() {
             if(this.modalIsClosableWhenClickedOutside) {
-                webpod.dashboardMethods.setModalState.hide()
+                webpod.dashboardMethods.modal.hide()
             }
         }
     },
@@ -189,10 +189,11 @@ export default {
                 }
             }
             const dash = {
-                setModalState: {
-                    show: isClosableWhenClickedOutside => {
+                modal: {
+                    show: (isClosableWhenClickedOutside,cb) => {
                         this.showModal = true
                         if(typeof isClosableWhenClickedOutside === 'boolean') this.modalIsClosableWhenClickedOutside = isClosableWhenClickedOutside
+                        if(cb) cb()
                     },
                     hide: cb => {
                         this.showModal = false
