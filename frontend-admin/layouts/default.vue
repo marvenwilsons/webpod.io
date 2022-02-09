@@ -120,7 +120,8 @@ export default {
         alertFunctionToBeExecutedOnClose: undefined,
         menuMappingRole: {}, // role manefist file, does not hold any app data, values here is just like a map
         serviceMappingRole: {},
-        modalIsClosableWhenClickedOutside: true
+        modalIsClosableWhenClickedOutside: true,
+        modalOnClose: undefined
     }),
     created() {
         service.getAllServices(this)
@@ -192,13 +193,23 @@ export default {
                 modal: {
                     show: (isClosableWhenClickedOutside,cb) => {
                         this.showModal = true
-                        if(typeof isClosableWhenClickedOutside === 'boolean') this.modalIsClosableWhenClickedOutside = isClosableWhenClickedOutside
+                        
                         if(cb) cb()
                     },
                     hide: cb => {
                         this.showModal = false
                         if(cb) cb()
+                        if(typeof this.modalOnClose == 'function') {
+                            this.modalOnClose()
+                            this.modalOnClose = undefined
+                        }
                     },
+                    closeOnBlur: (v = false) => {
+                        if(typeof v === 'boolean') this.modalIsClosableWhenClickedOutside = v
+                    },
+                    onClose: (cb) => {
+                        this.modalOnClose = cb
+                    }
                 },
                 loading: (state) => this.loading = state,
                 showDashboard: (state) => this.showDashboard = state,
