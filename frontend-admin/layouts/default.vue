@@ -3,7 +3,7 @@
         <v-main  style="background: #1565c0a8;" class="relative " >
             <v-fade-transition>
                 <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                    <portal-target  name="modal" />
+                    <portal-target :class="[shakeModal ? 'err_shake' : '']" name="modal" />
                 </div>
             </v-fade-transition>    
             <main>
@@ -121,7 +121,8 @@ export default {
         menuMappingRole: {}, // role manefist file, does not hold any app data, values here is just like a map
         serviceMappingRole: {},
         modalIsClosableWhenClickedOutside: true,
-        modalOnClose: undefined
+        modalOnClose: undefined,
+        shakeModal:false
     }),
     created() {
         service.getAllServices(this)
@@ -169,7 +170,12 @@ export default {
         },
         closeModal() {
             if(this.modalIsClosableWhenClickedOutside) {
-                webpod.dashboardMethods.modal.hide()
+                webpod.dash.modal.hide()
+            } else {
+                this.shakeModal = true
+                setTimeout(() => {
+                    this.shakeModal = false
+                },2000)
             }
         }
     },
