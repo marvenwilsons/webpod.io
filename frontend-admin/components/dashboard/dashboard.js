@@ -123,7 +123,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
         dash.loading(false)
         dash.showDashboard(true)
         window.webpod = Object.seal({
-            dashboardMethods: {...dash},
+            dash: {...dash},
             paneCollection,
             server: {
                 apps: {...appFetch},

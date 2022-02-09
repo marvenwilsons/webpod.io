@@ -42,7 +42,7 @@ export default {
                     if(colEnd - 1 < this.maxCol || colEnd - 1 == this.maxCol) {
                         tiles[itemIndex].colEnd = (this.maxCol / 2  + 1) + (tiles[itemIndex].colStart - 1)
                     } else {
-                        webpod.dashboardMethods.alert('Not enough space to perform 50% horizontal span')
+                        webpod.dash.alert('Not enough space to perform 50% horizontal span')
                     }
                     // this.addSessionEntry(tiles)
                     // console.log(tiles[itemIndex].customStyle.span = 4)¸

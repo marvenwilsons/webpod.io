@@ -794,7 +794,7 @@ function getName() {
                     }),
                     onCmd: stringify(function(p) {
                       if(p.cmd.split(' ')[0] == 'alert') {
-                        p.dashboardMethods.alert(p.cmd.replace('alert',''))
+                        p.dash.alert(p.cmd.replace('alert',''))
                       }
                       // console.log('onCmd', p)
                     })

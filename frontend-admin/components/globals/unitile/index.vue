@@ -443,7 +443,7 @@ export default {
     },
     created() {
         this.currentUid = this.uid()
-        const _alert = webpod.dashboardMethods.alert
+        const _alert = webpod.dash.alert
 
         const {instances} = this.myData
         if(this.myData) {

@@ -13,7 +13,7 @@ export default {
                 cb(data)
             })
             .catch(err => {
-                webpod.dashboardMethods.alertError({
+                webpod.dash.alertError({
                     message: `<span>An error occured while fetching app instances for app: <strong>"${app_name}"</strong>  <br> server says: <strong>"${err.message}"</strong> </span>`,
                     reload: true
                 })
@@ -31,7 +31,7 @@ export default {
                 cb(data)
             })
             .catch(err => {
-                webpod.dashboardMethods.alertError({
+                webpod.dash.alertError({
                     message: `<span>An error occured while fetching app instance for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
                     reload: true
                 })
@@ -51,7 +51,7 @@ export default {
         .then(data => {
             cb(data)
         }).catch(err => {
-            webpod.dashboardMethods.alertError({
+            webpod.dash.alertError({
                 message: `<span>An error occured while inserting app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
                 reload: true
             })
@@ -69,7 +69,7 @@ export default {
                         cb(_d ? _d : d)
                     })
                 } else {
-                    webpod.dashboardMethods.alertError({
+                    webpod.dash.alertError({
                         message: `<span>An error occured while deleting <strong>${instance_title}</strong>: ${data.message}</span>`,
                         reload: true
                     })
@@ -107,7 +107,7 @@ export default {
         .then(data => {
             cb(data)
         }).catch(err => {
-            webpod.dashboardMethods.alertError({
+            webpod.dash.alertError({
                 message: `<span>An error occured while updating app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
                 reload: true
             })
@@ -126,9 +126,10 @@ export default {
         fetch(url, request_options)
         .then(response => response.json())
         .then(data => {
+            console.log('done rename at fetch')
             cb(data)
         }).catch(err => {
-            webpod.dashboardMethods.alertError({
+            webpod.dash.alertError({
                 message: `<span>An error occured while updating app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
                 reload: true
             })

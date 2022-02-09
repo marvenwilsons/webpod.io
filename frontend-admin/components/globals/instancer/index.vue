@@ -72,43 +72,48 @@
             </portal>
             <portal to="modal">
                 <v-card  v-if="lastModifiedModal" style="min-width: 400px;" class="pad125" >
-                    <div>
-                        Filter data by date
-                    </div>
-                    <div class="flex" >
-                        <v-select
-                        :items="lastModfiedYears"
-                        menu-props="auto"
-                        hide-details
-                        label="Select Year"
-                        v-model="selectedModifiedYear"
-                        ></v-select>
-                    </div>
-                    <div class="margintop125" >
-                        <v-select
-                        :items="lastModfiedMonths"
-                        menu-props="auto"
-                        hide-details
-                        label="Select Month"
-                        v-model="selectedModifiedMonth"
-                        ></v-select>
-                    </div>
-                    <div class="margintop125" >
-                        <v-select
-                        :items="lastModfiedDays"
-                        menu-props="auto"
-                        hide-details
-                        label="Select Day"
-                        v-model="selectedModifiedDay"
-                        ></v-select>
-                    </div>
-                    <div class="flex fullwidth flexend margintop125" >
-                        <v-btn @click="showLastModifiedModal(false)" plain text > 
-                            CLOSE 
-                        </v-btn>
-                        <v-btn :disabled="filterByDateButtonIsDisable" @click="filterByDate" plain text > 
-                            FILTER
-                        </v-btn>
+                    <div class="pad125" >
+                        <div>
+                            <v-card-title style="padding-left:0" >Filter By Date</v-card-title>
+                            <v-card-subtitle style="padding-left:0" >Filtering app instances by a specific date range</v-card-subtitle>
+                        </div>
+                        <div>
+                            <v-select
+                            :items="lastModfiedYears"
+                            menu-props="auto"
+                            hide-details
+                            label="Select Year"
+                            v-model="selectedModifiedYear"
+                            ></v-select>
+                        </div>
+                        <div class="margintop125" >
+                            <v-select
+                            :items="lastModfiedMonths"
+                            menu-props="auto"
+                            hide-details
+                            label="Select Month"
+                            v-model="selectedModifiedMonth"
+                            ></v-select>
+                        </div>
+                        <div class="margintop125" >
+                            <v-select
+                            :items="lastModfiedDays"
+                            menu-props="auto"
+                            hide-details
+                            label="Select Day"
+                            v-model="selectedModifiedDay"
+                            ></v-select>
+                        </div>
+                        <div class="flex fullwidth flexend margintop125" >
+                            <v-card-actions>
+                                <v-btn @click="showLastModifiedModal(false)" plain text > 
+                                CLEAR 
+                            </v-btn>
+                            <v-btn :disabled="filterByDateButtonIsDisable" @click="filterByDate" plain text > 
+                                FILTER
+                            </v-btn>
+                            </v-card-actions>
+                        </div>
                     </div>
                 </v-card>
             </portal>
@@ -138,9 +143,19 @@
             <v-expand-transition>
                 <div v-if="loadProtocolIsDone" class="margintop125 fullwidth" >
                     <v-expand-transition>
-                        <emptyBox v-if="instances.length == 0 && loadProtocolIsDone" />
+                        <div>
+                            <emptyBox v-if="instances.length == 0 && loadProtocolIsDone" />
+                            <div  v-if="instances.length == 0 && instancesCopy.length != 0" class="flex flexcenter" >
+                                <v-btn @click="instances = instancesCopy" text tile >
+                                    <svg class="marginright025" style="width:20px;height:20px" viewBox="0 0 24 24">
+                                        <path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
+                                    </svg>
+                                    go back
+                                </v-btn>
+                            </div>
+                        </div>
                     </v-expand-transition>
-                    <div class=" flex  flexend" >
+                    <div v-if="instances.length != 0" class=" flex  flexend" >
                         <div class="flexcenter" >
                             <v-text-field v-model="searchQuery" :placeholder="`search title against ${instances.length} items`" style="min-width:250px;" > </v-text-field>
                         </div>
@@ -274,6 +289,7 @@ export default {
         searchQuery: undefined,
         // modified by
         modifiedByAdminList: [],
+        // modified by date
         lastModifiedModal: false,
         lastModfiedYears: [],
         lastModfiedMonths: [],
@@ -281,7 +297,8 @@ export default {
         selectedModifiedYear: undefined,
         selectedModifiedMonth: undefined,
         selectedModifiedDay: undefined,
-        filterByDateButtonIsDisable: true
+        filterByDateButtonIsDisable: true,
+        isBeenFilteredOnce: false
         
     }),
     watch: {
@@ -318,7 +335,7 @@ export default {
             const service = this.myData.version_data.body
             service.viewData = n
             this.promptForNewProjectTitle = true
-            webpod.dashboardMethods.modal.show()
+            webpod.dash.modal.show()
             this.newProjectService = service
             // webpod.paneCollection.insertPaneCollectionItem(0)(service)
         },
@@ -366,7 +383,7 @@ export default {
         },
         cancelNewProjectInstanceCreation() {
             this.promptForNewProjectTitle = false
-            webpod.dashboardMethods.modal.hide(() => {
+            webpod.dash.modal.hide(() => {
                 this.newProjectError = undefined
                 this.newProjectTitle = undefined
                 this.newProjectService = undefined
@@ -400,11 +417,11 @@ export default {
         },
         // rename methods
         setRenameEnv(selected) {
-            webpod.dashboardMethods.modal.show()
+            webpod.dash.modal.show()
             this.renameData = selected
         },
         cancelRename() {
-            webpod.dashboardMethods.modal.hide(() => {
+            webpod.dash.modal.hide(() => {
                 this.renameData = undefined
                 this.renameError = undefined
                 this.renameNewValue = undefined
@@ -414,12 +431,14 @@ export default {
         },
         renameStart() {
             this.renameOnProgress = false
+            webpod.dash.modal.closeOnBlur(false)
             const validationResult = this.validateInstanceTitle(this.renameNewValue)
 
             if(validationResult === 'passed') {
                 webpod.server.apps.renameAppInstanceTitle(this.renameNewValue,this.renameData,(data) => {
                     if(data.message == 'OK') {
-                        for(let i = 0; i < this.instances.length - 1; i++) {
+                        for(let i = 0; i < this.instances.length; i++) {
+                            webpod.dash.modal.closeOnBlur(true)
                             if(this.instances[i].title === this.renameData.title) {
                                 this.instances[i].title = data.new_title
                                 setTimeout(() => {
@@ -451,21 +470,46 @@ export default {
         showLastModifiedModal(state) {
             this.lastModifiedModal = state
             if(state) {
-                webpod.dashboardMethods.modal.show()
-                webpod.dashboardMethods.modal.onClose(() => {
-                    console.log('hey')
-                    this.selectedModifiedYear = undefined
-                    this.selectedModifiedMonth = undefined
-                    this.selectedModifiedDay = undefined
+                webpod.dash.modal.show()
+                webpod.dash.modal.onClose(() => {
+                    if(!this.isBeenFilteredOnce) {
+                        this.selectedModifiedYear = undefined
+                        this.selectedModifiedMonth = undefined
+                        this.selectedModifiedDay = undefined
+                    }
+                    
                 })
             } else {
-                webpod.dashboardMethods.modal.hide()
+                webpod.dash.modal.hide(() => {
+                    this.isBeenFilteredOnce = false
+                    this.instances = this.instancesCopy
+                })
             }
         },
         filterByDate() {
-            webpod.dashboardMethods.modal.hide(() => {
-                console.log(this.selectedModifiedYear)
-                console.log(this.selectedModifiedMonth)
+            webpod.dash.modal.hide(() => {
+
+                if(this.selectedModifiedYear) {
+                    this.isBeenFilteredOnce = true
+                    const filtered =  this.instancesCopy.filter(e => {
+                        const dateInfo = e.modified_date.split('/')
+                        const year = dateInfo[2]
+                        const month = dateInfo[0]
+
+                        if(!this.selectedModifiedMonth) {
+                            return this.selectedModifiedYear == year
+                        } else {
+                            return this.selectedModifiedMonth == month && this.selectedModifiedYear == year
+                        }
+                    })
+
+                    if(filtered.length == 0) {
+                        this.isBeenFilteredOnce = false
+                    }
+
+                    this.instances = filtered
+
+                }
             })
         }
     },
@@ -479,7 +523,7 @@ export default {
         }
 
         if(!this.myData.version_data) {
-            webpod.dashboardMethods.alertError({
+            webpod.dash.alertError({
                 message: 'Invalid version_data',
                 reload: true
             })
