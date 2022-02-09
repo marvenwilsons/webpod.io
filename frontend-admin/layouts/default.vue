@@ -1,8 +1,10 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
-        <v-main style="background: #1565c0a8;" class="relative" >
+        <v-main  style="background: #1565c0a8;" class="relative " >
             <v-fade-transition>
-                <portal-target v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" name="modal" />
+                <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
+                    <portal-target  name="modal" />
+                </div>
             </v-fade-transition>    
             <main>
                 <!-- loading -->
@@ -117,7 +119,8 @@ export default {
         alertMsg: undefined,
         alertFunctionToBeExecutedOnClose: undefined,
         menuMappingRole: {}, // role manefist file, does not hold any app data, values here is just like a map
-        serviceMappingRole: {}
+        serviceMappingRole: {},
+        modalIsClosableWhenClickedOutside: true
     }),
     created() {
         service.getAllServices(this)
@@ -163,6 +166,11 @@ export default {
                 this.serviceMappingRole[role.service_id][ver] = undefined
             })
         },
+        closeModal() {
+            if(this.modalIsClosableWhenClickedOutside) {
+                webpod.dashboardMethods.setModalState.hide()
+            }
+        }
     },
     mounted() {
         try {
@@ -182,8 +190,14 @@ export default {
             }
             const dash = {
                 setModalState: {
-                    show: _ => this.showModal = true,
-                    hide: _ => this.showModal = false,
+                    show: isClosableWhenClickedOutside => {
+                        this.showModal = true
+                        if(typeof isClosableWhenClickedOutside === 'boolean') this.modalIsClosableWhenClickedOutside = isClosableWhenClickedOutside
+                    },
+                    hide: cb => {
+                        this.showModal = false
+                        if(cb) cb()
+                    },
                 },
                 loading: (state) => this.loading = state,
                 showDashboard: (state) => this.showDashboard = state,
