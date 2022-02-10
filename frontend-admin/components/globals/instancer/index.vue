@@ -3,6 +3,7 @@
         <div class="marginbottom125 text-uppercase " >
             <span style="font-weight:500; color: #424242;" >Get Started</span>
         </div>
+        <!-- CREATE NEW INSTANCE BUTTONS -->
         <div style="gap:5px;" class="flex  flexwrap marginbottom125 " >
             <div 
                 style="background: white; max-width:450px; min-width:450px;" 
@@ -33,26 +34,21 @@
                 </v-hover>
             </div>
         </div>
+        <!-- EXISTING PROJECTS TITLE  -->
         <div class="marginbottom125 text-uppercase" >
             <span style="font-weight:500; color: #424242;" >Existing Projects</span>
         </div>
+        <!-- EXISTING PROJECTS CONTAINER -->
         <div :elevation="0" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
-             <v-progress-linear
+            <!-- PROGRESS EFFECT -->
+            <v-progress-linear
                 v-if="loadProtocolIsDone == false"
                 :active="true"
                 :indeterminate="true"
                 bottom
                 color="primary"
             ></v-progress-linear>
-            <!-- instance list here -->
-            <!-- <v-expand-transition>
-                <v-tabs v-if="instances.length > 0 && loadProtocolIsDone" color="#4e6795">
-                    <v-tab>ALL</v-tab>
-                    <v-tab>RECENT</v-tab>
-                    <v-tab>PINNED</v-tab>
-                </v-tabs>
-            </v-expand-transition> -->
-            <!-- Modals -->
+            <!-- RENAME MODAL -->
             <portal to="modal">
                     <v-card v-if="renameData" tile  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
                         <v-progress-linear
@@ -70,6 +66,7 @@
                         </div>
                     </v-card>
             </portal>
+            <!-- FILTER BY DATE MODAL -->
             <portal to="modal">
                 <v-card   v-if="lastModifiedModal" tile style="min-width: 400px;" class="pad125" >
                     <div class="pad125" >
@@ -119,7 +116,7 @@
                                 <v-btn @click="showLastModifiedModal(false)" plain text > 
                                     CLEAR 
                                 </v-btn>
-                                <v-btn :disabled="filterByDateButtonIsDisable" @click="filterByDate" plain text > 
+                                <v-btn :disabled="filterByDateButtonIsDisable || dateFilterItemsFound == 0" @click="filterByDate" plain text > 
                                     FILTER
                                 </v-btn>
                             </v-card-actions>
@@ -128,6 +125,7 @@
                     
                 </v-card>
             </portal>
+            <!-- CREATE NEW INSTANCE MODAL -->
             <portal  to="modal" >
                 <v-card tile v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
                     <v-progress-linear
@@ -150,43 +148,47 @@
                     </div>
                 </v-card>
             </portal>
-            <!-- Modal end -->
+            <!-- MODAL END-->
             <v-expand-transition>
                 <div v-if="loadProtocolIsDone" class="margintop125 fullwidth" >
+                    <!-- ON EMPTY -->
                     <v-expand-transition>
                         <div>
                             <emptyBox v-if="instances.length == 0 && loadProtocolIsDone" />
+                            <!-- GO BACK BUTTON -->
                             <div  v-if="instances.length == 0 && instancesCopy.length != 0" class="flex flexcenter" >
-                                <v-btn @click="instances = instancesCopy" text tile >
-                                    <svg class="marginright025" style="width:20px;height:20px" viewBox="0 0 24 24">
-                                        <path fill="currentColor" d="M20,11V13H8L13.5,18.5L12.08,19.92L4.16,12L12.08,4.08L13.5,5.5L8,11H20Z" />
-                                    </svg>
+                                <v-btn @click="resetQuery" text tile plain >
                                     go back
                                 </v-btn>
                             </div>
                         </div>
                     </v-expand-transition>
-                    <div v-if="instances.length != 0" class=" flex  flexend" >
-                        <div class="flexcenter" >
-                            <v-text-field v-model="searchQuery" :placeholder="`search title against ${instances.length} items`" style="min-width:250px;" > </v-text-field>
+                    <!-- SEARCH INSTANCES -->
+                    <div v-if="instances.length != 0" class=" flex flexend" >
+                        <div style="max-width:350px" class="flexcenter flex" >
+                            <v-text-field v-model="searchQuery" :placeholder="`search title`" style="min-width:250px;" > </v-text-field>
+                            <v-btn @click="searchByTitle" icon >
+                                <v-icon>mdi-magnify</v-icon>
+                            </v-btn>
                         </div>
                     </div>
                     <div class="fullwidth" >
+                        <!-- MODIFIED OPTIONS -->
                         <v-expand-transition>
-                            <div v-if="instances.length > 0" style="border-bottom:3px solid whitesmoke;;" class="flex pad050" >
-                                <div class="fullwidth " style="font-weight:500; margin-left:60px;" >Title</div>
-                                <!-- Last Modified -->
+                            <div v-if="instances.length > 0" style="border-bottom:3px solid whitesmoke;" class="flex pad050" >
+                                <div class="fullwidth flex flexcenter flexstart" style="font-weight:500; margin-left:60px;" >
+                                    <span class="body-2 text--secondary" >TITLE</span>
+                                </div>
+                                <!-- LAST MODIFIED-->
                                 <div class="fullwidth flex flexcenter flexstart " style="font-weight:500;"  >
-                                    Last Modified
+                                    <span class="body-2 text--secondary text-uppercase" >Last Modified</span>
                                     <v-btn @click="showLastModifiedModal(true)" plain text icon small :ripple="false" >
-                                        <svg class="pointer" style="width:20px;height:20px" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                                        </svg>
+                                        <v-icon>mdi-chevron-down</v-icon>
                                     </v-btn>
                                 </div>
-                                <!-- Modified By Dropdown -->
+                                <!-- MODIFIED BY -->
                                 <div class="fullwidth flex flexcenter flexstart relative " style="font-weight:500;"  >
-                                    <span class="" >Modified By</span>
+                                    <span class="body-2 text--secondary text-uppercase" >Modified By</span>
                                     <v-menu offset-y>
                                         <template v-slot:activator="{ on, attrs }">
                                             <v-btn
@@ -195,9 +197,9 @@
                                             v-on="on"
                                             :ripple="false"
                                             >
-                                            <svg class="pointer" style="width:20px;height:20px" viewBox="0 0 24 24">
-                                                <path fill="currentColor" d="M7.41,8.58L12,13.17L16.59,8.58L18,10L12,16L6,10L7.41,8.58Z" />
-                                            </svg>
+                                            <v-btn plain text icon small :ripple="false" >
+                                                <v-icon>mdi-chevron-down</v-icon>
+                                            </v-btn>
                                             </v-btn>
                                         </template>
                                         <v-list>
@@ -212,18 +214,19 @@
                                         </v-list>
                                     </v-menu>
                                 </div>
-                                <!-- Actions -->
-                                <div class="padright125 " style="font-weight:500;"  >Action</div>
+                                <!-- ACTIONS -->
+                                <div class="" style="font-weight:500;min-width:70px"  >
+                                    <span class="body-2 text--secondary text-uppercase" >action</span>
+                                </div>
                             </div>
                         </v-expand-transition>
-                        <!-- instance list -->
+                        <!-- INSTANCE LIST -->
                         <div style="border-bottom:1px solid whitesmoke;" 
                             :class="[disableAll ? 'not-allowed' : 'pointer']"
                             @click.once="disableAll ? () => {} : instanceSelect(instance)" 
                             v-for="instance in instances" :key="uid(instance)"
-                        >
-                            
-                            <!-- instance data table -->
+                        >                            
+                            <!-- INSTANCE DATA TABLE-->
                             <v-hover v-slot="{ hover }" >
                                 <v-card :disabled="disableAll" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
                                     <v-progress-linear
@@ -233,6 +236,7 @@
                                         bottom
                                         color="primary"
                                     ></v-progress-linear>
+                                    <!-- ENTRIES -->
                                     <div class="flex" >
                                         <div class="padtop025 padleft050 padbottom025 flex flexcenter flexstart" >
                                             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -244,23 +248,24 @@
                                         <div class="padtop025 padleft050 padbottom025 fullwidth flex flexcenter flexstart" >{{instance.modified_by}}</div>
                                         <div  class="padtop025 padbottom025 flex" >
                                             <v-btn @click.stop="instanceRemove(instance)" icon plain >
-                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                                    <path fill="currentColor" d="M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19M8,9H16V19H8V9M15.5,4L14.5,3H9.5L8.5,4H5V6H19V4H15.5Z" />
-                                                </svg>
+                                                <v-icon>
+                                                    mdi-delete
+                                                </v-icon>
                                             </v-btn>
                                             <v-btn @click.stop="setRenameEnv(instance)" icon plain >
-                                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                                    <path fill="currentColor" d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" />
-                                                </svg>
+                                                <v-icon>
+                                                    mdi-pencil
+                                                </v-icon>
                                             </v-btn>
                                         </div>
                                     </div>
                                 </v-card>
                             </v-hover>
                         </div>
-                        <!-- items found -->
-                        <div class="margintop125 flex flexend" >
-                            {{instances.length}} item{{instances.length > 1 ? 's' : ''}} found
+                        <!-- ITEMS FOUND-->
+                        <div class="margintop125 flex spacebetween flexcenter" >
+                            <span class="body-2 text--secondary text-uppercase" >{{instances.length}} item{{instances.length > 1 ? 's' : ''}} found</span>
+                            <v-btn plain text  @click="resetQuery"  >reset</v-btn>
                         </div>
                     </div>
                 </div>
@@ -296,6 +301,8 @@ export default {
         newProjectTitle: undefined,
         newProjectError: undefined,
         newProjectService: undefined,
+        // global filter condition
+        filterConditions: [],
         // search query
         searchQuery: undefined,
         // modified by
@@ -320,47 +327,34 @@ export default {
         newProjectTitle() {
             this.newProjectError = undefined
         },
-        searchQuery() {
-            if(this.searchQuery) {
-                this.instances = this.instances.filter(item => {
-                    return item.title.includes(this.searchQuery)
-                })
-            } else {
-                this.instances = this.instancesCopy
-            }
-        },
-        selectedModifiedYear() {
+        selectedModifiedYear(n) {
             if(this.selectedModifiedYear != undefined) {
                 this.filterByDateButtonIsDisable = false
-                
-                const filtered =  this.instancesCopy.filter(e => {
-                    const dateInfo = e.modified_date.split('/')
-                    const year = dateInfo[2]
-                    return this.selectedModifiedYear == year
-                })
-                this.dateFilterItemsFound = filtered.length
             }
         },
         selectedModifiedMonth() {
             if(this.selectedModifiedMonth != undefined) {
                 
-                const filtered =  this.instances.filter(e => {
-                    const dateInfo = e.modified_date.split('/')
-                    const month = dateInfo[0]
-                    return this.selectedModifiedMonth == month
-                })
-                this.dateFilterItemsFound = filtered.length
             }
         },
         selectedModifiedDay() {
             if(this.selectedModifiedDay != undefined) {
                 
-                const filtered =  this.instances.filter(e => {
-                    const dateInfo = e.modified_date.split('/')
-                    const day = dateInfo[1]
-                    return this.selectedModifiedDay == day
-                })
-                this.dateFilterItemsFound = filtered.length
+            }
+        },
+        filterConditions(conditions) {
+            let currentFilteredResult = undefined
+            
+            const filterInstance = (conditionIndex) => {
+                currentFilteredResult = (currentFilteredResult || this.instancesCopy).filter(instance_entry => 
+                    conditions[conditionIndex](instance_entry) && instance_entry)
+            }
+       
+            for(let i = 0; i < this.filterConditions.length; i++) {
+                filterInstance(i)
+                if(i === this.filterConditions.length - 1) {
+                    this.instances = currentFilteredResult
+                }
             }
         }
     },
@@ -512,6 +506,10 @@ export default {
                 } else {
                     this.instances = this.instancesCopy.filter(item => item.modified_by === admin)
                 }
+
+                const condition = (instance_entry) => instance_entry.modified_by === admin
+                
+                this.filterConditions.push(condition)
             }
             
         },
@@ -519,48 +517,62 @@ export default {
             this.lastModifiedModal = state
             if(state) {
                 webpod.dash.modal.show()
-                webpod.dash.modal.onClose(() => {
-                    if(!this.isBeenFilteredOnce) {
-                        this.selectedModifiedYear = undefined
-                        this.selectedModifiedMonth = undefined
-                        this.selectedModifiedDay = undefined
-                    }
-                    
-                })
             } else {
                 webpod.dash.modal.hide(() => {
                     this.isBeenFilteredOnce = false
                     this.instances = this.instancesCopy
+                    this.selectedModifiedYear = undefined
+                    this.selectedModifiedMonth = undefined
+                    this.selectedModifiedDay = undefined
                 })
             }
         },
         filterByDate() {
             webpod.dash.modal.hide(() => {
                 if(this.selectedModifiedYear) {
-                    this.isBeenFilteredOnce = true
-                    const filtered =  this.instancesCopy.filter(e => {
-                        const dateInfo = e.modified_date.split('/')
+                    const condition = (instance_entry) => {
+                        const dateInfo = instance_entry.modified_date.split('/')
                         const year = dateInfo[2]
-                        const month = dateInfo[0]
                         const day = dateInfo[1]
-
-
-                        if(!this.selectedModifiedMonth) {
-                            return this.selectedModifiedYear == year
-                        } else {
-                            if(this.selectedModifiedDay) {
-                                return this.selectedModifiedMonth == month && this.selectedModifiedYear == year && this.selectedModifiedDay == day
-                            } else {
-                                return this.selectedModifiedMonth == month && this.selectedModifiedYear == year
-                            }   
-                        }
-                    })
-                    if(filtered.length == 0) {
-                        this.isBeenFilteredOnce = false
+                        return this.selectedModifiedYear == year
                     }
-                    this.instances = filtered
+                    this.filterConditions.push(condition)
+                }
+
+                if(this.selectedModifiedMonth) {
+                     const condition = (instance_entry) => {
+                        const dateInfo = instance_entry.modified_date.split('/')
+                        const month = dateInfo[0]
+                        return this.selectedModifiedMonth == month
+                    }
+                    this.filterConditions.push(condition)
+                }
+
+                if(this.selectedModifiedDay) {
+                     const condition = (instance_entry) => {
+                        const dateInfo = instance_entry.modified_date.split('/')
+                        const day = dateInfo[1]
+                        return this.selectedModifiedDay == day
+                    }
+                    this.filterConditions.push(condition)
                 }
             })
+        },
+        resetQuery() {
+            this.instances = this.instancesCopy
+            this.filterConditions = []
+            this.searchQuery = undefined
+            this.selectedModifiedYear = undefined
+            this.selectedModifiedMonth = undefined
+            this.selectedModifiedDay = undefined
+        },
+        searchByTitle() {
+            if(this.searchQuery) {
+                const condition = (instance_entry) => {
+                    return instance_entry.title.toLowerCase().includes(this.searchQuery.toLowerCase())
+                }
+                this.filterConditions.push(condition)
+            }
         }
     },
     created() {

@@ -36,7 +36,7 @@
                                 <div v-html="alertMsg" ></div>
                             </div>
                             <div class="margintop125 flex flexend">
-                                <el-button @click="closeAlert" size="small" >Close</el-button>
+                                <v-btn  @click="closeAlert" text plain >Close</v-btn>
                             </div>
                         </v-card>
                     </div>
