@@ -50,12 +50,11 @@
                     </div>
                 </v-fade-transition>
             </main>
-            <main v-show="showDashboard" class="flex fullheight-percent" style="background:#7fccff;" >
+            <main v-show="showDashboard" class="flex fullheight-percent " style="background:#7fccff;" >
 
                 <!-- BACKGROUND -->
                 <div class="fullwidth" style="position:fixed;z-index:1" >
                     <svg 
-                        xmlns="http://www.w3.org/2000/svg" 
                         viewBox="0 0 1440 320"
                         >
                         <path 
@@ -66,12 +65,14 @@
                     </svg>
                 </div>
                 <!-- menubar -->
-                <section style="z-index:100; min-width:220px; background:#232729;color:white;" class="flexcol" >
-                    <menubar ref="menubar" />
+                <section style="z-index:2" class="pane" >
+                    <v-card dark style="z-index:800; min-width:220px;" class="flexcol margin050" >
+                        <menubar  ref="menubar" />
+                    </v-card>
                 </section>
                 <!-- CONTENT -->
-                <section class="fullwidth flex flexcol" style="z-index:2" >
-                    <div style="background: #232729; color: #009aff;"  class="pad025" >
+                <section class="fullwidth flex pane" style="z-index:2" >
+                    <div style="background: #232729; color: #009aff; display: none;"  class="pad025" >
                         <topbar :notificationLength="notifications.length" :user="user" @openNotificationWindow="sidebarWindowIsOpen = !sidebarWindowIsOpen" ref="topbar" />
                         <div>
                             <history @historyClick="historyClick" ref="history" />
@@ -80,6 +81,21 @@
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
                     </section>
+                    <div style="z-index: 1900; right: 0; bottom: 0;" 
+                    class="absolute  flex flexend" >
+                        <div class="marginright125 marginbottom125" >
+                            <v-btn
+                            @click="sidebarWindowIsOpen = !sidebarWindowIsOpen"
+                                class="mx-2"
+                                fab
+                                dark
+                            >
+                                <v-icon dark>
+                                    mdi-account
+                                </v-icon>
+                            </v-btn>
+                        </div>
+                    </div>
                 </section>
                 <v-slide-x-reverse-transition>
                     <section v-if="sidebarWindowIsOpen" style="z-index:100; background: #e5f1fa; width:450px; right:0;" class="absolute fullheight-percent paneShadow" >

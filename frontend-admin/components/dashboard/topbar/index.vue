@@ -1,7 +1,7 @@
 <template>
   <main class="flex spacebetween flexcenter padtop025 padbottom025" >
       <div  class="fullwidth" style="color: orange" >
-          <div v-if="msg" style="font-weight:600;" >{{msg}}</div>
+          <!-- <div v-if="msg" style="font-weight:600;" >{{msg}}</div> -->
       </div>
       <div class="pointer padright025 flex flexend fullwidth" >
           <span style="font-weight:600;" class="marginright050 marginleft050 flex flexcenter flexend" >
