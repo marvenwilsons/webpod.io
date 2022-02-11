@@ -85,7 +85,7 @@
                     class="absolute  flex flexend" >
                         <div class="marginright125 marginbottom125" >
                             <v-btn
-                            @click="sidebarWindowIsOpen = !sidebarWindowIsOpen"
+                                @click="sidebarWindowIsOpen = !sidebarWindowIsOpen, showModal = true"
                                 class="mx-2"
                                 fab
                                 dark
@@ -98,11 +98,11 @@
                     </div>
                 </section>
                 <v-slide-x-reverse-transition>
-                    <section v-if="sidebarWindowIsOpen" style="z-index:100; background: #e5f1fa; width:450px; right:0;" class="absolute fullheight-percent paneShadow" >
+                    <section v-if="sidebarWindowIsOpen" style="z-index:9000; background: #e5f1fa; width:450px; right:0;" class="absolute fullheight-percent paneShadow" >
                         <!-- <img src="@/static/leaves.jpeg" alt=""> -->
                         <!-- <audio src="@/static/webpod_notification_sound.mp3" type="audio/mpeg" autoplay >
                         </audio> -->
-                        <sidebar :user="user" ref="sidebar" @close="sidebarWindowIsOpen = false">
+                        <sidebar style="z-index:9000;" :user="user" ref="sidebar" @close="sidebarWindowIsOpen = false, showModal = false">
                             <notification :notifications="notifications" ref="notification" />
                         </sidebar>
                     </section>
