@@ -4,15 +4,15 @@
             <span style="font-weight:500; color: #424242;" >Get Started</span>
         </div>
         <!-- CREATE NEW INSTANCE BUTTONS -->
-        <div style="gap:5px;" class="flex  flexwrap marginbottom125 " >
+        <div style="gap:10px;" class="flex  flexwrap marginbottom125 " >
             <div 
-                style="background: white; max-width:450px; min-width:450px;" 
-                class=" instances_box  paneBorder pointer  flex" 
+                style="max-width:450px; min-width:450px;" 
+                class=" instances_box   pointer  flex" 
                 v-for="type in instance_types" :key="uid(type)" 
                 @click="createInstance(type)"
             >
                 <v-hover v-slot="{ hover }" >
-                     <v-card shaped :disabled="false" :loading="false" :elevation="hover ? 12 : 1" v-ripple  plain block tile class=" fullheight-percent fullwidth" >
+                     <v-card  :disabled="false" :loading="false" :elevation="hover ? 12 : 1" v-ripple  plain   class=" fullheight-percent fullwidth" >
                         <main class="pad125" >
                             <div class="padtop125 flex fullwidth" >
                             <div style="max-width:35px;" class="flex bordrred" >
@@ -22,7 +22,7 @@
                             </div>
                             <div class="flex flexcol marginleft050 " >
                                 <div class="text-uppercase flex flexstart" > 
-                                    <span class="" style="font-weight:500; font-size: 105%; color: #4e6795;">CREATE {{type.type}}</span> 
+                                    <span class="" style="font-weight:500; font-size: 105%;">CREATE {{type.type}}</span> 
                                 </div>
                                 <div class="caption text--secondary text-uppercase flex flexstart flexwrap" >
                                     {{type.desc || 'No available description'}}
@@ -39,7 +39,7 @@
             <span style="font-weight:500; color: #424242;" >Existing Projects</span>
         </div>
         <!-- EXISTING PROJECTS CONTAINER -->
-        <div :elevation="0" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
+        <v-card :elevation="2" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
             <!-- PROGRESS EFFECT -->
             <v-progress-linear
                 v-if="loadProtocolIsDone == false"
@@ -50,7 +50,7 @@
             ></v-progress-linear>
             <!-- RENAME MODAL -->
             <portal to="modal">
-                    <v-card v-if="renameData" tile  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
+                    <v-card v-if="renameData"  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
                         <v-progress-linear
                             :active="renameOnProgress"
                             :indeterminate="renameOnProgress"
@@ -68,7 +68,7 @@
             </portal>
             <!-- FILTER BY DATE MODAL -->
             <portal to="modal">
-                <v-card   v-if="lastModifiedModal" tile style="min-width: 400px;" class="pad125" >
+                <v-card   v-if="lastModifiedModal" style="min-width: 400px;" class="pad125" >
                     <div class="pad125" >
                         <div>
                             <div class="flex spacebetween" >
@@ -124,7 +124,7 @@
             </portal>
             <!-- CREATE NEW INSTANCE MODAL -->
             <portal  to="modal" >
-                <v-card tile v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
+                <v-card v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
                     <v-progress-linear
                         :active="createNewProjectOnProgress"
                         :indeterminate="createNewProjectOnProgress"
@@ -147,14 +147,14 @@
             </portal>
             <!-- MODAL END-->
             <v-expand-transition>
-                <div v-if="loadProtocolIsDone" class="margintop125 fullwidth" >
+                <div v-if="loadProtocolIsDone" class="margintop125 fullwidth pad125" >
                     <!-- ON EMPTY -->
                     <v-expand-transition>
                         <div>
                             <emptyBox v-if="instances.length == 0 && loadProtocolIsDone" />
                             <!-- GO BACK BUTTON -->
                             <div  v-if="instances.length == 0 && instancesCopy.length != 0" class="flex flexcenter" >
-                                <v-btn @click="resetQuery" text tile plain >
+                                <v-btn @click="resetQuery" text plain >
                                     go back
                                 </v-btn>
                             </div>
@@ -225,7 +225,7 @@
                         >                            
                             <!-- INSTANCE DATA TABLE-->
                             <v-hover v-slot="{ hover }" >
-                                <v-card :disabled="disableAll" bottom style="background: none;" :elevation="hover ? 5 : 0" tile class="pad025 " >
+                                <v-card :disabled="disableAll" bottom style="background: none;" :elevation="hover ? 5 : 0" class="pad025 " >
                                     <v-progress-linear
                                         :active="clickedInstance == instance.title"
                                         :indeterminate="clickedInstance == instance.title"
@@ -267,7 +267,7 @@
                     </div>
                 </div>
             </v-expand-transition>
-        </div>
+        </v-card>
     </main>
 </template>
 
