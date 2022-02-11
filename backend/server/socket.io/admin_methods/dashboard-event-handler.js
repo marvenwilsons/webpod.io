@@ -26,8 +26,8 @@ module.exports = async (dashboard) => ({
             email: userServices.email,
             avatar: userServices.avatar
           })
-          .exec('topbar',   'setMsg',       userServices.app_name)
           .exec('service',  'setServices',  userServices.services)
+          // .exec('topbar',   'setMsg',       userServices.app_name)
           // .exec('menu',     'setItems',     userServices.menu_items)
           // .exec('menu',     'setSelected',  'Dashboard')
 

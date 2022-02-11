@@ -260,7 +260,7 @@ export default {
                 serviceMappingRole: this.serviceMappingRole,
             }
 
-            dashboard(paneCollection,menu, topbar, service, dash, sidebar, this.socket)
+            dashboard(paneCollection,menu, service, dash, sidebar, this.socket)
         }catch(err) {
             alert(err)
             console.log(err)

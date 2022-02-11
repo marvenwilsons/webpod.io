@@ -1,5 +1,5 @@
 import appFetch from "./app-fetch"
-export default function (paneCollection, menu, topbar, service, dash, sidebar, socket) {
+export default function (paneCollection, menu, service, dash, sidebar, socket) {
     dash.loading(true)
     let dashboard_resource = {
       admin: undefined,
@@ -52,7 +52,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
             const title = paneCollection.paneCollection.map(e => {
                 return e.paneConfig.title || 'untitled'
             })
-            topbar.history.panes = title
+            // topbar.history.panes = title
             if(webpod) {
                 webpod.session.paneOnFocus = title.length - 1
             }
@@ -78,7 +78,7 @@ export default function (paneCollection, menu, topbar, service, dash, sidebar, s
     }
         
     socket.on('exec', (e) => {
-        const dashboard_locations = { paneCollection, menu, topbar, service, dash, sidebar }
+        const dashboard_locations = { paneCollection, menu, service, dash, sidebar }
         try {
             dashboard_locations[e.location][e.action](e.payload)
         } catch(err) {
