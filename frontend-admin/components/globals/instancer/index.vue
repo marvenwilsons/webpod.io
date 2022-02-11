@@ -75,9 +75,6 @@
                                 <v-card-title style="padding-left:0" >
                                     Filter By Date
                                 </v-card-title>
-                                <div style="margin-top:10px;" class="text--secondary" >
-                                    <v-chip>{{dateFilterItemsFound}} {{dateFilterItemsFound > 1 ? 'items' : 'item'}} found</v-chip>
-                                </div> 
                             </div>
                             <v-card-subtitle style="padding-left:0" >Filtering app instances by a specific date range</v-card-subtitle>
                         </div>
