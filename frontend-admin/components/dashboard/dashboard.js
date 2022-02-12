@@ -11,7 +11,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
 
 /*********************************** DASHBOARD EVENT HANDLERS *************************************************/
     // watch the pane on empty
-    // paneCollection.onEmpty = () => menu.setSelected('Dashboard')
+    paneCollection.onEmpty = () => menu.setSelected('Dashboard')
     
     // fires everytime menu select property changes
     menu.onSelect = ({selected, menu}) => {
@@ -49,12 +49,23 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         // get selected service view
         
         paneCollection.onPaneCollectionChange = function() {
+            setTimeout(() => {
+                dash.accountBtn.show()
+            },500)
             const title = paneCollection.paneCollection.map(e => {
                 return e.paneConfig.title || 'untitled'
             })
             // topbar.history.panes = title
             if(webpod) {
+                webpod.session.paneCollection = title
                 webpod.session.paneOnFocus = title.length - 1
+                if(title.length > 1) {
+                    setTimeout(() => {
+                        dash.history.historyBtn.show()
+                    },700)
+                } else if(title.length == 1) {
+                    dash.history.historyBtn.hide()    
+                }
             }
         }
         

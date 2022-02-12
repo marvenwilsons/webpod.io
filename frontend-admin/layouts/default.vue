@@ -1,14 +1,14 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
-        <v-main  style="background: #1565c0a8;" class="relative " >
-            <v-fade-transition>
-                <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                    <draggable v-if="showModal" >
-                        <portal-target :class="[shakeModal ? 'err_shake' : '']" name="modal" />
-                    </draggable>
-                </div>
-            </v-fade-transition>    
+        <v-main  style="background: #1565c0a8;" class="relative" >
             <main>
+                <v-fade-transition>
+                    <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
+                        <draggable ref="draggable" v-if="showModal" >
+                            <portal-target  @change="portalTargetChanged" :class="[shakeModal ? 'err_shake' : '']" name="modal" />
+                        </draggable>
+                    </div>
+                </v-fade-transition>   
                 <!-- loading -->
                 <v-fade-transition>
                     <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
@@ -83,17 +83,34 @@
                     </section>
                     <div style="z-index: 1900; right: 0; bottom: 0;" 
                     class="absolute  flex flexend" >
-                        <div class="marginright125 marginbottom125" >
-                            <v-btn
-                                @click="sidebarWindowIsOpen = !sidebarWindowIsOpen, showModal = true"
-                                class="mx-2"
-                                fab
-                                dark
-                            >
-                                <v-icon dark>
-                                    mdi-account
-                                </v-icon>
-                            </v-btn>
+                        <div class="marginright125 marginbottom125 flex flexcol" >
+                            <v-scale-transition origin="center">
+                                <v-btn
+                                    v-if="historyBtnIsShowing"
+                                    @click="historyBtnDirection == 'right' ? nextPane() : prevPane()"
+                                    class="mx-2 marginbottom050"
+                                    fab
+                                    dark
+                                >
+                                    <v-icon dark>
+                                        mdi-arrow-{{historyBtnDirection}}-bold
+                                    </v-icon>
+                                </v-btn>
+                            </v-scale-transition>
+                            <v-scale-transition origin="center">
+                                <v-btn
+                                    v-if="showAccountBtn"
+                                    @click="sidebarWindowIsOpen = !sidebarWindowIsOpen, showModal = true"
+                                    class="mx-2"
+                                    fab
+                                    dark
+                                >
+                                    <v-icon dark>
+                                        mdi-account
+                                    </v-icon>
+                                </v-btn>
+                            </v-scale-transition>
+
                         </div>
                     </div>
                 </section>
@@ -140,7 +157,10 @@ export default {
         serviceMappingRole: {},
         modalIsClosableWhenClickedOutside: true,
         modalOnClose: undefined,
-        shakeModal:false
+        shakeModal:false,
+        historyBtnIsShowing: false,
+        historyBtnDirection: 'left',
+        showAccountBtn: false
     }),
     created() {
         service.getAllServices(this)
@@ -149,12 +169,29 @@ export default {
     },
     methods: {
         historyClick(i) {
-            console.log('history click',i)
             webpod.session.paneOnFocus = i
             try {
                 const el = document.getElementById(`pane${i}`)
                 el.scrollIntoView({behavior: webpod.dashSettings['Slide on history click'] == 'yes' ? 'smooth' : 'auto', block: "center", inline: "center"})
             } catch(err) {}
+            
+            if(webpod.session.paneCollection.length - 1 > i) {
+                this.prevBtnIsShowing = false
+                this.nextBtnIsShowing = true
+                this.historyBtnDirection = 'right'
+
+            } else if(webpod.session.paneCollection.length - 1 < i || webpod.session.paneCollection.length - 1 == i) {
+                this.prevBtnIsShowing = true
+                this.nextBtnIsShowing = false
+                this.historyBtnDirection = 'left'
+            }
+        },
+        prevPane() {
+            this.historyClick(webpod.session.paneOnFocus - 1)
+        },
+        nextPane() {
+            this.historyClick(webpod.session.paneOnFocus + 1)
+
         },
         closeAlert() {
             this.alertMsg = ''
@@ -189,12 +226,18 @@ export default {
         closeModal() {
             if(this.modalIsClosableWhenClickedOutside) {
                 webpod.dash.modal.hide()
+                setTimeout(() => {
+                    this.sidebarWindowIsOpen = false
+                },100)
             } else {
                 this.shakeModal = true
                 setTimeout(() => {
                     this.shakeModal = false
                 },2000)
             }
+        },
+        portalTargetChanged() {
+            this.$refs.draggable.ready = true
         }
     },
     mounted() {
@@ -234,6 +277,19 @@ export default {
                     onClose: (cb) => {
                         this.modalOnClose = cb
                     }
+                },
+                history: {
+                    historyBtn: {
+                        hide: () => this.historyBtnIsShowing = false,
+                        show: () => {
+                            this.historyBtnIsShowing = true
+                            this.historyBtnDirection = 'left'
+                        }
+                    },
+                },
+                accountBtn: {
+                    show: () => this.showAccountBtn = true,
+                    hide: () => this.showAccountBtn = false
                 },
                 loading: (state) => this.loading = state,
                 showDashboard: (state) => this.showDashboard = state,
