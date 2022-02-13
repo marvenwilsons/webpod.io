@@ -50,21 +50,21 @@
             ></v-progress-linear>
             <!-- RENAME MODAL -->
             <portal to="modal">
-                    <v-card v-if="renameData"  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
-                        <v-progress-linear
-                            :active="renameOnProgress"
-                            :indeterminate="renameOnProgress"
-                            absolute
-                            bottom
-                            color="primary"
-                        ></v-progress-linear>
-                        <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
-                        <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
-                        <div class="flex fullwidth flexend" >
-                            <v-btn :ripple="false" :disabled="renameOnProgress"  @click="cancelRename" plain text  > cancel </v-btn>
-                            <v-btn :ripple="false" :disabled="renameOnProgress" @click="renameStart" plain text  > {{renameOnProgress == true ? 'renaming ...' : 'rename'}} </v-btn>
-                        </div>
-                    </v-card>
+                <v-card v-if="renameData"  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
+                    <v-progress-linear
+                        :active="renameOnProgress"
+                        :indeterminate="renameOnProgress"
+                        absolute
+                        bottom
+                        color="primary"
+                    ></v-progress-linear>
+                    <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
+                    <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
+                    <div class="flex fullwidth flexend" >
+                        <v-btn :ripple="false" :disabled="renameOnProgress"  @click="cancelRename" plain text  > cancel </v-btn>
+                        <v-btn :ripple="false" :disabled="renameOnProgress" @click="renameStart" plain text  > {{renameOnProgress == true ? 'renaming ...' : 'rename'}} </v-btn>
+                    </div>
+                </v-card>
             </portal>
             <!-- FILTER BY DATE MODAL -->
             <portal to="modal">
@@ -145,7 +145,7 @@
                     </div>
                 </v-card>
             </portal>
-            <!-- MODAL END-->
+            <!-- **** -->
             <v-expand-transition>
                 <div v-if="loadProtocolIsDone" class="margintop125 fullwidth pad125" >
                     <!-- ON EMPTY -->
@@ -512,8 +512,10 @@ export default {
         },
         showLastModifiedModal(state) {
             this.lastModifiedModal = state
+
             if(state) {
                 webpod.dash.modal.show()
+                webpod.dash.modal.onClose(() => this.lastModifiedModal = false)
             } else {
                 webpod.dash.modal.hide(() => {
                     this.isBeenFilteredOnce = false
@@ -521,6 +523,7 @@ export default {
                     this.selectedModifiedYear = undefined
                     this.selectedModifiedMonth = undefined
                     this.selectedModifiedDay = undefined
+                    this.lastModifiedModal = false
                 })
             }
         },
