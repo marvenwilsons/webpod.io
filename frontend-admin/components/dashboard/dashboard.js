@@ -35,7 +35,8 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                     view: 'instancer',
                     viewData: {
                         instancer: {...instancer},
-                        version_data
+                        version_data,
+                        title: selected
                     }
                 }
             }

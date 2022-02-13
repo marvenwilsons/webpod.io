@@ -36,7 +36,7 @@
         </div>
         <!-- EXISTING PROJECTS TITLE  -->
         <div class="marginbottom125 text-uppercase" >
-            <span style="font-weight:500; color: #424242;" >Existing Projects</span>
+            <span style="font-weight:500; color: #424242;" >Existing {{menuTitle}}'s</span>
         </div>
         <!-- EXISTING PROJECTS CONTAINER -->
         <v-card :elevation="2" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
@@ -132,7 +132,7 @@
                         bottom
                         color="primary"
                     ></v-progress-linear>
-                    <v-card-text class=" " style="padding:0;" >Give a title name for this project</v-card-text>
+                    <v-card-text class=" " style="padding:0;" >Give a title name for this <strong><span class="text-uppercase" >{{selectedInstanceType}}</span></strong></v-card-text>
                     <v-text-field 
                         :error="newProjectError != undefined" 
                         :error-messages="newProjectError" 
@@ -279,6 +279,7 @@ export default {
     components: {emptyBox},
     props: ['myData', 'hooks'],
     data: () => ({
+        menuTitle: undefined,
         instance_types: [],
         instances: [],
         instancesCopy: [],
@@ -287,6 +288,8 @@ export default {
         appName: undefined,
         loadProtocolIsDone: false,
         disableAll: false,
+        // instance creation
+        selectedInstanceType: undefined,
         // rename data properties
         renameData: false,
         renameNewValue: '',
@@ -364,6 +367,7 @@ export default {
         },
         // create new project instance
         createInstance(n) {
+            this.selectedInstanceType = n.type
             const service = this.myData.version_data.body
             service.viewData = n
             this.promptForNewProjectTitle = true
@@ -577,6 +581,7 @@ export default {
     },
     created() {
         if(this.myData.instancer.instance_types && this.myData.instancer.instance_types.length) {
+            this.menuTitle = this.myData.title
             this.instance_types = this.myData.instancer.instance_types
         } else {
             this.instance_types.push({
