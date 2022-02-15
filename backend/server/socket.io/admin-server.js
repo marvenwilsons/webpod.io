@@ -4,6 +4,7 @@ const socketio = require('socket.io')
 const fs = require('fs')
 const app = express()
 const server = http.createServer(app)
+const { query } = require('../postgres/db')
 const io = socketio(server,{
   cookie: false
 })

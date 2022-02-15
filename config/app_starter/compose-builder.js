@@ -2,6 +2,12 @@ const app_config = require('../app.js')
 const adminPort = 5000
 const publicPort = 3000
 const mode = 'dev' // dev or production
+const postgresEnv = [
+  `POSTGRES_PASSWORD=postgres`,
+  `POSTGRES_USER=postgres`,
+  `POSTGRES_DB=webpod`,
+  `PGHOST=postgres`
+]
 /**************************************************************
  *                  Front End Admin Container                  *
  **************************************************************/
@@ -18,10 +24,7 @@ const frontend_admin_container = {
     `APP_PORT=${adminPort}`,
     `ADMIN_ROUTE=${app_config.admin_route}`,
     `API_URL=${app_config.backend.admin_api_route}`,
-    `API_BASE=backend:${app_config.backend.admin_server_port}`
-  ],
-  networks: [
-    'admin-network'
+    `API_BASE=backend:${app_config.backend.admin_server_port}`,
   ],
   // ports: [
   //   `${adminPort}:${adminPort}`
@@ -60,9 +63,7 @@ const frontend_public_container = {
   // ports: [
   //   `${publicPort}:${publicPort}`
   // ],
-  networks: [
-    'public-network'
-  ],
+
   volumes: [
     "../frontend-public/assets:/usr/src/public/assets",
     "../frontend-public/layouts:/usr/src/public/layouts",
@@ -95,7 +96,8 @@ const frontend_public_container = {
     "ADMIN_SERVER_PORT=8000",
     "PUBLIC_SERVER_PORT=9000",
     `API_URL=${app_config.backend.admin_api_route}`,
-    `JWT_SECRET=${app_config.jwt_secret}`
+    `JWT_SECRET=${app_config.jwt_secret}`,
+    ...postgresEnv
   ],
   volumes: [
     "../backend:/usr/src/backend",
@@ -109,9 +111,7 @@ const frontend_public_container = {
     'frontend-admin',
     'frontend-public',
   ],
-  networks: [
-    'backend-network'
-  ]
+
 }
 /**************************************************************
  *                      Nginx Container                       *
@@ -148,11 +148,6 @@ const nginx_container = {
     // PG ADMIN
     { PGADMIN_URL:                      app_config.pg_admin.PGADMIN_URL }
   ],
-  networks: [
-    'backend-network',
-    'admin-network',
-    'public-network'
-  ]
 }
 nginx_container.environment.map((e,i) => {
   if(typeof e == 'object') {
@@ -167,12 +162,7 @@ const postgres_container = {
   image: 'postgres',
   restart: 'always',
   ports: ['5432'],
-  environment: [
-    `POSTGRES_PASSWORD=postgres`,
-    `POSTGRES_USER=postgres`,
-    `POSTGRES_DB=webpod`,
-    `PGHOST=postgres`
-  ],
+  environment: [...postgresEnv],
   depends_on: ['nginx'],
   volumes: [
     '../postgres:/var/lib/postgresql/data'
@@ -188,17 +178,17 @@ let dockerCompose = {
     'nginx': nginx_container,
     'postgres': postgres_container
   },
-  networks:{
-    'admin-network' : {
-      driver: 'bridge',
-    },
-    'public-network': {
-      driver: 'bridge'
-    },
-    'backend-network': {
-      driver: 'bridge'
-    }
-  }
+  // networks:{
+  //   'admin-network' : {
+  //     driver: 'bridge',
+  //   },
+  //   'public-network': {
+  //     driver: 'bridge'
+  //   },
+  //   'backend-network': {
+  //     driver: 'bridge'
+  //   }
+  // }
 }
 
 module.exports = dockerCompose
