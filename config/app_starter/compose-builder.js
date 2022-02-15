@@ -108,6 +108,7 @@ const frontend_public_container = {
   //   `${app_config.backend.admin_server_port}:${app_config.backend.admin_server_port}`,
   // ],
   depends_on: [
+    'postgres',
     'frontend-admin',
     'frontend-public',
   ],
@@ -163,7 +164,6 @@ const postgres_container = {
   restart: 'always',
   ports: ['5432'],
   environment: [...postgresEnv],
-  depends_on: ['nginx'],
   volumes: [
     '../postgres:/var/lib/postgresql/data'
   ]

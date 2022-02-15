@@ -1,6 +1,7 @@
 const express = require('express')
 const app = express()
 const port = process.env.PUBLIC_SERVER_PORT
+const init = require('../postgres/init')
 
 const auth_token = (req, res, next) => {
   // http://localhost/url/videos/sample.mp4?token="22teoasdakjdsvnkansdfsadf2"&&user_prefix="iadsjfh"

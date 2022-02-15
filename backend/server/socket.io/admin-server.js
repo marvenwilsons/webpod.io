@@ -9,7 +9,15 @@ const io = socketio(server,{
   cookie: false
 })
 
+
+
 app.use(express.json())
+
+app.get('/', (req,res) => {
+  res.json({
+    message: 'APP IS NOT INITIALIZED'
+  })
+})
 
 app.get('/apps', (req,res) => {
   // returns an array of all apps installed

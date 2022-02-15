@@ -1,5 +1,6 @@
 import gsap from "gsap";
 import { io } from "socket.io-client"; 
+import utils from './utils'
 export default {
     data: () => ({
       loaded: [],
@@ -8,9 +9,12 @@ export default {
       socket: undefined,
       mode: undefined,
       authorization: undefined,
-      use_socket: false
+      use_socket: false,
+      validator: undefined
     }),
     mounted() {
+      this.validator = utils.stringValidator
+      
       // every axios request requires authorization headers
       this.authorization = {
         headers: {

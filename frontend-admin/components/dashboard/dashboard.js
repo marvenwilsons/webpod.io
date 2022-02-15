@@ -128,12 +128,21 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             }
         })
     } else {
-        location.href = '/login'
+        console.log('checking app')
+        fetch(`${process.env.API_URL}`)
+        .then(response => response.json())
+        .then(({message}) => {
+            if(message == 'APP IS NOT INITIALIZED') {
+                console.log(dash.initApp(false))
+            } else {    
+                location.href = '/login'
+            }
+        })
     }
 
     setTimeout(() => {
-        dash.loading(false)
-        dash.showDashboard(true)
+        // dash.loading(false)
+        // dash.showDashboard(true)
         window.webpod = Object.seal({
             dash: {...dash},
             paneCollection,

@@ -1,7 +1,10 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main  style="background: #1565c0a8;" class="relative" >
-            <main>
+            <main v-if="!appIsInitialized" style="z-index: 1999">
+                <init @completedForm="handleInitForm" />
+            </main>
+            <main  v-if="appIsInitialized" >
                 <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                         <draggable ref="draggable" v-if="showModal" >
@@ -107,6 +110,7 @@
                     </section>
                 </v-slide-x-reverse-transition>
             </main>
+            
         </v-main>
     </v-app>
 </template>
@@ -118,11 +122,12 @@ import dashboard from '@/components/dashboard/dashboard.js'
 import sidebar from '@/components/dashboard/side-bar/index.vue'
 import notification from '@/components/dashboard/side-bar/notification.vue'
 import accentBg from '@/components/dashboard/accent-bg/index.vue'
+import init from '@/components/dashboard/init/index.vue'
 
 import m from '@/m'
 export default {
     mixins: [m],
-    components: {menubar, sidebar, notification, accentBg},
+    components: {menubar, sidebar, notification, accentBg, init},
     data: () => ({
         panes: [],
         showModal: false,
@@ -141,7 +146,8 @@ export default {
         shakeModal:false,
         historyBtnIsShowing: false,
         historyBtnDirection: 'left',
-        showAccountBtn: false
+        showAccountBtn: false,
+        appIsInitialized: true
     }),
     created() {
         service.getAllServices(this)
@@ -219,6 +225,9 @@ export default {
         },
         portalTargetChanged() {
             this.$refs.draggable.ready = true
+        },
+        handleInitForm(formData) {
+            console.log('handling init form', formData)
         }
     },
     mounted() {
@@ -291,6 +300,7 @@ export default {
                 setServices: (s) => this.setService(s),
                 menuMappingRole: this.menuMappingRole,
                 serviceMappingRole: this.serviceMappingRole,
+                initApp: (s) => this.appIsInitialized = s
             }
 
             dashboard(paneCollection,menu, service, dash, sidebar, this.socket)
