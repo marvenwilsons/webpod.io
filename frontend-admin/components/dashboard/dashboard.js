@@ -109,6 +109,18 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             location.href = '/login'
         }
     })
+    socket.on('log', (msg) => {
+        webpod.session.logs.push(msg)
+        webpod.session.onLog(msg)
+    })
+
+    socket.on('progress', (val) => {
+        if(val == '100%') {
+            webpod.session.logs = []
+        } else {
+            setTimeout(() =>  webpod.session.onProgress(val), 200)
+        }
+    })
 
 
 /*********************************** ON DASHBOARD LOAD *****************************************************/
@@ -128,12 +140,11 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             }
         })
     } else {
-        console.log('checking app')
         fetch(`${process.env.API_URL}`)
         .then(response => response.json())
         .then(({message}) => {
             if(message == 'APP IS NOT INITIALIZED') {
-                console.log(dash.initApp(false))
+                dash.showInitForms(true)
             } else {    
                 location.href = '/login'
             }
@@ -154,7 +165,10 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             },
             session: {
                 paneOnFocus: 0,
-                appInstanceOnFocus: undefined
+                appInstanceOnFocus: undefined,
+                logs: [],
+                onLog: () => {},
+                onProgress: () => {}
             },
             dashSettings: {
                 'Pane Slide': 'yes',

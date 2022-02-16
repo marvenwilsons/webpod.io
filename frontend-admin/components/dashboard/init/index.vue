@@ -14,29 +14,33 @@
         <div style="z-index:3; overflow-x:auto;" :class="['fullheight-VH', slide && !hasError || currentForm == 1 ? ['flex', 'flexcenter', 'smth'] : '']" >
             <div class="flex flexcenter" >
                 <section style="background:white; max-width:400px;" class="relative pad125 margintop125 marginbottom125 flex flexcenter borderRad4 modalShadow" >
-                    <!-- <v-progress-linear
-                        :active="true"
-                        :indeterminate="true"
+                    <v-progress-linear
+                    v-if="currentForm == 3 "
+                        :value="progressValue"
                         bottom
                         absolute
                         color="primary"
-                    ></v-progress-linear> -->
+                    ></v-progress-linear>
                     <div class="padleft125 padright125 padbottom125" >
                         
                         <div class="marginbottom125 margintop125 flex flexcenter flexcol" >
                             <!-- logo -->
                             <div class="relative" style="height:70px;width:70px;" >
-                                <img class="absolute" style="height:70px;width:70px; z-index:1;" src="dq-logo.png" alt="">
+                                <div class="absolute flex flexcenter" style="height:70px;width:70px; z-index:1;" >
+                                    <div style="border-radius: 200%; border: 1px solid black;" class="  flex flexcenter" >
+                                        <h1 class="merri-font" style="font-size:40px; margin:0;" >W</h1>
+                                    </div>
+                                </div>
                                 <div v-if="currentForm == 3" style="z-index:0;" class="absolute fullwidth fullheight-percent " >
                                     <loading/>
                                 </div>
                             </div>
                             <!-- form title -->
                             <div>
-                                <h5 v-if="currentForm != 3 " class="smth" style="font-weight:100;" >
+                                <h5 v-if="currentForm != 3 " class="smth" style="font-weight:300;" >
                                     Creat{{currentForm != 3 ? 'e' : 'ing'}} App{{currentForm != 3 ? '' : '...'}}
                                 </h5>
-                                <div v-if="currentForm == 3 " class="margintop125" >loading</div>
+                                <div v-if="currentForm == 3 " class="margintop125" >{{progressMsg}}</div>
                                 <!-- <h6 v-if="currentForm == 3 " class="smth" style="font-weight:500;" >
                                     Please wait ...
                                 </h6> -->
@@ -109,6 +113,8 @@ export default {
             slide: true
         },
         firstFormValue: undefined,
+        progressMsg: undefined,
+        progressValue: 0
     }),
     methods: {
         nextAnimate() {
@@ -241,6 +247,10 @@ export default {
         }
     },
     mounted() {
+        setTimeout(() => {
+            webpod.session.onLog = msg =>  this.progressMsg = msg
+            webpod.session.onProgress = val => this.progressValue = val
+        },100)
     }
 }
 </script>

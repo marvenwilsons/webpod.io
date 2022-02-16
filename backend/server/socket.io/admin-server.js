@@ -8,6 +8,8 @@ const { query } = require('../postgres/db')
 const io = socketio(server,{
   cookie: false
 })
+let log = undefined
+let progress = undefined
 
 
 
@@ -17,6 +19,14 @@ app.get('/', (req,res) => {
   res.json({
     message: 'APP IS NOT INITIALIZED'
   })
+})
+app.post('/init', (req,res) => {
+  console.log('init')
+  log('initializing ...')
+  progress('15%')
+  // res.json({
+  //   message: 'APP IS NOT INITIALIZED'
+  // })
 })
 
 app.get('/apps', (req,res) => {
@@ -175,7 +185,8 @@ io.on('connection', async function (socket) {
   }
   const dashboard_events = await dashboard_event_handler(dashboard_exec)
   dashboard_events.onMount()
-
+  log = msg => socket.emit('log',msg)
+  progress = val => socket.emit('progress', val)
   socket.on('req', async function ({name, payload}) {
     try {
       if(payload) {

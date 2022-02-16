@@ -1,10 +1,10 @@
 <template>
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main  style="background: #1565c0a8;" class="relative" >
-            <main v-if="!appIsInitialized" style="z-index: 1999">
+            <main v-if="showInitForms" style="z-index: 1999">
                 <init @completedForm="handleInitForm" />
             </main>
-            <main  v-if="appIsInitialized" >
+            <main  v-if="!showInitForms" >
                 <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                         <draggable ref="draggable" v-if="showModal" >
@@ -147,7 +147,7 @@ export default {
         historyBtnIsShowing: false,
         historyBtnDirection: 'left',
         showAccountBtn: false,
-        appIsInitialized: true
+        showInitForms: true
     }),
     created() {
         service.getAllServices(this)
@@ -228,6 +228,22 @@ export default {
         },
         handleInitForm(formData) {
             console.log('handling init form', formData)
+            const url = `${process.env.API_URL}/init`
+            const request_options = {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            };
+            fetch(url, request_options)
+            .then(response => response.json())
+            .then(data => {
+                
+            }).catch(err => {
+                webpod.dash.alertError({
+                    message: `<span>An error occured while inserting app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
+                    reload: true
+                })
+            })
         }
     },
     mounted() {
@@ -300,7 +316,7 @@ export default {
                 setServices: (s) => this.setService(s),
                 menuMappingRole: this.menuMappingRole,
                 serviceMappingRole: this.serviceMappingRole,
-                initApp: (s) => this.appIsInitialized = s
+                showInitForms: (s) => this.appIsInitialized = s
             }
 
             dashboard(paneCollection,menu, service, dash, sidebar, this.socket)
