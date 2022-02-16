@@ -2,7 +2,7 @@
     <v-app class="flexcenter flex relative" style="height:100vh; overflow:hidden;"  >
         <v-main  style="background: #1565c0a8;" class="relative" >
             <main v-if="showInitForms" style="z-index: 1999">
-                <init @completedForm="handleInitForm" />
+                <init ref="wp-init" @completedForm="handleInitForm" />
             </main>
             <main  v-if="!showInitForms" >
                 <v-fade-transition>
@@ -316,7 +316,10 @@ export default {
                 setServices: (s) => this.setService(s),
                 menuMappingRole: this.menuMappingRole,
                 serviceMappingRole: this.serviceMappingRole,
-                showInitForms: (s) => this.appIsInitialized = s
+                showInitForms: (s,generated_db_info) => {
+                    this.appIsInitialized = s
+                    this.$refs['wp-init'].generated_db_info = generated_db_info
+                }
             }
 
             dashboard(paneCollection,menu, service, dash, sidebar, this.socket)

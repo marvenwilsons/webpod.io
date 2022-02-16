@@ -1,21 +1,6 @@
 <template>
     <div>
         <div class="" >
-            <v-card :elevation="databaseName.errors ? 5 : 0" :class="[databaseName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-                <div v-if="databaseName.errors" class="marginbottom050 err" > 
-                    <div v-for="(msg,msgIndex) in databaseName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
-                </div>
-                <v-text-field
-                    label="Database Name"
-                    dense
-                    outlined
-                    class="marginbottom125"
-                    v-model="databaseName.value"
-                    :error="databaseName.errors ? true : false"
-                    :disabled="disableAll"
-                ></v-text-field>
-            </v-card>
-
             <v-card :elevation="databaseUsername.errors ? 5 : 0" :class="[databaseUsername.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
                 <div v-if="databaseUsername.errors" class="marginbottom050 err">
                     <div v-for="(msg,msgIndex) in databaseUsername.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
@@ -30,22 +15,6 @@
                     :disabled="disableAll"
                 ></v-text-field>
             </v-card>
-
-            <v-card :elevation="tablePrefix.errors ? 5 : 0" :class="[tablePrefix.errors  ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
-                <div v-if="tablePrefix.errors " class="marginbottom050 err"> 
-                    <div v-for="(msg,msgIndex) in tablePrefix.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
-                </div>
-                <v-text-field
-                    label="Table Prefix"
-                    outlined
-                    dense
-                    class="marginbottom125"
-                    v-model="tablePrefix.value"
-                    :error="tablePrefix.errors ? true : false"
-                    :disabled="disableAll"
-                ></v-text-field>
-            </v-card>
-
             <v-card :elevation="databasePassword.errors ? 5 : 0" :class="[databasePassword.errors ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
                 <div v-if="databasePassword.errors" class="marginbottom050 err" >
                     <div v-for="(msg,msgIndex) in databasePassword.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
@@ -65,6 +34,38 @@
                 hint="Password must have Special characters, lower & uppercase letters & numbers "
             ></v-text-field>
             </v-card>
+            <br> <br>
+            <v-card :elevation="databaseName.errors ? 5 : 0" :class="[databaseName.errors ? 'smth padtop125 padleft125 padright125 marginbottom125 margintop125' : 'smth']" >
+                <div v-if="databaseName.errors" class="marginbottom050 err" > 
+                    <div v-for="(msg,msgIndex) in databaseName.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+                </div>
+                <v-text-field
+                    label="Database Name"
+                    dense
+                    outlined
+                    class="marginbottom125"
+                    v-model="databaseName.value"
+                    :error="databaseName.errors ? true : false"
+                    :disabled="true"
+                ></v-text-field>
+            </v-card>
+
+            <v-card :elevation="tablePrefix.errors ? 5 : 0" :class="[tablePrefix.errors  ? 'smth padtop125 padleft125 padright125 marginbottom125' : 'smth']" >
+                <div v-if="tablePrefix.errors " class="marginbottom050 err"> 
+                    <div v-for="(msg,msgIndex) in tablePrefix.errors" :key="`${msg}${msgIndex}`" >{{msg}}</div>
+                </div>
+                <v-text-field
+                    label="Table Prefix"
+                    outlined
+                    dense
+                    class="marginbottom125"
+                    v-model="tablePrefix.value"
+                    :error="tablePrefix.errors ? true : false"
+                    :disabled="true"
+                ></v-text-field>
+            </v-card>
+
+            
 
         </div>
     </div>
@@ -78,15 +79,18 @@ export default {
         this.h = this
     },
     mounted() {
+        const { db_name, table_prefix } = this.generated_db_info
+        this.databaseName.value = db_name
+        this.tablePrefix.value = table_prefix
+
+
         if(process.env.NODE_ENV == 'development') {
             console.log('RUNNING ON DEVELOPMENT')
-            this.databaseName.value = 'asdfasdf'
             this.databaseUsername.value = 'marven'
-            this.tablePrefix.value = 'asdf'
             this.databasePassword.value = 'password123ABC'
         }
     },
-    props:['disableAll'],
+    props:['disableAll','generated_db_info'],
     data: () => ({
         databaseName:    {value: undefined, errors: undefined},
         databaseUsername:{value: undefined, errors: undefined},
@@ -103,9 +107,6 @@ export default {
             value == undefined && 
                 errors.push('Database Name is a required field')
 
-
-            this.validator.hasNumber(value) &&
-                errors.push('Database Name must not have any numbers')
 
             return {
                 value,
@@ -152,9 +153,6 @@ export default {
 
             value == undefined && 
                 errors.push('Table Prefix is required')
-
-            this.validator.hasSpecialCharacters(value) &&
-                errors.push('Table Prefix must not have any special characters')
 
             this.validator.hasWhiteSpace(value) &&
                 errors.push('Table Prefix must not have any white spaces')

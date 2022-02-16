@@ -66,6 +66,7 @@
                                 :disableAll="disableAll"
                                 id="initSecondForm"
                                 ref="SecondForm"
+                                :generated_db_info="generated_db_info"
                             />
                         </div>
                         <div v-if="currentForm != 3" class="flex flexend margintop125" >
@@ -114,7 +115,8 @@ export default {
         },
         firstFormValue: undefined,
         progressMsg: undefined,
-        progressValue: 0
+        progressValue: 0,
+        generated_db_info: undefined
     }),
     methods: {
         nextAnimate() {
