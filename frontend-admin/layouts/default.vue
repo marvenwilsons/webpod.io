@@ -227,7 +227,6 @@ export default {
             this.$refs.draggable.ready = true
         },
         handleInitForm(formData) {
-            console.log('handling init form', formData)
             const url = `${process.env.API_URL}/init`
             const request_options = {
             method: 'POST',
