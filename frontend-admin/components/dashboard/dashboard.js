@@ -144,9 +144,9 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     } else {
         fetch(`${process.env.API_URL}`)
         .then(response => response.json())
-        .then(({message}) => {
+        .then(({message, generated_db_info}) => {
             if(message == 'APP IS NOT INITIALIZED') {
-                dash.showInitForms(true)
+                dash.showInitForms(true,generated_db_info)
             } else {    
                 location.href = '/login'
             }
