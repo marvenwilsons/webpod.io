@@ -110,15 +110,17 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         }
     })
     socket.on('log', (msg) => {
-        webpod.session.logs.push(msg)
-        webpod.session.onLog(msg)
+        setTimeout(() => {
+            webpod.session.logs.push(msg)
+            webpod.session.onLog(msg)
+        },1200)
     })
 
     socket.on('progress', (val) => {
         if(val == '100%') {
             webpod.session.logs = []
         } else {
-            setTimeout(() =>  webpod.session.onProgress(val), 200)
+            setTimeout(() =>  webpod.session.onProgress(val), 1200)
         }
     })
 
