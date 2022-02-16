@@ -5,25 +5,26 @@ const fs = require('fs')
 const app = express()
 const server = http.createServer(app)
 const { query } = require('../postgres/db')
+const init = require('../postgres/init')
 const io = socketio(server,{
   cookie: false
 })
-let log = undefined
-let progress = undefined
-
-
 
 app.use(express.json())
 
 app.get('/', (req,res) => {
   res.json({
-    message: 'APP IS NOT INITIALIZED'
+    message: 'APP IS NOT INITIALIZED',
+    generated_db_info: {
+      db_name: process.env.POSTGRES_DB,
+      table_prefix: process.env.TABLE_PREFIX
+    }
   })
 })
 app.post('/init', (req,res) => {
-  console.log('init')
-  log('initializing ...')
-  progress('15%')
+  global.log('initializing ...')
+  global.progress('15%')
+  init(req.body)
   // res.json({
   //   message: 'APP IS NOT INITIALIZED'
   // })
@@ -183,10 +184,16 @@ io.on('connection', async function (socket) {
       }
     }
   }
+
+  // sending exec command to dashboard
   const dashboard_events = await dashboard_event_handler(dashboard_exec)
   dashboard_events.onMount()
-  log = msg => socket.emit('log',msg)
-  progress = val => socket.emit('progress', val)
+
+  // loggers
+  global.log = Object.freeze(msg => socket.emit('log',msg))
+  global.progress = Object.freeze(val => socket.emit('progress', val))
+  
+  // on request
   socket.on('req', async function ({name, payload}) {
     try {
       if(payload) {
