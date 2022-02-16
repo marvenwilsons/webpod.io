@@ -182,6 +182,27 @@ const postgres_container = {
   ]
 }
 
+/**************************************************************
+ *                  pgadmin Container                       *
+ **************************************************************/
+ const pgadmin_container = {
+  container_name: 'pgadmin',
+  image: 'dpage/pgadmin4',
+  restart: 'unless-stopped',
+  ports: ['5555:80'],
+  environment: [
+    "PGADMIN_DEFAULT_EMAIL=user@domain.com",
+    "PGADMIN_DEFAULT_PASSWORD=password",
+    "PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION=True",
+    "PGADMIN_CONFIG_LOGIN_BANNER=\"Webpod authorized users only!\""
+  ],
+  volumes: [
+    "../pgadmin:/var/lib/pgadmin",
+    "../pgadmin:/pgadmin4/servers.json",
+    "../pgadmin:/pgadmin4/config_local.py"
+  ]
+}
+
 let dockerCompose = {
   version: '3',
   services: {
@@ -189,19 +210,12 @@ let dockerCompose = {
     'frontend-admin': frontend_admin_container,
     'frontend-public': frontend_public_container,
     'nginx': nginx_container,
-    'postgres': postgres_container
-  },
-  // networks:{
-  //   'admin-network' : {
-  //     driver: 'bridge',
-  //   },
-  //   'public-network': {
-  //     driver: 'bridge'
-  //   },
-  //   'backend-network': {
-  //     driver: 'bridge'
-  //   }
-  // }
+    'postgres': postgres_container,
+  }
+}
+
+if(app_config.use_pg_admin) {
+  dockerCompose.services.pgadmin = pgadmin_container
 }
 
 module.exports = dockerCompose
