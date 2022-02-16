@@ -2,11 +2,24 @@ const app_config = require('../app.js')
 const adminPort = 5000
 const publicPort = 3000
 const mode = 'dev' // dev or production
+
+// postgres env
+function makeid(length) {
+  var result           = [];
+  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var charactersLength = characters.length;
+  for ( var i = 0; i < length; i++ ) {
+    result.push(characters.charAt(Math.floor(Math.random() * 
+charactersLength)));
+  }
+  return result.join('');
+}
 const postgresEnv = [
   `POSTGRES_PASSWORD=postgres`,
   `POSTGRES_USER=postgres`,
-  `POSTGRES_DB=webpod`,
-  `PGHOST=postgres`
+  `POSTGRES_DB=webpod_${makeid(7)}`,
+  `PGHOST=postgres`,
+  `TABLE_PREFIX=${makeid(7)}_`
 ]
 /**************************************************************
  *                  Front End Admin Container                  *
