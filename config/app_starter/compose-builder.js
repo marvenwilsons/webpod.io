@@ -6,7 +6,7 @@ const mode = 'dev' // dev or production
 // postgres env
 function makeid(length) {
   var result           = [];
-  var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  var characters       = 'abcdefghijklmnopqrstuvwxyz';
   var charactersLength = characters.length;
   for ( var i = 0; i < length; i++ ) {
     result.push(characters.charAt(Math.floor(Math.random() * 
@@ -17,7 +17,7 @@ charactersLength)));
 const postgresEnv = [
   `POSTGRES_PASSWORD=postgres`,
   `POSTGRES_USER=postgres`,
-  `POSTGRES_DB=webpod_${makeid(7)}`,
+  `POSTGRES_DB=${makeid(7)}_webpod`,
   `PGHOST=postgres`,
   `TABLE_PREFIX=${makeid(7)}_`
 ]
