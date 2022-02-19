@@ -252,7 +252,7 @@ export default {
         setTimeout(() => {
             webpod.session.onLog = msg =>  this.progressMsg = msg
             webpod.session.onProgress = val => this.progressValue = val
-        },100)
+        },10)
     }
 }
 </script>

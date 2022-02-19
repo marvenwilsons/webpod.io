@@ -197,25 +197,86 @@ module.exports = async (body) => {
     
     /**
      * Create a master dashboard admin user
-     * assign 
      */
+    let create_admin_user_result = undefined
     if(update_role_menu_result === 'success') {
         try {
             const saltRound = 10
             const salt =  bcryptjs.genSaltSync(saltRound)
             const bcryptPassword =  bcryptjs.hashSync(password, salt)
-            const x = (await query(`
+            create_admin_user_result = (await query(`
                 INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
                 VALUES ($1, $2, $3, $4, $5, $6)
-            `,[email, username, bcryptPassword, firstName, lastName, `{${master_role_id}}`]))
-            console.log('x', x)
+            `,[email, username, bcryptPassword, firstName, lastName, `{${master_role_id}}`])).rows.length == 0 && 'success'
         } catch(err) {
             console.log('insert user err', err)
         }
     }
 
+    /**
+     * Create apps table
+     */
+    let create_apps_table_result = undefined
+    if(create_admin_user_result == 'success') {
+        try {
+            global.log('Creating apps table ...')
 
-    
+            create_apps_table_result = await Promise.all([
+                query(`
+                    CREATE TABLE ${tablePrefix}apps (
+                        app_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                        app_name VARCHAR(100) NOT NULL
+                    )
+                `),
+                query(`
+                    CREATE TABLE ${tablePrefix}app_instances (
+                        instance_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                        instance_from uuid NOT NULL,
+                        instance_title VARCHAR(250) NOT NULL,
+                        allowed_users uuid [],
+                        history VARCHAR(500) [],
+                        app_data jsonb,
+                        last_modified date,
+                        modified_by uuid REFERENCES ${tablePrefix}users(user_id)
+                    )
+                `)
+            ]).then(data => 'success')
+        } catch(err) {
+            console.log('create_apps_table_err', err)
+        }
+    }
 
-    
+
+    /**
+     * Create service table
+     */
+    let create_services_table_result = undefined
+    if(create_apps_table_result == 'success') {
+        global.log('Creating services table ...')
+        global.progress('90%')
+
+        create_services_table_result = await Promise.all([
+            query(`
+                CREATE TABLE ${tablePrefix}services (
+                    service_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                    service_name VARCHAR(100) NOT NULL
+                )
+            `),
+            query(`
+                CREATE TABLE ${tablePrefix}service_versions (
+                    version_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                    service_id uuid NOT NULL REFERENCES ${tablePrefix}services(service_id),
+                    version_name VARCHAR(100) NOT NULL,
+                    version_data jsonb,
+                    instancer jsonb
+                )
+            `)
+        ]).then(data => true)
+    }
+
+    if(create_services_table_result) {
+        global.log('done')
+        global.progress('100%')
+        console.log('its done')
+    }
 }
