@@ -1,4 +1,6 @@
 const { query } = require('./db')
+const bcryptjs = require('bcryptjs')
+
 
 async function GET_ALL_TABLES () {
     const res = await query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`)
@@ -87,8 +89,9 @@ module.exports = async (body) => {
             create_user_table_result = (await query(`
                 CREATE TABLE ${tablePrefix}users (
                     user_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                    email VARCHAR(500) NOT NULL, 
-                    user_password VARCHAR(250) NOT NULL,
+                    username VARCHAR(100) NOT NULL, 
+                    email VARCHAR(100) NOT NULL, 
+                    user_password VARCHAR(100) NOT NULL,
                     first_name VARCHAR(100) NOT NULL,
                     last_name VARCHAR(100) NOT NULL,
                     role_id uuid [ ]
@@ -119,14 +122,13 @@ module.exports = async (body) => {
     /**
      * Add default master role
      */
-
     let master_role_id = undefined
     if(create_roles_table_result === 'success') {
         global.log('Inserting master role ...')
         global.progress('80%')
         try {
             master_role_id = (await query(`
-                INSERT INTO roles (role_name) 
+                INSERT INTO ${tablePrefix}roles (role_name) 
                 VALUES($1) returning *
             `,['master'])).rows[0].role_id
         } catch(err) {
@@ -139,6 +141,8 @@ module.exports = async (body) => {
      */
     let create_menu_table_result = undefined
     if(master_role_id != undefined) {
+        global.log('Creating menu table ...')
+        global.progress('82%')
         try {
             create_menu_table_result = (await query(`
                 CREATE TABLE ${tablePrefix}menu (
@@ -151,29 +155,64 @@ module.exports = async (body) => {
         }
     }
 
-    console.log('sdfag',create_menu_table_result)
+    /**
+     * Add default menus to menu table
+     */
+    let add_default_menu_result = undefined
+    let default_menu_uids = []
+    if(create_menu_table_result === 'success') {
+        global.log('Inserting default menus ...')
+        try {
+            const default_menus = ['Dashboard','Site','Collections','Apps','Users','Roles','Services','Settings']
+            const qs = []
+
+            default_menus.map(menu_name => qs.push(query(`
+                INSERT INTO ${tablePrefix}menu (menu_name) 
+                VALUES($1) returning *
+            `,[menu_name])))
+            
+            add_default_menu_result = await Promise.all(qs).then(data => {
+                default_menu_uids = data.map(r => r.rows[0].menu_id)
+                return 'success'
+            })
+        } catch(err) {
+            console.log('insert default menus err ', err)
+        }
+    }
 
 
     /**
-     * Add role menus to role_menu column in roles table
+     * Update master role add menus
      */
+    let update_role_menu_result = undefined
+    if(add_default_menu_result === 'success') {
+        global.log('Updating role menus ...')
 
+        update_role_menu_result = (await query(`
+            UPDATE ${tablePrefix}roles 
+            SET role_menu = '{${default_menu_uids.join(',')}}'
+            WHERE role_id = '${master_role_id}'
+        `)).rows.length == 0 && 'success'
+    }
+    
     /**
-     * Add user to users table referencing the master role as its role
+     * Create a master dashboard admin user
+     * assign 
      */
-    // let insert_user_result = undefined
-    // if(insert_master_role_result === 'success') {
-    //     try {
-    //         global.log('Inserting master user  ...')
-    //         global.progress('85%')
-    //         insert_user_result = (await query(`
-    //             INSERT INTO users (email, user_password, first_name, last_name) 
-    //             VALUES($1, $2, $3, $4)
-    //         `,['master'])).rows.length == 0 && 'success'
-    //     } catch(err) {
-    //         console.log('insert user err', err)
-    //     }
-    // }
+    if(update_role_menu_result === 'success') {
+        try {
+            const saltRound = 10
+            const salt =  bcryptjs.genSaltSync(saltRound)
+            const bcryptPassword =  bcryptjs.hashSync(password, salt)
+            const x = (await query(`
+                INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
+                VALUES ($1, $2, $3, $4, $5, $6)
+            `,[email, username, bcryptPassword, firstName, lastName, `{${master_role_id}}`]))
+            console.log('x', x)
+        } catch(err) {
+            console.log('insert user err', err)
+        }
+    }
 
 
     
