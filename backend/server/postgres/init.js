@@ -277,7 +277,6 @@ module.exports = async (body, cb) => {
     if(create_services_table_result) {
         global.log('done')
         global.progress('100%')
-        console.log('its done')
         
         if(cb) {
             cb('OK')
