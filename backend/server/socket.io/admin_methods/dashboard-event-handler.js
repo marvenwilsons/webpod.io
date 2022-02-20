@@ -5,33 +5,12 @@ module.exports = async (dashboard) => ({
 
   onMount() {
     console.log('on Mount')
-    // dashboard.exec({
-    //   location: 'sidebar',
-    //   action: 'open',
-    //   payload: "test"
-    // })
-    // dashboard.send('media')
   },
 
   // onRequest is executed by admin-server.js
   async onRequest(request_name,admin_username) {
     // console.log('** on request', request_name, user)
     switch(request_name) {
-      case 'getUserServices':
-        const userServices = await procedures()['getUserServices']()
-
-        dashboard
-          .exec('dash','setUser',{
-            name: userServices.name,
-            email: userServices.email,
-            avatar: userServices.avatar
-          })
-          .exec('service',  'setServices',  userServices.services)
-          // .exec('topbar',   'setMsg',       userServices.app_name)
-          // .exec('menu',     'setItems',     userServices.menu_items)
-          // .exec('menu',     'setSelected',  'Dashboard')
-
-      break;
       case 'getDashboardResource':
         const sys = procedures()
         
@@ -94,16 +73,19 @@ module.exports = async (dashboard) => ({
         // promise.all will fail if there is one failed promise, even if other promise resolves.
         Promise.all(selected_service_version).then((data) => {
           // set dashboard services
+          dashboard.exec('dash','showInitForms',false)
           dashboard.exec('dash','constructDashboardServices',data)
+          dashboard.exec('dash','showDashboard',true)
+          setTimeout(() => {
+            dashboard.exec('dash','loading',false)
+          }, 1000)
+
         }).catch(err => {
           dashboard.exec('dash','alertError', {
             message: err,
             reload: true
           })
         })
-        
-        
-
       break;
     }
   },
