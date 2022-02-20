@@ -12,22 +12,36 @@ const io = socketio(server,{
 
 app.use(express.json())
 
-app.get('/', (req,res) => {
-  res.json({
-    message: 'APP IS NOT INITIALIZED',
-    generated_db_info: {
-      db_name: process.env.POSTGRES_DB,
-      table_prefix: process.env.TABLE_PREFIX
-    }
-  })
+app.get('/', async (req,res) => {
+  const r = await query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`)
+  if(r.rows.length == 0) {
+    console.log('APP IS NOT INITIALIZED')
+    res.json({
+      message: 'APP IS NOT INITIALIZED',
+      generated_db_info: {
+        db_name: process.env.POSTGRES_DB,
+        table_prefix: process.env.TABLE_PREFIX
+      }
+    })
+  } else {
+    res.json({
+      message: 'OK'
+    })
+  }
+  
 })
 app.post('/init', (req,res) => {
   global.log('initializing ...')
   global.progress('15%')
-  init(req.body)
-  // res.json({
-  //   message: 'APP IS NOT INITIALIZED'
-  // })
+  init(req.body, (msg) => {
+    if(msg === 'OK') {
+      console.log('init done')
+      res.json({
+        message: 'OK'
+      })
+    }
+  })
+  
 })
 
 app.get('/apps', (req,res) => {
