@@ -95,9 +95,10 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             dashboard_locations[e.location][e.action](e.payload)
         } catch(err) {
             dash.alertError({
-                message: `<span> <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed </span>`,
+                message: `<span> <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed, please check console logs for more information about this error. </span>`,
                 reload: true
             })
+            console.error(err)
         }
     })
     socket.on('error', (payload) => {
@@ -115,10 +116,10 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     })
 
     socket.on('progress', (val) => {
+        webpod.session.onProgress(val)
+
         if(val == '100%') {
             webpod.session.logs = []
-        } else {
-            webpod.session.onProgress(val)
         }
     })
 
@@ -144,6 +145,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         .then(response => response.json())
         .then(({message, generated_db_info}) => {
             if(message == 'APP IS NOT INITIALIZED') {
+                console.log('APP IS NOT INITIALIZED')
                 dash.showInitForms(true,generated_db_info)
             } else {    
                 location.href = '/login'
