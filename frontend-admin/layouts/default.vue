@@ -147,7 +147,7 @@ export default {
         historyBtnIsShowing: false,
         historyBtnDirection: 'left',
         showAccountBtn: false,
-        showInitForms: true
+        showInitForms: false
     }),
     created() {
         service.getAllServices(this)
@@ -235,8 +235,12 @@ export default {
             };
             fetch(url, request_options)
             .then(response => response.json())
-            .then(data => {
-                
+            .then(({message}) => {
+                if(message === 'OK') {
+                    setTimeout(() => {
+                        location.href = '/login'
+                    },1000)
+                }
             }).catch(err => {
                 webpod.dash.alertError({
                     message: `<span>An error occured while inserting app instances for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
@@ -316,8 +320,12 @@ export default {
                 menuMappingRole: this.menuMappingRole,
                 serviceMappingRole: this.serviceMappingRole,
                 showInitForms: (s,generated_db_info) => {
-                    this.appIsInitialized = s
-                    this.$refs['wp-init'].generated_db_info = generated_db_info
+                    this.showInitForms = s
+                    if(s == true) {
+                        setTimeout(() => {
+                            this.$refs['wp-init'].generated_db_info = generated_db_info
+                        },0)
+                    }
                 }
             }
 
