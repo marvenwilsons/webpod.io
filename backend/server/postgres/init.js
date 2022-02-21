@@ -1,5 +1,7 @@
 const { query } = require('./db')
 const bcryptjs = require('bcryptjs')
+const fs = require('fs')
+const path = require('path')
 
 
 async function GET_ALL_TABLES () {
@@ -198,16 +200,25 @@ module.exports = async (body, cb) => {
     /**
      * Create a master dashboard admin user
      */
-    let create_admin_user_result = undefined
+    let create_admin_user_result = {onDone: () => {}}
     if(update_role_menu_result === 'OK') {
         try {
-            const saltRound = 10
-            const salt =  bcryptjs.genSaltSync(saltRound)
-            const bcryptPassword =  bcryptjs.hashSync(password, salt)
-            create_admin_user_result = (await query(`
-                INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
-                VALUES ($1, $2, $3, $4, $5, $6)
-            `,[email, username, bcryptPassword, firstName, lastName, `{${master_role_id}}`])).rows.length == 0 && 'OK'
+            bcryptjs.genSalt(10, (err, salt) => {
+                console.log('1')
+                bcryptjs.hash(password, salt, async (err, hashedPassword) => {
+                    console.log('2', hashedPassword)
+                    if(err) {
+                        throw err
+                    }
+
+                    create_admin_user_result.onDone(
+                        (await query(`
+                            INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
+                            VALUES ($1, $2, $3, $4, $5, $6)
+                        `,[email, username, hashedPassword, firstName, lastName, `{${master_role_id}}`])).rows.length == 0 && 'OK'
+                    )
+                });
+            });
         } catch(err) {
             console.log('insert user err', err)
         }
@@ -216,68 +227,82 @@ module.exports = async (body, cb) => {
     /**
      * Create apps table
      */
-    let create_apps_table_result = undefined
-    if(create_admin_user_result == 'OK') {
-        try {
-            global.log('Creating apps table ...')
+    let create_apps_table_result = {onDone: () => {}}
+    create_admin_user_result.onDone = async (p) => {
+        if(p == 'OK') {
+            try {
+                global.log('Creating apps table ...')
 
-            create_apps_table_result = await Promise.all([
-                query(`
-                    CREATE TABLE ${tablePrefix}apps (
-                        app_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                        app_name VARCHAR(100) NOT NULL
-                    )
-                `),
-                query(`
-                    CREATE TABLE ${tablePrefix}app_instances (
-                        instance_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                        instance_from uuid NOT NULL,
-                        instance_title VARCHAR(250) NOT NULL,
-                        allowed_users uuid [],
-                        history VARCHAR(500) [],
-                        app_data jsonb,
-                        last_modified date,
-                        modified_by uuid REFERENCES ${tablePrefix}users(user_id)
-                    )
-                `)
-            ]).then(data => 'OK')
-        } catch(err) {
-            console.log('create_apps_table_err', err)
+                Promise.all([
+                    query(`
+                        CREATE TABLE ${tablePrefix}apps (
+                            app_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                            app_name VARCHAR(100) NOT NULL
+                        )
+                    `),
+                    query(`
+                        CREATE TABLE ${tablePrefix}app_instances (
+                            instance_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                            instance_from uuid NOT NULL,
+                            instance_title VARCHAR(250) NOT NULL,
+                            allowed_users uuid [],
+                            history VARCHAR(500) [],
+                            app_data jsonb,
+                            last_modified date,
+                            modified_by uuid REFERENCES ${tablePrefix}users(user_id)
+                        )
+                    `)
+                ]).then(data => create_apps_table_result.onDone('OK'))
+            } catch(err) {
+                console.log('create_apps_table_err', err)
+            }
         }
     }
+    
 
 
     /**
      * Create service table
      */
-    let create_services_table_result = undefined
-    if(create_apps_table_result == 'OK') {
-        global.log('Creating services table ...')
-        global.progress('90%')
-
-        create_services_table_result = await Promise.all([
-            query(`
+    let create_services_table_result = {onDone: () => {}}
+    create_apps_table_result.onDone = (msg) => {
+        if(msg == 'OK') {
+            global.log('Creating services table ...')
+            global.progress('90%')
+    
+             query(`
                 CREATE TABLE ${tablePrefix}services (
                     service_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
                     service_name VARCHAR(100) NOT NULL
                 )
-            `),
-            query(`
-                CREATE TABLE ${tablePrefix}service_versions (
-                    version_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                    service_id uuid NOT NULL REFERENCES ${tablePrefix}services(service_id),
-                    version_name VARCHAR(100) NOT NULL,
-                    version_data jsonb,
-                    instancer jsonb
-                )
-            `)
-        ]).then(data => true)
+            `).then(() => {
+                query(`
+                    CREATE TABLE ${tablePrefix}service_versions (
+                        version_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                        service_id uuid NOT NULL REFERENCES ${tablePrefix}services(service_id),
+                        version_name VARCHAR(100) NOT NULL,
+                        version_data jsonb,
+                        instancer jsonb
+                    )
+                `).then (d => {
+                    create_services_table_result.onDone('OK')
+                })
+            }) 
+        }
     }
-
-    if(create_services_table_result) {
+    
+    create_services_table_result.onDone = () => {
         global.log('done')
         global.progress('100%')
-        
+        const man = {
+            app_name: applicationName,
+            jwt_secret: 'sample_jwt_secret_you_should_change_this',
+            database_name: databaseName,
+            db_table_prefix: tablePrefix,
+            use_pg_admin: true,
+            pgadmin_url: null
+        }
+        fs.writeFileSync(path.join(__dirname,'../man.json'), JSON.stringify(man,null,4))
         if(cb) {
             cb('OK')
         }

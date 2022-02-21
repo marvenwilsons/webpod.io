@@ -4,22 +4,12 @@ const publicPort = 3000
 const mode = 'dev' // dev or production
 
 // postgres env
-function makeid(length) {
-  var result           = [];
-  var characters       = 'abcdefghijklmnopqrstuvwxyz';
-  var charactersLength = characters.length;
-  for ( var i = 0; i < length; i++ ) {
-    result.push(characters.charAt(Math.floor(Math.random() * 
-charactersLength)));
-  }
-  return result.join('');
-}
 const postgresEnv = [
   `POSTGRES_PASSWORD=postgres`,
   `POSTGRES_USER=postgres`,
-  `POSTGRES_DB=${makeid(7)}_webpod`,
+  `POSTGRES_DB=${app_config.postgres.POSTGRES_DB}`,
   `PGHOST=postgres`,
-  `TABLE_PREFIX=${makeid(7)}_`
+  `TABLE_PREFIX=${app_config.postgres.TABLE_PREFIX}`
 ]
 /**************************************************************
  *                  Front End Admin Container                  *
