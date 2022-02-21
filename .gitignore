@@ -1,8 +1,12 @@
 ############################
-# nuxt
+# webpod
 ############################
 config/app.json
 backend/server/man.json
+yarn.lock
+config/docker-compose.yml
+pgadmin/*
+package-lock.json
 
 
 ############################
