@@ -16,7 +16,9 @@ module.exports = async function ({user, token}) {
     if(user) {
     // check user token, dashboard request authenticat
       try {
-        const is_valid = verifyToken(token, process.env.JWT_SECRET,u)
+        const is_valid = verifyToken(token, process.env.JWT_SECRET,{
+          id: user
+        })
         resolve({
           is_valid
         })

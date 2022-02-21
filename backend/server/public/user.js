@@ -1,17 +1,20 @@
 const mock_user = ['admin','admin1']
 const jwt = require('jsonwebtoken')
-
+const bcrypt = require('bcryptjs')
+const { query } = require('../postgres/db')
 
 module.exports = (app) => {
   console.log('user route')
-  app.get('/user/confirm_user', function (req, res ) {
+  app.get('/user/confirm_user', async function (req, res ) {
     /** purpose is to check the username or email from req.query if it exist */
-
+    console.log(process.env)
     const { user } = req.query
+    const r  = await query(`SELECT username FROM ${process.env.TABLE_PREFIX}users WHERE username = $1`, [user])
+
 
     res.status(200).json({
-      isSuccess: mock_user.includes(user) ? true : false,
-      msg: mock_user.includes(user) ? {} : `Invalid: Cannot find "${user}" in the database`,
+      isSuccess: r.rows.length != 0 ? true : false,
+      msg: r.rows.length != 0 ? {} : `Invalid: Cannot find "${user}" in the database`,
       contents: null
     })
 
@@ -25,44 +28,40 @@ module.exports = (app) => {
     //      compare password from database and password from request.
     // 3.a  If password is match generate a token then return it to the user inside content object.
     // 3.b  If password does not match return an error
+    const db_user = await query(`SELECT * FROM ${process.env.TABLE_PREFIX}users WHERE username = $1`, [user])
+    const { username, user_password, user_id} = db_user.rows[0]
 
-    const JWT_SECRET = process.env.JWT_SECRET ||  'sample_jwt_secret_you_should_change_this'
-    const TOKEN_EXPIRATION = '1hr'
+    bcrypt.compare(password, user_password, function(err, hashIsValid) {
+      console.log('ey', hashIsValid)
+      if(hashIsValid === true) {
+        console.log('yeah')
 
-    async function passwordIsValid () {
-      return new Promise((resolve,reject) => {
-        setTimeout(() => {
-          resolve(password == 'admin')
-        },0)
-      })
-    }
+        const JWT_SECRET = process.env.JWT_SECRET ||  'sample_jwt_secret_you_should_change_this'
+        const TOKEN_EXPIRATION = '1hr'
 
+        function generateToken(user_id,JWT_SECRET) {
+          const payload = {
+              user: user_id
+          }
+        
+          return jwt.sign(payload, JWT_SECRET, {expiresIn: TOKEN_EXPIRATION})
+        }
 
-    async function getUserId(user) {
-      // query database
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          resolve('sampleUserId')
-        }, 0)
-      })
-    }
+        res.status(200).json({
+          isSuccess: hashIsValid,
+          msg: hashIsValid ? null : 'Password is incorrect',
+          content: {
+              token: hashIsValid ? generateToken(user_id,JWT_SECRET) : null,
+              user: user_id
+          }
+        })
 
-    function generateToken(user_id,JWT_SECRET) {
-      const payload = {
-          user: user_id
+      } else {
+        res.status(200).json({
+          isSuccess: false,
+          msg: 'Password is incorrect',
+        })
       }
-    
-      return jwt.sign(payload, JWT_SECRET, {expiresIn: TOKEN_EXPIRATION})
-    }
-
-    res.status(200).json({
-      isSuccess: await passwordIsValid(),
-      msg: await passwordIsValid() ? null : 'Password is incorrect',
-      content: {
-          token: await passwordIsValid() ? generateToken(await getUserId(user),JWT_SECRET) : null,
-          user
-      }
-    })
-
+    });
   })
 }
