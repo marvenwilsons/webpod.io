@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "sh start.sh",
+    "start": "node start",
     "local": "sh local.sh"
   },
   "repository": {
@@ -20,6 +20,7 @@
   "homepage": "https://github.com/marvenwilsons/webpod.io#readme",
   "dependencies": {
     "json-to-pretty-yaml": "^1.2.2",
-    "prompts": "^2.4.2"
+    "prompts": "^2.4.2",
+    "shelljs": "^0.8.5"
   }
 }
