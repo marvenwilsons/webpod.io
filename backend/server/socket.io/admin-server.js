@@ -10,6 +10,12 @@ const io = socketio(server,{
   cookie: false
 })
 
+const admin_events = {
+  request() {
+
+  }
+}
+
 app.use(express.json())
 
 app.get('/', async (req,res) => {
@@ -201,7 +207,6 @@ io.on('connection', async function (socket) {
 
   // sending exec command to dashboard
   const dashboard_events = await dashboard_event_handler(dashboard_exec)
-  dashboard_events.onMount()
 
   // loggers
   global.log = Object.freeze(msg => socket.emit('log',msg))
@@ -231,6 +236,7 @@ io.on('connection', async function (socket) {
           if(authenticate_admin.is_valid) {
             
             dashboard_events.onRequest(name, payload.user)
+            admin_events.request(name, payload.user)
 
             const requested_method = admin_methods()[name]
             
@@ -272,3 +278,9 @@ server.listen(process.env.ADMIN_SERVER_PORT, 'backend', (err) => {
     console.log('ℹ There was an error: ', err)
   }
 })
+
+module.exports = {
+  on: (method,func) => {
+    admin_events[method](func)
+  }
+}

@@ -7,6 +7,16 @@ echo '*                                        *'
 echo '******************************************'
 echo ''
 
+echo '
+{
+    "app_name": null,
+    "jwt_secret": "sample_jwt_secret_you_should_change_this",
+    "database_name": null,
+    "db_table_prefix": null,
+    "use_pg_admin": true,
+    "pgadmin_url": null
+}' > config/app.json
+
 docker rm -f $(docker ps -aq)
 docker network rm $(docker network ls -q)
 docker image rm $(docker image ls -q)

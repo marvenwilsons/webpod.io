@@ -1,10 +1,4 @@
-/**
- * > Start application using localhost env or HTTP env
- * > Reset & Start application using localhost env or HTTP env (Warning! this option will DELETE all data)
- * > Start application using remote env or HTTPS env
- * > About
- */
-
+// THIS FILE IS NOT WORKING PROPERLY USE THE .sh METHODS INSTEAD
 
  const prompts = require('prompts'); // https://github.com/terkelg/prompts#readme
  const shell = require('shelljs')
@@ -33,9 +27,20 @@ prompts(questions).then(response => {
             if(data) {
                 fs.writeFile(path.join(__dirname,'./config/app.json'), data, null, () => {
                     setTimeout(() => {
-                        // shell.exec('chmod +x ./local.sh')
-                        // shell.exec('./local.sh')
-
+                        shell.exec('chmod +x ./local.sh')
+                        const child = shell.exec('./local.sh')
+                        child.on('SIGINT', () => {
+                            console.log('eyyyy')
+                        })
+                        child.on('disconnect', () => {
+                            console.log('disconnect')
+                        })
+                        child.on('exit', () => {
+                            console.log('exit')
+                        })
+                        child.on('close', () => {
+                            console.log('close')
+                        })
                         process.once('SIGINT', code => {
                             console.log('done!')
                             // Note: there's no shell.errorCode() API, so we just return 1 if
@@ -43,9 +48,9 @@ prompts(questions).then(response => {
                             // process.kill('SIGINT')
                             // process.exit()
                         });
+                        
                     },1000)
                 })
-                
             } else {
                 console.log('\n\n   (ERROR) Cannot start because man.json is missing in /backend/server directory')
                 console.log('\n\n   Please select the (FRESH START) option if you havent initialized the application yet.')
@@ -71,8 +76,8 @@ prompts(questions).then(response => {
     }
 
     if(startUpEnv === 2) {
-        shell.exec('chmod +x ./start.sh')
-        shell.exec('./start.sh')
+        shell.exec('chmod +x ./deploy.sh')
+        shell.exec('./deploy.sh')
     }
 
     if(startUpEnv === 3) {
