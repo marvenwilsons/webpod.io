@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node start",
-    "local": "sh local.sh"
+    "local": "sh local.sh",
+    "fresh": "sh local-fresh.sh",
+    "deploy": "sh deploy.sh"
   },
   "repository": {
     "type": "git",
