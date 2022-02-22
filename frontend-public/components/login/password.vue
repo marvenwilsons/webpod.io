@@ -31,10 +31,12 @@
                 style="margin-bottom:0px;"
                 :label="placeholder"
                 class="marginbottom125 fullwidth"
-                type="password"
+                :type="show1 ? 'password' : 'text'"
                 id="password-field"
                 :disabled="disabled"
                 :error="error ? true : false"
+                :append-icon="show1 ? 'mdi-eye' : 'mdi-eye-off'"
+                @click:append="show1 = !show1"
             ></v-text-field>
 
             <div class="fullwidth" >
@@ -65,9 +67,9 @@ export default {
         // set component default
         this.showForm = true
     },
-    // data: () => ({
-    //     error: undefined,
-    // })
+    data: () => ({
+        show1: false,
+    })
 }
 </script>
 
