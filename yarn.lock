@@ -20,6 +20,11 @@
   "resolved" "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz"
   "version" "0.0.1"
 
+"death@^1.1.0":
+  "integrity" "sha1-AaqcQB7dknUFFEcLgmY5DGbGcxg="
+  "resolved" "https://registry.npmjs.org/death/-/death-1.1.0.tgz"
+  "version" "1.1.0"
+
 "fs.realpath@^1.0.0":
   "integrity" "sha1-FQStJSMVjKpA20onh8sBQRmU6k8="
   "resolved" "https://registry.npmjs.org/fs.realpath/-/fs.realpath-1.0.0.tgz"

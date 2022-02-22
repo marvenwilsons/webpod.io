@@ -10,6 +10,7 @@
  const shell = require('shelljs')
  const fs = require('fs')
  const path = require('path')
+ const child_process = require('child_process');
 
  const questions = [
     {
@@ -32,8 +33,16 @@ prompts(questions).then(response => {
             if(data) {
                 fs.writeFile(path.join(__dirname,'./config/app.json'), data, null, () => {
                     setTimeout(() => {
-                        shell.exec('chmod +x ./local.sh')
-                        shell.exec('./local.sh')
+                        // shell.exec('chmod +x ./local.sh')
+                        // shell.exec('./local.sh')
+
+                        process.once('SIGINT', code => {
+                            console.log('done!')
+                            // Note: there's no shell.errorCode() API, so we just return 1 if
+                            // there's an error.
+                            // process.kill('SIGINT')
+                            // process.exit()
+                        });
                     },1000)
                 })
                 
@@ -58,7 +67,7 @@ prompts(questions).then(response => {
         fs.writeFileSync(path.join(__dirname, './config/app.json',),JSON.stringify(defaultAppState,null,4))
 
         shell.exec('chmod +x ./local-reset.sh')
-        shell.exec('./local-reset.sh')
+        shell.exec('./local-fresh.sh')
     }
 
     if(startUpEnv === 2) {
