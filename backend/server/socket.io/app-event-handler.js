@@ -80,3 +80,10 @@ server.on('ready', (admin,dashboard) => {
         
     })
 })
+
+server.on('mount', () => {
+  console.log('\n\n\n mounted')
+})
+server.on('error', (error) => {
+  console.log('ℹ There was an error: ', err)
+})

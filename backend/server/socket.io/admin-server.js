@@ -234,7 +234,7 @@ io.on('connection', async function (socket) {
           tokenEvents.emit('data',payload.token)
 
           if(authenticate_admin.is_valid) {
-            
+
             dashboardEvents.emit(name, payload.user)
             const requested_method = admin_methods()[name]
 
@@ -271,8 +271,9 @@ io.on('connection', async function (socket) {
 })
 
 server.listen(process.env.ADMIN_SERVER_PORT, 'backend', (err) => {
+  serverEvents.emit('mount')
   if(err) {
-    console.log('ℹ There was an error: ', err)
+    serverEvents.emit('error')
   }
 })
 
