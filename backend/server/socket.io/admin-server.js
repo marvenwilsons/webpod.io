@@ -1,20 +1,16 @@
 const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
-const fs = require('fs')
 const app = express()
 const server = http.createServer(app)
 const { query } = require('../postgres/db')
 const init = require('../postgres/init')
-const io = socketio(server,{
-  cookie: false
-})
-
-const admin_events = {
-  request() {
-
-  }
-}
+const io = socketio(server,{cookie: false})
+const events = require('events')
+const serverEvents = new events.EventEmitter()
+const adminEvents = new events.EventEmitter()
+const tokenEvents = new events.EventEmitter()
+const dashboardEvents = new events.EventEmitter()
 
 app.use(express.json())
 
@@ -47,7 +43,6 @@ app.post('/init', (req,res) => {
       })
     }
   })
-  
 })
 
 app.get('/apps', (req,res) => {
@@ -186,12 +181,22 @@ app.put('/apps/:app_name/:instance_title', (req,res) => {
 
 const admin_methods = require('./admin_methods/index')
 const admin_auth = require('./admin_methods/admin_auth')
-const dashboard_event_handler = require('./admin_methods/dashboard-event-handler')
 
 io.on('connection', async function (socket) {
   console.log('ℹ Client connected')
-  const dashboard_exec = {
-    exec(location,action,payload) {
+
+  // loggers
+  global.log      = Object.freeze(msg => socket.emit('log',msg))
+  global.progress = Object.freeze(val => socket.emit('progress', val))
+  global.exec     = Object.freeze((fn,arg) => socket.emit('exec', fn, arg))
+
+  Object.assign(adminEvents, {
+    ...admin_methods(),
+    token: tokenEvents
+  })
+
+  const dashboard = Object.assign(dashboardEvents, {
+    exec: (location,action,payload) => {
       setTimeout(() => {
         socket.emit('exec', {
           location,
@@ -203,16 +208,10 @@ io.on('connection', async function (socket) {
         exec: this.exec
       }
     }
-  }
+  })
+ 
+  serverEvents.emit('ready',adminEvents,dashboard)
 
-  // sending exec command to dashboard
-  const dashboard_events = await dashboard_event_handler(dashboard_exec)
-
-  // loggers
-  global.log = Object.freeze(msg => socket.emit('log',msg))
-  global.progress = Object.freeze(val => socket.emit('progress', val))
-  global.exec = Object.freeze((fn,arg) => socket.emit('exec', fn, arg))
-  
   // on request
   socket.on('req', async function ({name, payload}) {
     try {
@@ -232,17 +231,15 @@ io.on('connection', async function (socket) {
         } else {
           // process request
           const authenticate_admin = await admin_auth({token: payload.token, user: payload.user})
+          tokenEvents.emit('data',payload.token)
 
           if(authenticate_admin.is_valid) {
             
-            dashboard_events.onRequest(name, payload.user)
-            admin_events.request(name, payload.user)
-
+            dashboardEvents.emit(name, payload.user)
             const requested_method = admin_methods()[name]
-            
+
             if(requested_method) {
               const request_response = await requested_method(payload)
-
               // response to request
               socket.emit('notification', {
                 method_name: name,
@@ -251,7 +248,7 @@ io.on('connection', async function (socket) {
             }
 
           } else {
-            dashboard_events.onTokenExpire()
+            tokenEvents.emit('expire')
 
             socket.emit('error', {
               method_name: name,
@@ -279,8 +276,4 @@ server.listen(process.env.ADMIN_SERVER_PORT, 'backend', (err) => {
   }
 })
 
-module.exports = {
-  on: (method,func) => {
-    admin_events[method](func)
-  }
-}
+module.exports = serverEvents
