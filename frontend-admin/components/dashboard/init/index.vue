@@ -249,6 +249,8 @@ export default {
         }
     },
     mounted() {
+        localStorage.removeItem('user')
+        localStorage.removeItem('token')
         setTimeout(() => {
             webpod.session.onLog = msg =>  this.progressMsg = msg
             webpod.session.onProgress = val => this.progressValue = val

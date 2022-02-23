@@ -125,37 +125,36 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
 
 
 /*********************************** ON DASHBOARD LOAD *****************************************************/
-    if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
-        socket.emit('req', {
-            name: 'getUserServices',
-            payload: {
-                token:localStorage.getItem('token'),
-                user: localStorage.getItem('user')
-            }
-        })
-        socket.emit('req', {
-            name: 'getDashboardResource',
-            payload: {
-                token:localStorage.getItem('token'),
-                user: localStorage.getItem('user')
-            }
-        })
-    } else {
-        fetch(`${process.env.API_URL}`)
-        .then(response => response.json())
-        .then(({message, generated_db_info}) => {
-            if(message == 'APP IS NOT INITIALIZED') {
-                console.log('APP IS NOT INITIALIZED')
-                dash.showInitForms(true,generated_db_info)
-            } else {    
+    fetch(`${process.env.API_URL}`)
+    .then(response => response.json())
+    .then(({message, generated_db_info}) => {
+        if(message == 'APP IS NOT INITIALIZED') {
+            console.log('APP IS NOT INITIALIZED')
+            dash.showInitForms(true,generated_db_info)
+        } else {    
+            if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
+                socket.emit('req', {
+                    name: 'getUserServices',
+                    payload: {
+                        token:localStorage.getItem('token'),
+                        user: localStorage.getItem('user')
+                    }
+                })
+                socket.emit('req', {
+                    name: 'getDashboardResource',
+                    payload: {
+                        token:localStorage.getItem('token'),
+                        user: localStorage.getItem('user')
+                    }
+                })
+            } else {
                 location.href = '/login'
             }
-        })
-    }
+        }
+    })
+    
 
     setTimeout(() => {
-        // dash.loading(false)
-        // dash.showDashboard(true)
         window.webpod = Object.seal({
             dash: {...dash},
             paneCollection,

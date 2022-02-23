@@ -7,6 +7,8 @@ echo '*                                        *'
 echo '******************************************'
 echo ''
 
+rm backend/server/man.json
+
 echo '
 {
     "app_name": null,

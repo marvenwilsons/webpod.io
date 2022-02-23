@@ -1,3 +1,4 @@
+const { query } = require('../../postgres/db')
 async function insertNewAdmin (payload) {
   const admin = {
     admin_id: undefined, // string
@@ -11,18 +12,16 @@ async function insertNewAdmin (payload) {
   }
 }
 
-async function getAdmin (user) {
-  console.log('=== getAdmin ===', user)
+async function getAdmin (user_id) {
+  const user = (await query(`SELECT * FROM ${process.env.TABLE_PREFIX}users WHERE user_id = $1`, [user_id])).rows[0]
   return new Promise((resolve,reject) => {
-    setTimeout(() => {
-      resolve({
-        name: 'Marven Wilson Donque',
-        email: 'marvenwilsons@gmail.com',
-        user: 'marvenwilsons',
-        avatar: '',
-        role_id: 'sample_kjadbv34'
-      })
-    }, 100);
+    resolve({
+      name: `${user.first_name} ${user.last_name}`,
+      email: user.email,
+      user: user.username,
+      avatar: user.avatar,
+      role_id: user.role_id
+    })
   })
 }
 

@@ -96,7 +96,8 @@ module.exports = async (body, cb) => {
                     user_password VARCHAR(100) NOT NULL,
                     first_name VARCHAR(100) NOT NULL,
                     last_name VARCHAR(100) NOT NULL,
-                    role_id uuid [ ]
+                    role_id uuid,
+                    avatar VARCHAR(500)
                 )`
             )).rows.length == 0 && 'OK'
         } catch(err) {
@@ -139,19 +140,36 @@ module.exports = async (body, cb) => {
     }
 
     /**
-     * Add menu table
+     * Add service table
      */
-    let create_menu_table_result = undefined
+    let create_services_table_result = {onDone: () => {}}
     if(master_role_id != undefined) {
         global.log('Creating menu table ...')
         global.progress('82%')
         try {
-            create_menu_table_result = (await query(`
-                CREATE TABLE ${tablePrefix}menu (
-                    menu_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                    menu_name VARCHAR(500) NOT NULL
-                )`
-            )).rows.length == 0 && 'OK'
+
+
+            global.log('Creating services table ...')
+            global.progress('90%')
+    
+             query(`
+                CREATE TABLE ${tablePrefix}services (
+                    service_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                    service_name VARCHAR(100) NOT NULL
+                )
+            `).then(() => {
+                query(`
+                    CREATE TABLE ${tablePrefix}service_versions (
+                        version_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                        service_id uuid NOT NULL REFERENCES ${tablePrefix}services(service_id),
+                        version_name VARCHAR(100) NOT NULL,
+                        version_data jsonb,
+                        instancer jsonb
+                    )
+                `).then (d => {
+                    create_services_table_result.onDone('OK')
+                })
+            }) 
         } catch(err) {
             console.log('create menu table err ', err)
         }
@@ -160,9 +178,9 @@ module.exports = async (body, cb) => {
     /**
      * Add default menus to menu table
      */
-    let add_default_menu_result = undefined
+    let add_default_menu_result = {onDone: () => {}}
     let default_menu_uids = []
-    if(create_menu_table_result === 'OK') {
+    create_services_table_result.onDone(() => {
         global.log('Inserting default menus ...')
         try {
             const default_menus = ['Dashboard','Site','Collections','Apps','Users','Roles','Services','Settings']
@@ -173,29 +191,31 @@ module.exports = async (body, cb) => {
                 VALUES($1) returning *
             `,[menu_name])))
             
-            add_default_menu_result = await Promise.all(qs).then(data => {
+            Promise.all(qs).then(data => {
                 default_menu_uids = data.map(r => r.rows[0].menu_id)
-                return 'OK'
+                add_default_menu_result.onDone('OK')
             })
         } catch(err) {
             console.log('insert default menus err ', err)
         }
-    }
+    })
 
 
     /**
      * Update master role add menus
      */
-    let update_role_menu_result = undefined
-    if(add_default_menu_result === 'OK') {
+    let update_role_menu_result = {onDone: () => {}}
+    add_default_menu_result.onDone(() => {
         global.log('Updating role menus ...')
 
-        update_role_menu_result = (await query(`
+        update_role_menu_result = query(`
             UPDATE ${tablePrefix}roles 
             SET role_menu = '{${default_menu_uids.join(',')}}'
             WHERE role_id = '${master_role_id}'
-        `)).rows.length == 0 && 'OK'
-    }
+        `).then(() => {
+            update_role_menu_result.onDone('OK')
+        })
+    })
     
     /**
      * Create a master dashboard admin user
@@ -204,9 +224,7 @@ module.exports = async (body, cb) => {
     if(update_role_menu_result === 'OK') {
         try {
             bcryptjs.genSalt(10, (err, salt) => {
-                console.log('1')
                 bcryptjs.hash(password, salt, async (err, hashedPassword) => {
-                    console.log('2', hashedPassword)
                     if(err) {
                         throw err
                     }
@@ -215,7 +233,7 @@ module.exports = async (body, cb) => {
                         (await query(`
                             INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
                             VALUES ($1, $2, $3, $4, $5, $6)
-                        `,[email, username, hashedPassword, firstName, lastName, `{${master_role_id}}`])).rows.length == 0 && 'OK'
+                        `,[email, username, hashedPassword, firstName, lastName, master_role_id])).rows.length == 0 && 'OK'
                     )
                 });
             });
@@ -264,35 +282,25 @@ module.exports = async (body, cb) => {
     /**
      * Create service table
      */
-    let create_services_table_result = {onDone: () => {}}
+    let create_menu_table_result = {onDone: () => {}}
     create_apps_table_result.onDone = (msg) => {
         if(msg == 'OK') {
-            global.log('Creating services table ...')
-            global.progress('90%')
-    
-             query(`
-                CREATE TABLE ${tablePrefix}services (
-                    service_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                    service_name VARCHAR(100) NOT NULL
-                )
-            `).then(() => {
-                query(`
-                    CREATE TABLE ${tablePrefix}service_versions (
-                        version_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-                        service_id uuid NOT NULL REFERENCES ${tablePrefix}services(service_id),
-                        version_name VARCHAR(100) NOT NULL,
-                        version_data jsonb,
-                        instancer jsonb
-                    )
-                `).then (d => {
-                    create_services_table_result.onDone('OK')
-                })
-            }) 
+            query(`
+                CREATE TABLE ${tablePrefix}menu (
+                    menu_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
+                    menu_name VARCHAR(500) NOT NULL,
+                    service_id uuid REFERENCES ${tablePrefix}services(service_id),
+                    primary_version uuid REFERENCES ${tablePrefix}service_versions(version_id),
+                    versions uuid [ ]
+                )`
+            ).then(() => {
+                create_menu_table_result.onDone('OK')
+            })
         }
     }
     
     create_services_table_result.onDone = () => {
-        global.log('done')
+        global.log('finishing up ...')
         global.progress('100%')
         const man = {
             app_name: applicationName,

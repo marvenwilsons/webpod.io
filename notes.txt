@@ -37,9 +37,9 @@ SVG Manipulation
 
 ============================================  TODO  ============================================
 ==> Bugs
-|-------------------------|
++-------------------------+
 |       Sytem Pillars     |
-|-------------------------|
++-------------------------+
 ==> Layout Builder
   - Ability to list all instances
   - Ability to Edit and Delete an instance

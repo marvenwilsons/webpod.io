@@ -10,11 +10,11 @@ server.on('ready', (admin,dashboard) => {
 
         // set user info to dashboard
         dashboard.exec('dash','setUser', { name, email, user, avatar })
-
+        console.log('yesasdf')
         // get admin role
         const role = await admin.getRole(role_id)
         const { role_name, role_menu } = role
-
+        console.log('role', role)
         let each_menu = []
         let selected_service_version = []
         let selected_service = []

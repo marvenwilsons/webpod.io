@@ -1,13 +1,18 @@
+const { query } = require('../../postgres/db')
+
 async function insertNewRole () {
 
 }
 
-async function getRole (role_id) {
-  console.log(`=== getRole ${role_id} ===`)
-  const roles = [
-    {
-      role_id: 'sample_kjadbv34',
-      role_name: 'master',
+async function getRole (_role_id) {
+
+  const { role_id, role_menu, role_name } = (await query(`SELECT * FROM ${process.env.TABLE_PREFIX}roles WHERE role_id = $1`, [_role_id]))
+  // const menus = (await query(`SELECT menu_id FROM ${process.env.TABLE_PREFIX}menu WHERE `))
+  console.log('ROLE MENU', role_menu)
+  
+  return new Promise((resolve,reject) => {
+    resolve({
+      role_id,
       role_menu: [
         {
           /**
@@ -75,19 +80,9 @@ async function getRole (role_id) {
           primary_version: 'my-custom-version8',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         }
-      ]
-    }
-  ]
-
-  return new Promise((resolve,reject) => {
-    setTimeout(() => {
-      for (let i = 0; i < roles.length; i++) {
-        if (roles[i].role_id === role_id) { 
-          resolve(roles[i])
-          break; 
-        }
-      } 
-    }, 50)
+      ],
+      role_name
+    })
   })
 }
 
