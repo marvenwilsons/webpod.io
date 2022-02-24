@@ -80,6 +80,15 @@ function init (body, cb) {
     dbEvents.on('insert-default-user', (roleId) => {
         dbEvents.emit('insert-user', {firstName, lastName, username, password, email, roleId})
     })
+
+    let queries = []
+    dbEvents.on('query', (str,val) => {
+        // queries.push(str.replace("\\\s\\\s", ""))
+
+        // if(event_count == 14) {
+        //     fs.writeFileSync(path.join(__dirname,'start.sql'),queries.join('\n'))
+        // }
+    })
 }
 
 module.exports = init
