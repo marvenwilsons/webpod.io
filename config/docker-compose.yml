@@ -12,13 +12,13 @@ services:
       - "HOST=backend"
       - "ADMIN_SERVER_PORT=8000"
       - "PUBLIC_SERVER_PORT=9000"
-      - "API_URL=aar_ronne"
+      - "API_URL=aar_tanle"
       - "JWT_SECRET=sample_jwt_secret_you_should_change_this"
       - "POSTGRES_PASSWORD=postgres"
       - "POSTGRES_USER=postgres"
-      - "POSTGRES_DB=vidh_webpod"
+      - "POSTGRES_DB=whho_webpod"
       - "PGHOST=postgres"
-      - "TABLE_PREFIX=brwx_"
+      - "TABLE_PREFIX=kknt_"
     volumes:
       - "../backend:/usr/src/backend"
     depends_on:
@@ -36,7 +36,7 @@ services:
       - "APP_HOST=frontend-admin"
       - "APP_PORT=5000"
       - "ADMIN_ROUTE=wpadmin"
-      - "API_URL=aar_ronne"
+      - "API_URL=aar_tanle"
       - "API_BASE=backend:8000"
     volumes:
       - "../frontend-admin/assets:/usr/src/admin/assets"
@@ -61,7 +61,7 @@ services:
       - "APP_HOST=frontend-public"
       - "APP_PORT=3000"
       - "APP_NAME=sample.com"
-      - "API_URL=par_trlrj"
+      - "API_URL=par_kdamd"
     volumes:
       - "../frontend-public/assets:/usr/src/public/assets"
       - "../frontend-public/layouts:/usr/src/public/layouts"
@@ -93,11 +93,11 @@ services:
       - "NGINX_PORT=80"
       - "PUBLIC_FRONTEND_SERVER_UPSTREAM=frontend-public:3000"
       - "PUBLIC_BACKEND_UPSTREAM=backend:9000"
-      - "PUBLIC_API_LINK=par_trlrj"
+      - "PUBLIC_API_LINK=par_kdamd"
       - "ADMIN_FRONTEND_SERVER_UPSTREAM=frontend-admin:5000"
       - "ADMIN_DASHBOARD_PUBLIC_LINK=wpadmin"
       - "ADMIN_BACKEND_SERVER=backend:8000"
-      - "ADMIN_EXPRESS_ROUTE=aar_ronne"
+      - "ADMIN_EXPRESS_ROUTE=aar_tanle"
       - "PGADMIN_URL=pgadmin"
   postgres:
     container_name: "postgres"
@@ -108,9 +108,9 @@ services:
     environment:
       - "POSTGRES_PASSWORD=postgres"
       - "POSTGRES_USER=postgres"
-      - "POSTGRES_DB=vidh_webpod"
+      - "POSTGRES_DB=whho_webpod"
       - "PGHOST=postgres"
-      - "TABLE_PREFIX=brwx_"
+      - "TABLE_PREFIX=kknt_"
     volumes:
       - "../postgres:/var/lib/postgresql/data"
   pgadmin:

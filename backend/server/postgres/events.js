@@ -44,19 +44,31 @@ dbEvents.on('create-users-table', function (cb = () => {}) {
 })
 
 dbEvents.on('insert-user', function (user, cb = () => {}) {
-    query(`
-        INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
-        VALUES ($1, $2, $3, $4, $5, $6)
-        returning *
-    `,[user.email, user.username, user.password, user.firstName, user.lastName, user.roleId])
-    .then(d => {
-        dbEvents.emit('insert-user-done', d.rows)
-        dbEvents.emit('call', 'insert-user')
-        cb(d.rows)
-    })
-    .catch(err => {
-        throw err
-    })
+    const {email, username, password, firstName, lastName, roleId} = user
+    bcryptjs.genSalt(10, (err, salt) => {
+        bcryptjs.hash(password, salt, (err, hashedPassword) => {
+            if(err) {
+                throw err
+            }
+
+            query(`
+                    INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
+                    VALUES ($1, $2, $3, $4, $5, $6)
+                `,[email, username, hashedPassword, firstName, lastName, roleId]
+            )
+            .then(d => {
+                dbEvents.emit('insert-user-done', d.rows)
+                dbEvents.emit('call', 'insert-user')
+                cb(d.rows)
+            })
+            .catch(err => {
+                throw err
+            })
+        })
+            
+    });
+
+    
 })
 
 dbEvents.on('create-services-table', function (cb = () => {}) {
