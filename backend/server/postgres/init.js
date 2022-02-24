@@ -1,8 +1,9 @@
 const dbEvents = require('./events')
-
+const fs = require('fs')
+const path = require('path')
 
 function init (body, cb) {
-    const {firstName, lastName, username, password, email} = body
+    const {firstName, lastName, username, password, email, applicationName} = body
 
     dbEvents.emit('get-all-tables')
     dbEvents.on('get-all-tables-done', (rows) => {
@@ -31,20 +32,37 @@ function init (body, cb) {
     /**
      * handle client logs and que to insert defaults
      */
-    let table_count = 0
+    let event_count = 0
     dbEvents.on('call', (name) => {
-        table_count++
+        event_count++
 
         console.log('done ==> ',name)
 
         global.log(name)
-        global.progress(`${table_count * 5}%`)
+        global.progress(`${event_count * 5}%`)
 
-        if(table_count == 10) {
+        if(event_count == 10) {
             dbEvents.emit('insert-default-role')
             dbEvents.emit('insert-default-menus')
-            
+            dbEvents.emit('create-master-db-user', {databaseUsername: username, databasePassword: password})
             dbEvents.emit('insert-default-services')
+        }
+
+        if(event_count == 14) {
+            global.progress('100%')
+            global.log('finishing up ...')
+            const man = {
+                app_name: applicationName,
+                jwt_secret: 'sample_jwt_secret_you_should_change_this',
+                database_name: process.env.POSTGRES_DB,
+                db_table_prefix: process.env.TABLE_PREFIX,
+                use_pg_admin: true,
+                pgadmin_url: null
+            }
+            fs.writeFileSync(path.join(__dirname,'../man.json'), JSON.stringify(man,null,4))
+            if(cb) {
+                cb('OK')
+            }
         }
     })
 
@@ -60,13 +78,8 @@ function init (body, cb) {
     })
 
     dbEvents.on('insert-default-user', (roleId) => {
-        dbEvents.emit('insert-user', {firstName, lastName, username, password, email, roleId}, (rows) => {
-            console.log('rows', rows)
-        })
+        dbEvents.emit('insert-user', {firstName, lastName, username, password, email, roleId})
     })
-
-    // dbEvents.on('insert-default-user', )
-
 }
 
 module.exports = init

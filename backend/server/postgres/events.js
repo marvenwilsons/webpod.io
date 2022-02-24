@@ -2,7 +2,10 @@ const events = require('events')
 const dbEvents = new events.EventEmitter()
 const { query } = require('./db')
 const tablePrefix = process.env.TABLE_PREFIX
+const bcryptjs = require('bcryptjs')
+const util = require('../utils/util')
 
+// general
 dbEvents.on('get-all-tables', async function (cb = () => {}) {
     return await query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`)
     .then(d => {
@@ -22,6 +25,23 @@ dbEvents.on('install-ossp-extension', function (cb = () => {}) {
     )
 })
 
+dbEvents.on('create-master-db-user', function (app = {}, cb = () => {}) {
+    const { databaseUsername, databasePassword } = app
+    query(`CREATE USER ${databaseUsername}`)
+    .then(() => {
+        query(`GRANT ALL PRIVILEGES ON DATABASE ${process.env.POSTGRES_DB} TO ${databaseUsername}`)
+        .then(() => {
+            query(`ALTER USER ${databaseUsername} PASSWORD '${databasePassword}'`)
+            .then(() => {
+                cb()
+                dbEvents.emit('create-master-db-user-done')
+                dbEvents.emit('call', 'create-master-db-user')
+            })
+        })
+    })
+})
+
+// users
 dbEvents.on('create-users-table', function (cb = () => {}) {
     query(`
         CREATE TABLE ${tablePrefix}users (
@@ -54,6 +74,7 @@ dbEvents.on('insert-user', function (user, cb = () => {}) {
             query(`
                     INSERT INTO ${tablePrefix}users (email,username,user_password,first_name,last_name,role_id)
                     VALUES ($1, $2, $3, $4, $5, $6)
+                    returning *
                 `,[email, username, hashedPassword, firstName, lastName, roleId]
             )
             .then(d => {
@@ -71,6 +92,15 @@ dbEvents.on('insert-user', function (user, cb = () => {}) {
     
 })
 
+dbEvents.on('alter-user', function(payload,cb = () => {}) {
+
+})
+
+dbEvents.on('delete-user', function(payload,cb = () => {}) {
+    
+})
+
+// services
 dbEvents.on('create-services-table', function (cb = () => {}) {
     query(`
         CREATE TABLE ${tablePrefix}services (
@@ -108,6 +138,7 @@ dbEvents.on('create-service-version-table', function (cb = () => {}) {
     })
 })
 
+// menu
 dbEvents.on('create-menu-table', function (cb = () => {}) {
     query(`
         CREATE TABLE ${tablePrefix}menu (
@@ -130,24 +161,26 @@ dbEvents.on('create-menu-table', function (cb = () => {}) {
 
 dbEvents.on('insert-menus', function (default_menus,cb = () => {}) {
     const qs = []
-
     default_menus.map(menu_name => qs.push(query(`
         INSERT INTO ${tablePrefix}menu (menu_name) 
         VALUES($1) returning *
     `,[menu_name])))
     
-    Promise.all(qs)
-    .then(data => {
-        default_menu_uids = data.map(r => r.rows[0])
-        cb(default_menu_uids)
-        dbEvents.emit('insert-default-menus-done',default_menu_uids)
-        dbEvents.emit('call','insert-menus')
-    })
-    .catch(err => {
-        throw err
-    })
+    Promise
+        .all(qs)
+        .then(data => {
+            default_menu_uids = data.map(r => r.rows[0])
+
+            cb(default_menu_uids)
+            dbEvents.emit('insert-default-menus-done',default_menu_uids)
+            dbEvents.emit('call','insert-menus')
+        })
+        .catch(err => {
+            throw err
+        })
 })
 
+// roles
 dbEvents.on('create-roles-table', function (cb = () => {}) {
     query(`
         CREATE TABLE ${tablePrefix}roles (
@@ -185,6 +218,7 @@ dbEvents.on('insert-role', function (roleName, cb = () => {}) {
     })
 })
 
+// apps
 dbEvents.on('create-apps-table', function (cb = () => {}) {
     query(`
         CREATE TABLE ${tablePrefix}apps (
@@ -225,6 +259,7 @@ dbEvents.on('create-app-instances-table', function (cb = () => {}) {
     })
 })
 
+// collections
 dbEvents.on('create-collections-table', function (cb = () => {}) {
     query(`
         CREATE TABLE ${tablePrefix}collections (
