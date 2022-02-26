@@ -45,6 +45,7 @@ dbEvents.on('create-master-db-user', function (app = {}, cb = df) {
     })
 })
 
+
 // users
 dbEvents.on('create-users-table', function (cb = df) {
     const queryString = `
@@ -55,6 +56,7 @@ dbEvents.on('create-users-table', function (cb = df) {
         user_password VARCHAR(100) NOT NULL,
         first_name VARCHAR(100) NOT NULL,
         last_name VARCHAR(100) NOT NULL,
+        last_login date,
         role_id uuid,
         avatar VARCHAR(500)
     )`
@@ -123,7 +125,9 @@ dbEvents.on('create-services-table', function (cb = df) {
     const queryString = `
         CREATE TABLE ${tablePrefix}services (
             service_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-            service_name VARCHAR(100) NOT NULL
+            service_name VARCHAR(100) NOT NULL,
+            created_by uuid REFERENCES ${tablePrefix}users(user_id),
+            about_info TEXT
         )
     `
     query(queryString)
@@ -154,6 +158,25 @@ dbEvents.on('remove-service', function(cb = df) {
 
 })
 
+dbEvents.on('insert-service', function(payload, cb = df) {
+
+    const { service_name, created_by, about_info } = payload
+
+    const queryString = `
+        INSERT INTO ${tablePrefix}services (service_name, created_by, about_info)
+        VALUES ($1, $2, $3)
+        returning *
+    `
+    const queryValue = [service_name, created_by, about_info]
+
+    query(queryString,queryValue)
+    .then(d => {
+        cb(d.rows)
+        dbEvents.emit('call', 'insert-service')
+        dbEvents.emit('query',queryString)
+    })
+})
+
 // service-version
 dbEvents.on('create-service-version-table', function (cb = df) {
     const queryString = `
@@ -174,6 +197,38 @@ dbEvents.on('create-service-version-table', function (cb = df) {
     })
     .catch(err => {
         throw err
+    })
+})
+
+dbEvents.on('insert-service-version',function(payload,cb = df) {
+    let { service_id, version_name, version_data, instancer } = payload
+
+    if(!version_data) {
+        version_data = {
+            view: 'pd',
+            viewConfig: {},
+            viewData:'empty', // points to an app instance, it will be provided by the instancer
+            viewHooks:'',
+            paneConfig: {
+                isClosable: false,
+                title: 'sample',
+            },
+            paneHooks: ''
+        }
+    }
+
+    const queryString = `
+        INSERT INTO ${tablePrefix}service_versions (service_id, version_name, version_data, instancer)
+        VALUES ($1, $2, $3, $4)
+        returning *
+    `
+    const queryValue = [service_id, version_name, version_data, instancer]
+
+    query(queryString,queryValue)
+    .then(d => {
+        dbEvents.emit('insert-service-version-done', d.rows)
+        dbEvents.emit('call', 'insert-service-version')
+        dbEvents.emit('query', queryString)
     })
 })
 
@@ -336,7 +391,11 @@ dbEvents.on('create-apps-table', function (cb = df) {
     const queryString = `
         CREATE TABLE ${tablePrefix}apps (
             app_id uuid NOT NULL PRIMARY KEY DEFAULT uuid_generate_v4(),
-            app_name VARCHAR(100) NOT NULL
+            app_name VARCHAR(100) NOT NULL,
+            installed_by uuid REFERENCES ${tablePrefix}users(user_id),
+            about_info TEXT,
+            documentation TEXT,
+            extensions JSONB
         )
     `
 
@@ -353,7 +412,21 @@ dbEvents.on('create-apps-table', function (cb = df) {
 })
 
 dbEvents.on('install-app', function (payload, cb = df) {
+    const {app_name, installed_by, about_info, documentation, extensions} = payload
 
+    const queryString = `
+        INSERT INTO ${tablePrefix}apps (app_name, installed_by, about_info, documentation, extensions)
+        VALUES ($1, $2, $3, $4, $5)
+        returning *
+    `
+    const queryValue = [app_name, installed_by, about_info, documentation, extensions]
+
+    query(queryString,queryValue)
+    .then(d  => {
+        cb(d.rows)
+        dbEvents.emit('call','install-app')
+        dbEvents.emit('query', queryString)
+    })
 })
 
 dbEvents.on('alter-app', function (payload, cb = df) {
@@ -376,6 +449,7 @@ dbEvents.on('create-app-instances-table', function (cb = df) {
             history VARCHAR(500) [],
             app_data jsonb,
             last_modified date,
+            created_on NOT NULL DEFAULT CURRENT_DATE,
             modified_by uuid REFERENCES ${tablePrefix}users(user_id)
         )
     `
@@ -447,6 +521,7 @@ dbEvents.on('create-collection-instance-table', function (cb = df) {
             instance_id uuid DEFAULT uuid_generate_v4(),
             instance_of uuid REFERENCES ${tablePrefix}collections(collection_id),
             instance_body jsonb NOT NULL,
+            instance_tags VARCHAR(500) [],
             is_trash BOOLEAN DEFAULT FALSE,
             PRIMARY KEY (instance_id)
         )

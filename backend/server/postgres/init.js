@@ -36,7 +36,7 @@ function init (body, cb) {
     dbEvents.on('call', (name) => {
         event_count++
 
-        console.log('done ==> ',name)
+        console.log(`layer  ${event_count} - `,name)
 
         global.log(name)
         global.progress(`${event_count * 5}%`)
@@ -46,9 +46,10 @@ function init (body, cb) {
             dbEvents.emit('insert-default-menus')
             dbEvents.emit('create-master-db-user', {databaseUsername: username, databasePassword: password})
             dbEvents.emit('insert-default-services')
+            dbEvents.emit('install-default-apps')
         }
 
-        if(event_count == 14) {
+        if(event_count == 40) {
             global.progress('100%')
             global.log('finishing up ...')
             const man = {
@@ -66,29 +67,107 @@ function init (body, cb) {
         }
     })
 
-    dbEvents.on('insert-default-menus' , () => {
+    dbEvents.on('insert-default-menus' , function() {
         const default_menus = ['Dashboard','Site','Collections','Apps','Users','Roles','Services','Settings']
         dbEvents.emit('insert-menus', default_menus)
     })
 
-    dbEvents.on('insert-default-role', () => {
+    dbEvents.on('insert-default-role', function() {
         dbEvents.emit('insert-role', 'master', (rows) => {
             dbEvents.emit('insert-default-user',rows[0].role_id)
         })
     })
 
     dbEvents.on('insert-default-user', (roleId) => {
-        dbEvents.emit('insert-user', {firstName, lastName, username, password, email, roleId})
+        dbEvents.emit('insert-user', {firstName, lastName, username, password, email, roleId}, (rows) => {
+            const user_id = rows[0].user_id
+            dbEvents.emit('install-default-apps', user_id)
+            dbEvents.emit('install-default-services',user_id)
+        })
     })
 
-    let queries = []
-    dbEvents.on('query', (str,val) => {
-        // queries.push(str.replace("\\\s\\\s", ""))
-
-        // if(event_count == 14) {
-        //     fs.writeFileSync(path.join(__dirname,'start.sql'),queries.join('\n'))
-        // }
+    dbEvents.on('install-default-apps', function(user_id) {
+        if(user_id) {
+            dbEvents.emit('install-app', {
+                app_name: 'unitile', 
+                installed_by: user_id,
+                about_info: 'unitile version 0.1 by webpod.io'
+            })
+            dbEvents.emit('install-app', {
+                app_name: 'form-builder', 
+                installed_by: user_id, 
+                about_info: 'form-builder version 0.1 by webpod.io'
+            })
+            dbEvents.emit('install-app', {
+                app_name: 'doc', 
+                installed_by: user_id, 
+                about_info: 'doc version 0.1 by webpod.io'
+            })
+            dbEvents.emit('install-app', {
+                app_name: 'code-editor', 
+                installed_by: user_id, 
+                about_info: 'code-editor version 0.1 by webpod.io'
+            })
+        }
     })
+
+    dbEvents.on('install-default-services', (user_id) => {
+        dbEvents.emit('insert-service', {
+            service_name: 'master',
+            created_by: user_id,
+            about_info: null
+        }, function (rows) {
+            const service_id = rows[0].service_id
+            dbEvents.emit('install-default-service-versions',service_id)
+        })
+    })
+
+    dbEvents.on('install-default-service-versions', function (service_id) {
+
+        dbEvents.emit('insert-service-version',{
+            version_name: 'services',
+            service_name: 'master',
+            service_id,
+            instancer: {},
+            version_data: null
+        })
+        dbEvents.emit('insert-service-version',{
+            version_name: 'dashboard',
+            service_name: 'master',
+            service_id,
+            instancer: {
+                
+            },
+            version_data: {
+
+            }
+        })
+        dbEvents.emit('insert-service-version',{
+            version_name: 'roles',
+            service_name: 'master',
+            service_id,
+            instancer: {
+                
+            },
+            version_data: {
+
+            }
+        })
+        dbEvents.emit('insert-service-version',{
+            version_name: 'users',
+            service_name: 'master',
+            service_id,
+            instancer: {
+                
+            },
+            version_data: {
+
+            }
+        })
+
+    })
+
+
 }
 
 module.exports = init

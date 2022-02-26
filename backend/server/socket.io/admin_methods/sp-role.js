@@ -11,6 +11,10 @@ async function getRole (_role_id) {
   console.log('ROLE MENU', role_menu)
   
   return new Promise((resolve,reject) => {
+    // admin is assigned by a role
+    // a role contains role_menu that points to serveral services
+    // so for example, a master role has this set of role_menu and services with the assigned version of that service.
+    // example 2: an analyst role has a different set of role_menu and services.
     resolve({
       role_id,
       role_menu: [
@@ -21,10 +25,32 @@ async function getRole (_role_id) {
            * one service can have multiple service_versions
            * when the menu is clicked it will look for the service, then the service will provide the version
            */
-          menu_id: 'menu-id-lkasdn1',
-          service_id: 'service-id-dmni10', // 
-          primary_version: 'my-custom-version', // primary vesion
-          versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2'] // user is allowed to toggle through versions
+
+          // refers to menu item from menu table
+          menu_id: 'menu-id-lkasdn1', 
+
+          // refers to service item from service table
+          service_id: 'service-id-dmni10',
+
+          // refers to a version item from service_version table 
+          // a service_version contains content that the dashboard system uses to run
+          primary_version: 'my-custom-version', 
+
+          // assigning collection for the admin
+          collections: [
+            {
+              name: 'flowers',
+              tags_allowed: ['forest_flowers','river_flowers']
+            },
+            {
+              name: 'staff',
+              tags_allowed: ['teachers','cleaners']
+            }
+          ],
+
+          // refers to multiple version from service_version table
+          // the user can toggle through this versions to have a different view in the dashboard
+          versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2'] 
         },
         {
           menu_id: 'menu-id-lkasdn2',
