@@ -161,9 +161,9 @@
             </div>
             <div v-else class="flex flexcol" >
                 <span class="overline" >GRID SETTINGS</span>
+
                 <span class="overline" >TILE CUSTOM STYLE</span>
                 <span class="text-small" >Style to be applied on every tile</span>
-                <span class="overline" >SERVICE SETTINGS</span>
             </div>
         </div>
     </main>
@@ -289,7 +289,7 @@ export default {
             if(mode == 'add') {
                 if(this.tiles[index].colEnd != this.maxCol + 1) {
                     this.tiles[index].colEnd = this.tiles[index].colEnd + 1
-                    console.log(this.tiles[index].colEnd, this.maxCol)
+                    // console.log(this.tiles[index].colEnd, this.maxCol)
                 }   
             }
             if(mode == 'minus') {
@@ -446,6 +446,7 @@ export default {
         const _alert = webpod.dash.alert
 
         const {instances} = this.myData
+
         if(this.myData) {
             if(!Array.isArray(this.myData)) {
                 _alert(`Error: Expected array but got an ${typeof this.myData}`)
@@ -458,14 +459,22 @@ export default {
                     this.editMode = false
                 }
 
+                let largestRowEnd = 0
                 this.myData.map(item => {
                     if(typeof item != 'object') {
                         alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
                         location.reload()
                     } else {
+                        if(largestRowEnd < item.rowEnd) {
+                            largestRowEnd = item.rowEnd
+                        }   
+
                         this.tiles.push(item)
+
                     }
                 })
+
+                this.maxRows = largestRowEnd + 2
             }
         } else {
             _alert('Error: unitile data is undefined')
