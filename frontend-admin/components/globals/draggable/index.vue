@@ -1,6 +1,6 @@
 <template>
     <div class="fullwidth flex flexcenter" >
-        <v-card id="mydiv">
+        <v-card id="mydiv" class="">
             <div id="mydivheader" class="pad025 flex flexend">
                 <svg style="width:24px;height:24px" viewBox="0 0 24 24">
                     <path fill="currentColor" d="M3,15V13H5V15H3M3,11V9H5V11H3M7,15V13H9V15H7M7,11V9H9V11H7M11,15V13H13V15H11M11,11V9H13V11H11M15,15V13H17V15H15M15,11V9H17V11H15M19,15V13H21V15H19M19,11V9H21V11H19Z" />
@@ -74,6 +74,8 @@ export default {
 #mydiv {
   position: absolute;
   z-index: 9;
+  resize: both !important;
+  overflow: auto;
 }
 
 #mydivheader {
