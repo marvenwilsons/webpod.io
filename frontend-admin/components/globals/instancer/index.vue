@@ -50,7 +50,7 @@
             ></v-progress-linear>
             <!-- RENAME MODAL -->
             <portal to="modal">
-                <v-card v-if="renameData"  style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', renameError ? 'err_shake' : '']" >
+                <div v-if="renameData"  style="background: white;  min-width: 400px; height: 100%;" :class="['pad125', renameError ? 'err_shake' : '']" >
                     <v-progress-linear
                         :active="renameOnProgress"
                         :indeterminate="renameOnProgress"
@@ -64,11 +64,11 @@
                         <v-btn :ripple="false" :disabled="renameOnProgress"  @click="cancelRename" plain text  > cancel </v-btn>
                         <v-btn :ripple="false" :disabled="renameOnProgress" @click="renameStart" plain text  > {{renameOnProgress == true ? 'renaming ...' : 'rename'}} </v-btn>
                     </div>
-                </v-card>
+                </div>
             </portal>
             <!-- FILTER BY DATE MODAL -->
             <portal to="modal">
-                <v-card   v-if="lastModifiedModal" style="min-width: 400px;" class="pad125" >
+                <div   v-if="lastModifiedModal" style="min-width: 400px;" class="pad125" >
                     <div class="pad125" >
                         <div>
                             <div class="flex spacebetween" >
@@ -120,11 +120,11 @@
                         </div>
                     </div>
                     
-                </v-card>
+                </div>
             </portal>
             <!-- CREATE NEW INSTANCE MODAL -->
             <portal  to="modal" >
-                <v-card v-if="promptForNewProjectTitle" style="background: white; max-width:400px; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
+                <div v-if="promptForNewProjectTitle" style="background: white; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
                     <v-progress-linear
                         :active="createNewProjectOnProgress"
                         :indeterminate="createNewProjectOnProgress"
@@ -143,7 +143,7 @@
                         <v-btn v-if="createNewProjectOnProgress == false" :disabled="createNewProjectOnProgress"  @click="cancelNewProjectInstanceCreation" plain text > cancel </v-btn>
                         <v-btn :disabled="createNewProjectOnProgress" @click="startCreation" plain text > {{createNewProjectOnProgress ? 'creating ...' : 'create'}} </v-btn>
                     </div>
-                </v-card>
+                </div>
             </portal>
             <!-- **** -->
             <v-expand-transition>
