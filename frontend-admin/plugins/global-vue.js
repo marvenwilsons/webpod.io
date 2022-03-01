@@ -73,6 +73,10 @@ Vue.use(PortalVue)
 import draggable from '@/components/globals/draggable/index.vue'
 Vue.component("draggable",draggable)
 
+import resizable from '@/components/globals/resizable/index.vue'
+Vue.component("resizable",resizable)
+
+
 
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
