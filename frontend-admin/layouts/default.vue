@@ -7,8 +7,8 @@
             <main  v-if="!showInitForms" >
                 <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                        <draggable ref="draggable" v-if="showModal" >
-                            <portal-target  @change="portalTargetChanged" :class="[shakeModal ? 'err_shake' : '']" name="modal" />
+                        <draggable :class="[shakeModal ? 'err_shake' : '']" ref="draggable" v-if="showModal" >
+                            <portal-target  @change="portalTargetChanged"  name="modal" />
                         </draggable>
                     </div>
                 </v-fade-transition>   
