@@ -49,7 +49,8 @@ export default {
     }),
     watch: {
         selected(n) {
-            this.$parent.tiles[this.$parent.nodeSelectedIndex].align = n
+            this.$emit('change',n)
+            // 
         }
     }
 }

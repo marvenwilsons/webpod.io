@@ -1,7 +1,8 @@
 <template>
     <div class="flex flexcol" >
         <span class="overline" > CUSTOM CSS CLASSES </span> <br>
-        <span class="marginbottom caption marginbottom125" >Css classes to be applied only for this selected tile</span>
+        <span class="marginbottom caption marginbottom125" >CSS classes to be applied only for this selected tile</span>
+        <span class="marginbottom caption marginbottom125" >Separate each classes by New Line or by pressing the Enter Key</span>
         <div>
             <codeEditor
                 :readOnly="false"
