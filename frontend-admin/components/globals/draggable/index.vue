@@ -1,12 +1,19 @@
 <template>
-    <div class="fullwidth flex flexcenter" >
+    <div v-show="ready" class="fullwidth flex flexcenter" >
         <v-card id="mydiv" class="">
-            <div id="mydivheader" class="pad025 flex flexend">
-                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                    <path fill="currentColor" d="M3,15V13H5V15H3M3,11V9H5V11H3M7,15V13H9V15H7M7,11V9H9V11H7M11,15V13H13V15H11M11,11V9H13V11H11M15,15V13H17V15H15M15,11V9H17V11H15M19,15V13H21V15H19M19,11V9H21V11H19Z" />
-                </svg>
+            <div id="mydivheader" style="border-bottom: 1px solid lightgray;" class="pad025 flex spacebetween flexcenter">
+                <div class="padleft050" >
+                    <strong>
+                        {{title}}
+                    </strong>
+                </div>
+                <div>
+                    <v-btn color="white" @click="handleClose" :ripple="false" icon text small >
+                        <v-icon>mdi-close</v-icon>
+                    </v-btn>
+                </div>
             </div>
-            <div style="z-index:2" role="content" >
+            <div id="content" style="z-index:2" role="content" >
                 <slot></slot>
             </div>
         </v-card>
@@ -20,8 +27,14 @@ export default {
     props: ['name'],
     data: () => ({
         currentId: undefined,
-        ready: false
+        ready: false,
+        title: undefined
     }),
+    methods: {
+        handleClose() {
+            webpod.dash.modal.hide()
+        }
+    },
     mounted() {
         dragElement(document.getElementById("mydiv"));
 
@@ -74,14 +87,18 @@ export default {
 #mydiv {
   position: absolute;
   z-index: 9;
-  resize: both !important;
-  overflow: auto;
+  
+}
+
+#content {
+    resize: both !important;
+    overflow: auto;
 }
 
 #mydivheader {
   cursor: move;
   z-index: 10 !important;
-  background-color: #1976D2;
+  background-color: #1e1e1e;
   color: #fff;
 }
 </style>
