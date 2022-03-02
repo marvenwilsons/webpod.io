@@ -8,7 +8,7 @@
                 <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                         <draggable :class="[shakeModal ? 'err_shake' : '']" ref="draggable" v-if="showModal" >
-                            <portal-target style="min-width: 400px; min-height:200px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                            <portal-target style="min-width: 400px; min-height:100px; height: 100%"  @change="portalTargetChanged"  name="modal" />
                         </draggable>
                     </div>
                 </v-fade-transition>   
@@ -223,7 +223,7 @@ export default {
                 },2000)
             }
         },
-        portalTargetChanged() {
+        portalTargetChanged(n) {
             this.$refs.draggable.ready = true
         },
         handleInitForm(formData) {
@@ -263,9 +263,12 @@ export default {
             }
             const dash = {
                 modal: {
-                    show: (isClosableWhenClickedOutside,cb) => {
+                    show: (title,cb) => {
                         this.showModal = true
-                        
+                        setTimeout(() => {
+                            this.$refs.draggable.ready = true
+                            this.$refs.draggable.title = title || 'Untitled'
+                        },0)
                         if(cb) cb()
                     },
                     hide: cb => {
@@ -281,7 +284,7 @@ export default {
                     },
                     onClose: (cb) => {
                         this.modalOnClose = cb
-                    }
+                    },
                 },
                 history: {
                     historyBtn: {
