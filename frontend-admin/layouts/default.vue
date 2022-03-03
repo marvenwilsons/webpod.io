@@ -6,7 +6,7 @@
             </main>
             <main  v-if="!showInitForms" >
                 <v-fade-transition>
-                    <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
+                    <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                         <draggable :class="[shakeModal ? 'err_shake' : '']" ref="draggable" v-if="showModal" >
                             <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                 <v-icon >mdi-alert-circle</v-icon>
