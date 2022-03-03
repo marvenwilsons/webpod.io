@@ -1,6 +1,12 @@
 <template>
-    <div class="fullwidth flex flexcol" >
-        <div >
+    <div class="fullwidth flex" >
+        <div 
+            :style="{
+                display: 'grid',
+                'grid-template-columns': `${frs.join(' ')}`,
+            }" 
+            class="fullwidth" 
+        >
             <v-menu 
                 offset-y
                 v-for="i in maxCol" :key="i" 
@@ -19,7 +25,7 @@
                             <div>
                                 C{{i}}
                             </div>
-                            <span class="text-lowercase" ><code>{{ getFrs[i] }}</code></span>
+                            <span class="text-lowercase" ><code>{{ getFrs[i - 1] }}</code></span>
                         </div>
                     </v-btn>
                 </template>
@@ -28,9 +34,9 @@
                     v-for="item in 6"
                     :key="item"
                     link
-                    @click="assignSize(item,i)"
+                    @click="assignSize(item,i - 1)"
                     >
-                    <v-list-item-title   v-text="item"></v-list-item-title>
+                    <v-list-item-title   v-text="`${item}fr`"></v-list-item-title>
                     </v-list-item>
                 </v-list>
             </v-menu>
@@ -40,7 +46,7 @@
 
 <script>
 export default {
-    props: ['maxCol'],
+    props: ['maxCol', 'gridColumns'],
     data: () => ({
         frs: [],
         ready: true
@@ -52,15 +58,11 @@ export default {
     },
     methods: {
         assignSize(size,index) {
-            this.$set(this.frs,index,`${size}FR`)
+            this.$set(this.frs,index,`${size}fr`)
         }
     },
     mounted() {
-        for(let i = 0; i < this.maxCol + 1; i++) {
-            this.frs.push('1fr')
-        }
-
-        console.log(this.frs)
+        this.frs = this.gridColumns.split(' ')
     }
 }
 </script>
