@@ -8,7 +8,18 @@
                 <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                         <draggable :class="[shakeModal ? 'err_shake' : '']" ref="draggable" v-if="showModal" >
+                            <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
+                                <v-icon >mdi-alert-circle</v-icon>
+                                <strong class="marginleft025" >
+                                    {{modalError}}
+                                </strong>
+                            </div>
                             <portal-target style="min-width: 400px; min-height:100px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                            <div v-if="modalIsPlayable" class="flex flexend" >
+                                <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon tile >
+                                    <v-icon>mdi-play</v-icon>
+                                </v-btn>
+                            </div>
                         </draggable>
                     </div>
                 </v-fade-transition>   
@@ -125,6 +136,7 @@ import accentBg from '@/components/dashboard/accent-bg/index.vue'
 import init from '@/components/dashboard/init/index.vue'
 
 import m from '@/m'
+import EventEmitter from '@/EventEmitter'
 export default {
     mixins: [m],
     components: {menubar, sidebar, notification, accentBg, init},
@@ -147,7 +159,11 @@ export default {
         historyBtnIsShowing: false,
         historyBtnDirection: 'left',
         showAccountBtn: false,
-        showInitForms: false
+        showInitForms: false,
+        modalEvent: undefined,
+        modalError: undefined,
+        modalIsPlayable: false,
+        modalIsPlaying: false
     }),
     created() {
         service.getAllServices(this)
@@ -247,6 +263,10 @@ export default {
                     reload: true
                 })
             })
+        },
+        modalPlay() {
+            this.modalIsPlaying = true
+            this.modalEvent.emit('play')
         }
     },
     mounted() {
@@ -263,20 +283,64 @@ export default {
             }
             const dash = {
                 modal: {
-                    show: (title,cb) => {
+                    show: (conf,cb) => {
+                        
                         this.showModal = true
-                        setTimeout(() => {
-                            this.$refs.draggable.ready = true
-                            this.$refs.draggable.title = title || 'Untitled'
-                        },0)
+                        
+                        if(typeof conf == 'object') {
+                            setTimeout(() => {
+                                this.$refs.draggable.ready = true
+                                this.$refs.draggable.title = conf.modalTitle || 'Untitled'
+                                this.modalIsPlayable = conf.isPlayable || false
+                            },0)
+                        } else if(typeof conf === 'string') {
+                            setTimeout(() => {
+                                this.$refs.draggable.ready = true
+                                this.$refs.draggable.title = conf || 'Untitled'
+                            },0)
+                        }
+
+                        
                         if(cb) cb()
+                        
+                        const modalEvent = new EventEmitter()
+                        this.modalEvent = modalEvent
+
+                        modalEvent.on('error', (msg) => {
+                            this.modalError = msg
+                            this.modalIsPlaying = false
+                        })
+
+                        modalEvent.on('stop-playing', () => {
+                            this.modalIsPlaying = false
+                        })
+
+                        modalEvent.emit('show')
+
+                        return modalEvent
                     },
                     hide: cb => {
-                        this.showModal = false
-                        if(cb) cb()
-                        if(typeof this.modalOnClose == 'function') {
-                            this.modalOnClose()
-                            this.modalOnClose = undefined
+                        let abort = false
+                        this.modalEvent.emit('close', (s) => {
+                            abort = s
+                        })
+
+                        if(abort == false) {
+                            this.showModal = false
+                            this.modalEvent = undefined
+                            this.modalError = undefined
+                            this.modalIsPlayable = false
+                            this.modalIsPlaying = false
+                            if(cb) cb()
+                            if(typeof this.modalOnClose == 'function') {
+                                this.modalOnClose()
+                                this.modalOnClose = undefined
+                            }
+                        } else {
+                            this.shakeModal = true
+                            setTimeout(() => {
+                                this.shakeModal = false
+                            },2000)
                         }
                     },
                     closeOnBlur: (v = false) => {
