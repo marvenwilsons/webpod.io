@@ -28,7 +28,7 @@ export default {
     data: () => ({
         currentId: undefined,
         ready: false,
-        title: undefined
+        title: undefined,
     }),
     methods: {
         handleClose() {
