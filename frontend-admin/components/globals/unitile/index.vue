@@ -81,14 +81,15 @@
             <section id="tile-presentation" style="overflow:auto;" class="flex1" >
                 <div
                     v-if="ready"
-                    class="wp-dash-grid relative" 
+                    class="wp-dash-grid relative " 
                     @keydown="keydown"
                     :id="`grid-${currentUid}`"
                     :style="{
+                        ...gridContainerStyle,
                         'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
                         'min-width': `${minTileWidth}`,
-                        'grid-template-columns': `repeat(${maxCol}, 1fr)`,
-                        'grid-gap': gridGap
+                        'grid-template-columns': `${gridColumns.join(' ')}`,
+                        'grid-gap': `${gridGap}px`
 
                     }"
                 >
@@ -151,20 +152,88 @@
                     <v-divider />
                 <tile-setting-z-index />
                     <v-divider />
-                <align-self />
+                <align-self ref="tileCustomCssTextEditor" @change="tileALignChange"  />
                     <v-divider />
                 <tile-view />
                     <v-divider />
-                <tile-custom-css v-if="ready" />
+                <span class="overline" > TILE CUSTOM STYLE </span> <br>
+                <span class="marginbottom125 caption" >
+                    Custom CSS Style to be applied for this selected tile only.
+                </span>
+                <custom-css v-if="ready" 
+                    @change="tileCustomStyle" 
+                    :cssObject="tiles[nodeSelectedIndex].customStyle"
+                    :el_id="tiles[nodeSelectedIndex].id" 
+                />
                     <v-divider />
                 <custom-classes />
             </div>
             <div v-else class="flex flexcol" >
-                <span class="overline" >GRID SETTINGS</span>
+                <!-- GRID GAP -->
+                <grid-gap @change="applyGridGap" :gap="gridGap" />
+                <v-divider />
 
-                <span class="overline" >TILE CUSTOM STYLE</span>
-                <span class="text-small" >Style to be applied on every tile</span>
+                <div role="global style for all tiles">
+                    <span class="overline" >GRID COLUMNS </span> <br>
+                    <span class="marginbottom125 " >
+                        Define how many columns for the grid container to have.
+                    </span>
+                    <br> <br>
+                    <v-btn 
+                        @click="changeGridColumn(i)"  
+                        elavation="0" 
+                        fab 
+                        :plain="maxCol != i" tile  v-for="i in 12" :key="uid(i)" 
+                    >{{i}}</v-btn>
+                </div>
+                <v-divider />
+
+                <!-- COLUMN SIZE -->
+                <div role="grid column size">
+                    <span class="overline" >GRID COLUMN SIZE </span> <br>
+                    <span class="marginbottom125 " >
+                        Define the size of each columns.
+                    </span>
+                    <br> <br>
+                    <div class="flex flexcenter paneBorder marginbottom025 pad025" >
+                        <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
+                    </div>
+                    <v-btn block plain @click="openColumnEditor" >OPEN COLUMN EDITOR</v-btn>
+                </div>
+                <v-divider />
+
+                <!-- CUSTOM CSS -->
+                <div role="global style for all tiles">
+                    <span class="overline" >GRID TILE's CUSTOM CSS * </span> <br>
+                    <span class="marginbottom125 " >
+                        Custom CSS Style to be applied for each tile
+                    </span>
+                    <br> <br>
+                    <custom-css v-if="ready" @change="containerCustomStyle" />
+                </div>
+                <v-divider />
+
+
+                <div role="grid container style">
+                    <span class="overline" > GRID CONTAINER CUSTOM CSS </span> <br>
+                    <span class="marginbottom125 " >
+                        Custom CSS Style to be applied for the grid container
+                    </span>
+                    <br> <br>
+                    <custom-css v-if="ready" @change="containerCustomStyle" />
+                </div>
+                <v-divider />
+                <container-justify-items @change="containerJustifyItems" />
             </div>
+        </div>
+        <!-- modals -->
+        <div v-if="columnEditorIsOpen" >
+            <portal  class="" to="modal">
+                <div  class="pad125 fullheight-percent fullwidth" style="height: 150px;"  >
+                    All Columns 
+                    <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
+                </div>
+            </portal>
         </div>
     </main>
 </template>
@@ -176,25 +245,31 @@ import optionHandler from './options'
 import sessionHistory from './sessions-history'
 import gridGuides from './grid-guides.vue'
 
+import gridGap from './c-grid-gap.vue'
+import containerJustifyItems from './c-justify-items.vue'
+import columnEditor from './column-editor.vue'
+
 import tileSettingPosition from './tile-s-position.vue'
 import tileSettingSize from './tile-s-size.vue'
 import tileSettingZIndex from './tile-s-z-index.vue'
 import tileView from './tiles-s-view.vue'
-import tileCustomCss from './tile-custom-css.vue'
+import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
 
 export default {
+    name: 'unitile',
     mixins: [m,optionHandler,sessionHistory],
     components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
-    tileCustomCss,customClasses,alignSelf
-    },
+    customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor},
     props: ['myData','config', 'paneIndex', 'hooks'],
     data: () => ({
         tiles: [],
         maxRows: 4,
         maxCol: 4,
-        gridGap: '5px',
+        gridGap: 5,
+        gridColumns: undefined,
+        gridContainerStyle: {},
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
         minTileHeight: '50px',
@@ -204,7 +279,8 @@ export default {
         useGridGuides: false,
         selectionToolIsActivated: false,
         selectedNodesBySelectionTool: [],
-        previewIsOn: false
+        previewIsOn: false,
+        columnEditorIsOpen: false
     }),
     methods: {
         removeUnwantedRows() {
@@ -378,8 +454,16 @@ export default {
             },0)
         },
         saveLayout() {
-            this.hooks.onSaveLayout(this.tiles)
-            webpod.server.apps.update(this.tiles, (response) => {
+            const data = {
+                gridGap: this.gridGap,
+                maxCol: this.maxCol,
+                gridContainerStyle: this.gridContainerStyle,
+                tiles: this.tiles,
+                gridColumns: this.gridColumns
+            }
+            // this.hooks.onSaveLayout(data)
+            console.log(data)
+            webpod.server.apps.update(data, (response) => {
                 if(response.message == 'success') {
                     // saving is successfull
                 }
@@ -439,43 +523,96 @@ export default {
         },
         preview(state) {
             this.previewIsOn = state
+        },
+        tileALignChange(value) {
+            this.tiles[this.nodeSelectedIndex].align = value
+        },
+        containerCustomStyle(value) {
+            console.log('container custom style', value)
+        },
+        containerJustifyItems(value) {
+            console.log('asdf', value)
+        },
+        tileCustomStyle(cssObject) {
+            this.tiles[this.nodeSelectedIndex].customStyle = cssObject
+        },
+        applyGridGap(value) {
+            this.gridGap = value
+        },
+        changeGridColumn(value) {
+            this.maxCol = value
+
+            // populate gridColumns with 1fr 
+            for(let i = 0; i < value; i++) {
+                if(i > this.gridColumns.length - 1) {
+                    this.gridColumns.push('1fr')
+                }
+            }
+
+            // when the selected value is lower than the past value
+            const t = this.gridColumns.length - value
+            if(this.gridColumns.length > value) {
+                for(let i = 0; i <  t; i++) {
+                    this.gridColumns.pop()
+                }
+            }
+        },
+        openColumnEditor() {
+            const columnEditor = webpod.dash.modal.show({
+                modalTitle: 'Column Editor',
+                isPlayable: true,
+                viewTrigger: (s) => this.columnEditorIsOpen = s
+            })
+
+            columnEditor.on('play', () => {
+                this.gridColumns = this.$refs.colEditor.frs
+                webpod.dash.modal.hide()
+            })
         }
     },
     created() {
         this.currentUid = this.uid()
         const _alert = webpod.dash.alert
 
-        const {instances} = this.myData
-
         if(this.myData) {
-            if(!Array.isArray(this.myData)) {
-                _alert(`Error: Expected array but got an ${typeof this.myData}`)
+            if(Object.keys(this.config).includes('editable')) {
+                this.editMode = this.config.editable
             } else {
-                
-                if(Object.keys(this.config).includes('editable')) {
-                    this.editMode = this.config.editable
-                } else {
-                    _alert('Error: Cannot find editable property in viewConfig, defaulting to read only mode.')
-                    this.editMode = false
-                }
-
-                let largestRowEnd = 0
-                this.myData.map(item => {
-                    if(typeof item != 'object') {
-                        alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
-                        location.reload()
-                    } else {
-                        if(largestRowEnd < item.rowEnd) {
-                            largestRowEnd = item.rowEnd
-                        }   
-
-                        this.tiles.push(item)
-
-                    }
-                })
-
-                this.maxRows = largestRowEnd + 2
+                _alert('Error: Cannot find editable property in viewConfig, defaulting to read only mode.')
+                this.editMode = false
             }
+
+            let largestRowEnd = 0
+            this.myData.tiles.map(item => {
+                if(typeof item != 'object') {
+                    alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
+                    location.reload()
+                } else {
+                    if(largestRowEnd < item.rowEnd) {
+                        largestRowEnd = item.rowEnd
+                    }   
+                    
+                    this.tiles.push(item)
+                }
+            })
+
+            // default grid settings
+            if(this.myData.maxCol) { this.maxCol = this.myData.maxCol }
+            if(this.myData.gridGap) { this.gridGap = this.myData.gridGap }
+            if(this.myData.gridContainerStyle) { this.gridContainerStyle = this.myData.gridContainerStyle }
+            this.maxRows = largestRowEnd + 2
+
+            if(this.myData.gridColumns != undefined) {
+                this.gridColumns = this.myData.gridColumns
+            } else {
+                let col = []
+                for(let i = 0; i < this.maxCol; i++) {
+                    col.push(`1fr`)
+                }
+                this.gridColumns = col
+            }
+            
+
         } else {
             _alert('Error: unitile data is undefined')
         }
