@@ -14,9 +14,9 @@
                                     {{modalError}}
                                 </strong>
                             </div>
-                            <portal-target style="min-width: 400px; min-height:100px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                            <portal-target style="min-width: 400px; min-height:200px; height: 100%"  @change="portalTargetChanged"  name="modal" />
                             <div v-if="modalIsPlayable" class="flex flexend" >
-                                <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon tile >
+                                <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon small >
                                     <v-icon>mdi-play</v-icon>
                                 </v-btn>
                             </div>
@@ -296,7 +296,7 @@ export default {
                         } else if(typeof conf === 'string') {
                             setTimeout(() => {
                                 this.$refs.draggable.ready = true
-                                this.$refs.draggable.title = conf || 'Untitled'
+                                this.$refs.draggable.title = 'Untitled'
                             },0)
                         }
 

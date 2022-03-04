@@ -1,19 +1,19 @@
 <template>
     <div v-show="ready" class="fullwidth flex flexcenter" >
         <v-card id="mydiv" class="">
-            <div id="mydivheader" style="border-bottom: 1px solid lightgray;" class="pad025 flex spacebetween flexcenter">
-                <div class="padleft050" >
+            <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
+                <div class=""  >
                     <strong>
                         {{title}}
                     </strong>
                 </div>
                 <div>
-                    <v-btn color="white" @click="handleClose" :ripple="false" icon text small >
+                    <v-btn  @click="handleClose" :ripple="false" icon text  >
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
                 </div>
             </div>
-            <div id="content" style="z-index:2" role="content" >
+            <div id="content" class="pad125" style="z-index:2" role="content" >
                 <slot></slot>
             </div>
         </v-card>
@@ -28,7 +28,7 @@ export default {
     data: () => ({
         currentId: undefined,
         ready: false,
-        title: undefined,
+        title: 'Untitled',
     }),
     methods: {
         handleClose() {
@@ -98,7 +98,7 @@ export default {
 #mydivheader {
   cursor: move;
   z-index: 10 !important;
-  background-color: #1e1e1e;
-  color: #fff;
+  /* background-color: #1e1e1e; */
+  /* color: #fff; */
 }
 </style>
