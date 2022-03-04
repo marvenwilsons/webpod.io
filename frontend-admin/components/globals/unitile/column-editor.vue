@@ -30,6 +30,9 @@
                     </v-btn>
                 </template>
                 <v-list  >
+                    <v-list-item link >
+                        <v-list-item-title v-text="'custom'" ></v-list-item-title>
+                    </v-list-item>
                     <v-list-item
                     v-for="item in 6"
                     :key="item"
@@ -45,7 +48,9 @@
 </template>
 
 <script>
+import m from '@/m'
 export default {
+    mixins: [m],
     props: ['maxCol', 'gridColumns'],
     data: () => ({
         frs: [],
@@ -62,7 +67,13 @@ export default {
         }
     },
     mounted() {
-        this.frs = this.gridColumns.split(' ')
+        this.frs = this.gridColumns
+        
+        for(let i = 0; i < this.maxCol; i++) {
+            if(i > this.frs.length - 1) {
+                this.frs.push('1fr')
+            }
+        }
     }
 }
 </script>
