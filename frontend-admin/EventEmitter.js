@@ -3,9 +3,8 @@ export default function () {
   let registeredEventListeners = {}
   return {
     emit: function (...args) {
-
+      // get the arguments passed from the .emit parameter
       let argsArray = []
-
       for(let i = 0; i < ([...args]).length; i++ ) {
         if(i != 0) {
           // 
@@ -13,37 +12,25 @@ export default function () {
         }
       }
 
-      if(registeredEventListeners[args[0]] != undefined) {
-        // if requested emit event exist  in the registered listeners object execute it
-        registeredEventListeners[args[0]].apply(null,argsArray)
-      } else {
-        // if the requested emit event does not exist then register to registeredEvents
-        // will be executed later
+      try {
+        registeredEvents[args[0]].callbacks.map(ev_fns => {
+          ev_fns.apply(null, argsArray)
+        })
+      } catch(err) {}
 
-        registeredEvents[args[0]] = argsArray
-      }
     },
     on: function (eventName, cb) {
+      console.log('.on', eventName)
 
       if(registeredEvents[eventName] != undefined) {
-        // case when .emit is called first before .on
-        if(typeof cb === 'function') {
-          cb.apply(null,registeredEvents[eventName])
-          
-        } else {
-          console.error(`Error at .on("${eventName}") EventEmitter's Callback should be a function but got a type of ${typeof cb} instead`)
-        }
+        // push the new callback into its callbacks array
+        registeredEvents[eventName].callbacks.push(cb)
       } else {
-        // case when .on is called first then .emit
-        // save the callback then execute later on .emit
-        if(registeredEventListeners[eventName] == undefined) {
-          if(typeof cb === 'function') {
-            registeredEventListeners[eventName] = cb
-          } else {
-            console.error(`Error at .on("${eventName}") EventEmitter's Callback should be a function but got a type of ${typeof cb} instead`)
-          }
-        } 
+        registeredEvents[eventName] = {
+          callbacks: [cb],
+        }
       }
+      // end
     }
   }
 }
