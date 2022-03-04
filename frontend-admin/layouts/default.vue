@@ -14,7 +14,7 @@
                                     {{modalError}}
                                 </strong>
                             </div>
-                            <portal-target style="min-width: 400px; min-height:200px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                            <portal-target style="min-width: 450px; min-height:220px; height: 100%"  @change="portalTargetChanged"  name="modal" />
                             <div v-if="modalIsPlayable" class="flex flexend" >
                                 <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon small >
                                     <v-icon>mdi-play</v-icon>
