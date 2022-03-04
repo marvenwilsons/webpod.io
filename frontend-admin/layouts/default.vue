@@ -163,7 +163,8 @@ export default {
         modalEvent: undefined,
         modalError: undefined,
         modalIsPlayable: false,
-        modalIsPlaying: false
+        modalIsPlaying: false,
+        modalViewTrigger: undefined
     }),
     created() {
         service.getAllServices(this)
@@ -292,6 +293,12 @@ export default {
                                 this.$refs.draggable.ready = true
                                 this.$refs.draggable.title = conf.modalTitle || 'Untitled'
                                 this.modalIsPlayable = conf.isPlayable || false
+                                this.viewTrigger = conf.viewTrigger
+
+                                if(conf.viewTrigger != undefined) {
+                                    conf.viewTrigger(true)
+                                }
+
                             },0)
                         } else if(typeof conf === 'string') {
                             setTimeout(() => {
@@ -331,6 +338,14 @@ export default {
                             this.modalError = undefined
                             this.modalIsPlayable = false
                             this.modalIsPlaying = false
+                            
+                            if(typeof this.viewTrigger == 'function') {
+                                this.viewTrigger(false)
+                                setTimeout(() => {
+                                    this.viewTrigger = undefined
+                                },0)
+                            }
+
                             if(cb) cb()
                             if(typeof this.modalOnClose == 'function') {
                                 this.modalOnClose()
