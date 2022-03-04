@@ -132,17 +132,19 @@
                         bottom
                         color="primary"
                     ></v-progress-linear>
-                    <v-card-text class=" " style="padding:0;" >Give a title name for this <strong><span class="text-uppercase" >{{selectedInstanceType}}</span></strong></v-card-text>
+                    <!-- <v-card-text class=" " style="padding:0;" >Give a title name for this <strong><span class="text-uppercase" >{{selectedInstanceType}}</span></strong></v-card-text> -->
                     <v-text-field 
                         :error="newProjectError != undefined" 
                         :error-messages="newProjectError" 
                         v-model="newProjectTitle"  
-                        :disabled="createNewProjectOnProgress" 
+                        :disabled="createNewProjectOnProgress"
+                        :hint="`Give a title name for this '${selectedInstanceType}'`" 
+                        persistent-hint
                     />
-                    <div class="flex fullwidth flexend" >
+                    <!-- <div class="flex fullwidth flexend" >
                         <v-btn v-if="createNewProjectOnProgress == false" :disabled="createNewProjectOnProgress"  @click="cancelNewProjectInstanceCreation" plain text > cancel </v-btn>
                         <v-btn :disabled="createNewProjectOnProgress" @click="startCreation" plain text > {{createNewProjectOnProgress ? 'creating ...' : 'create'}} </v-btn>
-                    </div>
+                    </div> -->
                 </div>
             </portal>
             <!-- **** -->
@@ -370,10 +372,22 @@ export default {
             this.selectedInstanceType = n.type
             const service = this.myData.version_data.body
             service.viewData = n
-            this.promptForNewProjectTitle = true
-            webpod.dash.modal.show()
-            webpod.dash.modal.closeOnBlur(false)
             this.newProjectService = service
+
+            const modalInstance = webpod.dash.modal.show({
+                viewTrigger: (s) => {
+                    this.promptForNewProjectTitle = s
+                    if(s == false) {
+                        this.newProjectError = undefined
+                    }
+                },
+                modalTitle: 'Create New Project',
+                isPlayable: true
+            })
+            modalInstance.on('play', () => {
+                this.startCreation()
+            })
+
         },
         instanceSelect(selected,cb) {
             this.clickedInstance = selected.title
@@ -407,7 +421,7 @@ export default {
         },
         validateInstanceTitle(value) {
             let error = undefined
-            if(value == undefined || value.trim() == '' ) error = 'this field is required'
+            if(value == undefined || value.trim() == '' ) error = 'Field is required'
             if((value || '').length > 20) error = 'Max 20 characters'
             for(let x = 0; x < this.instances.length - 1; x++) {
                if(this.instances[x].title === value) {
@@ -427,9 +441,10 @@ export default {
             })
             
         },
-        startCreation() {
+        startCreation(cb = () => {}) {
             const validationResult = this.validateInstanceTitle(this.newProjectTitle)
             if(validationResult === 'passed') {
+                cb('passed')
                 this.createNewProjectOnProgress = true
                 this.newProjectService.paneConfig.title = `${this.newProjectService.paneConfig.title}:${this.newProjectTitle}`
                 this.newProjectService.viewData.title = this.newProjectTitle
@@ -448,6 +463,7 @@ export default {
                 // then locate the new instance in instances
                 // webpod.paneCollection.insertPaneCollectionItem(0)(this.newProjectService)
             } else {
+                cb(validationResult)
                 this.newProjectError = validationResult
             }
         },
