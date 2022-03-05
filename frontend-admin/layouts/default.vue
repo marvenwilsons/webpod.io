@@ -373,11 +373,15 @@ export default {
                     },
                     hide: cb => {
                         let abort = false
-                        this.modalEvent.emit('close', (s) => {
-                            abort = s
-                        })
 
-                        if(abort == false) {
+                        if(this.modalEvent != undefined) {
+                            this.modalEvent.emit('close', (s) => {
+                                abort = s
+                            })
+                        }
+                        
+
+                        if(abort == false || this.modalEvent == undefined) {
                             this.showModal = false
                             this.modalEvent = undefined
                             this.modalError = undefined
