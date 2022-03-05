@@ -40,24 +40,9 @@
         </div>
         <!-- EXISTING PROJECTS CONTAINER -->
         <v-card :elevation="2" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
-            <!-- PROGRESS EFFECT -->
-            <v-progress-linear
-                v-if="loadProtocolIsDone == false"
-                :active="true"
-                :indeterminate="true"
-                bottom
-                color="primary"
-            ></v-progress-linear>
             <!-- RENAME MODAL -->
             <portal to="modal">
                 <div v-if="renameData"  style="background: white;  min-width: 400px; height: 100%;" :class="['pad125', renameError ? 'err_shake' : '']" >
-                    <v-progress-linear
-                        :active="renameOnProgress"
-                        :indeterminate="renameOnProgress"
-                        absolute
-                        bottom
-                        color="primary"
-                    ></v-progress-linear>
                     <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
                     <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
                     <div class="flex fullwidth flexend" >
@@ -124,27 +109,15 @@
             </portal>
             <!-- CREATE NEW INSTANCE MODAL -->
             <portal  to="modal" >
-                <div v-if="promptForNewProjectTitle" style="background: white; min-width: 400px;" :class="['pad125', newProjectError ? 'err_shake' : '']"  >
-                    <v-progress-linear
-                        :active="createNewProjectOnProgress"
-                        :indeterminate="createNewProjectOnProgress"
-                        absolute
-                        bottom
-                        color="primary"
-                    ></v-progress-linear>
-                    <!-- <v-card-text class=" " style="padding:0;" >Give a title name for this <strong><span class="text-uppercase" >{{selectedInstanceType}}</span></strong></v-card-text> -->
+                <div v-if="promptForNewProjectTitle" style="background: white; min-width: 400px;" :class="['', newProjectError ? 'err_shake' : '']"  >
+                    <v-card-text class=" " style="padding:0;" >Give a title name for this <strong><span class="text-uppercase" >{{selectedInstanceType}}</span></strong></v-card-text>
                     <v-text-field 
                         :error="newProjectError != undefined" 
                         :error-messages="newProjectError" 
                         v-model="newProjectTitle"  
                         :disabled="createNewProjectOnProgress"
-                        :hint="`Give a title name for this '${selectedInstanceType}'`" 
                         persistent-hint
                     />
-                    <!-- <div class="flex fullwidth flexend" >
-                        <v-btn v-if="createNewProjectOnProgress == false" :disabled="createNewProjectOnProgress"  @click="cancelNewProjectInstanceCreation" plain text > cancel </v-btn>
-                        <v-btn :disabled="createNewProjectOnProgress" @click="startCreation" plain text > {{createNewProjectOnProgress ? 'creating ...' : 'create'}} </v-btn>
-                    </div> -->
                 </div>
             </portal>
             <!-- **** -->
@@ -228,13 +201,6 @@
                             <!-- INSTANCE DATA TABLE-->
                             <v-hover v-slot="{ hover }" >
                                 <v-card :disabled="disableAll" bottom style="background: none;" :elevation="hover ? 5 : 0" class="pad025 " >
-                                    <v-progress-linear
-                                        :active="clickedInstance == instance.title"
-                                        :indeterminate="clickedInstance == instance.title"
-                                        absolute
-                                        bottom
-                                        color="primary"
-                                    ></v-progress-linear>
                                     <!-- ENTRIES -->
                                     <div class="flex" >
                                         <div class="padtop025 padleft050 padbottom025 flex flexcenter flexstart" >
@@ -377,15 +343,52 @@ export default {
             const modalInstance = webpod.dash.modal.show({
                 viewTrigger: (s) => {
                     this.promptForNewProjectTitle = s
-                    if(s == false) {
-                        this.newProjectError = undefined
+                    if(s == false) { 
+                        // this bit will exec on close only
+                        this.newProjectError = undefined 
+                        this.newProjectTitle = undefined
+                        this.newProjectService = undefined
+                        this.createNewProjectOnProgress = false
                     }
                 },
                 modalTitle: 'Create New Project',
-                isPlayable: true
+                button: 'create',
             })
-            modalInstance.on('play', () => {
-                this.startCreation()
+
+            modalInstance.on('btn-click', (btn) => {
+                btn.disabled(true)
+                btn.progress(true)
+                
+                this.createNewProjectOnProgress = true
+
+                const validationResult = this.validateInstanceTitle(this.newProjectTitle)
+                if(validationResult === 'passed') {
+                    
+                    this.newProjectService.paneConfig.title = `${this.newProjectService.paneConfig.title}:${this.newProjectTitle}`
+                    this.newProjectService.viewData.title = this.newProjectTitle
+                    
+                    // create app instance in db
+                    const app_name = this.appName
+                    const instance_title = this.newProjectTitle
+
+                    // REST api
+                    webpod.server.apps.insertAppInstance({app_name,instance_title},(data) => {
+                        if(data.message == 'OK') {
+                            this.instanceSelect({title: this.newProjectTitle},() => {
+                                this.cancelNewProjectInstanceCreation()
+                            })
+                        }
+                    })
+                    // refetch all apps
+                    // then locate the new instance in instances
+                    // webpod.paneCollection.insertPaneCollectionItem(0)(this.newProjectService)
+                } else {
+                    this.newProjectError = validationResult
+                    this.createNewProjectOnProgress = false
+                    btn.disabled(false)
+                    btn.progress(false)
+                }
+
             })
 
         },
@@ -430,42 +433,6 @@ export default {
                }
             }
             return error || 'passed'
-        },
-        cancelNewProjectInstanceCreation() {
-            this.promptForNewProjectTitle = false
-            webpod.dash.modal.hide(() => {
-                this.newProjectError = undefined
-                this.newProjectTitle = undefined
-                this.newProjectService = undefined
-                this.createNewProjectOnProgress = false
-            })
-            
-        },
-        startCreation(cb = () => {}) {
-            const validationResult = this.validateInstanceTitle(this.newProjectTitle)
-            if(validationResult === 'passed') {
-                cb('passed')
-                this.createNewProjectOnProgress = true
-                this.newProjectService.paneConfig.title = `${this.newProjectService.paneConfig.title}:${this.newProjectTitle}`
-                this.newProjectService.viewData.title = this.newProjectTitle
-
-                // create app instance in db
-                const app_name = this.appName
-                const instance_title = this.newProjectTitle
-                webpod.server.apps.insertAppInstance({app_name,instance_title},(data) => {
-                    if(data.message == 'OK') {
-                        this.instanceSelect({title: this.newProjectTitle},() => {
-                            this.cancelNewProjectInstanceCreation()
-                        })
-                    }
-                })
-                // refetch all apps
-                // then locate the new instance in instances
-                // webpod.paneCollection.insertPaneCollectionItem(0)(this.newProjectService)
-            } else {
-                cb(validationResult)
-                this.newProjectError = validationResult
-            }
         },
         // rename methods
         setRenameEnv(selected) {
