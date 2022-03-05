@@ -21,7 +21,9 @@ export default {
                 viewTrigger: (s) => {
                     // takes care of render toggling  the html view inside modal
                     this.componentToBeShownInsideModal = s
-                }
+                },
+                // its like a submit button, it will appear an enables the event .on('submit')
+                button: ['create', 'creating']
             })
 
             // if on instanciation isPlayable is set to true a play button will appear in modal
@@ -53,6 +55,13 @@ export default {
 
             // stops the loading animation of the play button
             modalInstance.emit('stop-playing')
+
+            // btn-click event usage
+            modalInstance.on('btn-click', (btn) => {
+                btn.disabled(true)
+                btn.progress(true)
+                btn.loading(true)
+            })
         }
     }
 }
