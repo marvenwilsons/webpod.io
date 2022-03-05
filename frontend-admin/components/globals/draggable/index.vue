@@ -1,6 +1,7 @@
 <template>
     <div v-show="ready" class="fullwidth flex flexcenter" >
         <v-card id="mydiv" class="">
+            
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
                 <div class=""  >
                     <strong>
@@ -13,8 +14,17 @@
                     </v-btn>
                 </div>
             </div>
+            <v-progress-linear
+                v-if="progress"
+                :active="true"
+                :indeterminate="true"
+                color="primary"
+            ></v-progress-linear>
+            
             <div id="content" class="pad125" style="z-index:2" role="content" >
-                <slot></slot>
+                <div class="pad125" >
+                    <slot></slot>
+                </div>
             </div>
         </v-card>
     </div>
@@ -29,6 +39,7 @@ export default {
         currentId: undefined,
         ready: false,
         title: 'Untitled',
+        progress: false
     }),
     methods: {
         handleClose() {
