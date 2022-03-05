@@ -7,18 +7,33 @@
             <main  v-if="!showInitForms" >
                 <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                        <draggable :class="[shakeModal ? 'err_shake' : '']" ref="draggable" v-if="showModal" >
+                        <draggable :class="[shakeModal ? 'err_shake' : '',]" ref="draggable" v-if="showModal" >
                             <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                 <v-icon >mdi-alert-circle</v-icon>
                                 <strong class="marginleft025" >
                                     {{modalError}}
                                 </strong>
                             </div>
-                            <portal-target style="min-width: 450px; min-height:200px; height: 100%"  @change="portalTargetChanged"  name="modal" />
-                            <div v-if="modalIsPlayable" class="flex flexend" >
-                                <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon small >
-                                    <v-icon>mdi-play</v-icon>
-                                </v-btn>
+                            <div class="" >
+                                <portal-target style="min-width: 400px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                                <!-- modal button -->
+                                <div class="flex flexend"  v-if="modalButton.show" >
+                                    <v-btn 
+                                        ref="modalButton" 
+                                        plain text 
+                                        @click="modalButtonClick"
+                                        :disabled="modalButton.disabled"
+                                        :loading="modalButton.loading"
+                                    > 
+                                        {{modalButton.text}} 
+                                    </v-btn>
+                                </div>
+                                <!-- play -->
+                                <div v-if="modalIsPlayable" class="flex flexend" >
+                                    <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon small >
+                                        <v-icon>mdi-play</v-icon>
+                                    </v-btn>
+                                </div>
                             </div>
                         </draggable>
                     </div>
@@ -160,11 +175,18 @@ export default {
         historyBtnDirection: 'left',
         showAccountBtn: false,
         showInitForms: false,
+        // MODAL PROPERTIES
         modalEvent: undefined,
         modalError: undefined,
         modalIsPlayable: false,
         modalIsPlaying: false,
-        modalViewTrigger: undefined
+        modalViewTrigger: undefined,
+        modalButton: {
+            show: false,
+            text: undefined,
+            loading: false,
+            disabled: false
+        }
     }),
     created() {
         service.getAllServices(this)
@@ -268,6 +290,22 @@ export default {
         modalPlay() {
             this.modalIsPlaying = true
             this.modalEvent.emit('play')
+        },
+        modalButtonClick() {
+            this.modalEvent.emit('btn-click', {
+                disabled: (v) => {
+                    this.$set(this.modalButton,'disabled',v)
+                },
+                loading: (v) => {
+                    this.$set(this.modalButton,'loading', v)
+                },
+                progress: (v) => {
+                    this.$refs.draggable.progress = v
+                },
+                text: (v) => {
+                    this.$set(this.modalButton,'text', v)
+                }
+            })
         }
     },
     mounted() {
@@ -298,6 +336,13 @@ export default {
                                 if(conf.viewTrigger != undefined) {
                                     conf.viewTrigger(true)
                                 }
+
+                                if(conf.button) {
+                                    this.$set(this.modalButton,'show',true)
+                                    this.$set(this.modalButton,'text',conf.button)
+                                }
+
+                                
 
                             },0)
                         } else if(typeof conf === 'string') {
@@ -338,6 +383,12 @@ export default {
                             this.modalError = undefined
                             this.modalIsPlayable = false
                             this.modalIsPlaying = false
+                            this.modalButton = {
+                                show: false,
+                                text: undefined,
+                                loading: false,
+                                disabled: false
+                            }
                             
                             if(typeof this.viewTrigger == 'function') {
                                 this.viewTrigger(false)
