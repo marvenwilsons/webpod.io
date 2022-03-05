@@ -358,7 +358,7 @@ export default {
             modalInstance.on('btn-click', (btn) => {
                 btn.disabled(true)
                 btn.progress(true)
-                
+
                 this.createNewProjectOnProgress = true
 
                 const validationResult = this.validateInstanceTitle(this.newProjectTitle)
@@ -375,7 +375,7 @@ export default {
                     webpod.server.apps.insertAppInstance({app_name,instance_title},(data) => {
                         if(data.message == 'OK') {
                             this.instanceSelect({title: this.newProjectTitle},() => {
-                                this.cancelNewProjectInstanceCreation()
+                                webpod.dash.modal.hide()
                             })
                         }
                     })
