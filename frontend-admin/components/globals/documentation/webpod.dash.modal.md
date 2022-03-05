@@ -23,7 +23,7 @@ export default {
                     this.componentToBeShownInsideModal = s
                 },
                 // its like a submit button, it will appear an enables the event .on('submit')
-                button: ['create', 'creating']
+                button: 'click me'
             })
 
             // if on instanciation isPlayable is set to true a play button will appear in modal
@@ -61,6 +61,7 @@ export default {
                 btn.disabled(true)
                 btn.progress(true)
                 btn.loading(true)
+                btn.text('creating ...')
             })
         }
     }
