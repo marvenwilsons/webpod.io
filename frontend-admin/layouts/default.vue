@@ -479,9 +479,12 @@ export default {
 }
 .modal-wrapper {
     background: #1565c03a;
-    z-index: 900;
+    z-index: 500;
 }
 html {
     overflow: hidden !important;
+}
+.v-menu__content {
+    z-index: 1000 !important;
 }
 </style>
