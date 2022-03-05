@@ -20,8 +20,6 @@ export default function () {
 
     },
     on: function (eventName, cb) {
-      console.log('.on', eventName)
-
       if(registeredEvents[eventName] != undefined) {
         // push the new callback into its callbacks array
         registeredEvents[eventName].callbacks.push(cb)
