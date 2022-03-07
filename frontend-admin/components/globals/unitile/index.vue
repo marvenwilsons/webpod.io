@@ -7,7 +7,7 @@
         >
             <!-- ribbon -->
             <div>
-                <div v-if="editMode" style="background:#fbfbfb" class="flex spacebetween  flexcenter pad050" >
+                <div v-if="editMode" style="background: white;" class="flex spacebetween flexcenter pad050" >
                     <div class="flex" >
                         <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
                             <v-btn :disabled="selectionToolIsActivated || previewIsOn" icon plain small @click="addNewTile" >
@@ -569,6 +569,24 @@ export default {
                 webpod.dash.modal.hide()
             })
         }
+    },
+    mounted() {
+        setTimeout(() => {
+            webpod.dash.sidebarRibbon.show()
+        },500)
+        
+        webpod.session.onPaneToggle = (currentIndex) => {
+            if(this.paneIndex != currentIndex) {
+                webpod.dash.sidebarRibbon.hide()
+            } else {
+                setTimeout(() => {
+                    webpod.dash.sidebarRibbon.show()
+                }, 100)
+            }
+        }
+    },
+    beforeDestroy() {
+        webpod.dash.sidebarRibbon.hide()
     },
     created() {
         this.currentUid = this.uid()
