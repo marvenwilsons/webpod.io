@@ -42,7 +42,7 @@
         <v-card :elevation="2" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
             <!-- RENAME MODAL -->
             <portal to="modal">
-                <div v-if="renameData"  style="background: white;  min-width: 400px; height: 100%;" :class="['pad125', renameError ? 'err_shake' : '']" >
+                <div v-if="renameData"  style="background: white;  min-width: 400px; height: 100%;" :class="['', renameError ? 'err_shake' : '']" >
                     <v-card-text class=" " style="padding:0;" >Give a new title name to <strong>"{{renameData.title}}"</strong>.</v-card-text>
                     <v-text-field :error="renameError != undefined" :error-messages="renameError" v-model="renameNewValue"  :disabled="renameOnProgress" ></v-text-field>
                     <div class="flex fullwidth flexend" >
