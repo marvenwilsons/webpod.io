@@ -1,6 +1,6 @@
 <template>
     <div v-show="ready" class="fullwidth flex flexcenter" >
-        <v-card id="mydiv" class="">
+        <v-card id="mydiv" class="" elevation="5">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
                 <div class=""  >
