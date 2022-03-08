@@ -1,9 +1,10 @@
 <template>
     <el-dropdown  @command="handleCommand" size="small" trigger="click">
-        <div class="pad025" >
-            <svg style="width:20px;height:20px" viewBox="0 0 24 24">
+        <div style="color: #000000de; " class="pointer" >
+            <svg v-if="svgTrigger" style="width:20px;height:20px" viewBox="0 0 24 24">
                 <path fill="gray" :d="svgTrigger" />
             </svg>
+            <slot></slot>
         </div>
         <el-dropdown-menu  style="font-family: 'Roboto'; font-size: 1rem;"  slot="dropdown">
             <el-dropdown-item 
@@ -14,7 +15,7 @@
             :key="uid(option)" 
             class="pad125">
                 <div class="flex pad025 " >
-                    <div style="max-width: 20px;min-width: 20px;" class="marginright050 flex flexcenter" >
+                    <div v-if="option.d" style="max-width: 20px;min-width: 20px;" class="marginright050 flex flexcenter" >
                         <svg v-if="option.d" style="width:20px;height:20px" viewBox="0 0 24 24">
                             <path fill="#000000de" :d="option.d" />
                         </svg>
