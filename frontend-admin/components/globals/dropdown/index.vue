@@ -5,22 +5,22 @@
                 <path fill="gray" :d="svgTrigger" />
             </svg>
         </div>
-        <el-dropdown-menu  style="font-family: 'Monaco'"  slot="dropdown">
+        <el-dropdown-menu  style="font-family: 'Roboto'; font-size: 1rem;"  slot="dropdown">
             <el-dropdown-item 
             :divided="divideOptionsBefore && divideOptionsBefore.includes(option.title)"
             :disabled="disabledOptions && disabledOptions.includes(option.title)"
             :command="option.title"  
             v-for="option in options" 
             :key="uid(option)" 
-            class="small-text">
-                <div class="flex" >
+            class="pad125">
+                <div class="flex pad025 " >
                     <div style="max-width: 20px;min-width: 20px;" class="marginright050 flex flexcenter" >
                         <svg v-if="option.d" style="width:20px;height:20px" viewBox="0 0 24 24">
-                            <path fill="gray" :d="option.d" />
+                            <path fill="#000000de" :d="option.d" />
                         </svg>
                     </div>
-                    <div class="flex flex1 fullwidth" >
-                        <div class="fullwidth" >{{option.title}}</div>
+                    <div style="font-weight:400;" class="flex flex1 fullwidth marginleft050 padright125" >
+                        <div class="fullwidth padtop025" style="color: #000000de; font-size: .875rem;" >{{option.title}}</div>
                     </div>
                 </div>
             </el-dropdown-item>
@@ -41,3 +41,10 @@ export default {
     }
 }
 </script>
+
+<style>
+.el-dropdown-menu__item:hover {
+    background: #F5F5F5 !important;
+    transition: 0.2s;
+}
+</style>
