@@ -13,7 +13,9 @@
             :command="option.title"  
             v-for="option in options" 
             :key="uid(option)" 
-            class="pad125">
+            class="pad125"
+            :style="{background: selected && selected == option.title ? '#F5F5F5' : ''}"
+            >
                 <div class="flex pad025 " >
                     <div v-if="option.d" style="max-width: 20px;min-width: 20px;" class="marginright050 flex flexcenter" >
                         <svg v-if="option.d" style="width:20px;height:20px" viewBox="0 0 24 24">
@@ -34,7 +36,7 @@ import m from '@/m'
 export default {
     name:"wp-dropdown",
     mixins: [m],
-    props: ['options','svgTrigger','divideOptionsBefore','disabledOptions'],
+    props: ['options','svgTrigger','divideOptionsBefore','disabledOptions', 'selected'],
     methods: {
         handleCommand(command) {
             this.$emit('command',command)
