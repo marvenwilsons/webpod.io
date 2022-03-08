@@ -1,6 +1,6 @@
 <template>
     <div v-show="ready" class="fullwidth flex flexcenter" >
-        <v-card id="mydiv" class="" elevation="5">
+        <v-card id="mydiv" class="" elevation="8">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
                 <div class=""  >
@@ -9,6 +9,12 @@
                     </strong>
                 </div>
                 <div>
+                    <v-btn v-if="!isCollapsed"  @click="collapse" :ripple="false" icon text  >
+                        <v-icon>mdi-arrow-collapse</v-icon>
+                    </v-btn>
+                    <v-btn v-if="isCollapsed"  @click="expand" :ripple="false" icon text  >
+                        <v-icon>mdi-arrow-expand</v-icon>
+                    </v-btn>
                     <v-btn  @click="handleClose" :ripple="false" icon text  >
                         <v-icon>mdi-close</v-icon>
                     </v-btn>
@@ -21,17 +27,20 @@
                 color="primary"
             ></v-progress-linear>
             
-            <div id="content" class="pad125" style="z-index:2" role="content" >
-                <div class="pad125" >
-                    <slot></slot>
+            <v-expand-x-transition>
+                <div id="content"  class="pad125 paneBorder" :style="{zIndex:2}" role="content" >
+                    <div class="pad125" >
+                        <slot></slot>
+                    </div>
                 </div>
-            </div>
+            </v-expand-x-transition>
         </v-card>
     </div>
 </template>
 
 <script>
 import m from '@/m'
+import gsap from "gsap";
 export default {
     mixins: [m],
     props: ['name'],
@@ -39,11 +48,22 @@ export default {
         currentId: undefined,
         ready: false,
         title: 'Untitled',
-        progress: false
+        progress: false,
+        isCollapsed: false
     }),
     methods: {
         handleClose() {
             webpod.dash.modal.hide()
+        },
+        collapse() {
+            this.isCollapsed = true
+            gsap.to("#content", {height: 0, duration: 0.3, ease: "power3.inOut"});
+            gsap.to("#content", {width: '250px', duration: 0.3, ease: "power3.inOut"});
+        },
+        expand() {
+            this.isCollapsed = false
+            gsap.to("#content", {height: 'auto', duration: 0.3, ease: "power3.inOut"});
+            gsap.to("#content", {width: 'auto', duration: 0.3, ease: "power3.inOut"});
         }
     },
     mounted() {
@@ -111,5 +131,8 @@ export default {
   z-index: 10 !important;
   /* background-color: #1e1e1e; */
   /* color: #fff; */
+}
+.ani {
+    transition: 1s !important;
 }
 </style>
