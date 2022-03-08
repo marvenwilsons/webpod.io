@@ -54,19 +54,27 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 dash.accountBtn.show()
             },500)
             const title = paneCollection.paneCollection.map(e => {
+                
                 return e.paneConfig.title || 'untitled'
             })
+            const closablePanes = paneCollection.paneCollection.map(e => e.paneConfig.isClosable)
             // topbar.history.panes = title
             if(webpod) {
                 webpod.session.paneCollection = title
+
+                webpod.session.closablePanes = closablePanes
                 webpod.session.paneOnFocus = title.length - 1
                 if(title.length > 1) {
                     setTimeout(() => {
                         dash.history.historyBtn.show()
+                        dash.setIfPaneIsClosable(paneCollection.paneCollection[webpod.session.paneOnFocus].paneConfig.isClosable)
+
                     },700)
                 } else if(title.length == 1) {
-                    dash.history.historyBtn.hide()    
+                    dash.history.historyBtn.hide()
+                    dash.setIfPaneIsClosable(paneCollection.paneCollection[webpod.session.paneOnFocus].paneConfig.isClosable)
                 }
+
             }
         }
         
@@ -162,14 +170,15 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 apps: {...appFetch},
                 collections: {},
                 users: {},
-                roles: {}
+                roles: {},
             },
             session: {
                 paneOnFocus: 0,
                 appInstanceOnFocus: undefined,
                 logs: [],
                 onLog: () => {},
-                onProgress: () => {}
+                onProgress: () => {},
+                onPaneToggle: () => {},
             },
             dashSettings: {
                 'Pane Slide': 'yes',
