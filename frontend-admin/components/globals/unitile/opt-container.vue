@@ -1,7 +1,7 @@
 <template>
-    <v-sheet style="height:40px;" elevation="0" class="pad050 borderRad4" >
+    <v-sheet style="height:40px; border: 1px solid #BDBDBD;" elevation="0" class="pad050 borderRad4" >
         <div class="flex flexcenter fullheight-percent" >
-            <div class="flex flexcenter  marginright050  text-caption" >
+            <div style="white-space: nowrap;" class=" marginright050  text-caption" >
                 {{title}}
             </div>
             <div class="flex flexcenter" >
