@@ -14,8 +14,8 @@
                                     {{modalError}}
                                 </strong>
                             </div>
-                            <div class="" >
-                                <portal-target style="min-width: 400px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                            <div class="" style="max-height:500px;" >
+                                <portal-target style="min-width: 300px; height: 100%"  @change="portalTargetChanged"  name="modal" />
                                 <!-- modal button -->
                                 <div class="flex flexend"  v-if="modalButton.show" >
                                     <v-btn 
@@ -93,8 +93,37 @@
                     <section class="flex fullwidth" >
                         <nuxt ref="pane" />
                     </section>
-                    <div  style="z-index: 1900; right: 0; bottom: 0; max-width: 5%;" class="absolute flex flexend" >
-                        <div class="marginright125 marginbottom125 flex flexcol" >
+                    <div  style="z-index: 1900; right: 0; bottom: 0; max-width: 5%; min-width:92px; margin-right:12px;" 
+                    class="absolute flex flexcol spacebetween " >
+                        <div class="flex flexcenter" >
+                            <v-scale-transition origin="center" >
+                                <v-btn
+                                    v-if="cog.show"
+                                    class="mx-2 marginbottom050"
+                                    dark fab color="black"
+                                    @click="cog.click()"
+                                >
+                                    <v-icon dark>
+                                        mdi-cog-outline
+                                    </v-icon>
+                                </v-btn>
+                            </v-scale-transition>
+                        </div>
+                        <div class=" flex flexcenter"  >
+                            <v-scale-transition origin="center">
+                                <v-btn
+                                    v-if="currentPaneIsClosable"
+                                    class="mx-2 marginbottom050"
+                                    dark fab color="black"
+                                    @click="closePane"
+                                >
+                                    <v-icon dark>
+                                        mdi-close
+                                    </v-icon>
+                                </v-btn>
+                            </v-scale-transition>
+                        </div>
+                        <div class="marginbottom125 flex flexcol flexcenter" >
                             <v-scale-transition origin="center">
                                 <v-btn
                                     v-if="historyBtnIsShowing"
@@ -142,9 +171,10 @@
 </template>
 
 <script>
+import dashboard from '@/components/dashboard/dashboard.js'
+
 import menubar from '@/components/dashboard/menu-bar/index' 
 import service from '@/components/dashboard/services/index'
-import dashboard from '@/components/dashboard/dashboard.js'
 import sidebar from '@/components/dashboard/side-bar/index.vue'
 import notification from '@/components/dashboard/side-bar/notification.vue'
 import accentBg from '@/components/dashboard/accent-bg/index.vue'
@@ -175,12 +205,17 @@ export default {
         historyBtnDirection: 'left',
         showAccountBtn: false,
         showInitForms: false,
+        currentPaneIsClosable: false,
         // MODAL PROPERTIES
         modalEvent: undefined,
         modalError: undefined,
         modalIsPlayable: false,
         modalIsPlaying: false,
         modalViewTrigger: undefined,
+        cog: {
+            show: false,
+            click: () => {}
+        },
         modalButton: {
             show: false,
             text: undefined,
@@ -192,9 +227,11 @@ export default {
         service.getAllServices(this)
         this.use_socket = true
         // console.log(`${location.href}${process.env.API_URL}`)
+        
     },
     methods: {
         historyClick(i) {
+            
             webpod.session.paneOnFocus = i
             try {
                 const el = document.getElementById(`pane${i}`)
@@ -211,6 +248,8 @@ export default {
                 this.nextBtnIsShowing = false
                 this.historyBtnDirection = 'left'
             }
+            this.currentPaneIsClosable = webpod.session.closablePanes[i]
+            webpod.session.onPaneToggle(i)
         },
         prevPane() {
             this.historyClick(webpod.session.paneOnFocus - 1)
@@ -306,6 +345,12 @@ export default {
                     this.$set(this.modalButton,'text', v)
                 }
             })
+        },
+        setPaneIsClosable(isClosable) {
+            this.currentPaneIsClosable = isClosable
+        },
+        closePane() {
+            this.$refs.pane.$children[0].$children[0].removePaneCollectionItem(webpod.session.paneOnFocus)()
         }
     },
     mounted() {
@@ -463,6 +508,24 @@ export default {
                             this.$refs['wp-init'].generated_db_info = generated_db_info
                         },0)
                     }
+                },
+                setIfPaneIsClosable: (isClosable) => this.currentPaneIsClosable = isClosable,
+                cog: {
+                    show: () => {
+                        setTimeout(() => {
+                            this.$set(this.cog,'show',true)
+                        },500)
+
+                        const cogEvents = new EventEmitter()
+                        this.cog.click = () => {
+                            cogEvents.emit('click')
+                        }
+
+                        return cogEvents
+                    },
+                    hide: () => {
+                        this.$set(this.cog,'show',false)
+                    }
                 }
             }
 
@@ -472,6 +535,12 @@ export default {
             console.log(err)
         }
 
+        window.onresize = (n) => {
+            try {
+                const el = document.getElementById(`pane${webpod.session.paneOnFocus}`)
+                el.scrollIntoView()
+            } catch(err) {}
+        }
        
     }
 }
@@ -482,7 +551,7 @@ export default {
     font-family: 'Merriweather', serif !important;
 }
 .modal-wrapper {
-    background: #1565c03a;
+    /* background: #1565c03a; */
     z-index: 500;
 }
 html {
