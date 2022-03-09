@@ -27,13 +27,11 @@
                 color="primary"
             ></v-progress-linear>
             
-            <v-expand-x-transition>
-                <div id="content"  class="pad125 paneBorder" :style="{zIndex:2}" role="content" >
-                    <div class="pad125" >
-                        <slot></slot>
-                    </div>
+            <div id="content"  class="pad125 paneBorder" :style="{zIndex:2}" role="content" >
+                <div class="pad125" >
+                    <slot></slot>
                 </div>
-            </v-expand-x-transition>
+            </div>
         </v-card>
     </div>
 </template>
@@ -131,8 +129,5 @@ export default {
   z-index: 10 !important;
   /* background-color: #1e1e1e; */
   /* color: #fff; */
-}
-.ani {
-    transition: 1s !important;
 }
 </style>
