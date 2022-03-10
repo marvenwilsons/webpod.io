@@ -14,6 +14,15 @@ export default {
             {title:'Expand width'},
             {title:'Decrease width'},
         ],
+        scaleUnits: [
+            {title: 'px'},
+            {title: '%'},
+            {title: 'em'},
+            {title: 'vmin'},
+            {title: 'vmax'},
+            {title: 'cm'},
+            {title: 'mm'},
+        ],
         disabledOptions: []
     }),
     methods: {
