@@ -1,5 +1,5 @@
 <template>
-    <div v-show="ready" class="fullwidth flex flexcenter" >
+    <div class="fullwidth flex flexcenter" >
         <v-card id="mydiv" class="" elevation="8">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
@@ -44,7 +44,7 @@ export default {
     props: ['name'],
     data: () => ({
         currentId: undefined,
-        ready: false,
+        ready: true,
         title: 'Untitled',
         progress: false,
         isCollapsed: false
