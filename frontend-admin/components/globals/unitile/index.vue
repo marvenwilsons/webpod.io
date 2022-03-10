@@ -115,23 +115,34 @@
                             <div id="start" ></div>
                             <opt-container title="GRID GAP" >
                                 <grid-gap @change="applyGridGap" :gap="gridGap" class="marginright025" />
-                                <v-divider
+                                <!-- <v-divider
                                     vertical
-                                ></v-divider>
-                                <div class="marginleft050 borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                ></v-divider> -->
+                                <!-- <div class="marginleft050 borderRad4 paneBorder padleft025 padright025 ribbon-item" >
                                     <dropDown
                                         @command="(cmd) => {handleRibbonContainerCmd('grid-gap',cmd)}"
                                         :options="scaleUnits"
                                     >px</dropDown>
-                                </div>
+                                </div> -->
                             </opt-container>
                             <opt-container title="GRID COLUMNS" >
                                 <div  class="borderRad4 paneBorder ribbon-item" >
                                     <dropDown
                                         class="padleft025 padright025"
                                         @command="(cmd) => {handleRibbonContainerCmd('grid-columns',cmd)}"
-                                        :options="[{title: '1'},{title: '2'},{title: '3'},{title: '4'},{title: '5'},{title: '6'},{title: '7'},
-                                        {title: '8'},{title: '9'},{title: '10'},{title: '11'},{title: '12'}
+                                        :options="[
+                                            {title: 1},
+                                            {title: 2},
+                                            {title: 3},
+                                            {title: 4},
+                                            {title: 5},
+                                            {title: 6},
+                                            {title: 7},
+                                            {title: 8},
+                                            {title: 9},
+                                            {title: 10},
+                                            {title: 11},
+                                            {title: 12}
                                         ]"
                                         :selected="maxCol"
                                     >
@@ -143,7 +154,7 @@
                                 <div @click="openColumnEditor" 
                                 style="white-space: nowrap;"
                                 class="caption paneBorder padleft025 padright025 borderRad4 ribbon-item" >
-                                    1fr 2fr 2fr 1fr - (4)
+                                    <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
                                 </div>
                             </opt-container>
                             <opt-container title="GRID CONTAINER CUSTOM CSS" >
@@ -341,10 +352,10 @@
         </portal>
 
         <!-- modals -->
-        <div v-if="columnEditorIsOpen" >
+        <div  >
             <portal  class="" to="modal">
-                <div  class="fullheight-percent fullwidth padbottom125"   >
-                    All Columns 
+                <div v-if="columnEditorIsOpen" class="fullheight-percent fullwidth padbottom125"   >
+                    {{maxCol}} Columns 
                     <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
                 </div>
             </portal>
