@@ -1,10 +1,9 @@
 <template>
 <!-- PANE -->
-    <main v-if="ready"  class="fullheight-percent flex flexcol  overflowhidden " >
-        <section :style="{background: 'transparent'}" class="flex spacebetween pad025 padleft050 padright025" >
+    <main v-if="ready"  class="fullheight-percent flex flexcol relative overflowhidden " >
+        <!-- <section :style="{background: 'transparent'}" class="flex spacebetween pad025 padleft050 padright025" >
             <div class="paneTextColor  padleft125 padtop125 padright125  fullwidth" 
             style="z-index:100; display: block; max-width:95%;" >
-                <!-- pane title -->
                 <div class="flex spacebetween flexcenter" >
                     <paneTitle  :paneCollection="paneCollection" :paneIndex="paneIndex" ></paneTitle>
                     <div class="" style="z-index:100" >
@@ -17,47 +16,45 @@
                         </div>
                     </div>
                 </div>
-                <!-- service ribbon here -->
                 <section role="service ribbon" class="margintop050 marginbottom025 flex" >
                     <paneRibbon :onRibbonClick="viewHooks.onRibbonClick" :ribbons="paneCollection[paneIndex].viewConfig.ribbons" ></paneRibbon>
                 </section>
                 <div class="" style="border-bottom: 1px solid lightgray;" ></div>
             </div>
-            <!-- CLOSE -->
-            
-        </section>
+        </section> -->
         <!-- BODY -->
         <section 
             :style="{zIndex:1, overflow: paneModalisActive ? '':'auto'}" 
-            class="fullheight-percent relative" >
-            <!-- <section class="marginleft125 fullheight-percent" >
-                <tileSystem></tileSystem>
-            </section> -->
+            class="fullheight-percent relative flex" 
+            >
+
             <section 
-            role="content" 
-            :class="['absolute fullwidth pad050', this.paneCollection[this.paneIndex].view == 'unitile' ? 'fullheight-percent' : '']" 
-            style="max-width:95%"
+                role="content" 
+                :class="['fullwidth pad050', this.paneCollection[this.paneIndex].view == 'unitile' ? 'fullheight-percent' : '']" 
+                :style="this.paneCollection[this.paneIndex].paneConfig.allowOverflow ? {} : this.paneCollection[this.paneIndex].paneConfig.allowOverflow == undefined ? {} : {overflow: 'hidden'}"
             >
                 <div
-                    class="fullheight-percent borderRad4  pad125" 
+                    class="fullheight-percent borderRad4" 
                     :is="this.paneCollection[this.paneIndex].view"
                     :myData="this.paneCollection[this.paneIndex].viewData" 
                     :config="this.paneCollection[this.paneIndex].viewConfig"
                     :hooks="viewHooks"
                     :hookArgs="viewHooksArgs"
+                    :paneIndex="this.paneIndex"
                     @onEvent="viewEvent" 
                 >
                 </div>
             </section>
+            <div class="" style="min-width: 90px; max-height:20px; margin-right:12px;" ></div>
             <!-- pane modal -->
-            <PaneModal 
+            <!-- <PaneModal 
                 ref="paneModal" 
                 v-if="paneModalisActive" 
                 :config="paneModalConfig" 
                 class="flex flexcenter fullwidth fullheight-percent"
                 :hooks="viewHooks"
                 :hookArgs="viewHooksArgs"
-            />
+            /> -->
         </section>
     </main>
 </template>
@@ -82,7 +79,11 @@ export default {
         paneModalEventHandler: undefined,
         viewHooks: undefined,
         viewHooksArgs: undefined,
-        ready: false
+        ready: false,
+        webpod: undefined,
+        o: {
+            overflow: 'hidden'
+        }
     }),
     watch: {
         paneModalisActive() {
@@ -213,6 +214,7 @@ export default {
         }
     },
     mounted() {
+        this.webpod = webpod
         // Assigning defaults
         const {paneWidth,paneTitle} = this.paneCollection[this.paneIndex].paneConfig
         this.paneWidth = paneWidth || '700px'
