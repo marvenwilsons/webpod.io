@@ -5,7 +5,7 @@
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
                 <div class=""  >
                     <strong>
-                        {{title}}
+                        {{modalTitle}}
                     </strong>
                 </div>
                 <div>
@@ -41,7 +41,7 @@ import m from '@/m'
 import gsap from "gsap";
 export default {
     mixins: [m],
-    props: ['name'],
+    props: ['name','modalTitle'],
     data: () => ({
         currentId: undefined,
         ready: true,
