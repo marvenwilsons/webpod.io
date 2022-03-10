@@ -5,9 +5,8 @@
                 <init ref="wp-init" @completedForm="handleInitForm" />
             </main>
             <main  v-if="!showInitForms" >
-                <v-fade-transition>
                     <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                        <draggable :class="[shakeModal ? 'err_shake' : '',]" ref="draggable" v-if="showModal" >
+                        <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalTitle="modalTitle" v-if="showModal" >
                             <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                 <v-icon >mdi-alert-circle</v-icon>
                                 <strong class="marginleft025" >
@@ -37,7 +36,6 @@
                             </div>
                         </draggable>
                     </div>
-                </v-fade-transition>   
                 <!-- loading -->
                 <v-fade-transition>
                     <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
@@ -212,6 +210,7 @@ export default {
         modalIsPlayable: false,
         modalIsPlaying: false,
         modalViewTrigger: undefined,
+        modalTitle: undefined,
         cog: {
             show: false,
             click: () => {}
@@ -302,7 +301,7 @@ export default {
             }
         },
         portalTargetChanged(n) {
-            this.$refs.draggable.ready = true
+            // this.$refs.draggable.ready = true
         },
         handleInitForm(formData) {
             const url = `${process.env.API_URL}/init`
@@ -376,37 +375,31 @@ export default {
                             dash.modal.hide()    
                         }
 
+                        // show and render the modal
                         this.showModal = true
                         
-                        if(typeof conf == 'object') {
-                            setTimeout(() => {
-                                this.$refs.draggable.ready = true
-                                this.$refs.draggable.title = conf.modalTitle || 'Untitled'
-                                this.modalIsPlayable = conf.isPlayable || false
-                                this.viewTrigger = conf.viewTrigger
-
-                                if(conf.viewTrigger != undefined) {
-                                    conf.viewTrigger(true)
-                                }
-
-                                if(conf.button) {
-                                    this.$set(this.modalButton,'show',true)
-                                    this.$set(this.modalButton,'text',conf.button)
-                                }
-
-                                
-
-                            },0)
-                        } else if(typeof conf === 'string') {
-                            setTimeout(() => {
-                                this.$refs.draggable.ready = true
-                                this.$refs.draggable.title = 'Untitled'
-                            },0)
+                        // if conf is a type of object assign modal title
+                        // modal is playable
+                        // viewTrigger executes and passes true on modal show
+                        if(typeof conf == 'object' && this.showModal == true) {
+                            this.modalTitle = conf.modalTitle
+                            this.modalIsPlayable = conf.isPlayable || false
+                            this.viewTrigger = conf.viewTrigger
+                            if(conf.viewTrigger != undefined) {
+                                conf.viewTrigger(true)
+                            }
+                            if(conf.button) {
+                                this.$set(this.modalButton,'show',true)
+                                this.$set(this.modalButton,'text',conf.button)
+                            }
+                        } else if(typeof conf === 'string' && this.showModal == true ) {
+                            this.modalTitle = conf
                         }
 
-                        
+                        // if a callback function is passed execute on show
                         if(cb) cb()
                         
+                        // initialized event emitter
                         const modalEvent = new EventEmitter()
                         this.modalEvent = modalEvent
 
