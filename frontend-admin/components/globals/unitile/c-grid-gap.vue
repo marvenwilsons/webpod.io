@@ -1,11 +1,11 @@
 <template>
     <div>
-        <span class="overline" >GRID GAP</span>
-        <br>
+        <!-- <span class="overline" >GRID GAP</span> -->
+        <!-- <br>
         <span class="marginbottom125 caption" >
             Apply GAP to be applied in all tiles
         </span>
-        <br><br>
+        <br><br> -->
         <!-- gap -->
         <div  >
             <div style="max-width:90px;" class="flex flexcol flexcenter" >
@@ -15,7 +15,7 @@
                             <v-icon>mdi-minus</v-icon>
                         </v-btn>
                     </div>
-                    <div class="paneBorder padleft025" style="width:40px; max-height:18px" >
+                    <div class="paneBorder padleft025 text-small borderRad4" style="width:40px; max-height:18px" >
                         {{value}}px
                     </div>
                     <div @click="add" style="min-height:9px;" class=" flex flexcenter" >
@@ -24,11 +24,11 @@
                         </v-btn>
                     </div>
                 </div>
-                <div class="marginleft025" >
+                <!-- <div class="marginleft025" >
                     <span>
                         gap
                     </span>
-                </div>
+                </div> -->
             </div>
         </div>
         
