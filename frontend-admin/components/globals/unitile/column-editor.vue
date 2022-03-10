@@ -7,42 +7,31 @@
             }" 
             class="fullwidth" 
         >
-            <v-menu 
-                offset-y
-                v-for="i in maxCol" :key="i" 
-                style="z-index:900"
-                
+            <dropDown
+                v-for="i in maxCol"
+                :key="uid(i)"
+                @command="(item) => {assignSize(item,i - 1)}"
+                :options="[
+                    {title: 1},
+                    {title: 2},
+                    {title: 3},
+                    {title: 4},
+                    {title: 5},
+                    {title: 7},
+                    {title: 8},
+                    {title: 9},
+                    {title: 10},
+                ]"
             >
-                <template v-slot:activator="{ attrs, on }">
-                    <v-btn
-                        v-bind="attrs"
-                        v-on="on"
-                        tile
-                        elevation="0"
-                        outlined
-                    >
-                        <div class="flex flexcol flexcenter" >
-                            <div>
-                                C{{i}}
-                            </div>
-                            <span class="text-lowercase" ><code>{{ getFrs[i - 1] }}</code></span>
-                        </div>
-                    </v-btn>
-                </template>
-                <v-list  >
-                    <v-list-item link >
-                        <v-list-item-title v-text="'custom'" ></v-list-item-title>
-                    </v-list-item>
-                    <v-list-item
-                    v-for="item in 6"
-                    :key="item"
-                    link
-                    @click="assignSize(item,i - 1)"
-                    >
-                    <v-list-item-title   v-text="`${item}fr`"></v-list-item-title>
-                    </v-list-item>
-                </v-list>
-            </v-menu>
+                <v-btn tile block >
+                    C{{i}} 
+                    <div class="marginright025" >
+                        <v-divider vertical ></v-divider> 
+                        <code class="text-lowercase" >{{frs[i -1]}}</code>
+                        <v-divider vertical ></v-divider> 
+                    </div>
+                </v-btn>
+            </dropDown>
         </div>
     </div>
 </template>
