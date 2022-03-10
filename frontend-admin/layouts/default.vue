@@ -368,7 +368,14 @@ export default {
             const dash = {
                 modal: {
                     show: (conf,cb) => {
-                        
+                       
+                        if(this.modalEvent != undefined) {
+                            // when modal overlap happens
+                            // when modal is spawn without closing the prev modal
+                            // prev modal needs to be closed
+                            dash.modal.hide()    
+                        }
+
                         this.showModal = true
                         
                         if(typeof conf == 'object') {
