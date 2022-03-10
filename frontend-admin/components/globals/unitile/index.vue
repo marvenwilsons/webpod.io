@@ -1,6 +1,6 @@
 <template>
     <main :class="['flex spacebetween fullheight-percent borderRad4', editMode ? '' : '']" >
-        <div :class="['fullwidth flex flexcol']" 
+        <div :class="['borderred flex flexcol']" 
             :style="{'max-width': !editMode && '1920px', 
                 'border': editMode ? '1px solid #d3d3d3' : '',
                 overflow: 'hidden',
@@ -8,10 +8,10 @@
             }" 
         >
             <!-- ribbon -->
-            <div class="" >
-                <div class="flex flexcol paneShadow" >
-                    <div v-if="editMode"  class="flex flexcenter flexwrap pad050 grey darken-4" >
-                        <div class="padleft050 padright125" >
+            <div>
+                <div class="flex flexcol" >
+                    <div v-if="editMode"  class="flex flexcenter flexstart flexwrap pad050 grey darken-4" >
+                        <div style="max-width:95px;" class="padleft050 padright125 flex flexcenter borderRad4" >
                             <h6 
                             class="white--text"
                             style="margin:0; font-size: 17px; font-weight: 600;"  
@@ -97,8 +97,88 @@
                             </div>
                         </div>
                     </div>
-                    <div style="min-height:45px; grid-gap: 5px; z-index: 1;" 
-                    class="grey lighten-3 padtop025 padbottom025 padleft025 padright025 flex elevation-5 flexwrap" >
+                    <div
+                        id="unitile-ribbon"
+                        v-if="nodeSelectedIndex == undefined" 
+                        :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
+                        class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
+                    >
+                        <div style="right:0px; z-index:3" class="margintop025" >
+                            <v-btn @click="ribbonScrollTo('start')" fab x-small text >
+                                    <v-icon>
+                                        mdi-chevron-left
+                                    </v-icon>
+                            </v-btn>
+                        </div>
+                        <div style="gap:5px; overflow:hidden;" 
+                        class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
+                            <div id="start" ></div>
+                            <opt-container title="GRID GAP" >
+                                <grid-gap @change="applyGridGap" :gap="gridGap" class="marginright025" />
+                                <v-divider
+                                    vertical
+                                ></v-divider>
+                                <div class="marginleft050 borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                    <dropDown
+                                        @command="(cmd) => {handleRibbonContainerCmd('grid-gap',cmd)}"
+                                        :options="scaleUnits"
+                                    >px</dropDown>
+                                </div>
+                            </opt-container>
+                            <opt-container title="GRID COLUMNS" >
+                                <div  class="borderRad4 paneBorder ribbon-item" >
+                                    <dropDown
+                                        class="padleft025 padright025"
+                                        @command="(cmd) => {handleRibbonContainerCmd('grid-columns',cmd)}"
+                                        :options="[{title: '1'},{title: '2'},{title: '3'},{title: '4'},{title: '5'},{title: '6'},{title: '7'},
+                                        {title: '8'},{title: '9'},{title: '10'},{title: '11'},{title: '12'}
+                                        ]"
+                                        :selected="maxCol"
+                                    >
+                                        {{maxCol}}
+                                    </dropDown>
+                                </div>
+                            </opt-container>
+                            <opt-container  title="COLUMN SIZES" >
+                                <div @click="openColumnEditor" 
+                                style="white-space: nowrap;"
+                                class="caption paneBorder padleft025 padright025 borderRad4 ribbon-item" >
+                                    1fr 2fr 2fr 1fr - (4)
+                                </div>
+                            </opt-container>
+                            <opt-container title="GRID CONTAINER CUSTOM CSS" >
+                                <div
+                                @click="handleRibbonContainerCmd('grid-container-custom-css')"
+                                class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                    <v-icon small >mdi-language-css3</v-icon>
+                                </div>
+                            </opt-container>
+                            <opt-container title="GRID TILES CUSTOM CSS" >
+                                <div 
+                                @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                    <v-icon small >mdi-language-css3</v-icon>
+                                </div>
+                            </opt-container>
+                            <opt-container title="JUSTIFY ITEMS" >
+                                <div class="borderRad4 padleft025 padright025" >
+                                    <container-justify-items @change="containerJustifyItems" />
+                                </div>
+                            </opt-container>
+                            <div id="end" ></div>
+                        </div>
+                        <div style="z-index:3" class="margintop025" >
+                            <v-btn @click="ribbonScrollTo('end')" fab x-small text >
+                                <v-icon>
+                                    mdi-chevron-right
+                                </v-icon>
+                            </v-btn>
+                        </div>
+                    </div>
+                    <div v-if="nodeSelectedIndex != undefined"
+                        style="min-height:45px; grid-gap: 5px; z-index: 1;" 
+                        class="grey lighten-3 padtop025 padbottom025 padleft025 padright025 flex elevation-5 flexwrap"
+                    >
                         <opt-container title="GRID GAP" >
                             <grid-gap class="marginright025" />
                             <v-divider
@@ -108,42 +188,6 @@
                                 <dropDown
                                     :options="[{title: 'px'},{title: '%'}]"
                                 >px</dropDown>
-                            </div>
-                        </opt-container>
-                            
-
-                        <opt-container title="GRID COLUMNS" >
-                            <div  class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                <dropDown
-                                    :options="[{title: '1'},{title: '2'},{title: '3'},{title: '4'},{title: '5'},{title: '6'},{title: '7'},
-                                    {title: '8'},{title: '9'},{title: '10'},{title: '11'},{title: '12'}
-                                    ]"
-                                    :selected="maxCol"
-                                >{{maxCol}}</dropDown>
-                            </div>
-                        </opt-container>
-
-                        <opt-container  title="COLUMN SIZES" >
-                            <div @click="openColumnEditor" class="caption paneBorder padleft025 padright025 borderRad4 ribbon-item" >
-                                1fr 2fr 2fr 1fr - (4)
-                            </div>
-                        </opt-container>
-
-                        <opt-container title="GRID CONTAINER CUSTOM CSS" >
-                            <div class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                <v-icon small >mdi-language-css3</v-icon>
-                            </div>
-                        </opt-container>
-
-                        <opt-container title="GRID TILES CUSTOM CSS" >
-                            <div class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                <v-icon small >mdi-language-css3</v-icon>
-                            </div>
-                        </opt-container>
-
-                        <opt-container title="JUSTIFY ITEMS" >
-                            <div class="borderRad4 padleft025 padright025" >
-                                <container-justify-items @change="containerJustifyItems" />
                             </div>
                         </opt-container>
                     </div>
@@ -209,7 +253,7 @@
                 </div>
             </section>
         </div>
-        <portal class=" borderred" to="modal" >
+        <portal v-if="gridSettingsModalIsOpen" class=" borderred" to="modal" >
             <div  v-if="editMode && !previewIsOn" 
                 style="background:white; font-family: 'Menlo'; overflow: auto; max-width:500px;" 
                 class="pad125 text-small " 
@@ -243,6 +287,7 @@
                     <!-- GRID GAP -->
                     <grid-gap @change="applyGridGap" :gap="gridGap" />
                     <v-divider />
+                    <!-- COLUMN SIZE -->
                     <div role="global style for all tiles">
                         <span class="overline" >GRID COLUMNS </span> <br>
                         <span class="marginbottom125 " >
@@ -270,7 +315,7 @@
                         <v-btn block plain @click="openColumnEditor" >OPEN COLUMN EDITOR</v-btn>
                     </div>
                     <v-divider />
-                    <!-- CUSTOM CSS -->
+                    <!-- CUSTOM CSS CONTAINER -->
                     <div role="global style for all tiles">
                         <span class="overline" >GRID TILE's CUSTOM CSS * </span> <br>
                         <span class="marginbottom125 " >
@@ -280,6 +325,7 @@
                         <custom-css v-if="ready" @change="containerCustomStyle" />
                     </div>
                     <v-divider />
+                    <!-- CUSTOM CSS TILES -->
                     <div role="grid container style">
                         <span class="overline" > GRID CONTAINER CUSTOM CSS </span> <br>
                         <span class="marginbottom125 " >
@@ -297,7 +343,7 @@
         <!-- modals -->
         <div v-if="columnEditorIsOpen" >
             <portal  class="" to="modal">
-                <div  class="pad125 fullheight-percent fullwidth" style="height: 150px;"  >
+                <div  class="fullheight-percent fullwidth padbottom125"   >
                     All Columns 
                     <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
                 </div>
@@ -349,7 +395,9 @@ export default {
         selectionToolIsActivated: false,
         selectedNodesBySelectionTool: [],
         previewIsOn: false,
-        columnEditorIsOpen: false
+        gridSettingsModalIsOpen: false,
+        columnEditorIsOpen: false,
+        ribbonContainerWidth: undefined
     }),
     methods: {
         removeUnwantedRows() {
@@ -637,15 +685,49 @@ export default {
                 this.gridColumns = this.$refs.colEditor.frs
                 webpod.dash.modal.hide()
             })
+        },
+        handleRibbonContainerCmd(cmd,val) {
+            if(cmd === 'grid-gap') {
+
+            }
+
+            if(cmd === 'grid-gap') {
+
+            }
+
+            if(cmd === 'grid-container-custom-css') {
+
+            }
+
+            if(cmd === 'grid-tile-custom-css') {
+                console.log(cmd)
+            }
+
+            if(cmd === 'grid-columns') {
+                this.changeGridColumn(val)
+            }
+        },
+        ribbonScrollTo(e) {
+            if(e == 'end') {
+                document.getElementById('end').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            } else {
+                document.getElementById('start').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            }
         }
     },
     mounted() {
         const cog = webpod.dash.cog.show()
 
         cog.on('click', () => {
-            console.log('I am clicked')
             webpod.dash.modal.show({
                 modalTitle: 'GRID SETTINGS',
+                viewTrigger: (s) => {
+                    this.gridSettingsModalIsOpen = s
+                }
             })
         })
         
@@ -658,7 +740,6 @@ export default {
                     console.log("ssss")
                     const x = webpod.dash.cog.show()
                     x.on('click', () => {
-                        console.log('I am clicked')
                         webpod.dash.modal.show({
                             modalTitle: 'GRID SETTINGS',
                         })
@@ -673,6 +754,7 @@ export default {
     created() {
         this.currentUid = this.uid()
         const _alert = webpod.dash.alert
+        webpod.session.allowOverflow = false
 
         if(this.myData) {
             if(Object.keys(this.config).includes('editable')) {
