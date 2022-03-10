@@ -3,7 +3,9 @@
     <section class="flex" role="pane title and service selector" >
         <div  role="pane title" class=" relative" >
             <div @click="showServiceDropDown = !showServiceDropDown" class="flex flat_action_plain" >
-                <h6 style="margin:0; color: #444; font-weight: 600;" class="merri-font" >{{this.paneCollection[this.paneIndex].paneConfig.title || 'pane'}}</h6>
+                <h6 style="margin:0; color: #444; font-weight: 500;" class="merri-font" >
+                  {{this.paneCollection[this.paneIndex].paneConfig.title || 'pane'}}
+                </h6>
                 <!-- service select -->
                 <div v-if="this.paneCollection[this.paneIndex].viewConfig.view_versions && this.paneCollection[this.paneIndex].viewConfig.view_versions.length > 1" >
                   <svg v-if="showServiceDropDown == false" role="service select" style="width:24px;height:24px" viewBox="0 0 24 24">
