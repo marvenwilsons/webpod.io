@@ -23,38 +23,31 @@
             </div>
         </section> -->
         <!-- BODY -->
-        <section 
+        <section
             :style="{zIndex:1, overflow: paneModalisActive ? '':'auto'}" 
             class="fullheight-percent relative flex" 
             >
-
-            <section 
-                role="content" 
-                :class="['fullwidth pad050', this.paneCollection[this.paneIndex].view == 'unitile' ? 'fullheight-percent' : '']" 
-                :style="this.paneCollection[this.paneIndex].paneConfig.allowOverflow ? {} : this.paneCollection[this.paneIndex].paneConfig.allowOverflow == undefined ? {} : {overflow: 'hidden'}"
-            >
-                <div
-                    class="fullheight-percent borderRad4" 
-                    :is="this.paneCollection[this.paneIndex].view"
-                    :myData="this.paneCollection[this.paneIndex].viewData" 
-                    :config="this.paneCollection[this.paneIndex].viewConfig"
-                    :hooks="viewHooks"
-                    :hookArgs="viewHooksArgs"
-                    :paneIndex="this.paneIndex"
-                    @onEvent="viewEvent" 
+            <v-scale-transition >
+                <section
+                    v-if="paneOnFocus == this.paneIndex"
+                    role="content" 
+                    :class="['fullwidth pad050', this.paneCollection[this.paneIndex].view == 'unitile' ? 'fullheight-percent' : '']" 
+                    :style="this.paneCollection[this.paneIndex].paneConfig.allowOverflow ? {} : this.paneCollection[this.paneIndex].paneConfig.allowOverflow == undefined ? {} : {overflow: 'hidden'}"
                 >
-                </div>
-            </section>
+                    <div
+                        class="fullheight-percent borderRad4" 
+                        :is="this.paneCollection[this.paneIndex].view"
+                        :myData="this.paneCollection[this.paneIndex].viewData" 
+                        :config="this.paneCollection[this.paneIndex].viewConfig"
+                        :hooks="viewHooks"
+                        :hookArgs="viewHooksArgs"
+                        :paneIndex="this.paneIndex"
+                        @onEvent="viewEvent" 
+                    >
+                    </div>
+                </section>
+            </v-scale-transition>
             <div class="" style="min-width: 90px; max-height:20px; margin-right:12px;" ></div>
-            <!-- pane modal -->
-            <!-- <PaneModal 
-                ref="paneModal" 
-                v-if="paneModalisActive" 
-                :config="paneModalConfig" 
-                class="flex flexcenter fullwidth fullheight-percent"
-                :hooks="viewHooks"
-                :hookArgs="viewHooksArgs"
-            /> -->
         </section>
     </main>
 </template>
@@ -72,6 +65,7 @@ export default {
         paneView: undefined,
         paneViewConfig: undefined,
         paneViewEventHandler: undefined,
+        paneOnFocus: 0,
         // modal related properties
         paneModalisActive: false,
         paneModalConfig: undefined,
@@ -81,9 +75,6 @@ export default {
         viewHooksArgs: undefined,
         ready: false,
         webpod: undefined,
-        o: {
-            overflow: 'hidden'
-        }
     }),
     watch: {
         paneModalisActive() {
@@ -214,7 +205,11 @@ export default {
         }
     },
     mounted() {
-        this.webpod = webpod
+        this.webpod = window.webpod
+
+        webpod.session.events.on('pane-toggle',(index) => {
+            this.paneOnFocus = index
+        })
         // Assigning defaults
         const {paneWidth,paneTitle} = this.paneCollection[this.paneIndex].paneConfig
         this.paneWidth = paneWidth || '700px'

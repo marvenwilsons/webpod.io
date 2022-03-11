@@ -230,7 +230,7 @@ export default {
     },
     methods: {
         historyClick(i) {
-            
+            console.log('history click')
             webpod.session.paneOnFocus = i
             try {
                 const el = document.getElementById(`pane${i}`)
@@ -249,6 +249,7 @@ export default {
             }
             this.currentPaneIsClosable = webpod.session.closablePanes[i]
             webpod.session.onPaneToggle(i)
+            webpod.session.events.emit('pane-toggle',i)
         },
         prevPane() {
             this.historyClick(webpod.session.paneOnFocus - 1)

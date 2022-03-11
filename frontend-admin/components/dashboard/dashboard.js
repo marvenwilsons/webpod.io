@@ -1,4 +1,5 @@
 import appFetch from "./app-fetch"
+import eventEmitter from '../../EventEmitter'
 export default function (paneCollection, menu, service, dash, sidebar, socket) {
     dash.loading(true)
     let dashboard_resource = {
@@ -54,27 +55,27 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 dash.accountBtn.show()
             },500)
             const title = paneCollection.paneCollection.map(e => {
-                
                 return e.paneConfig.title || 'untitled'
             })
             const closablePanes = paneCollection.paneCollection.map(e => e.paneConfig.isClosable)
             // topbar.history.panes = title
             if(webpod) {
                 webpod.session.paneCollection = title
-
                 webpod.session.closablePanes = closablePanes
                 webpod.session.paneOnFocus = title.length - 1
+                
                 if(title.length > 1) {
                     setTimeout(() => {
                         dash.history.historyBtn.show()
                         dash.setIfPaneIsClosable(paneCollection.paneCollection[webpod.session.paneOnFocus].paneConfig.isClosable)
-
                     },700)
                 } else if(title.length == 1) {
                     dash.history.historyBtn.hide()
                     dash.setIfPaneIsClosable(paneCollection.paneCollection[webpod.session.paneOnFocus].paneConfig.isClosable)
                 }
-
+                setTimeout(() => {
+                    webpod.session.events.emit('pane-toggle',title.length - 1)
+                },100)
             }
         }
         
@@ -163,6 +164,9 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     
 
     setTimeout(() => {
+        const sessionEvents = new eventEmitter()
+
+
         window.webpod = Object.seal({
             dash: {...dash},
             paneCollection,
@@ -179,6 +183,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 onLog: () => {},
                 onProgress: () => {},
                 onPaneToggle: () => {},
+                events: sessionEvents
             },
             dashSettings: {
                 'Pane Slide': 'yes',
