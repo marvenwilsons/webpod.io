@@ -5,7 +5,8 @@
                 <init ref="wp-init" @completedForm="handleInitForm" />
             </main>
             <main  v-if="!showInitForms" >
-                    <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
+                    <v-scroll-y-transition origin="center" >
+                        <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                         <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalTitle="modalTitle" v-if="showModal" >
                             <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                 <v-icon >mdi-alert-circle</v-icon>
@@ -36,6 +37,8 @@
                             </div>
                         </draggable>
                     </div>
+                    </v-scroll-y-transition>
+                    
                 <!-- loading -->
                 <v-fade-transition>
                     <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
