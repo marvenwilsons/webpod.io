@@ -7,7 +7,7 @@
             <main  v-if="!showInitForms" >
                     <v-scale-transition  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                            <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalTitle="modalTitle" v-if="showModal" >
+                            <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal" >
                                 <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                     <v-icon >mdi-alert-circle</v-icon>
                                     <strong class="marginleft025" >
@@ -214,6 +214,10 @@ export default {
         modalIsPlaying: false,
         modalViewTrigger: undefined,
         modalTitle: undefined,
+        modalProgress: {
+            show: false,
+            value: undefined
+        },
         cog: {
             show: false,
             click: () => {}
@@ -342,7 +346,7 @@ export default {
                     this.$set(this.modalButton,'loading', v)
                 },
                 progress: (v) => {
-                    this.$refs.draggable.progress = v
+                    this.$set(this.modalProgress,'show',v)
                 },
                 text: (v) => {
                     this.$set(this.modalButton,'text', v)
@@ -442,6 +446,7 @@ export default {
                                 loading: false,
                                 disabled: false
                             }
+                            this.$set(this.modalProgress,'show',false)
                             
                             if(typeof this.viewTrigger == 'function') {
                                 this.viewTrigger(false)
