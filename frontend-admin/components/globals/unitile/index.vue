@@ -351,15 +351,14 @@
             </div>
         </portal>
 
-        <!-- modals -->
-        <div  >
-            <portal  class="" to="modal">
-                <div v-if="columnEditorIsOpen" class="fullheight-percent fullwidth padbottom125"   >
-                    {{maxCol}} Columns 
-                    <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
-                </div>
-            </portal>
-        </div>
+        <!-- modal column editor -->
+        <portal v-if="columnEditorIsOpen"  to="modal">
+            <div class="fullheight-percent fullwidth padbottom125"   >
+                {{maxCol}} Columns 
+                <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
+            </div>
+        </portal>
+        <!-- modal grid container custom css -->
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -707,7 +706,7 @@ export default {
             }
 
             if(cmd === 'grid-container-custom-css') {
-
+                console.log('open modal for grid container custom css')
             }
 
             if(cmd === 'grid-tile-custom-css') {
