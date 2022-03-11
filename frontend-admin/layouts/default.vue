@@ -5,39 +5,39 @@
                 <init ref="wp-init" @completedForm="handleInitForm" />
             </main>
             <main  v-if="!showInitForms" >
-                    <v-scroll-y-transition origin="center" >
+                    <v-scale-transition  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                        <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalTitle="modalTitle" v-if="showModal" >
-                            <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
-                                <v-icon >mdi-alert-circle</v-icon>
-                                <strong class="marginleft025" >
-                                    {{modalError}}
-                                </strong>
-                            </div>
-                            <div class="" style="max-height:500px;" >
-                                <portal-target style="min-width: 300px; height: 100%"  @change="portalTargetChanged"  name="modal" />
-                                <!-- modal button -->
-                                <div class="flex flexend"  v-if="modalButton.show" >
-                                    <v-btn 
-                                        ref="modalButton" 
-                                        plain text 
-                                        @click="modalButtonClick"
-                                        :disabled="modalButton.disabled"
-                                        :loading="modalButton.loading"
-                                    > 
-                                        {{modalButton.text}} 
-                                    </v-btn>
+                            <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalTitle="modalTitle" v-if="showModal" >
+                                <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
+                                    <v-icon >mdi-alert-circle</v-icon>
+                                    <strong class="marginleft025" >
+                                        {{modalError}}
+                                    </strong>
                                 </div>
-                                <!-- play -->
-                                <div v-if="modalIsPlayable" class="flex flexend" >
-                                    <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon small >
-                                        <v-icon>mdi-play</v-icon>
-                                    </v-btn>
+                                <div class="" style="max-height:500px;" >
+                                    <portal-target style="min-width: 300px; height: 100%"  @change="portalTargetChanged"  name="modal" />
+                                    <!-- modal button -->
+                                    <div class="flex flexend"  v-if="modalButton.show" >
+                                        <v-btn 
+                                            ref="modalButton" 
+                                            plain text 
+                                            @click="modalButtonClick"
+                                            :disabled="modalButton.disabled"
+                                            :loading="modalButton.loading"
+                                        > 
+                                            {{modalButton.text}} 
+                                        </v-btn>
+                                    </div>
+                                    <!-- play -->
+                                    <div v-if="modalIsPlayable" class="flex flexend" >
+                                        <v-btn :loading="modalIsPlaying" @click="modalPlay" :ripple="false" fab icon small >
+                                            <v-icon>mdi-play</v-icon>
+                                        </v-btn>
+                                    </div>
                                 </div>
-                            </div>
-                        </draggable>
-                    </div>
-                    </v-scroll-y-transition>
+                            </draggable>
+                        </div>
+                    </v-scale-transition>
                     
                 <!-- loading -->
                 <v-fade-transition>
