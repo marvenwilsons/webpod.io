@@ -21,7 +21,7 @@
                 </div>
             </div>
             <v-progress-linear
-                v-if="progress"
+                v-if="modalProgress"
                 :active="true"
                 :indeterminate="true"
                 color="primary"
@@ -41,7 +41,7 @@ import m from '@/m'
 import gsap from "gsap";
 export default {
     mixins: [m],
-    props: ['name','modalTitle'],
+    props: ['name','modalTitle', 'modalProgress'],
     data: () => ({
         currentId: undefined,
         ready: true,
