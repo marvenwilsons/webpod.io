@@ -27,7 +27,7 @@
             :style="{zIndex:1, overflow: paneModalisActive ? '':'auto'}" 
             class="fullheight-percent relative flex" 
             >
-            <v-scale-transition >
+            <transition name="fade" >
                 <section
                     v-if="paneOnFocus == this.paneIndex"
                     role="content" 
@@ -46,7 +46,7 @@
                     >
                     </div>
                 </section>
-            </v-scale-transition>
+            </transition>
             <div class="" style="min-width: 90px; max-height:20px; margin-right:12px;" ></div>
         </section>
     </main>
@@ -329,7 +329,13 @@ export default {
 .paneTextColor{
     color: #333333 !important;
 }
-.hideOnLoad{
-    opacity: 0;
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>
