@@ -7,7 +7,7 @@
             <main  v-if="!showInitForms" >
                     <v-scale-transition  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                            <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal" >
+                            <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
                                 <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                     <v-icon >mdi-alert-circle</v-icon>
                                     <strong class="marginleft025" >
@@ -214,6 +214,7 @@ export default {
         modalIsPlaying: false,
         modalViewTrigger: undefined,
         modalTitle: undefined,
+        showModalBody: false,
         modalProgress: {
             show: false,
             value: undefined
@@ -309,6 +310,7 @@ export default {
             }
         },
         portalTargetChanged(n) {
+            this.showModalBody = n
             // this.$refs.draggable.ready = true
         },
         handleInitForm(formData) {
@@ -385,6 +387,7 @@ export default {
 
                         // show and render the modal
                         this.showModal = true
+                        this.showModalBody = true
                         
                         // if conf is a type of object assign modal title
                         // modal is playable
@@ -440,6 +443,8 @@ export default {
                             this.modalError = undefined
                             this.modalIsPlayable = false
                             this.modalIsPlaying = false
+                            this.modalTitle = undefined
+                            this.showModalBody = false
                             this.modalButton = {
                                 show: false,
                                 text: undefined,
