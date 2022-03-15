@@ -380,4 +380,7 @@ export default {
 .CodeMirror-readonly .CodeMirror-cursor {
   display: none !important
 }
+.CodeMirror-hints {
+    z-index: 3000 !important;
+}
 </style>
