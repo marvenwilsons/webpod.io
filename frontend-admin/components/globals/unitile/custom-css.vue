@@ -52,7 +52,7 @@ export default {
             const cssObject = cssConvertedToJs.values
 
             this.$emit('change', cssObject)
-
+            webpod.dash.modal.setData(cssObject)
             setTimeout(() => {
                 this.isLoading = false
             }, 500)

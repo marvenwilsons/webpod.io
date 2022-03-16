@@ -7,7 +7,7 @@
             <main  v-if="!showInitForms" >
                     <v-scale-transition  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                            <draggable :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
+                            <modal-drag :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
                                 <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
                                     <v-icon >mdi-alert-circle</v-icon>
                                     <strong class="marginleft025" >
@@ -35,7 +35,7 @@
                                         </v-btn>
                                     </div>
                                 </div>
-                            </draggable>
+                            </modal-drag>
                         </div>
                     </v-scale-transition>
                     
@@ -181,11 +181,13 @@ import notification from '@/components/dashboard/side-bar/notification.vue'
 import accentBg from '@/components/dashboard/accent-bg/index.vue'
 import init from '@/components/dashboard/init/index.vue'
 
+import modalDrag from '@/components/globals/modal/drag.vue'
+
 import m from '@/m'
 import EventEmitter from '@/EventEmitter'
 export default {
     mixins: [m],
-    components: {menubar, sidebar, notification, accentBg, init},
+    components: {menubar, sidebar, notification, accentBg, init, modalDrag},
     data: () => ({
         panes: [],
         showModal: false,
@@ -215,6 +217,7 @@ export default {
         modalViewTrigger: undefined,
         modalTitle: undefined,
         showModalBody: false,
+        modalData: undefined,
         modalProgress: {
             show: false,
             value: undefined
@@ -352,8 +355,12 @@ export default {
                 },
                 text: (v) => {
                     this.$set(this.modalButton,'text', v)
-                }
+                },
+                data: this.modalData
             })
+        },
+        modalContent() {
+
         },
         setPaneIsClosable(isClosable) {
             this.currentPaneIsClosable = isClosable
@@ -423,7 +430,9 @@ export default {
                             this.modalIsPlaying = false
                         })
 
-                        modalEvent.emit('show')
+                        setTimeout(() => {
+                            modalEvent.emit('show')
+                        },0)
 
                         return modalEvent
                     },
@@ -445,6 +454,7 @@ export default {
                             this.modalIsPlaying = false
                             this.modalTitle = undefined
                             this.showModalBody = false
+                            this.modalData = undefined
                             this.modalButton = {
                                 show: false,
                                 text: undefined,
@@ -471,6 +481,10 @@ export default {
                                 this.shakeModal = false
                             },2000)
                         }
+                    },
+                    setData: (v) => {
+                        this.modalData = v
+                        this.modalEvent.emit('data',v)
                     },
                     closeOnBlur: (v = false) => {
                         if(typeof v === 'boolean') this.modalIsClosableWhenClickedOutside = v
