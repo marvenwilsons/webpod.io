@@ -134,8 +134,8 @@ export default {
     outline: none;
 }
 .el-tooltip__popper, .popper__arrow {
-  border: 1px solid lightblue !important;
-  box-shadow: 0px 0px 67px -18px rgba(34, 34, 34, 0.89);
+  border: 1px solid rgba(0, 0, 0, 0.548) !important;
+  box-shadow: 0px 0px 67px -18px rgba(0, 0, 0, 0.548) ;
   padding: 0 !important;
 }
 </style>
