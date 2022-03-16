@@ -70,12 +70,11 @@ Vue.component("pd",pd)
 import PortalVue from 'portal-vue'
 Vue.use(PortalVue)
 
-import draggable from '@/components/globals/draggable/index.vue'
-Vue.component("draggable",draggable)
-
 import resizable from '@/components/globals/resizable/index.vue'
 Vue.component("resizable",resizable)
 
+import modal from '@/components/globals/modal/index.vue'
+Vue.component("wp-modal",modal)
 
 
 // CodeMirror CSS Essentials
