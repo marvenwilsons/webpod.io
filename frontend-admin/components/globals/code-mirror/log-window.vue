@@ -153,7 +153,11 @@ export default {
 
 <style>
 .el-tooltip__popper.is-light{
-    font-family: 'Monaco';
+    font-family: 'Menlo';
+    padding: 10px !important;
+}
+.el-tooltip__popper.is-dark{
+    font-family: 'Menlo';
     padding: 10px !important;
 }
 </style>
