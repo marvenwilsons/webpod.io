@@ -59,7 +59,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             })
             const closablePanes = paneCollection.paneCollection.map(e => e.paneConfig.isClosable)
             // topbar.history.panes = title
-            if(webpod) {
+            if(window.webpod) {
                 webpod.session.paneCollection = title
                 webpod.session.closablePanes = closablePanes
                 webpod.session.paneOnFocus = title.length - 1
@@ -75,7 +75,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 }
                 setTimeout(() => {
                     webpod.session.events.emit('pane-toggle',title.length - 1)
-                },100)
+                },0)
             }
         }
         
