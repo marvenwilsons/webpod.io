@@ -26,6 +26,7 @@
                                     <v-icon color="white" small >
                                         mdi-chevron-down
                                     </v-icon>
+                                    <!-- TODO: Rename -->
                                 </div>
                             </div>
                             
@@ -33,6 +34,7 @@
                         <div class="pad025 padleft050 padright050" style="flex-basis: content;"  >
                             <div class="flex flexcenter grey--text lighten-4--text" >
                                 Last edited a minute ago
+                                <!-- TODO -->
                             </div>
                         </div>
                         <div class="flex1 flex flexend" >
@@ -157,14 +159,14 @@
                                     <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
                                 </div>
                             </opt-container>
-                            <opt-container title="GRID CONTAINER CUSTOM CSS" >
+                            <opt-container title="GRID CONTAINER INLINE CSS" >
                                 <div
                                 @click="handleRibbonContainerCmd('grid-container-custom-css')"
                                 class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
                                     <v-icon small >mdi-language-css3</v-icon>
                                 </div>
                             </opt-container>
-                            <opt-container title="GRID TILES CUSTOM CSS" >
+                            <opt-container title="GRID TILES GLOBAL INLINE CSS" >
                                 <div 
                                 @click="handleRibbonContainerCmd('grid-tile-custom-css')"
                                 class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
@@ -264,7 +266,7 @@
                 </div>
             </section>
         </div>
-        <portal v-if="gridSettingsModalIsOpen" class=" borderred" to="modal" >
+        <wp-modal v-if="modals.grid_settings == 'show'" class=" borderred">
             <div  v-if="editMode && !previewIsOn" 
                 style="background:white; font-family: 'Menlo'; overflow: auto; max-width:500px;" 
                 class="pad125 text-small " 
@@ -338,7 +340,7 @@
                     <v-divider />
                     <!-- CUSTOM CSS TILES -->
                     <div role="grid container style">
-                        <span class="overline" > GRID CONTAINER CUSTOM CSS </span> <br>
+                        <span class="overline" > GRID CONTAINER INLINE STYLE </span> <br>
                         <span class="marginbottom125 " >
                             Custom CSS Style to be applied for the grid container
                         </span>
@@ -349,24 +351,38 @@
                     <container-justify-items @change="containerJustifyItems" />
                 </div>
             </div>
-        </portal>
-
+        </wp-modal>
         <!-- modal column editor -->
-        <portal v-if="columnEditorIsOpen"  to="modal">
+        <wp-modal v-if="modals.column_editor == 'show'">
             <div class="fullheight-percent fullwidth padbottom125"   >
                 {{maxCol}} Columns 
                 <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
             </div>
-        </portal>
+        </wp-modal>
         <!-- modal grid container custom css -->
+        <wp-modal v-if="modals.grid_container_inline_style == 'show'">
+            <custom-css 
+            :cssObject="gridContainerStyle"
+            :el_id="'#grid-container-inline-style'" 
+            style="min-width:400px;" >
+            </custom-css>
+        </wp-modal>
+        <!-- inline style for all tiles in the grid -->
+        <wp-modal v-if="modals.tiles_global_inline_style == 'show'">
+            <custom-css 
+            :cssObject="gridContainerStyle"
+            :el_id="'#inline-style-for-all-tiles'" 
+            style="min-width:400px;" >
+            </custom-css>
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
 // https://github.com/ThibaultJanBeyer/dragNdrop
 <script>
 import m from '@/m'
-import optionHandler from './options'
-import sessionHistory from './sessions-history'
+import optionHandler from './mixins/options.js'
+import sessionHistory from './mixins/sessions-history.js'
 import gridGuides from './grid-guides.vue'
 
 import gridGap from './c-grid-gap.vue'
@@ -395,6 +411,7 @@ export default {
         gridGap: 5,
         gridColumns: undefined,
         gridContainerStyle: {},
+        tiles_global_style: {},
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
         minTileHeight: '50px',
@@ -405,9 +422,16 @@ export default {
         selectionToolIsActivated: false,
         selectedNodesBySelectionTool: [],
         previewIsOn: false,
-        gridSettingsModalIsOpen: false,
-        columnEditorIsOpen: false,
-        ribbonContainerWidth: undefined
+        controlls: { // TODO
+            preview: 'off',
+            use_grid_guides: 'off'
+        },
+        modals: {
+            grid_container_inline_style: 'hide',
+            tiles_global_inline_style: 'hide',
+            column_editor: 'hide',
+            grid_settings: 'hide'
+        }
     }),
     methods: {
         removeUnwantedRows() {
@@ -686,9 +710,9 @@ export default {
         },
         openColumnEditor() {
             const columnEditor = webpod.dash.modal.show({
-                modalTitle: 'Column Editor',
+                modalTitle: 'COLUMN EDITOR',
                 isPlayable: true,
-                viewTrigger: (s) => this.columnEditorIsOpen = s
+                viewTrigger: (v) => this.$set(this.modals,'column_editor',v ? 'show' : 'hide')
             })
 
             columnEditor.on('play', () => {
@@ -701,16 +725,26 @@ export default {
 
             }
 
-            if(cmd === 'grid-gap') {
-
-            }
-
             if(cmd === 'grid-container-custom-css') {
-                console.log('open modal for grid container custom css')
+                const modal = webpod.dash.modal.show({
+                    modalTitle: 'GRID CONTAINER INLINE STYLE',
+                    viewTrigger: (v) => this.$set(this.modals,'grid_container_inline_style',v ? 'show' : 'hide')
+                })
+
+                modal.on('data', (data) => {
+                    this.gridContainerStyle = data
+                })
             }
 
             if(cmd === 'grid-tile-custom-css') {
-                console.log(cmd)
+                const modal = webpod.dash.modal.show({
+                    modalTitle: 'GRID TILES GLOBAL INLINE STYLE',
+                    viewTrigger: (v) => this.$set(this.modals,'tiles_global_inline_style',v ? 'show' : 'hide')
+                })
+
+                modal.on('data', (data) => {
+                    this.gridContainerStyle = data
+                })
             }
 
             if(cmd === 'grid-columns') {
@@ -735,9 +769,7 @@ export default {
         cog.on('click', () => {
             webpod.dash.modal.show({
                 modalTitle: 'GRID SETTINGS',
-                viewTrigger: (s) => {
-                    this.gridSettingsModalIsOpen = s
-                }
+                viewTrigger: (v) => this.$set(this.modals,'grid_settings',v ? 'show' : 'hide')
             })
         })
         
@@ -747,7 +779,6 @@ export default {
                 webpod.dash.cog.hide()
             } else {
                 setTimeout(() => {
-                    console.log("ssss")
                     const x = webpod.dash.cog.show()
                     x.on('click', () => {
                         webpod.dash.modal.show({
