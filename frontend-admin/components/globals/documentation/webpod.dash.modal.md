@@ -63,6 +63,15 @@ export default {
                 btn.loading(true)
                 btn.text('creating ...')
             })
+
+            // emits "data" event on modal instance
+            webpod.dash.modal.setData({
+                firstName: 'Jane',
+                lastName: 'Doe'
+            })
+            modalInstance.on('data', (data) => {
+                // data = {firstName: 'Jane', lastName: 'Doe}
+            })
         }
     }
 }
