@@ -43,6 +43,7 @@ const frontend_admin_container = {
     "../frontend-admin/store:/usr/src/admin/store",
     "../frontend-admin/static:/usr/src/admin/static",
     "../frontend-admin/m.js:/usr/src/admin/m.js",
+    "../frontend-admin/undo-redo.js:/usr/src/admin/undo-redo.js",
     "../frontend-admin/EventEmitter.js:/usr/src/admin/EventEmitter.js",
     "../frontend-admin/nuxt.config.js:/usr/src/admin/nuxt.config.js"
   ]
