@@ -114,18 +114,18 @@ function convertoToJS(tokens){
 
 	function readBracketO(token){
 
-		if(token != "{") throw new Error("Era esperado um '{' ");
+		if(token != "{") throw new Error("Invalid openning bracket found '{' ");
 
 		return readProperty;
 	}
 
 	function readBracketC(token){
-		if(token != "}") throw new Error("Era esperado um '}' ");
+		if(token != "}") throw new Error("Invalid closing bracket found '}' ");
 		return readSelector;
 	}
 
 	function readDefinition(token){
-		if(token != ":") throw new Error("Era esperado um ':' ");
+		if(token != ":") throw new Error("Invalid definition");
 
 		return readValue;
 	}
@@ -153,7 +153,7 @@ function convertoToJS(tokens){
 
 	function readFinal(token){
 		if(token == "}") return readBracketC(token);
-		if(token != ";")  throw new Error("Era esperado um ';' ");
+		if(token != ";")  throw new Error("Invalid character found ';' ");
 		return readProperty;
 	}
 
