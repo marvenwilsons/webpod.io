@@ -19,7 +19,7 @@ export default {
     },
     methods: {
         addSessionEntry() {
-            const uid = this.uid()
+            const uid = 'undoRedo_' + this.uid() + this.uid()
 
             if(this.overwriteMode == false) {
                 this.sessionHistoryCollection.push(uid)
