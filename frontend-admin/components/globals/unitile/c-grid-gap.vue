@@ -43,17 +43,19 @@ export default {
     }),
     props: ['gap'],
     watch: {
-        value(n) {
-            this.$emit('change',n)
+        gap() {
+            this.value = this.gap
         }
     },  
     methods: {
         add() {
             this.value ++
+            this.$emit('change',this.value)
         },
         minus() {
             if(this.value != 0 || this.value < 0) {
                 this.value --
+                this.$emit('change',this.value)
             }
         }
     },
