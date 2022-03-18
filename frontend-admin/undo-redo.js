@@ -77,6 +77,14 @@ export default {
                 },0)
             }
             
+        },
+        clearSession() {
+            this.sdata = undefined
+            this.overwriteMode = false
+            this.sessionHistoryPointer = 0
+            this.sessionHistoryCollection = []
+            this.$set(this.session,'onUndoRedo', () => {})
+            window.sessionStorage.clear()
         }
     }
 }

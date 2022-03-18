@@ -8,6 +8,7 @@
     - Creates a new session entry to be use later for undo and redo purposes
 - `undo()`
 - `redo()`
+- `sessionClear()`
 ## Events
 - `this.session.onUndoRedo = (data) => {do something to the data here}`
     - data argument returns the selected entry
@@ -52,6 +53,11 @@ export default {
             this.undo()
         }
     },
+    beforeDestroy() {
+        // avoid cluterring your disk space, session entries are saved in sessionStorage
+        // it is important to clear session everytime you are not using the undoRedo feature
+        this.clearSession()
+    }
     mounted() {
         // setting up usage for undoRedo.js
 
