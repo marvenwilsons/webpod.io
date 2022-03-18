@@ -45,7 +45,7 @@
                         <div  class="pad125 modalShadow flexcenter" >
                             <div class="flex flexcol relative" >
                                 <span class="absolute fullwidth fullheight-percent flex flexcenter" >
-                                    <h1 class="merri-font" style="font-size:120px; color: #e6f2fa; margin:0;" >W</h1>
+                                    <h1 class="merri-font" style="font-size:120px; color: #1e1e1e; margin:0;" >W</h1>
                                 </span>
                                 <v-progress-circular
                                 :size="200"
@@ -80,7 +80,7 @@
                     </div>
                 </v-fade-transition>
             </main>
-            <main v-show="showDashboard" class="flex fullheight-percent " style="background:#7fccff;" >
+            <main v-show="showDashboard" class="flex fullheight-percent relative" style="background:#7fccff;" >
                 <!-- BACKGROUND -->
                 <accent-bg/>
                 <!-- menubar -->
@@ -165,8 +165,23 @@
                         </sidebar>
                     </section>
                 </v-slide-x-reverse-transition>
+                <v-slide-y-reverse-transition>
+                    <v-card
+                    v-if="bottomAlert.show" 
+                    outlined
+                    elevation="10"
+                    dark
+                    style="z-index:800; position: absolute; bottom:0; left:50%; transform: translate(-50%,-50%)" 
+                    class="borderRad4 absolute pad050 paneShadow  " 
+                    >
+                        <div class="flex flexcenter" >
+                            <div class="padleft025 padright025" >
+                                {{bottomAlert.msg}}
+                            </div>
+                        </div>
+                    </v-card>
+                </v-slide-y-reverse-transition>
             </main>
-            
         </v-main>
     </v-app>
 </template>
@@ -231,6 +246,10 @@ export default {
             text: undefined,
             loading: false,
             disabled: false
+        },
+        bottomAlert: {
+            msg: undefined,
+            show: false
         }
     }),
     created() {
@@ -314,7 +333,6 @@ export default {
         },
         portalTargetChanged(n) {
             this.showModalBody = n
-            // this.$refs.draggable.ready = true
         },
         handleInitForm(formData) {
             const url = `${process.env.API_URL}/init`
@@ -554,6 +572,14 @@ export default {
                     hide: () => {
                         this.$set(this.cog,'show',false)
                     }
+                },
+                bottomAlert: (msg) => {
+                    this.$set(this.bottomAlert,'msg',msg)
+                    this.$set(this.bottomAlert,'show',true)
+                    setTimeout(() => {
+                        this.$set(this.bottomAlert,'msg',undefined)
+                        this.$set(this.bottomAlert,'show',false)
+                    },4000)
                 }
             }
 
