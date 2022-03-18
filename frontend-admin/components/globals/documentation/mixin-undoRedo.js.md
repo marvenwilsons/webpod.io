@@ -68,6 +68,10 @@ export default {
             this.count = data
         }
 
+        this.session.onMsg = (msg) => {
+            // display msg
+        }
+
         // REQUIRED! wont work without this
         this.setSessionTrackData(() => {
             // essentially you are telling undoRedo.js that
