@@ -5,7 +5,8 @@ export default {
         overwriteMode: false,
         sdata: undefined,
         session: {
-            onUndoRedo: () => {}
+            onUndoRedo: () => {},
+            onMsg: () => {}
         }
     }),
     watch: {
@@ -48,6 +49,12 @@ export default {
                 decrement(() => {
                     this.session.onUndoRedo(JSON.parse(sessionStorage.getItem(this.sessionHistoryCollection[this.sessionHistoryPointer])))
                 })
+            } else {
+                if(this.sessionHistoryCollection.length == 1) {
+                    this.session.onMsg('Session is currently empty, nothing to undo')
+                } else {
+                    this.session.onMsg('Maximum Undo Reached!')
+                }   
             }
         },
         Redo() {
@@ -60,6 +67,12 @@ export default {
                 increment(() => {
                     this.session.onUndoRedo(JSON.parse(sessionStorage.getItem(this.sessionHistoryCollection[this.sessionHistoryPointer])))
                 })
+            } else {
+                if(this.sessionHistoryCollection.length == 1) {
+                    this.session.onMsg('Session is currently empty, nothing to redo')
+                } else {
+                    this.session.onMsg('Maximum Redo Reached!')
+                }
             }
         },
         sessionData(cb) {
