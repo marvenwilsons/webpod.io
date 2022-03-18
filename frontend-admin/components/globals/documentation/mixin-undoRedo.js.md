@@ -33,9 +33,9 @@
 
 <script>
 import undoRedo from '@/undo-redo.js'
-
+import m from '@/m' // undoRedo.js uses some of the methods in this mixin
 export default {
-    mixins: [undoRedo],
+    mixins: [undoRedo,m],
     data: () => ({
         count: 0
     }),
