@@ -26,7 +26,8 @@ export default {
     data: () => ({
         code: '',
         isLoading: false,
-        ready: false
+        ready: false,
+        onError: () => {}
     }),
     props: ['cssObject','el_id'],
     mounted() {
@@ -39,23 +40,33 @@ export default {
     },
     methods: {
         setCodeString(cssObject,elementId) {
-            // console.log(cssObject)
-            const cssString = `${elementId} {\n \t${jsToCss(cssObject)} \n}`
-            // console.log(cssString)
-            this.code = cssString
+            try {
+                // console.log(cssObject)
+                const cssString = `${elementId} {\n \t${jsToCss(cssObject)} \n}`
+                // console.log(cssString)
+                this.code = cssString
+            } catch(err) {
+
+            }
         },
         apply() {
-            this.isLoading = true
+            try {
+                this.isLoading = true
 
-            const cssStringCodeFromEditor = this.$refs.co.getCode()
-            const cssConvertedToJs = cssConvertToJs(cssStringCodeFromEditor)
-            const cssObject = cssConvertedToJs.values
+                const cssStringCodeFromEditor = this.$refs.co.getCode()
+                const cssConvertedToJs = cssConvertToJs(cssStringCodeFromEditor)
+                const cssObject = cssConvertedToJs.values
 
-            this.$emit('change', cssObject)
-            webpod.dash.modal.setData(cssObject)
-            setTimeout(() => {
+                this.$emit('change', cssObject)
+                webpod.dash.modal.setData(cssObject)
+                setTimeout(() => {
+                    this.isLoading = false
+                }, 500)
+            } catch(err) {
                 this.isLoading = false
-            }, 500)
+                this.$emit('error',err)
+                this.onError(err)
+            }
         }
     }
 }
