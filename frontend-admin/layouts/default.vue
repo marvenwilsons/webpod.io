@@ -44,13 +44,16 @@
                     <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
                         <div  class="pad125 modalShadow flexcenter" >
                             <div class="flex flexcol relative" >
-                                <span class="absolute fullwidth fullheight-percent flex flexcenter" >
-                                    <h1 class="merri-font" style="font-size:120px; color: #1e1e1e; margin:0;" >W</h1>
+                                <span style="border-radius: 100%;" class="absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
+                                    <h1
+                                    class="merri-font" 
+                                    style="font-size:120px; color: #1e1e1e; margin:0; text-shadow:2px 2px 1px #1e1e1e" >
+                                    W</h1>
                                 </span>
                                 <v-progress-circular
                                 :size="200"
                                 :width="1"
-                                color="white"
+                                color="#1e1e1e"
                                 indeterminate
                                 ></v-progress-circular>
                             </div>
@@ -181,6 +184,22 @@
                         </div>
                     </v-card>
                 </v-slide-y-reverse-transition>
+                <v-slide-y-reverse-transition>
+                    <v-card
+                    v-if="topAlert.show" 
+                    outlined
+                    elevation="10"
+                    dark
+                    style="z-index:800; position: absolute; top:5%; left:50%; transform: translate(-50%,-50%)" 
+                    class="borderRad4 absolute pad050 paneShadow  " 
+                    >
+                        <div class="flex flexcenter" >
+                            <div class="padleft025 padright025" >
+                                {{topAlert.msg}}
+                            </div>
+                        </div>
+                    </v-card>
+                </v-slide-y-reverse-transition>
             </main>
         </v-main>
     </v-app>
@@ -248,6 +267,10 @@ export default {
             disabled: false
         },
         bottomAlert: {
+            msg: undefined,
+            show: false
+        },
+        topAlert: {
             msg: undefined,
             show: false
         }
@@ -580,6 +603,16 @@ export default {
                         this.$set(this.bottomAlert,'msg',undefined)
                         this.$set(this.bottomAlert,'show',false)
                     },4000)
+                },
+                topAlert: (msg) => {
+                    this.$set(this.topAlert,'msg', msg)
+                    this.$set(this.topAlert,'show', true)
+
+                    return {
+                        close: () => {
+                            this.$set(this.topAlert,'show', false)
+                        }
+                    }
                 }
             }
 
