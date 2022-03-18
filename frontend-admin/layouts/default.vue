@@ -177,10 +177,13 @@
                     style="z-index:800; position: absolute; bottom:0; left:50%; transform: translate(-50%,-50%)" 
                     class="borderRad4 absolute pad050 paneShadow  " 
                     >
-                        <div class="flex flexcenter" >
-                            <div class="padleft025 padright025" >
+                        <div class="flex flexcenter body-1" >
+                            <div style="font-family: Roboto,sans-serif" class="padleft025 padright025" >
                                 {{bottomAlert.msg}}
                             </div>
+                            <v-btn @click="bottomAlert.buttonClick()" v-if="bottomAlert.buttonText" plain text small :ripple="false" >
+                                {{bottomAlert.buttonText}}
+                            </v-btn>
                         </div>
                     </v-card>
                 </v-slide-y-reverse-transition>
@@ -193,8 +196,8 @@
                     style="z-index:800; position: absolute; top:5%; left:50%; transform: translate(-50%,-50%)" 
                     class="borderRad4 absolute pad050 paneShadow  " 
                     >
-                        <div class="flex flexcenter" >
-                            <div class="padleft025 padright025" >
+                        <div class="flex flexcenter body-1" >
+                            <div style="font-family: Roboto,sans-serif"  class="padleft025 padright025" >
                                 {{topAlert.msg}}
                             </div>
                         </div>
@@ -268,7 +271,9 @@ export default {
         },
         bottomAlert: {
             msg: undefined,
-            show: false
+            show: false,
+            buttonText: undefined,
+            buttonClick: () => {}
         },
         topAlert: {
             msg: undefined,
@@ -596,13 +601,26 @@ export default {
                         this.$set(this.cog,'show',false)
                     }
                 },
-                bottomAlert: (msg) => {
+                bottomAlert: (msg,buttonText) => {
+                    const bottomAlertEvents = new EventEmitter()
+
                     this.$set(this.bottomAlert,'msg',msg)
                     this.$set(this.bottomAlert,'show',true)
+                    this.$set(this.bottomAlert,'buttonText',buttonText)
+                    this.$set(this.bottomAlert,'buttonClick', () => {bottomAlertEvents.emit('btn-click') } )
+
                     setTimeout(() => {
                         this.$set(this.bottomAlert,'msg',undefined)
                         this.$set(this.bottomAlert,'show',false)
+                        this.$set(this.bottomAlert,'buttonText',undefined)
+                        this.$set(this.bottomAlert,'buttonClick', () => {} )
+                        bottomAlertEvents.emit('close')
+                        setTimeout(() => {
+                            bottomAlertEvents = null
+                        },0)
                     },4000)
+
+                    return bottomAlertEvents
                 },
                 topAlert: (msg) => {
                     this.$set(this.topAlert,'msg', msg)
