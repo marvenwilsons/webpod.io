@@ -563,6 +563,8 @@ export default {
         }
     },
     created() {
+        const topAlert = webpod.dash.topAlert('loading...')
+
         if(this.myData.instancer.instance_types && this.myData.instancer.instance_types.length) {
             this.menuTitle = this.myData.title
             this.instance_types = this.myData.instancer.instance_types
@@ -600,7 +602,7 @@ export default {
                     if(!this.lastModfiedDays.includes(day)) this.lastModfiedDays.push(day)
                 })
                 this.modifiedByAdminList.push('Show All')
-
+                topAlert.close()
             })
         }
     }
