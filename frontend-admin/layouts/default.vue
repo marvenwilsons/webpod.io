@@ -8,12 +8,14 @@
                     <v-scale-transition  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                             <modal-drag :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
-                                <div v-if="modalError"  class="error margin025 pad050 flex flexcenter flexstart" >
-                                    <v-icon >mdi-alert-circle</v-icon>
-                                    <strong class="marginleft025" >
-                                        {{modalError}}
-                                    </strong>
-                                </div>
+                                <v-expand-transition>
+                                    <div v-if="modalError"  class="error marginbottom025 pad050 flex flexcenter flexstart borderRad4" >
+                                        <v-icon >mdi-alert-circle</v-icon>
+                                        <span class="marginleft025 body-1" >
+                                            {{modalError}}
+                                        </span>
+                                    </div>
+                                </v-expand-transition>
                                 <div class="" style="max-height:500px;" >
                                     <portal-target style="min-width: 300px; height: 100%"  @change="portalTargetChanged"  name="modal" />
                                     <!-- modal button -->
@@ -66,7 +68,7 @@
                         <v-card class="pad125 borderRad4 margin125" 
                             style="background:white; color: #3f444a; min-width: 400px; max-width: 1080px;" >
                             <div style="max-height:500px; overflow-x: auto;" >
-                                <div v-html="alertMsg" ></div>
+                                <div class="body-1" v-html="alertMsg" ></div>
                             </div>
                             <div class="margintop125 flex flexend">
                                 <v-btn  @click="closeAlert" text plain >Close</v-btn>
@@ -470,6 +472,10 @@ export default {
                         modalEvent.on('error', (msg) => {
                             this.modalError = msg
                             this.modalIsPlaying = false
+                            this.shakeModal = true
+                            setTimeout(() => {
+                                this.shakeModal = false
+                            },2000)
                         })
 
                         modalEvent.on('stop-playing', () => {
@@ -602,7 +608,7 @@ export default {
                     }
                 },
                 bottomAlert: (msg,buttonText) => {
-                    const bottomAlertEvents = new EventEmitter()
+                    let bottomAlertEvents = new EventEmitter()
 
                     this.$set(this.bottomAlert,'msg',msg)
                     this.$set(this.bottomAlert,'show',true)
