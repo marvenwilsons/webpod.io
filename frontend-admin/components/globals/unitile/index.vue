@@ -16,7 +16,6 @@
                 <div class="flex flexcol" >
                     <div
                     id="unitile-ribbon"
-                    v-if="nodeSelectedIndex == undefined" 
                     :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
                     class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
                     >
@@ -27,7 +26,8 @@
                                     </v-icon>
                             </v-btn>
                         </div>
-                        <div style="gap:5px; overflow:hidden;" 
+                        <!-- GRID SETTINGS -->
+                        <div v-if="nodeSelectedIndex == undefined"  style="gap:5px; overflow:hidden;" 
                         class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
                             <div id="start" ></div>
 
@@ -93,6 +93,44 @@
                             
                             <div id="end" ></div>
                         </div>
+                        <!-- INDIVIDUAL SETTINGS -->
+                        <div v-if="nodeSelectedIndex != undefined" style="gap:5px; overflow:hidden;" 
+                        class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth"
+                        >
+                            <div id="start" ></div>
+
+                            <opt-container title="POSITION" >
+
+                            </opt-container>
+
+                            <opt-container title="TILE VIEW" >
+                                <div
+                                    class="borderRad4 paneBorder padleft025 padright025 ribbon-item"
+                                >
+                                    <v-icon>mdi-cog</v-icon>
+                                </div>
+                            </opt-container>
+
+                            <opt-container title="TILE INLINE CSS" >
+                                <div 
+                                @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                    <v-icon small >mdi-language-css3</v-icon>
+                                </div>
+                            </opt-container>
+
+                            <opt-container title="Z INDEX" >
+
+                            </opt-container>
+
+                            <opt-container title="ALIGN ITEMS" >
+                                <div class="borderRad4 padleft025 padright025" >
+                                    <container-justify-items @change="containerJustifyItems" />
+                                </div>
+                            </opt-container>
+
+                            <div id="end" ></div>
+                        </div>
                         <div style="z-index:3" class="margintop025" >
                             <v-btn @click="ribbonScrollTo('end')" fab x-small text >
                                 <v-icon>
@@ -100,22 +138,6 @@
                                 </v-icon>
                             </v-btn>
                         </div>
-                    </div>
-                    <div v-if="nodeSelectedIndex != undefined"
-                        style="min-height:45px; grid-gap: 5px; z-index: 1;" 
-                        class="grey lighten-3 padtop025 padbottom025 padleft025 padright025 flex elevation-5 flexwrap"
-                    >
-                        <opt-container title="GRID GAP" >
-                            <grid-gap class="marginright025" />
-                            <v-divider
-                                vertical
-                            ></v-divider>
-                            <div class="marginleft050 borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                <dropDown
-                                    :options="[{title: 'px'},{title: '%'}]"
-                                >px</dropDown>
-                            </div>
-                        </opt-container>
                     </div>
                 </div>
             </div>
