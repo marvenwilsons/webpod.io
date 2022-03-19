@@ -4,6 +4,7 @@
         <header-title 
         :project_title="project_title"
         :history_info="'a minute ago'"
+        @renameTitle="$emit('renameTitle')"
         />
 
         <header-controlls
@@ -14,7 +15,7 @@
 </template>
 
 <script>
-import headerTitle from './hader-title.vue'
+import headerTitle from './header-title.vue'
 import headerControlls from './header-controlls.vue'
 export default {
   components: {headerTitle, headerControlls},
