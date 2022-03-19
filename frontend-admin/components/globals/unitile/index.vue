@@ -1,109 +1,24 @@
 <template>
     <main :class="['flex spacebetween fullheight-percent borderRad4', editMode ? '' : '']" >
-        <div :class="['borderred flex flexcol']" 
+        <div :class="['flex flexcol']" 
             :style="{'max-width': !editMode && '1920px', 
                 'border': editMode ? '1px solid #d3d3d3' : '',
                 overflow: 'hidden',
                 borderRadius: '5px'
             }" 
         >
-            <!-- ribbon -->
+            <!-- header -->
+            <u-header
+            @HeaderCommand="handleHeaderCommand"
+            @renameTitle="headerTitleClick"
+            ></u-header>
             <div>
                 <div class="flex flexcol" >
-                    <div v-if="editMode"  class="flex flexcenter flexstart flexwrap pad050 grey darken-4" >
-                        <div style="max-width:95px;" class="padleft050 padright125 flex flexcenter borderRad4" >
-                            <h6 
-                            class="white--text"
-                            style="margin:0; font-size: 17px; font-weight: 600;"  
-                            >UNITILE</h6>
-                        </div>
-                        <div style="flex-basis: content;" class=" pointer white--text" >
-                            <div class="pad025 padleft050 padright050" >
-                                <div class="flex" >
-                                    <div class="padright025" >
-                                        {{myData.title}}
-                                    </div>
-                                    <v-icon color="white" small >
-                                        mdi-chevron-down
-                                    </v-icon>
-                                    <!-- TODO: Rename -->
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="pad025 padleft050 padright050" style="flex-basis: content;"  >
-                            <div class="flex flexcenter grey--text lighten-4--text" >
-                                Last edited a minute ago
-                                <!-- TODO -->
-                            </div>
-                        </div>
-                        <div class="flex1 flex flexend" >
-                            <div>
-                                <el-tooltip  class="pad025" content="Undo" effect="light" placement="top-start" >
-                                    <v-btn v-if="sessionHistoryCollection && sessionHistoryCollection.length" style="color:white;" icon :disabled="undoBtnIsDisabled || previewIsOn" @click="undo" plain small >
-                                        <v-icon>
-                                            mdi-arrow-u-left-top
-                                        </v-icon>
-                                    </v-btn>
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" content="Redo" effect="light" placement="top-start" >
-                                    <v-btn v-if="sessionHistoryCollection && sessionHistoryCollection.length" style="color:white;" icon :disabled="redoBtnIsDisabled || previewIsOn" @click="redo" plain small >
-                                        <v-icon>
-                                            mdi-arrow-u-right-top
-                                        </v-icon>
-                                    </v-btn>
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" content="Add new tile" effect="light" placement="top-start" >
-                                    <v-btn style="color:white;" :disabled="selectionToolIsActivated || previewIsOn" icon plain small @click="addNewTile" >
-                                        <v-icon>
-                                            mdi-plus
-                                        </v-icon>
-                                    </v-btn>
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" content="Preview on" effect="light" placement="top-start" >
-                                    <v-btn style="color:white;" v-if="!previewIsOn" @click="preview(true)" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
-                                        <v-icon>mdi-eye-outline</v-icon>
-                                    </v-btn>
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" content="Preview off" effect="light" placement="top-start" >
-                                    <v-btn style="color:white;" v-if="previewIsOn" @click="preview(false)" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
-                                        <v-icon>mdi-eye-off</v-icon>
-                                    </v-btn>
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" :content="!selectionToolIsActivated ? 'Activate selection tool' : 'Deactivate selection tool'" effect="light" placement="top-start" >
-                                    <v-btn style="color:white;" :disabled="previewIsOn" @click="activateSelectionTool(true)" v-if="selectionToolIsActivated == false" plain  icon class="pointer flex flexccenter pad025 ribbon-item" >
-                                        <svg  style="width:20px;height:20px" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M14,17H17V14H19V17H22V19H19V22H17V19H14V17M12,17V19H9V17H12M7,17V19H3V15H5V17H7M3,13V10H5V13H3M3,8V4H7V6H5V8H3M9,4H12V6H9V4M15,4H19V8H17V6H15V4M19,10V12H17V10H19Z" />
-                                        </svg>
-                                    </v-btn>
-                                    <v-btn style="color:white;" :disabled="previewIsOn" @click="activateSelectionTool(false)" v-if="selectionToolIsActivated == true" plain  icon class="pointer flex flexccenter pad025 ribbon-item"  >
-                                        <svg  style="width:20px;height:20px" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M21 20C21 20.55 20.55 21 20 21H19V19H21V20M15 21V19H17V21H15M11 21V19H13V21H11M7 21V19H9V21H7M4 21C3.45 21 3 20.55 3 20V19H5V21H4M3 15H5V17H3V15M21 15V17H19V15H21M14.59 8L12 10.59L9.41 8L8 9.41L10.59 12L8 14.59L9.41 16L12 13.41L14.59 16L16 14.59L13.41 12L16 9.41L14.59 8M3 11H5V13H3V11M21 11V13H19V11H21M3 7H5V9H3V7M21 7V9H19V7H21M4 3H5V5H3V4C3 3.45 3.45 3 4 3M20 3C20.55 3 21 3.45 21 4V5H19V3H20M15 5V3H17V5H15M11 5V3H13V5H11M7 5V3H9V5H7Z" />
-                                        </svg>
-                                    </v-btn>
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" content="Refresh Editor" effect="light" placement="top-start" >
-                                    <v-btn style="color:white;" plain @click="refresh" icon class="pointer flex flexccenter pad025 ribbon-item" >
-                                        <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                            <path fill="gray" d="M17.65,6.35C16.2,4.9 14.21,4 12,4A8,8 0 0,0 4,12A8,8 0 0,0 12,20C15.73,20 18.84,17.45 19.73,14H17.65C16.83,16.33 14.61,18 12,18A6,6 0 0,1 6,12A6,6 0 0,1 12,6C13.66,6 15.14,6.69 16.22,7.78L13,11H20V4L17.65,6.35Z" />
-                                        </svg>
-                                    </v-btn>     
-                                </el-tooltip>
-                                <el-tooltip  class="pad025" content="Save Layout" effect="light" placement="top-start" >
-                                    <v-btn style="color:white;" plain icon @click="saveLayout" >
-                                        <svg style="width:20px;height:20px" viewBox="0 0 24 24">
-                                            <path fill="currentColor" d="M15,9H5V5H15M12,19A3,3 0 0,1 9,16A3,3 0 0,1 12,13A3,3 0 0,1 15,16A3,3 0 0,1 12,19M17,3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V7L17,3Z" />
-                                        </svg>
-                                    </v-btn>
-                                </el-tooltip>
-                            </div>
-                        </div>
-                    </div>
                     <div
-                        id="unitile-ribbon"
-                        v-if="nodeSelectedIndex == undefined" 
-                        :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
-                        class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
+                    id="unitile-ribbon"
+                    v-if="nodeSelectedIndex == undefined" 
+                    :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
+                    class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
                     >
                         <div style="right:0px; z-index:3" class="margintop025" >
                             <v-btn @click="ribbonScrollTo('start')" fab x-small text >
@@ -115,18 +30,11 @@
                         <div style="gap:5px; overflow:hidden;" 
                         class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
                             <div id="start" ></div>
+
                             <opt-container title="GRID GAP" >
                                 <grid-gap @change="applyGridGap" :gap="gridGap" class="marginright025" />
-                                <!-- <v-divider
-                                    vertical
-                                ></v-divider> -->
-                                <!-- <div class="marginleft050 borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                    <dropDown
-                                        @command="(cmd) => {handleRibbonContainerCmd('grid-gap',cmd)}"
-                                        :options="scaleUnits"
-                                    >px</dropDown>
-                                </div> -->
                             </opt-container>
+
                             <opt-container title="GRID COLUMNS" >
                                 <div  class="borderRad4 paneBorder ribbon-item" >
                                     <dropDown
@@ -152,6 +60,7 @@
                                     </dropDown>
                                 </div>
                             </opt-container>
+
                             <opt-container  title="COLUMN SIZES" >
                                 <div @click="openColumnEditor" 
                                 style="white-space: nowrap;"
@@ -159,6 +68,7 @@
                                     <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
                                 </div>
                             </opt-container>
+
                             <opt-container title="GRID CONTAINER INLINE CSS" >
                                 <div
                                 @click="handleRibbonContainerCmd('grid-container-custom-css')"
@@ -166,6 +76,7 @@
                                     <v-icon small >mdi-language-css3</v-icon>
                                 </div>
                             </opt-container>
+
                             <opt-container title="GRID TILES GLOBAL INLINE CSS" >
                                 <div 
                                 @click="handleRibbonContainerCmd('grid-tile-custom-css')"
@@ -173,11 +84,13 @@
                                     <v-icon small >mdi-language-css3</v-icon>
                                 </div>
                             </opt-container>
+
                             <opt-container title="JUSTIFY ITEMS" >
                                 <div class="borderRad4 padleft025 padright025" >
                                     <container-justify-items @change="containerJustifyItems" />
                                 </div>
                             </opt-container>
+                            
                             <div id="end" ></div>
                         </div>
                         <div style="z-index:3" class="margintop025" >
@@ -208,13 +121,15 @@
             </div>
             <!-- tile presentation -->
             <section id="tile-presentation" style="overflow:auto; " class="flex1 grey lighten-5" >
-                <div
+                <v-fade-transition>
+                    <div
                     v-if="ready"
                     class="wp-dash-grid relative " 
                     @keydown="keydown"
                     :id="`grid-${currentUid}`"
                     :style="{
                         ...gridContainerStyle,
+                        'justify-items': gridContainerJustify,
                         'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
                         'min-width': `${minTileWidth}`,
                         'grid-template-columns': `${gridColumns.join(' ')}`,
@@ -242,12 +157,13 @@
                         'overflow':'auto',
                         justifySelf: item.align,
                         background:'white',
+                        ...tiles_global_style,
                         ...item.customStyle,
                     }"
                     >
                         <div class="relative fullheight-percent" >
                             <!-- dropDown component is handled by options.js -->
-                            <div v-if="editMode && selectionToolIsActivated == false" style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
+                            <div v-if="editMode && controlls.selection_tool === 'off'" style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
                                 <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
                                 <dropDown
                                     :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
@@ -264,10 +180,11 @@
                         </div>
                     </div>
                 </div>
+                </v-fade-transition>
             </section>
         </div>
         <wp-modal v-if="modals.grid_settings == 'show'" class=" borderred">
-            <div  v-if="editMode && !previewIsOn" 
+            <div  v-if="editMode && !controlls.preview == 'on'" 
                 style="background:white; font-family: 'Menlo'; overflow: auto; max-width:500px;" 
                 class="pad125 text-small " 
             >
@@ -369,11 +286,23 @@
         </wp-modal>
         <!-- inline style for all tiles in the grid -->
         <wp-modal v-if="modals.tiles_global_inline_style == 'show'">
-            <custom-css 
-            :cssObject="gridContainerStyle"
+            <custom-css
+            ref="tiles_global_style"
+            :cssObject="tiles_global_style"
             :el_id="'#inline-style-for-all-tiles'" 
             style="min-width:400px;" >
             </custom-css>
+        </wp-modal>
+        <!-- rename title -->
+        <wp-modal v-if="modals.rename_title"   >
+            <div >
+                <v-text-field v-model="projectTitle" ></v-text-field>
+                <div @click="validateAndRenameProjectTitle" class="flex flexend" >
+                    <v-btn>
+                        Save
+                    </v-btn>
+                </div>
+            </div>
         </wp-modal>
     </main>
 </template>
@@ -382,7 +311,7 @@
 <script>
 import m from '@/m'
 import optionHandler from './mixins/options.js'
-import sessionHistory from './mixins/sessions-history.js'
+import undoRedo from '@/undo-redo.js'
 import gridGuides from './grid-guides.vue'
 
 import gridGap from './c-grid-gap.vue'
@@ -398,19 +327,23 @@ import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
 import optContainer from './opt-container.vue'
 
+import uHeader from './header/layout.vue'
+
 export default {
     name: 'unitile',
-    mixins: [m,optionHandler,sessionHistory],
+    mixins: [m,optionHandler,undoRedo],
     components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
-    customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer},
+    customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks'],
     data: () => ({
+        projectTitle: undefined,
         tiles: [],
         maxRows: 4,
         maxCol: 4,
         gridGap: 5,
         gridColumns: undefined,
         gridContainerStyle: {},
+        gridContainerJustify: 'stretch',
         tiles_global_style: {},
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
@@ -419,18 +352,18 @@ export default {
         editMode: true,
         currentUid: undefined,
         useGridGuides: false,
-        selectionToolIsActivated: false,
         selectedNodesBySelectionTool: [],
-        previewIsOn: false,
-        controlls: { // TODO
+        controlls: {
             preview: 'off',
-            use_grid_guides: 'off'
+            use_grid_guides: 'off',
+            selection_tool: 'off'
         },
         modals: {
             grid_container_inline_style: 'hide',
             tiles_global_inline_style: 'hide',
             column_editor: 'hide',
-            grid_settings: 'hide'
+            grid_settings: 'hide',
+            rename_title: 'hide'
         }
     }),
     methods: {
@@ -454,6 +387,7 @@ export default {
             }
         },  
         move(moveDirection,id,index) {
+
             if(moveDirection == 'right') {
                 if(this.tiles[index].colEnd != this.maxCol + 1) {
                     this.tiles[index].colStart = this.tiles[index].colStart + 1
@@ -486,8 +420,8 @@ export default {
 
             }
             setTimeout(() => {
-                this.addSessionEntry(this.copy(this.tiles))
-            }, 10)
+                this.addSessionEntry()
+            }, 0)
         },
         height(mode,id,index) {
             this.addSessionEntry(this.tiles)
@@ -547,7 +481,7 @@ export default {
             }
         },
         keydown(e) {
-            if(this.nodeSelectedIndex != undefined && this.selectionToolIsActivated == false) {
+            if(this.nodeSelectedIndex != undefined && this.controlls.selection_tool == 'off') {
                 if(e.key == 'ArrowRight') {
                     this.move('right',null,this.nodeSelectedIndex)
                 }
@@ -568,7 +502,7 @@ export default {
                 this.nodeSelectedIndex = undefined
             }
         },
-        addNewTile(isClone,tileIndex) {
+        AddNewTile(isClone,tileIndex) {
             if(isClone == true) {
                 this.tiles.push({
                     name: undefined, 
@@ -606,11 +540,13 @@ export default {
         },
         saveLayout() {
             const data = {
+                tiles: this.tiles,
                 gridGap: this.gridGap,
                 maxCol: this.maxCol,
                 gridContainerStyle: this.gridContainerStyle,
-                tiles: this.tiles,
-                gridColumns: this.gridColumns
+                tiles_global_style: this.tiles_global_style,
+                gridColumns: this.gridColumns,
+                gridContainerJustify: this.gridContainerJustify
             }
             // this.hooks.onSaveLayout(data)
             console.log(data)
@@ -629,7 +565,7 @@ export default {
         activateSelectionTool(value) {
             let ds = undefined
             let selectedTiles = []
-            this.selectionToolIsActivated = value
+            this.$set(this.controlls,'selection_tool',value ? 'on' : 'off')
 
             if(value == true) {
                 const area = document.getElementById('tile-presentation')
@@ -673,7 +609,7 @@ export default {
             }
         },
         preview(state) {
-            this.previewIsOn = state
+            this.$set(this.controlls,'preview',state ? 'on' : 'off')
         },
         tileALignChange(value) {
             this.tiles[this.nodeSelectedIndex].align = value
@@ -682,13 +618,15 @@ export default {
             console.log('container custom style', value)
         },
         containerJustifyItems(value) {
-            console.log('asdf', value)
+            this.gridContainerJustify = value
+            this.addSessionEntry()
         },
         tileCustomStyle(cssObject) {
             this.tiles[this.nodeSelectedIndex].customStyle = cssObject
         },
         applyGridGap(value) {
             this.gridGap = value
+            this.addSessionEntry()
         },
         changeGridColumn(value) {
             this.maxCol = value
@@ -717,13 +655,12 @@ export default {
 
             columnEditor.on('play', () => {
                 this.gridColumns = this.$refs.colEditor.frs
+                this.addSessionEntry()
                 webpod.dash.modal.hide()
             })
         },
         handleRibbonContainerCmd(cmd,val) {
-            if(cmd === 'grid-gap') {
-
-            }
+            console.log(cmd)
 
             if(cmd === 'grid-container-custom-css') {
                 const modal = webpod.dash.modal.show({
@@ -743,12 +680,19 @@ export default {
                 })
 
                 modal.on('data', (data) => {
-                    this.gridContainerStyle = data
+                    this.tiles_global_style = data
+                })
+
+                modal.on('show', () => {
+                    this.$refs.tiles_global_style.onError = (err) => {
+                        modal.emit('error', err)
+                    }
                 })
             }
 
             if(cmd === 'grid-columns') {
                 this.changeGridColumn(val)
+                this.addSessionEntry()
             }
         },
         ribbonScrollTo(e) {
@@ -761,11 +705,40 @@ export default {
                     behavior: 'smooth'
                 });
             }
+        },
+        headerTitleClick() {
+            webpod.dash.modal.show({
+                modalTitle: 'Rename Title',
+                viewTrigger: (v) => this.$set(this.modals, 'rename_title', v ? 'show' : 'hide')
+            })
+        },
+        validateAndRenameProjectTitle() {
+
+        },
+        handleHeaderCommand(command) {
+            if(command == 'Redo') {
+                this.Redo()
+            }
+            if(command == 'Undo') {
+                this.Undo()
+            }
+            if(command == 'AddNewTile') {
+                this.AddNewTile()
+            }
+            if(command == 'SaveLayout') {
+                this.saveLayout()
+            }
         }
     },
     mounted() {
-        const cog = webpod.dash.cog.show()
+        // bottom alert
+        const welcomMsg = webpod.dash.bottomAlert('Welcome to Unitile v-0.1', 'learn more')
+        welcomMsg.on('btn-click', () => {
+            // show documentation in modal
+        })
 
+        // sidebar cog
+        const cog = webpod.dash.cog.show()
         cog.on('click', () => {
             webpod.dash.modal.show({
                 modalTitle: 'GRID SETTINGS',
@@ -788,9 +761,45 @@ export default {
                 }, 100)
             }
         }
+
+        // for undo and redo manager
+        this.setSessionTrackData(() => {
+            return {
+                tiles: this.tiles,
+                gridGap: this.gridGap,
+                maxCol: this.maxCol,
+                gridContainerStyle: this.gridContainerStyle,
+                tiles_global_style: this.tiles_global_style,
+                gridColumns: this.gridColumns,
+                gridContainerJustify: this.gridContainerJustify
+            }
+        })
+
+        this.session.onUndoRedo = ({tiles, gridGap, maxCol, gridColumns, gridContainerStyle, tiles_global_style, gridContainerJustify}) => {
+            // data contains the tracked content
+            this.changeGridColumn(maxCol)
+            this.tiles = tiles
+            this.gridGap = gridGap
+            this.gridContainerStyle = gridContainerStyle
+            this.tiles_global_style = tiles_global_style
+            this.gridColumns = gridColumns
+            this.gridContainerJustify = gridContainerJustify
+        }
+
+        this.session.onMsg = (msg) => {
+            webpod.dash.bottomAlert(msg)
+        }
+
+
     },
     beforeDestroy() {
         webpod.dash.cog.hide()
+        this.nodeSelectedIndex = undefined
+        this.tiles = []
+        this.refresh()
+
+        // clear undoRedo session
+        this.clearSession()
     },
     created() {
         this.currentUid = this.uid()
@@ -798,6 +807,8 @@ export default {
         webpod.session.allowOverflow = false
 
         if(this.myData) {
+            this.projectTitle = this.myData.title
+
             if(Object.keys(this.config).includes('editable')) {
                 this.editMode = this.config.editable
             } else {
