@@ -1,3 +1,4 @@
+@docs webpod.dash.modal
 ```js
 <template>
     <div>

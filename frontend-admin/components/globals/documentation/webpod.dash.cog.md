@@ -1,3 +1,4 @@
+@docs webpod.dash.cog
 ```js
 // renders the cog buton in the corner
 const cog = webpod.dash.cog.show()

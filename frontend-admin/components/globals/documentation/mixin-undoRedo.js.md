@@ -1,3 +1,4 @@
+@docs undo redo
 ## About
 - A mixin for vue component that offers an undo and redo feature
 ## Methods

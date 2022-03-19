@@ -1,3 +1,4 @@
+@docs webpod.dash.alertError
 ```js
 //  Alert error
 webpod.dash.alertError({

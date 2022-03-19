@@ -1,4 +1,4 @@
-
+@docs webpod.dash.bottomAlert
 ## About
 - An alert dialog will appear at the bottom of the screen, and will automatically closed after 4 seconds
 ## Method
