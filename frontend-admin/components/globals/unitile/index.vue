@@ -27,110 +27,171 @@
                             </v-btn>
                         </div>
                         <!-- GRID SETTINGS -->
-                        <div v-if="nodeSelectedIndex == undefined"  style="gap:5px; overflow:hidden;" 
-                        class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
-                            <div id="start" ></div>
+                        <v-fade-transition>
+                            <div v-if="nodeSelectedIndex == undefined"  style="gap:5px; overflow:hidden;" 
+                            class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
+                                <div id="start" ></div>
 
-                            <opt-container title="GRID GAP" >
-                                <grid-gap @change="applyGridGap" :gap="gridGap" class="marginright025" />
-                            </opt-container>
+                                <opt-container title="Grid Gap" >
+                                    <grid-gap @change="applyGridGap" :gap="gridGap" class="marginright025" />
+                                </opt-container>
 
-                            <opt-container title="GRID COLUMNS" >
-                                <div  class="borderRad4 paneBorder ribbon-item" >
-                                    <dropDown
-                                        class="padleft025 padright025"
-                                        @command="(cmd) => {handleRibbonContainerCmd('grid-columns',cmd)}"
-                                        :options="[
-                                            {title: 1},
-                                            {title: 2},
-                                            {title: 3},
-                                            {title: 4},
-                                            {title: 5},
-                                            {title: 6},
-                                            {title: 7},
-                                            {title: 8},
-                                            {title: 9},
-                                            {title: 10},
-                                            {title: 11},
-                                            {title: 12}
-                                        ]"
-                                        :selected="maxCol"
-                                    >
-                                        {{maxCol}}
-                                    </dropDown>
-                                </div>
-                            </opt-container>
+                                <opt-container title="Grid Columns" >
+                                    <div  class="borderRad4 paneBorder ribbon-item" >
+                                        <dropDown
+                                            class="padleft025 padright025"
+                                            @command="(cmd) => {handleRibbonContainerCmd('grid-columns',cmd)}"
+                                            :options="[
+                                                {title: 1},
+                                                {title: 2},
+                                                {title: 3},
+                                                {title: 4},
+                                                {title: 5},
+                                                {title: 6},
+                                                {title: 7},
+                                                {title: 8},
+                                                {title: 9},
+                                                {title: 10},
+                                                {title: 11},
+                                                {title: 12}
+                                            ]"
+                                            :selected="maxCol"
+                                        >
+                                            {{maxCol}}
+                                        </dropDown>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container  title="COLUMN SIZES" >
-                                <div @click="openColumnEditor" 
-                                style="white-space: nowrap;"
-                                class="caption paneBorder padleft025 padright025 borderRad4 ribbon-item" >
-                                    <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
-                                </div>
-                            </opt-container>
+                                <opt-container  title="Column Size" >
+                                    <div v-ripple @click="openColumnEditor" 
+                                    style="white-space: nowrap;"
+                                    class="caption paneBorder padleft025 padright025 borderRad4 ribbon-item" >
+                                        <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="GRID CONTAINER INLINE CSS" >
-                                <div
-                                @click="handleRibbonContainerCmd('grid-container-custom-css')"
-                                class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                    <v-icon small >mdi-language-css3</v-icon>
-                                </div>
-                            </opt-container>
+                                <opt-container title="Grid Container Custom CSS" >
+                                    <div
+                                    v-ripple
+                                    @click="handleRibbonContainerCmd('grid-container-custom-css')"
+                                    class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                        <v-icon small >mdi-language-css3</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="GRID TILES GLOBAL INLINE CSS" >
-                                <div 
-                                @click="handleRibbonContainerCmd('grid-tile-custom-css')"
-                                class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                    <v-icon small >mdi-language-css3</v-icon>
-                                </div>
-                            </opt-container>
+                                <opt-container title="Tiles Global Style" >
+                                    <div 
+                                    v-ripple
+                                    @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                    class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                        <v-icon small >mdi-language-css3</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="JUSTIFY ITEMS" >
-                                <div class="borderRad4 padleft025 padright025" >
-                                    <container-justify-items @change="containerJustifyItems" />
-                                </div>
-                            </opt-container>
-                            
-                            <div id="end" ></div>
-                        </div>
+                                <opt-container title="Globaly Position Items" >
+                                    <div class="borderRad4 padleft025 padright025" >
+                                        <container-justify-items @change="containerJustifyItems" />
+                                    </div>
+                                </opt-container>
+                                
+                                <div id="end" ></div>
+                            </div>
+                        </v-fade-transition>
                         <!-- INDIVIDUAL SETTINGS -->
-                        <div v-if="nodeSelectedIndex != undefined" style="gap:5px; overflow:hidden;" 
-                        class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth"
-                        >
-                            <div id="start" ></div>
+                        <v-fade-transition>
+                            <div v-if="nodeSelectedIndex != undefined" style="gap:5px; overflow:hidden;" 
+                            class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth"
+                            >
+                                <div id="start" ></div>
 
-                            <opt-container title="POSITION" >
+                                <opt-container title="Position" >
+                                    C:
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-arrow-up-thick</v-icon>
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-arrow-down-thick</v-icon>
+                                    </div>
+                                    <span class="marginleft050" >
+                                        R:
+                                    </span>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-arrow-left-thick</v-icon>
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-arrow-right-thick</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            </opt-container>
+                                <opt-container title="Vertical Span" >
+                                    <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
+                                        1
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-minus-thick</v-icon>
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-plus-thick</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="TILE VIEW" >
-                                <div
-                                    class="borderRad4 paneBorder padleft025 padright025 ribbon-item"
-                                >
-                                    <v-icon>mdi-cog</v-icon>
-                                </div>
-                            </opt-container>
+                                <opt-container title="Horizontal Span" >
+                                    <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
+                                        1
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-minus-thick</v-icon>
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-plus-thick</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="TILE INLINE CSS" >
-                                <div 
-                                @click="handleRibbonContainerCmd('grid-tile-custom-css')"
-                                class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
-                                    <v-icon small >mdi-language-css3</v-icon>
-                                </div>
-                            </opt-container>
+                                <opt-container title="Tile View" >
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-cog</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="Z INDEX" >
+                                <opt-container title="Tile Inline Style" >
+                                    <div
+                                    v-ripple
+                                    @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                    class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                        <v-icon small >mdi-language-css3</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            </opt-container>
+                                <opt-container title="Tile CSS Classes" >
+                                    <div
+                                    v-ripple
+                                    @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                    class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
+                                        <v-icon small >mdi-language-css3</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <opt-container title="ALIGN ITEMS" >
-                                <div class="borderRad4 padleft025 padright025" >
-                                    <container-justify-items @change="containerJustifyItems" />
-                                </div>
-                            </opt-container>
+                                <opt-container title="Z-Index" >
+                                    <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
+                                        1
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-minus-thick</v-icon>
+                                    </div>
+                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-plus-thick</v-icon>
+                                    </div>
+                                </opt-container>
 
-                            <div id="end" ></div>
-                        </div>
+                                <opt-container title="Align Items" >
+                                    <div v-ripple class="borderRad4 padleft025 padright025" >
+                                        <container-justify-items @change="containerJustifyItems" />
+                                    </div>
+                                </opt-container>
+
+                                <div id="end" ></div>
+                            </div>
+                        </v-fade-transition>
                         <div style="z-index:3" class="margintop025" >
                             <v-btn @click="ribbonScrollTo('end')" fab x-small text >
                                 <v-icon>
@@ -735,7 +796,8 @@ export default {
             })
         },
         validateAndRenameProjectTitle() {
-
+            //validate and confirm project title renaming
+            console.log(this.projectTitle)
         },
         handleHeaderCommand(command) {
             if(command == 'Redo') {

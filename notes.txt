@@ -33,6 +33,9 @@ useful stackoverflow content about grid
 SVG Manipulation
 ==> https://vuejs.org/v2/examples/svg.html
 
+GSAP Key Frames
+==> https://greensock.com/docs/v3/GSAP/gsap.to()
+
 
 
 ============================================  TODO  ============================================
