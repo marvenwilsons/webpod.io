@@ -123,7 +123,7 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Vertical Span" >
+                                <opt-container title="Horizontal Span" >
                                     <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
@@ -132,7 +132,7 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Horizontal Span" >
+                                <opt-container title="Vertical Span" >
                                     <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
@@ -518,6 +518,8 @@ export default {
                 if(this.tiles[index].rowStart + 1 != this.tiles[index].rowEnd) {
                     this.tiles[index].rowEnd = this.tiles[index].rowEnd - 1
                     this.removeUnwantedRows()
+                } else {
+                    webpod.dash.bottomAlert('Minimum vertical span reached!')
                 }
 
             }
@@ -527,12 +529,16 @@ export default {
                 if(this.tiles[index].colEnd != this.maxCol + 1) {
                     this.tiles[index].colEnd = this.tiles[index].colEnd + 1
                     // console.log(this.tiles[index].colEnd, this.maxCol)
+                } else {
+                    webpod.dash.bottomAlert('Maximum horizonal span reached!')
                 }   
             }
             if(mode == 'minus') {
                 if(this.tiles[index].colEnd != 2) {
                     this.tiles[index].colEnd = this.tiles[index].colEnd - 1
-                }
+                }  else {
+                    webpod.dash.bottomAlert('Minimum horizonal span reached!')
+                } 
 
             }
             setTimeout(() => {
