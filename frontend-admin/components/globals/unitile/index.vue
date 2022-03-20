@@ -106,19 +106,19 @@
 
                                 <opt-container title="Position" >
                                     C:
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="move('top',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-arrow-up-thick</v-icon>
                                     </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="move('bottom',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-arrow-down-thick</v-icon>
                                     </div>
                                     <span class="marginleft050" >
                                         R:
                                     </span>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="move('left',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-arrow-left-thick</v-icon>
                                     </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="move('right',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-arrow-right-thick</v-icon>
                                     </div>
                                 </opt-container>
@@ -377,7 +377,7 @@
             </custom-css>
         </wp-modal>
         <!-- rename title -->
-        <wp-modal v-if="modals.rename_title"   >
+        <wp-modal v-if="modals.rename_title == 'show'"   >
             <div >
                 <v-text-field v-model="projectTitle" ></v-text-field>
                 <div @click="validateAndRenameProjectTitle" class="flex flexend" >
