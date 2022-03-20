@@ -124,25 +124,19 @@
                                 </opt-container>
 
                                 <opt-container title="Vertical Span" >
-                                    <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
-                                        1
-                                    </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="width('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-plus-thick</v-icon>
                                     </div>
                                 </opt-container>
 
                                 <opt-container title="Horizontal Span" >
-                                    <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
-                                        1
-                                    </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="height('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-plus-thick</v-icon>
                                     </div>
                                 </opt-container>
@@ -529,7 +523,6 @@ export default {
             }
         },
         width(mode,id,index) {
-            this.addSessionEntry(this.tiles)
             if(mode == 'add') {
                 if(this.tiles[index].colEnd != this.maxCol + 1) {
                     this.tiles[index].colEnd = this.tiles[index].colEnd + 1
@@ -542,6 +535,9 @@ export default {
                 }
 
             }
+            setTimeout(() => {
+                this.addSessionEntry()
+            },0)
         },
         nodeSelect(e,index) {
             if(e.target.checked) {
