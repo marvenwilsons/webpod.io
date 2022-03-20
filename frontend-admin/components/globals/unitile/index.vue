@@ -37,7 +37,7 @@
                                 </opt-container>
 
                                 <opt-container title="Grid Columns" >
-                                    <div  class="borderRad4 paneBorder ribbon-item" >
+                                    <div v-ripple class="borderRad4 paneBorder ribbon-item" >
                                         <dropDown
                                             class="padleft025 padright025"
                                             @command="(cmd) => {handleRibbonContainerCmd('grid-columns',cmd)}"
