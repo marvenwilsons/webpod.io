@@ -386,19 +386,29 @@
             <v-select
             :items="apps.all"
             label="Apps"
-            v-model="apps.selected"
+            v-model="apps.app_selected"
             ></v-select>
 
             <v-select
-            v-if="apps.selected != undefined"
-            :items="apps.all"
-            :label="`${apps.selected} instances`"
+            v-if="apps.app_selected != undefined"
+            :items="apps.instances_title"
+            :label="`${apps.selected} instances / data`"
             v-model="apps.instance_selected"
+            :loading="apps.instances_title.length == 0"
+            :disabled="apps.instances_title.length == 0"
             ></v-select>
+
+            <v-expand-transition>
+                <div v-if="apps.instance_selected_info != undefined" class="caption" >
+                    modified_date: {{apps.instance_selected_info.modified_date}} <br>
+                    modified_by: {{apps.instance_selected_info.modified_by}} <br>
+                    instance_from: {{apps.instance_selected_info.instance_from}}
+                </div>
+            </v-expand-transition>
             
             <div class="fullwidth flex flexend">
                 <v-expand-transition>
-                    <v-btn v-if="apps.instance_selected != undefined" >
+                    <v-btn @click="applyTileView" v-if="apps.instance_selected != undefined" >
                         Apply
                     </v-btn>
                 </v-expand-transition>
@@ -455,8 +465,11 @@ export default {
         selectedNodesBySelectionTool: [],
         apps: {
             all: [],
-            selected: undefined,
-            instance_selected: undefined
+            app_selected: undefined,
+            instances_title: [],
+            instances_info: [],
+            instance_selected: undefined,
+            instance_selected_info: undefined,
         },
         app_instances: [],
         controlls: {
@@ -473,6 +486,15 @@ export default {
             tile_view: 'hide'
         }
     }),
+    watch: {
+        'apps.app_selected'(appName) {
+            // get all instaces of the selected app then populate the instance array
+            this.selectApp(appName)
+        },
+        'apps.instance_selected'(title) {
+            this.selectAppInstance(title)
+        }
+    },
     methods: {
         removeUnwantedRows() {
             // get the lowest or the most bottom element in the layout
@@ -846,11 +868,35 @@ export default {
             }
         },
         showTileViewModal() {
-            webpod.dash.modal.show({
+            const tileModal = webpod.dash.modal.show({
                 modalTitle: 'Tile View',
-                viewTrigger: (v) => this.$set(this.modals,'tile_view', v ? 'show' : 'hide')
+                viewTrigger: (v) => this.$set(this.modals,'tile_view', v ? 'show' : 'hide'),
             })
-            
+
+            tileModal.on('data', (data) => {
+                console.log('modal data', data)
+            })
+        },
+        applyTileView() {
+            webpod.dash.modal.hide()
+            // locate the tile and update its view and viewData
+            console.log('apply tile view', this.tiles[this.nodeSelectedIndex])
+        },
+        selectApp(appName) {
+            webpod.server.apps.fetchAppInstances({app: appName}, (data) => {
+               const titles = data.map(e => e.title)
+                setTimeout(() => {
+                    this.$set(this.apps,'instances_title',titles)
+                    this.$set(this.apps,'instances_info',data)
+                },1000)
+            })
+        },
+        selectAppInstance(title) {
+            this.$set(this.apps,'instance_selected_info',(this.apps.instances_info.filter(e => e.title == title && e))[0] )
+            webpod.dash.modal.setData({
+                app: this.apps.app_selected,
+                instance_selected: title
+            })
         }
     },
     mounted() {
