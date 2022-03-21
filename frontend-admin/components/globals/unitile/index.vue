@@ -142,7 +142,7 @@
                                 </opt-container>
 
                                 <opt-container title="Tile View" >
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="showTileViewModal" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-cog</v-icon>
                                     </div>
                                 </opt-container>
@@ -381,6 +381,29 @@
                 </div>
             </div>
         </wp-modal>
+        <!-- tile view -->
+        <wp-modal v-if="modals.tile_view == 'show'" >
+            <v-select
+            :items="apps.all"
+            label="Apps"
+            v-model="apps.selected"
+            ></v-select>
+
+            <v-select
+            v-if="apps.selected != undefined"
+            :items="apps.all"
+            :label="`${apps.selected} instances`"
+            v-model="apps.instance_selected"
+            ></v-select>
+            
+            <div class="fullwidth flex flexend">
+                <v-expand-transition>
+                    <v-btn v-if="apps.instance_selected != undefined" >
+                        Apply
+                    </v-btn>
+                </v-expand-transition>
+            </div>
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -430,6 +453,12 @@ export default {
         currentUid: undefined,
         useGridGuides: false,
         selectedNodesBySelectionTool: [],
+        apps: {
+            all: [],
+            selected: undefined,
+            instance_selected: undefined
+        },
+        app_instances: [],
         controlls: {
             preview: 'off',
             use_grid_guides: 'off',
@@ -440,7 +469,8 @@ export default {
             tiles_global_inline_style: 'hide',
             column_editor: 'hide',
             grid_settings: 'hide',
-            rename_title: 'hide'
+            rename_title: 'hide',
+            tile_view: 'hide'
         }
     }),
     methods: {
@@ -814,6 +844,13 @@ export default {
             if(command == 'SaveLayout') {
                 this.saveLayout()
             }
+        },
+        showTileViewModal() {
+            webpod.dash.modal.show({
+                modalTitle: 'Tile View',
+                viewTrigger: (v) => this.$set(this.modals,'tile_view', v ? 'show' : 'hide')
+            })
+            
         }
     },
     mounted() {
@@ -861,6 +898,7 @@ export default {
             }
         })
 
+        // update the specified properties when undo or redo is triggered
         this.session.onUndoRedo = ({tiles, gridGap, maxCol, gridColumns, gridContainerStyle, tiles_global_style, gridContainerJustify}) => {
             // data contains the tracked content
             this.changeGridColumn(maxCol)
@@ -872,9 +910,13 @@ export default {
             this.gridContainerJustify = gridContainerJustify
         }
 
+        // undo redo on msg
         this.session.onMsg = (msg) => {
             webpod.dash.bottomAlert(msg)
         }
+
+        // get all installed apps
+        this.apps.all = ['Unitile','Form builder','Simple Slider']
 
 
     },
