@@ -3,6 +3,7 @@
         :style="{
             height:'40px', 
             border: highlighted == title ? '1px solid #448AFF' : '1px solid #CFD8DC', 
+            background: highlighted == title ? 'lightgray' : ''
         }" 
         elevation="0" class="pad050 borderRad4" >
         <div class="flex flexcenter fullheight-percent" >
