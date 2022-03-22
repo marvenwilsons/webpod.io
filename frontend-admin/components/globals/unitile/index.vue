@@ -19,25 +19,33 @@
                     :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
                     class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
                     >
-                        <div style="right:0px; z-index:3" class="margintop025" >
+                        <div style="right:0px; z-index:3" class="margintop025 relative" >
+                            <div 
+                            style="right: 50px;
+                            min-height: 45px;
+                            -webkit-box-shadow: 50px 1px 15px 19px #EEEEEE; 
+                            box-shadow: 50px 1px 15px 19px #EEEEEE;"
+                            class="absolute fullheight-percent " >
+                            </div>
                             <v-btn @click="ribbonScrollTo('start')" fab x-small text >
-                                    <v-icon>
-                                        mdi-chevron-left
-                                    </v-icon>
+                                <v-icon>
+                                    mdi-chevron-left
+                                </v-icon>
                             </v-btn>
                         </div>
                         <!-- GRID SETTINGS -->
-                        <v-fade-transition>
                             <div v-if="nodeSelectedIndex == undefined"  style="gap:5px; overflow:hidden;" 
                             class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
                                 <div id="start" ></div>
 
-                                <opt-container title="Grid Gap" >
-                                    <grid-gap @change="applyGridGap" :gap="gridGap" class="marginright025" />
+                                <opt-container
+                                    :highlighted="highlighted_option" 
+                                    title="Grid Gap" >
+                                    <grid-gap @change="applyGridGap, highlighted_option = 'Grid Gap'" :gap="gridGap" class="marginright025" />
                                 </opt-container>
 
-                                <opt-container title="Grid Columns" >
-                                    <div v-ripple class="borderRad4 paneBorder ribbon-item" >
+                                <opt-container :highlighted="highlighted_option" title="Grid Columns" >
+                                    <div @click="highlighted_option = 'Grid Columns'" v-ripple class="borderRad4 paneBorder ribbon-item" >
                                         <dropDown
                                             class="padleft025 padright025"
                                             @command="(cmd) => {handleRibbonContainerCmd('grid-columns',cmd)}"
@@ -62,49 +70,47 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container  title="Column Size" >
-                                    <div v-ripple @click="openColumnEditor" 
+                                <opt-container :highlighted="highlighted_option"  title="Column Size" >
+                                    <div v-ripple @click="openColumnEditor(), highlighted_option = 'Column Size'" 
                                     style="white-space: nowrap;"
                                     class="caption paneBorder padleft025 padright025 borderRad4 ribbon-item" >
                                         <code>{{gridColumns.join(' ')}} - ({{gridColumns.length}})</code>
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Grid Container Custom CSS" >
+                                <opt-container :highlighted="highlighted_option" title="Grid Container Custom CSS" >
                                     <div
                                     v-ripple
-                                    @click="handleRibbonContainerCmd('grid-container-custom-css')"
+                                    @click="handleRibbonContainerCmd('grid-container-custom-css'), highlighted_option = 'Grid Container Custom CSS'"
                                     class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
                                         <v-icon small >mdi-language-css3</v-icon>
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Tiles Global Style" >
+                                <opt-container :highlighted="highlighted_option" title="Tiles Global Style" >
                                     <div 
                                     v-ripple
-                                    @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                    @click="handleRibbonContainerCmd('grid-tile-custom-css'), highlighted_option = 'Tiles Global Style'"
                                     class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
                                         <v-icon small >mdi-language-css3</v-icon>
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Globaly Position Items" >
-                                    <div class="borderRad4 padleft025 padright025" >
+                                <opt-container :highlighted="highlighted_option" title="Globaly Position Items" >
+                                    <div @click="highlighted_option = 'Globaly Position Items'" class="borderRad4 padleft025 padright025" >
                                         <container-justify-items @change="containerJustifyItems" />
                                     </div>
                                 </opt-container>
                                 
                                 <div id="end" ></div>
                             </div>
-                        </v-fade-transition>
                         <!-- INDIVIDUAL SETTINGS -->
-                        <v-fade-transition>
                             <div v-if="nodeSelectedIndex != undefined" style="gap:5px; overflow:hidden;" 
                             class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth"
                             >
                                 <div id="start" ></div>
 
-                                <opt-container title="Position" >
+                                <opt-container :highlighted="highlighted_option" title="Position" >
                                     C:
                                     <div @click="move('top',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-arrow-up-thick</v-icon>
@@ -123,7 +129,7 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Horizontal Span" >
+                                <opt-container :highlighted="highlighted_option" title="Horizontal Span" >
                                     <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
@@ -132,7 +138,7 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Vertical Span" >
+                                <opt-container :highlighted="highlighted_option" title="Vertical Span" >
                                     <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
@@ -141,13 +147,13 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Tile View" >
+                                <opt-container :highlighted="highlighted_option" title="Tile View" >
                                     <div @click="showTileViewModal" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-cog</v-icon>
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Tile Inline Style" >
+                                <opt-container :highlighted="highlighted_option" title="Tile Inline Style" >
                                     <div
                                     v-ripple
                                     @click="handleRibbonContainerCmd('grid-tile-custom-css')"
@@ -156,7 +162,7 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Tile CSS Classes" >
+                                <opt-container :highlighted="highlighted_option" title="Tile CSS Classes" >
                                     <div
                                     v-ripple
                                     @click="handleRibbonContainerCmd('grid-tile-custom-css')"
@@ -165,7 +171,7 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Z-Index" >
+                                <opt-container :highlighted="highlighted_option" title="Z-Index" >
                                     <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
                                         1
                                     </div>
@@ -177,17 +183,23 @@
                                     </div>
                                 </opt-container>
 
-                                <opt-container title="Align Items" >
+                                <opt-container :highlighted="highlighted_option" title="Align Items" >
                                     <div v-ripple class="borderRad4 padleft025 padright025" >
                                         <container-justify-items @change="containerJustifyItems" />
                                     </div>
                                 </opt-container>
 
-                                <div id="end" ></div>
+                                <div id="end" class="borderred" ></div>
                             </div>
-                        </v-fade-transition>
-                        <div style="z-index:3" class="margintop025" >
-                            <v-btn @click="ribbonScrollTo('end')" fab x-small text >
+                        <div style="z-index:3" class="margintop025 relative flex flexcenter" >
+                            <div 
+                            style="left: 30px;
+                            min-height: 45px;
+                            -webkit-box-shadow: -28px  1px 15px 19px #EEEEEE; 
+                            box-shadow: -28px  1px 15px 19px #EEEEEE;"
+                            class="absolute fullheight-percent" >
+                            </div>
+                            <v-btn @click="ribbonScrollTo('right')" fab x-small text >
                                 <v-icon>
                                     mdi-chevron-right
                                 </v-icon>
@@ -252,7 +264,11 @@
                             </div>
                             <div class="fullheight-percent fullwidth"  >
                                 <!-- view content here -->
-
+                                <tile-view
+                                v-if="item.view"
+                                :view="item.view"
+                                :viewData="item.viewData"
+                                ></tile-view>
                             </div>
                         </div>
                     </div>
@@ -431,13 +447,13 @@ import columnEditor from './column-editor.vue'
 import tileSettingPosition from './tile-s-position.vue'
 import tileSettingSize from './tile-s-size.vue'
 import tileSettingZIndex from './tile-s-z-index.vue'
-import tileView from './tiles-s-view.vue'
 import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
 import optContainer from './opt-container.vue'
 
 import uHeader from './header/layout.vue'
+import tileView from './tile-view.vue'
 
 export default {
     name: 'unitile',
@@ -463,6 +479,28 @@ export default {
         currentUid: undefined,
         useGridGuides: false,
         selectedNodesBySelectionTool: [],
+        highlighted_option: undefined,
+        highlighted_option_index: undefined,
+        ribbons: [
+            [
+                'Grid Gap',
+                'Grid Columns',
+                'Column Size',
+                'Grid Container Custom CSS',
+                'Tiles Global Style',
+                'Globaly Position Items'
+            ],
+            [
+                'Position',
+                'Horizontal Span',
+                'Vertical Span',
+                'Tile View',
+                'Tile Inline Style',
+                'Tile CSS Classes',
+                'Z-Index',
+                'Align Items'
+            ]
+        ],
         apps: {
             all: [],
             app_selected: undefined,
@@ -493,6 +531,13 @@ export default {
         },
         'apps.instance_selected'(title) {
             this.selectAppInstance(title)
+        },
+        nodeSelectedIndex(v) {
+            if(v) {
+                console.log('tile selected')
+            } else {
+                console.log('nope')
+            }
         }
     },
     methods: {
@@ -652,7 +697,8 @@ export default {
                     customStyle: this.tiles[tileIndex].customStyle,
                     customClasses: [],
                     isAClone: this.tiles[tileIndex].id,
-                    view: this.tiles[tileIndex].view
+                    view: this.tiles[tileIndex].view,
+                    viewData: this.tiles[tileIndex].viewData
                 })
             } else {
                 this.tiles.push({
@@ -666,6 +712,7 @@ export default {
                     customClasses: [],
                     customStyle: {},
                     view: undefined,
+                    viewData: undefined,
                     align: 'stretch'
                 })
             }
@@ -833,15 +880,50 @@ export default {
             }
         },
         ribbonScrollTo(e) {
-            if(e == 'end') {
-                document.getElementById('end').scrollIntoView({
-                    behavior: 'smooth'
-                });
+            let opt = !this.nodeSelectedIndex ? 0 : 1
+            let highlighted_option = (this.ribbons[opt]).indexOf(this.highlighted_option)
+            this.highlighted_option_index = highlighted_option
+
+            if(e == 'right') {
+                if(this.highlighted_option) {
+                    this.highlighted_option_index ++
+                    this.highlighted_option = this.ribbons[opt][this.highlighted_option_index]
+                    const el =  document.getElementById(this.highlighted_option)
+                    if(el) {
+                        el.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        this.highlighted_option = this.ribbons[opt][0]
+                        document.getElementById(this.highlighted_option).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        webpod.dash.bottomAlert('Maximum scroll to right reached!')
+                    }
+                } else {
+                    this.highlighted_option = this.ribbons[opt][0]
+                }
             } else {
-                document.getElementById('start').scrollIntoView({
-                    behavior: 'smooth'
-                });
+                if(this.highlighted_option) {
+                    this.highlighted_option_index --
+                    this.highlighted_option = this.ribbons[opt][this.highlighted_option_index]
+                    const el =  document.getElementById(this.highlighted_option)
+                    if(el) {
+                        el.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    } else {
+                        this.highlighted_option = this.ribbons[opt][this.ribbons[opt].length - 1]
+                        document.getElementById(this.highlighted_option).scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                        webpod.dash.bottomAlert('Maximum scroll to left reached!')
+                    }
+                } else {
+                    this.highlighted_option = this.ribbons[opt][this.ribbons[opt].length - 1]
+                }
             }
+           
         },
         headerTitleClick() {
             webpod.dash.modal.show({
@@ -870,17 +952,16 @@ export default {
         showTileViewModal() {
             const tileModal = webpod.dash.modal.show({
                 modalTitle: 'Tile View',
-                viewTrigger: (v) => this.$set(this.modals,'tile_view', v ? 'show' : 'hide'),
-            })
-
-            tileModal.on('data', (data) => {
-                console.log('modal data', data)
+                viewTrigger: (v) => {
+                    this.$set(this.modals,'tile_view', v ? 'show' : 'hide')
+                },
             })
         },
         applyTileView() {
             webpod.dash.modal.hide()
             // locate the tile and update its view and viewData
             console.log('apply tile view', this.tiles[this.nodeSelectedIndex])
+            this.tiles[this.nodeSelectedIndex].view = this.apps.app_selected
         },
         selectApp(appName) {
             webpod.server.apps.fetchAppInstances({app: appName}, (data) => {
@@ -963,8 +1044,6 @@ export default {
 
         // get all installed apps
         this.apps.all = ['Unitile','Form builder','Simple Slider']
-
-
     },
     beforeDestroy() {
         webpod.dash.cog.hide()
