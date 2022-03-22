@@ -156,7 +156,7 @@
                                 <opt-container :highlighted="highlighted_option" title="Tile Inline Style" >
                                     <div
                                     v-ripple
-                                    @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                    @click="handleRibbonContainerCmd('tile-custom-css')"
                                     class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
                                         <v-icon small >mdi-language-css3</v-icon>
                                     </div>
@@ -267,7 +267,7 @@
                                 <tile-view
                                 v-if="item.view"
                                 :view="item.view"
-                                :viewData="item.viewData"
+                                :myData="item.viewData"
                                 ></tile-view>
                             </div>
                         </div>
@@ -430,6 +430,21 @@
                 </v-expand-transition>
             </div>
         </wp-modal>
+        <!-- tile inline style modal -->
+        <wp-modal v-if="modals.tile_css" >
+            <custom-css
+            ref="tile_inline_style"
+            :cssObject="tile_inline_style"
+            :el_id="'#tile-inline-css'" 
+            style="min-width:400px;" >
+            </custom-css>
+        </wp-modal>
+        <!-- tile css classes modal -->
+        <wp-modal v-if="modals.tile_classes" ></wp-modal>
+        <!-- align items modal -->
+        <wp-modal v-if="modals.tile_align_item" >
+
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -521,7 +536,11 @@ export default {
             column_editor: 'hide',
             grid_settings: 'hide',
             rename_title: 'hide',
-            tile_view: 'hide'
+            tile_view: 'hide',
+            tile_css: 'hide',
+            tile_classes: 'hide',
+            tile_z_index: 'hide',
+            tile_align_item: 'hide'
         }
     }),
     watch: {
@@ -531,13 +550,6 @@ export default {
         },
         'apps.instance_selected'(title) {
             this.selectAppInstance(title)
-        },
-        nodeSelectedIndex(v) {
-            if(v) {
-                console.log('tile selected')
-            } else {
-                console.log('nope')
-            }
         }
     },
     methods: {
@@ -869,6 +881,24 @@ export default {
 
                 modal.on('show', () => {
                     this.$refs.tiles_global_style.onError = (err) => {
+                        modal.emit('error', err)
+                    }
+                })
+            }
+
+            if(cmd === 'tile-custom-css') {
+                const modal = webpod.dash.modal.show({
+                    modalTitle: 'Tile Custom Style',
+                    viewTrigger: (v) => this.$set(this.modals,'tile_css',v ? 'show' : 'hide')
+                })
+
+                modal.on('data', (data) => {
+                    this.tiles[this.nodeSelectedIndex].customStyle = data
+                    this.addSessionEntry()
+                })
+
+                modal.on('show', () => {
+                    this.$refs.tile_inline_style.onError = (err) => {
                         modal.emit('error', err)
                     }
                 })
