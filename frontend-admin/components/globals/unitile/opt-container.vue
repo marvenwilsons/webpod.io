@@ -1,5 +1,11 @@
 <template>
-    <v-sheet style="height:40px; border: 1px solid #BDBDBD;" elevation="0" class="pad050 borderRad4" >
+    <v-sheet :id="title" 
+        :style="{
+            height:'40px', 
+            border: highlighted == title ? '1px solid #448AFF' : '1px solid #CFD8DC', 
+            background: highlighted == title ? '#E3F2FD' : ''
+        }" 
+        elevation="0" class="pad050 borderRad4" >
         <div class="flex flexcenter fullheight-percent" >
             <div 
             style="white-space: nowrap; font-weight: 400;" 
@@ -15,6 +21,17 @@
 </template>
 <script>
 export default {
-    props: ['title']
+    props: ['title','highlighted'],
+    data: () => ({
+        highlighted_title: undefined,
+    }),
+    methods: {
+        highlightOpt(title) {
+            this.highlighted_title = title
+        },
+        optClick(title) {
+            this.highlightOpt(title)
+        }
+    }
 }
 </script>
