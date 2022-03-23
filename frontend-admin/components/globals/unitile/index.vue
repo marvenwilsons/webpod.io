@@ -173,19 +173,19 @@
 
                                 <opt-container :highlighted="highlighted_option" title="Z-Index" >
                                     <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
-                                        {{tiles[nodeSelectedIndex].customStyle.zIndex || 0}}
+                                        {{tiles[nodeSelectedIndex].zIndex || 0}}
                                     </div>
-                                    <div @click="changeTileZindex('minus')" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="handleRibbonContainerCmd('tile-z-index','minus')" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
-                                    <div @click="changeTileZindex('add')"  v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="handleRibbonContainerCmd('tile-z-index','add')"  v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-plus-thick</v-icon>
                                     </div>
                                 </opt-container>
 
-                                <opt-container :highlighted="highlighted_option" title="Align Items" >
+                                <opt-container :highlighted="highlighted_option" title="Align Self" >
                                     <div v-ripple class="borderRad4 padleft025 padright025" >
-                                        <container-justify-items @change="containerJustifyItems" />
+                                        <container-justify-items @change="(v) => handleRibbonContainerCmd('tile-align-self',v)" />
                                     </div>
                                 </opt-container>
 
@@ -204,14 +204,31 @@
                                     mdi-chevron-right
                                 </v-icon>
                             </v-btn>
+                            <dropDown
+                                v-if="nodeSelectedIndex != undefined"
+                                :options="ribbons[1].map(e => {return {title: e}})"
+                                @command="(v) => jumpToRibbon(v)"
+                            >
+                                <v-btn fab x-small text >
+                                    <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </dropDown>
+                            <dropDown
+                                v-if="nodeSelectedIndex == undefined"
+                                :options="ribbons[0].map(e => {return {title: e}})"
+                                @command="(v) => jumpToRibbon(v)"
+                            >
+                                <v-btn fab x-small text >
+                                    <v-icon>mdi-dots-vertical</v-icon>
+                                </v-btn>
+                            </dropDown>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- tile presentation -->
             <section id="tile-presentation" style="overflow:auto; " class="flex1 grey lighten-5" >
-                <v-fade-transition>
-                    <div
+                <div
                     v-if="ready"
                     class="wp-dash-grid relative " 
                     @keydown="keydown"
@@ -244,7 +261,9 @@
                         'grid-column-start':item.colStart,
                         'grid-column-end':item.colEnd,
                         'overflow':'auto',
+                        'min-width': '50px',
                         justifySelf: item.align,
+                        zIndex: item.zIndex,
                         background:'white',
                         ...tiles_global_style,
                         ...item.customStyle,
@@ -277,7 +296,6 @@
                         </div>
                     </div>
                 </div>
-                </v-fade-transition>
             </section>
         </div>
         <wp-modal v-if="modals.grid_settings == 'show'" class=" borderred">
@@ -393,7 +411,7 @@
         <!-- rename title -->
         <wp-modal v-if="modals.rename_title == 'show'"   >
             <div >
-                <v-text-field v-model="projectTitle" ></v-text-field>
+                <v-text-field v-model="project_title" ></v-text-field>
                 <div @click="validateAndRenameProjectTitle" class="flex flexend" >
                     <v-btn>
                         Save
@@ -485,7 +503,7 @@ export default {
     customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks'],
     data: () => ({
-        projectTitle: undefined,
+        project_title: undefined,
         tiles: [],
         maxRows: 4,
         maxCol: 4,
@@ -522,7 +540,7 @@ export default {
                 'Tile Inline Style',
                 'Tile CSS Classes',
                 'Z-Index',
-                'Align Items'
+                'Align Self'
             ]
         ],
         apps: {
@@ -724,7 +742,7 @@ export default {
                 this.nodeSelectedIndex = undefined
             }
         },
-        AddNewTile(isClone,tileIndex) {
+        addNewTile(isClone,tileIndex) {
             if(isClone == true) {
                 this.tiles.push({
                     name: undefined, 
@@ -738,7 +756,9 @@ export default {
                     customClasses: [],
                     isAClone: this.tiles[tileIndex].id,
                     view: this.tiles[tileIndex].view,
-                    viewData: this.tiles[tileIndex].viewData
+                    viewData: this.tiles[tileIndex].viewData,
+                    align: 'stretch',
+                    zIndex: 1,
                 })
             } else {
                 this.tiles.push({
@@ -753,7 +773,8 @@ export default {
                     customStyle: {},
                     view: undefined,
                     viewData: undefined,
-                    align: 'stretch'
+                    align: 'stretch',
+                    zIndex: 1,
                 })
             }
             
@@ -764,6 +785,7 @@ export default {
         },
         saveLayout() {
             const data = {
+                title: this.project_title,
                 tiles: this.tiles,
                 gridGap: this.gridGap,
                 maxCol: this.maxCol,
@@ -773,7 +795,7 @@ export default {
                 gridContainerJustify: this.gridContainerJustify
             }
             // this.hooks.onSaveLayout(data)
-            console.log(data)
+            console.log(JSON.stringify(data))
             webpod.server.apps.update(data, (response) => {
                 if(response.message == 'success') {
                     // saving is successfull
@@ -884,8 +906,6 @@ export default {
             })
         },
         handleRibbonContainerCmd(cmd,val) {
-            console.log(cmd)
-
             if(cmd === 'grid-container-custom-css') {
                 const modal = webpod.dash.modal.show({
                     modalTitle: 'GRID CONTAINER INLINE STYLE',
@@ -955,9 +975,35 @@ export default {
                     }
                 })
             }
+
+            if(cmd == 'tile-align-self') {
+                this.tiles[this.nodeSelectedIndex].align = val
+            }
+
+            if(cmd == 'tile-z-index') {
+                 const z = parseInt(this.tiles[this.nodeSelectedIndex].zIndex)
+                if(val == 'add') {
+                    console.log('add')
+                    if(typeof z == 'number') {
+                        this.tiles[this.nodeSelectedIndex].zIndex = z + 1
+                    } else {
+                        this.tiles[this.nodeSelectedIndex].zIndex = 0
+                    }
+                } else if(val == 'minus') {
+                    if(typeof z == 'number') {
+                        this.tiles[this.nodeSelectedIndex].zIndex = z - 1
+                    } else {
+                        this.tiles[this.nodeSelectedIndex].zIndex = 0
+                    }
+                }
+
+                setTimeout(() => {
+                    this.addSessionEntry()
+                },0)
+            }
         },
         ribbonScrollTo(e) {
-            let opt = !this.nodeSelectedIndex ? 0 : 1
+            let opt = this.nodeSelectedIndex == undefined ? 0 : 1
             let highlighted_option = (this.ribbons[opt]).indexOf(this.highlighted_option)
             this.highlighted_option_index = highlighted_option
 
@@ -1002,6 +1048,12 @@ export default {
             }
            
         },
+        jumpToRibbon(v) {
+            this.highlighted_option = v
+            document.getElementById(this.highlighted_option).scrollIntoView({
+                behavior: 'smooth'
+            });
+        },
         headerTitleClick() {
             webpod.dash.modal.show({
                 modalTitle: 'Rename Title',
@@ -1010,7 +1062,7 @@ export default {
         },
         validateAndRenameProjectTitle() {
             //validate and confirm project title renaming
-            console.log(this.projectTitle)
+            console.log(this.project_title)
         },
         handleHeaderCommand(command) {
             if(command == 'Redo') {
@@ -1019,8 +1071,8 @@ export default {
             if(command == 'Undo') {
                 this.Undo()
             }
-            if(command == 'AddNewTile') {
-                this.AddNewTile()
+            if(command == 'addNewTile') {
+                this.addNewTile()
             }
             if(command == 'SaveLayout') {
                 this.saveLayout()
@@ -1055,27 +1107,7 @@ export default {
                 app: this.apps.app_selected,
                 instance_selected: title
             })
-        },
-        changeTileZindex(mode) {
-            const z = parseInt(this.tiles[this.nodeSelectedIndex].customStyle.zIndex)
-            if(mode == 'add') {
-                if(z) {
-                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = z + 1
-                } else {
-                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = 0
-                }
-            } else if(mode == 'minus') {
-                if(z) {
-                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = z - 1
-                } else {
-                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = 0
-                }
-            }
-
-            setTimeout(() => {
-                this.addSessionEntry()
-            },0)
-        } 
+        }
     },
     mounted() {
         // bottom alert
@@ -1112,6 +1144,7 @@ export default {
         // for undo and redo manager
         this.setSessionTrackData(() => {
             return {
+                title: this.project_title,
                 tiles: this.tiles,
                 gridGap: this.gridGap,
                 maxCol: this.maxCol,
@@ -1123,9 +1156,10 @@ export default {
         })
 
         // update the specified properties when undo or redo is triggered
-        this.session.onUndoRedo = ({tiles, gridGap, maxCol, gridColumns, gridContainerStyle, tiles_global_style, gridContainerJustify}) => {
+        this.session.onUndoRedo = ({tiles, gridGap, maxCol, title, gridColumns, gridContainerStyle, tiles_global_style, gridContainerJustify}) => {
             // data contains the tracked content
             this.changeGridColumn(maxCol)
+            this.project_title = title
             this.tiles = tiles
             this.gridGap = gridGap
             this.gridContainerStyle = gridContainerStyle
@@ -1166,7 +1200,7 @@ export default {
         webpod.session.allowOverflow = false
 
         if(this.myData) {
-            this.projectTitle = this.myData.title
+            this.project_title = this.myData.title
 
             if(Object.keys(this.config).includes('editable')) {
                 this.editMode = this.config.editable

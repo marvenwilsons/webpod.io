@@ -41,7 +41,7 @@
                     icon 
                     plain 
                     small 
-                    @click="HeaderCommand('AddNewTile')" 
+                    @click="HeaderCommand('addNewTile')" 
                 >
                     <v-icon>
                         mdi-plus
