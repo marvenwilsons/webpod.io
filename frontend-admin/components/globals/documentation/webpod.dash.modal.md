@@ -58,6 +58,7 @@ export default {
             modalInstance.emit('stop-playing')
 
             // btn-click event usage
+            modalInstance.emit('btn-click')
             modalInstance.on('btn-click', (btn) => {
                 btn.disabled(true)
                 btn.progress(true)
