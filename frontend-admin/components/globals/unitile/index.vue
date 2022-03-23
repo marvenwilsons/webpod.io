@@ -194,8 +194,8 @@
 
                                 <div id="end" class="borderred" ></div>
                         </div>
-                        <!-- MOVE MULTIPLE -->
-                        <div v-if="select_multiple_mode" >
+                        <!-- MULTIPLE -->
+                        <div class="flex" v-if="select_multiple_mode" >
                             <opt-container :highlighted="highlighted_option" title="Position" >
                                 C:
                                 <div @click="move('top',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
@@ -212,6 +212,22 @@
                                 </div>
                                 <div @click="move('right',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-arrow-right-thick</v-icon>
+                                </div>
+                            </opt-container>
+                            <opt-container :highlighted="highlighted_option" title="Horizontal Span" >
+                                <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-minus-thick</v-icon>
+                                </div>
+                                <div @click="width('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-plus-thick</v-icon>
+                                </div>
+                            </opt-container>
+                            <opt-container :highlighted="highlighted_option" title="Vertical Span" >
+                                <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-minus-thick</v-icon>
+                                </div>
+                                <div @click="height('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-plus-thick</v-icon>
                                 </div>
                             </opt-container>
                         </div>
@@ -1169,11 +1185,11 @@ export default {
             if(command == 'SaveLayout') {
                 this.saveLayout()
             }
-            if(command == 'move-multiple-on') {
+            if(command == 'multiple-select-on') {
                 console.log('multiple on')
                 this.select_multiple_mode = true
             }
-            if(command == 'move-multiple-off') {
+            if(command == 'multiple-select-off') {
                 console.log('multiple off')
                 this.select_multiple_mode = false
             }
