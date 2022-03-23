@@ -19,7 +19,7 @@
                     :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
                     class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
                     >
-                        <div style="right:0px; z-index:3" class="margintop025 relative" >
+                        <div v-if="!select_multiple_mode" style="right:0px; z-index:3" class="margintop025 relative" >
                             <div 
                             style="right: 50px;
                             min-height: 45px;
@@ -34,8 +34,11 @@
                             </v-btn>
                         </div>
                         <!-- GRID SETTINGS -->
-                            <div v-if="nodeSelectedIndex == undefined"  style="gap:5px; overflow:hidden;" 
-                            class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth" >
+                        <div 
+                            v-if="nodeSelectedIndex == undefined && !select_multiple_mode"  
+                            style="gap:5px; overflow:hidden;" 
+                            class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth"
+                            >
                                 <div id="start" ></div>
 
                                 <opt-container
@@ -103,9 +106,9 @@
                                 </opt-container>
                                 
                                 <div id="end" ></div>
-                            </div>
+                        </div>
                         <!-- INDIVIDUAL SETTINGS -->
-                            <div v-if="nodeSelectedIndex != undefined" style="gap:5px; overflow:hidden;" 
+                        <div v-if="nodeSelectedIndex != undefined && !select_multiple_mode" style="gap:5px; overflow:hidden;" 
                             class="marginleft050 marginright050 flex spacebetween borderRad4 fullwidth"
                             >
                                 <div id="start" ></div>
@@ -190,8 +193,30 @@
                                 </opt-container>
 
                                 <div id="end" class="borderred" ></div>
-                            </div>
-                        <div style="z-index:3" class="margintop025 relative flex flexcenter" >
+                        </div>
+                        <!-- MOVE MULTIPLE -->
+                        <div v-if="select_multiple_mode" >
+                            <opt-container :highlighted="highlighted_option" title="Position" >
+                                C:
+                                <div @click="move('top',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-arrow-up-thick</v-icon>
+                                </div>
+                                <div @click="move('bottom',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-arrow-down-thick</v-icon>
+                                </div>
+                                <span class="marginleft050" >
+                                    R:
+                                </span>
+                                <div @click="move('left',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-arrow-left-thick</v-icon>
+                                </div>
+                                <div @click="move('right',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <v-icon small >mdi-arrow-right-thick</v-icon>
+                                </div>
+                            </opt-container>
+                        </div>
+                        <!-- SCROLL TO RIGHT -->
+                        <div v-if="!select_multiple_mode" style="z-index:3" class="margintop025 relative flex flexcenter" >
                             <div 
                             style="left: 30px;
                             min-height: 45px;
@@ -272,11 +297,11 @@
                         <div class="relative fullheight-percent" >
                             <!-- dropDown component is handled by options.js -->
                             <div 
-                            v-if="editMode && controlls.selection_tool === 'off'" 
+                            v-if="editMode && !select_multiple_mode" 
                             style="right:0;background: #f5f5f5;" 
                             class="flex flexcenter spacebetween pad025 tile-btn absolute" 
                             >
-                                <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
+                                <input class="marginleft025" @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox">
                                 <dropDown
                                     :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
                                     :options="options"
@@ -284,6 +309,14 @@
                                     :disabledOptions="disabledOptions"
                                     @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
                                 />
+                            </div>
+                            <!-- multiple select mode -->
+                            <div 
+                            style="right:0;background: #f5f5f5;" 
+                            class="flex flexcenter spacebetween pad025 tile-btn absolute"  
+                            v-if="select_multiple_mode" 
+                            >
+                                <input @change="(ev) => {registerNodeForMultipleMove(ev,item_index)}" type="checkbox">
                             </div>
                             <div :class="[...item.customClasses,'fullheight-percent', 'fullwidth']"  >
                                 <!-- view content here -->
@@ -518,6 +551,8 @@ export default {
         minTileHeight: '50px',
         ready: true,
         editMode: true,
+        select_multiple_mode: false,
+        selected_multiple_nodes: [],
         currentUid: undefined,
         useGridGuides: false,
         selectedNodesBySelectionTool: [],
@@ -618,38 +653,73 @@ export default {
                 }
             }
         },  
-        move(moveDirection,id,index) {
+        move(moveDirection,multiple,index) {
 
             if(moveDirection == 'right') {
-                if(this.tiles[index].colEnd != this.maxCol + 1) {
-                    this.tiles[index].colStart = this.tiles[index].colStart + 1
-                    this.tiles[index].colEnd = this.tiles[index].colEnd + 1
+                const moveRight = (i) => {
+                    if(this.tiles[i].colEnd != this.maxCol + 1) {
+                        this.tiles[i].colStart = this.tiles[i].colStart + 1
+                        this.tiles[i].colEnd = this.tiles[i].colEnd + 1
+                    }
+                }
+                if(multiple) {
+                    this.selected_multiple_nodes.map(index => {
+                        moveRight(index)
+                    })
+                } else {
+                    moveRight(index)
                 }
             }
             if(moveDirection == 'left') {
-                if(this.tiles[index].colStart + 1 != 2 ) {
-                    this.tiles[index].colStart = this.tiles[index].colStart - 1
-                    this.tiles[index].colEnd = this.tiles[index].colEnd - 1
+                const moveLeft = (i) => {
+                    if(this.tiles[i].colStart + 1 != 2 ) {
+                        this.tiles[i].colStart = this.tiles[i].colStart - 1
+                        this.tiles[i].colEnd = this.tiles[i].colEnd - 1
+                    }
+                }
+                if(multiple) {
+                    this.selected_multiple_nodes.map(index => {
+                        moveLeft(index)
+                    })
+                } else {
+                    moveLeft(index)
                 }
             }
             if(moveDirection == 'top') {
-                if(this.tiles[index].rowStart + 1 != 2 ) {
-                    this.tiles[index].rowStart = this.tiles[index].rowStart - 1
-                    this.tiles[index].rowEnd = this.tiles[index].rowEnd - 1
-                    this.removeUnwantedRows()
-                }   
+                const moveTop = (i) => {
+                    if(this.tiles[i].rowStart + 1 != 2 ) {
+                        this.tiles[i].rowStart = this.tiles[i].rowStart - 1
+                        this.tiles[i].rowEnd = this.tiles[i].rowEnd - 1
+                        this.removeUnwantedRows()
+                    } 
+                }
+                if(multiple) {
+                    this.selected_multiple_nodes.map(index => {
+                        moveTop(index)
+                    })
+                } else {
+                    moveTop(index)
+                }
             }
             if(moveDirection == 'bottom') {
-                this.tiles[index].rowStart = this.tiles[index].rowStart + 1
+                const moveBottom = (i) => {
+                    this.tiles[i].rowStart = this.tiles[i].rowStart + 1
 
-                const newRowEndVal = this.tiles[index].rowEnd + 1
-                this.tiles[index].rowEnd = newRowEndVal
+                    const newRowEndVal = this.tiles[i].rowEnd + 1
+                    this.tiles[i].rowEnd = newRowEndVal
 
-                this.tiles[index].rowEnd = newRowEndVal
-                if(newRowEndVal - 1 == this.maxRows) {
-                    this.maxRows = this.maxRows + 1
+                    this.tiles[i].rowEnd = newRowEndVal
+                    if(newRowEndVal - 1 == this.maxRows) {
+                        this.maxRows = this.maxRows + 1
+                    }
                 }
-
+                if(multiple) {
+                    this.selected_multiple_nodes.map(index => {
+                        moveBottom(index)
+                    })
+                } else {
+                    moveBottom(index)
+                }
             }
             setTimeout(() => {
                 this.addSessionEntry()
@@ -1100,6 +1170,14 @@ export default {
             if(command == 'SaveLayout') {
                 this.saveLayout()
             }
+            if(command == 'move-multiple-on') {
+                console.log('multiple on')
+                this.select_multiple_mode = true
+            }
+            if(command == 'move-multiple-off') {
+                console.log('multiple off')
+                this.select_multiple_mode = false
+            }
         },
         showTileViewModal() {
             const tileModal = webpod.dash.modal.show({
@@ -1130,6 +1208,11 @@ export default {
                 app: this.apps.app_selected,
                 instance_selected: title
             })
+        },
+        registerNodeForMultipleMove(ev,n_index) {
+            if(ev.target.checked) {
+                this.selected_multiple_nodes.push(n_index)
+            }
         }
     },
     mounted() {
