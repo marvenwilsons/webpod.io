@@ -165,7 +165,7 @@
                                 <opt-container :highlighted="highlighted_option" title="Tile CSS Classes" >
                                     <div
                                     v-ripple
-                                    @click="handleRibbonContainerCmd('grid-tile-custom-css')"
+                                    @click="handleRibbonContainerCmd('tile-classes')"
                                     class="borderRad4 paneBorder padleft025 padright025 ribbon-item" >
                                         <v-icon small >mdi-language-css3</v-icon>
                                     </div>
@@ -236,7 +236,7 @@
                     <div v-for="(item,item_index) in tiles" 
                     :key="item.id" 
                     :id="`${item.id}-${item_index}`"
-                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '', ...item.customClasses]" 
+                    :class="[...item.customClasses,'selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '']" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
@@ -431,7 +431,7 @@
             </div>
         </wp-modal>
         <!-- tile inline style modal -->
-        <wp-modal v-if="modals.tile_css" >
+        <wp-modal v-if="modals.tile_css == 'show'" >
             <custom-css
             ref="tile_inline_style"
             :cssObject="tile_inline_style"
@@ -440,9 +440,13 @@
             </custom-css>
         </wp-modal>
         <!-- tile css classes modal -->
-        <wp-modal v-if="modals.tile_classes" ></wp-modal>
+        <wp-modal v-if="modals.tile_classes == 'show'" >
+            <custom-classes
+            ref="tileCustomClassEditor"
+            />
+        </wp-modal>
         <!-- align items modal -->
-        <wp-modal v-if="modals.tile_align_item" >
+        <wp-modal v-if="modals.tile_align_item == 'show'" >
 
         </wp-modal>
     </main>
@@ -486,6 +490,7 @@ export default {
         gridContainerStyle: {},
         gridContainerJustify: 'stretch',
         tiles_global_style: {},
+        tile_inline_style: {},
         nodeSelectedIndex: undefined,
         minTileWidth: '50px',
         minTileHeight: '50px',
@@ -898,6 +903,7 @@ export default {
                 })
 
                 modal.on('show', () => {
+                    this.tile_inline_style = this.tiles[this.nodeSelectedIndex].customStyle
                     this.$refs.tile_inline_style.onError = (err) => {
                         modal.emit('error', err)
                     }
@@ -907,6 +913,24 @@ export default {
             if(cmd === 'grid-columns') {
                 this.changeGridColumn(val)
                 this.addSessionEntry()
+            }
+
+            if(cmd == 'tile-classes') {
+                const tileClassesModal = webpod.dash.modal.show({
+                    modalTitle: 'Tile Classes',
+                    viewTrigger: (v) => this.$set(this.modals,'tile_classes',v ? 'show' : 'hide')
+                })
+
+                tileClassesModal.on('show', () => {
+                    this.$refs.tileCustomClassEditor.setClasses(this.tiles[this.nodeSelectedIndex].customClasses)
+
+                    this.$refs.tileCustomClassEditor.onData = (classesArray) => {
+                        this.tiles[this.nodeSelectedIndex].customClasses = classesArray
+                        webpod.dash.bottomAlert('Successfully applied css classes!')
+                        this.addSessionEntry()
+                        webpod.dash.modal.hide()
+                    }
+                })
             }
         },
         ribbonScrollTo(e) {
@@ -924,10 +948,7 @@ export default {
                             behavior: 'smooth'
                         });
                     } else {
-                        this.highlighted_option = this.ribbons[opt][0]
-                        document.getElementById(this.highlighted_option).scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        
                         webpod.dash.bottomAlert('Maximum scroll to right reached!')
                     }
                 } else {
