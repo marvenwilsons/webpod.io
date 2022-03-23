@@ -173,12 +173,12 @@
 
                                 <opt-container :highlighted="highlighted_option" title="Z-Index" >
                                     <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
-                                        1
+                                        {{tiles[nodeSelectedIndex].customStyle.zIndex || 0}}
                                     </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="changeTileZindex('minus')" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-minus-thick</v-icon>
                                     </div>
-                                    <div v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="changeTileZindex('add')"  v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-plus-thick</v-icon>
                                     </div>
                                 </opt-container>
@@ -1055,7 +1055,27 @@ export default {
                 app: this.apps.app_selected,
                 instance_selected: title
             })
-        }
+        },
+        changeTileZindex(mode) {
+            const z = parseInt(this.tiles[this.nodeSelectedIndex].customStyle.zIndex)
+            if(mode == 'add') {
+                if(z) {
+                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = z + 1
+                } else {
+                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = 0
+                }
+            } else if(mode == 'minus') {
+                if(z) {
+                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = z - 1
+                } else {
+                    this.tiles[this.nodeSelectedIndex].customStyle.zIndex = 0
+                }
+            }
+
+            setTimeout(() => {
+                this.addSessionEntry()
+            },0)
+        } 
     },
     mounted() {
         // bottom alert
