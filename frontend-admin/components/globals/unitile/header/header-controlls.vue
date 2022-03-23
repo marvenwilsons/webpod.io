@@ -80,7 +80,7 @@
                 <v-btn
                     :ripple="false"
                     @click="toggleMoveMultiple"
-                    :style="{color: move_multiple_mode ? '#00E676' : 'white'}" 
+                    :style="{color: multiple_select_mode ? '#00E676' : 'white'}" 
                     class="pointer flex flexccenter pad025" 
                     plain 
                     icon
@@ -137,18 +137,18 @@ export default {
         selection_tool: 'off',
 
         // move multiple
-        move_multiple_mode: false
+        multiple_select_mode: false
     }),
     methods: {
         HeaderCommand(command) {
             this.$emit('HeaderCommand', command)
         },
         toggleMoveMultiple() {
-            this.move_multiple_mode = !this.move_multiple_mode
-            if(this.move_multiple_mode) {
-                this.$emit('HeaderCommand', 'move-multiple-on')
+            this.multiple_select_mode = !this.multiple_select_mode
+            if(this.multiple_select_mode) {
+                this.$emit('HeaderCommand', 'multiple-select-on')
             } else {
-                this.$emit('HeaderCommand', 'move-multiple-off')
+                this.$emit('HeaderCommand', 'multiple-select-off')
             }
         }
     }
