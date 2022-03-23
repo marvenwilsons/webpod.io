@@ -500,10 +500,6 @@
             ref="tileCustomClassEditor"
             />
         </wp-modal>
-        <!-- align items modal -->
-        <wp-modal v-if="modals.tile_align_item == 'show'" >
-
-        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -1158,6 +1154,9 @@ export default {
             webpod.dash.modal.setData(this.project_title)
         },
         handleHeaderCommand(command) {
+            if(command == 'Refresh') {
+                this.refresh()
+            }
             if(command == 'Redo') {
                 this.Redo()
             }
