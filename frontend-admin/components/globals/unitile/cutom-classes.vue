@@ -1,15 +1,13 @@
 <template>
     <div class="flex flexcol" >
-        <span class="overline" > CUSTOM CSS CLASSES </span> <br>
-        <span class="marginbottom caption marginbottom125" >CSS classes to be applied only for this selected tile</span>
         <span class="marginbottom caption marginbottom125" >Separate each classes by New Line or by pressing the Enter Key</span>
         <div>
-            <codeEditor
-                :readOnly="false"
-                :lang="'text'"
-                ref="co"
-                :code="code"
-            ></codeEditor>
+            <textarea 
+                style="height:200px;background: lightgray;" 
+                spellcheck="false" 
+                class="paneBorder fullwidth pad025" 
+                v-model="code"
+            />
         </div>
         <div class="flex flexend margintop025" >
             <v-btn :loading="isLoading" plain tile @click="apply" class="caption pad025 paneBorder flat_action" >
@@ -26,7 +24,8 @@
 export default {
     data: () => ({
         code: '',
-        isLoading: false
+        isLoading: false,
+        onData: () => {}
     }),
     methods: {
         apply() {
@@ -35,37 +34,16 @@ export default {
                 this.isLoading = false
             },500)
 
-            const classesString = this.$refs.co.getCode()
+            const classesString = this.code
             const classesArray = classesString.split('\n').filter(e => e != "")
-            const parent = this.$parent
 
-            if(classesArray.length == 0) {
-                parent.tiles[parent.nodeSelectedIndex].customClasses = []
-            } else {
-                let selectedTileCustomClassArray = parent.tiles[parent.nodeSelectedIndex].customClasses
-
-                if(selectedTileCustomClassArray.length > classesArray.length) {
-                    // it means the user deleted some classes
-                    parent.tiles[parent.nodeSelectedIndex].customClasses = []
-                    setTimeout(() => {
-                        classesArray.map(e => {
-                            !parent.tiles[parent.nodeSelectedIndex].customClasses.includes(e) &&
-                            selectedTileCustomClassArray.push(e)
-                        })
-                    },0)
-                } else {
-                    // it means the user added some classes
-                    classesArray.map(e => {
-                        !selectedTileCustomClassArray.includes(e) &&
-                        selectedTileCustomClassArray.push(e)
-                    })
-                }
+            if(classesArray.length != 0) {
+                this.onData(classesArray)
             }
+        },
+        setClasses(arr) {
+            this.code = arr.join('\n')
         }
-    },
-    mounted() {
-        const parent = this.$parent
-        this.code = parent.tiles[parent.nodeSelectedIndex].customClasses.join('\n')
     }
 }
 </script>
