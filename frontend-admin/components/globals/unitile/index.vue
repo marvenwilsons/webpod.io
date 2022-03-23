@@ -1055,14 +1055,37 @@ export default {
             });
         },
         headerTitleClick() {
-            webpod.dash.modal.show({
+            const w = webpod.dash.modal.show({
                 modalTitle: 'Rename Title',
                 viewTrigger: (v) => this.$set(this.modals, 'rename_title', v ? 'show' : 'hide')
             })
+            
+            w.on('data', (data) => {
+                if(data.trim(' ') != '' && data != undefined) {
+                    if( this.validator.hasSpecialCharacters(data)) {
+                        w.emit('error', 'Title should not have special characters')
+                    } else {
+                        const rename_info = {
+                            instance_from: 'unitile',
+                            title: this.myData.title
+                        }
+                        webpod.server.apps.renameAppInstanceTitle(data,rename_info,(data) => {
+                            if(data.message == 'OK') {
+                                webpod.dash.modal.hide()
+                            } else {
+                                w.emit('error', data.message)
+                            }
+                        })
+                    }
+                } else {
+                    w.emit('error', 'Title is required')
+                }
+            })
+
         },
         validateAndRenameProjectTitle() {
-            //validate and confirm project title renaming
-            console.log(this.project_title)
+            // pass data on the modal instance
+            webpod.dash.modal.setData(this.project_title)
         },
         handleHeaderCommand(command) {
             if(command == 'Redo') {
