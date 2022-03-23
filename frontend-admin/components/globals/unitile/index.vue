@@ -236,7 +236,7 @@
                     <div v-for="(item,item_index) in tiles" 
                     :key="item.id" 
                     :id="`${item.id}-${item_index}`"
-                    :class="[...item.customClasses,'selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '']" 
+                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '']" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
@@ -252,7 +252,11 @@
                     >
                         <div class="relative fullheight-percent" >
                             <!-- dropDown component is handled by options.js -->
-                            <div v-if="editMode && controlls.selection_tool === 'off'" style="right:0;background: #f5f5f5;" class="flex flexcenter spacebetween pad025 tile-btn absolute" >
+                            <div 
+                            v-if="editMode && controlls.selection_tool === 'off'" 
+                            style="right:0;background: #f5f5f5;" 
+                            class="flex flexcenter spacebetween pad025 tile-btn absolute" 
+                            >
                                 <input class="marginleft025" @change="(e) => {nodeSelect(e,item_index)}" v-model="item.selected" type="checkbox">
                                 <dropDown
                                     :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
@@ -262,7 +266,7 @@
                                     @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
                                 />
                             </div>
-                            <div class="fullheight-percent fullwidth"  >
+                            <div :class="[...item.customClasses,'fullheight-percent', 'fullwidth']"  >
                                 <!-- view content here -->
                                 <tile-view
                                 v-if="item.view"
@@ -555,6 +559,25 @@ export default {
         },
         'apps.instance_selected'(title) {
             this.selectAppInstance(title)
+        },
+        nodeSelectedIndex(v) {
+            if(this.nodeSelectedIndex != undefined) {
+                this.highlighted_option = this.ribbons[1][0]
+                setTimeout(() => {
+                    const el =  document.getElementById(this.highlighted_option)
+                    el.scrollIntoView({
+                        behavior: 'smooth'
+                    })
+                },0)
+            } else {
+                this.highlighted_option = this.ribbons[0][0]
+                setTimeout(() => {
+                    const el =  document.getElementById(this.highlighted_option)
+                    el.scrollIntoView({
+                        behavior: 'smooth'
+                    })
+                },0)
+            }
         }
     },
     methods: {
@@ -948,7 +971,10 @@ export default {
                             behavior: 'smooth'
                         });
                     } else {
-                        
+                        this.highlighted_option = this.ribbons[opt][0]
+                        document.getElementById(this.highlighted_option).scrollIntoView({
+                            behavior: 'smooth'
+                        });
                         webpod.dash.bottomAlert('Maximum scroll to right reached!')
                     }
                 } else {
@@ -1093,8 +1119,17 @@ export default {
             webpod.dash.bottomAlert(msg)
         }
 
-        // get all installed apps
+        // get all installed apps TODO
         this.apps.all = ['Unitile','Form builder','Simple Slider']
+
+        // default ribbon highlighted option
+        this.highlighted_option = this.ribbons[0][0]
+        setTimeout(() => {
+            const el =  document.getElementById(this.highlighted_option)
+            el.scrollIntoView({
+                behavior: 'smooth'
+            })
+        },0)
     },
     beforeDestroy() {
         webpod.dash.cog.hide()
