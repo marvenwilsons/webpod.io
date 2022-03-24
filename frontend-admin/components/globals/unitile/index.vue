@@ -8,7 +8,6 @@
             }" 
         >
             <!-- header -->
-            {{this.selected_multiple_nodes}}
             <u-header
             @HeaderCommand="handleHeaderCommand"
             @renameTitle="headerTitleClick"
@@ -505,6 +504,7 @@
         <!-- tile inline style modal -->
         <wp-modal v-if="modals.tile_css == 'show'" >
             <custom-css
+            v-if="Object.keys(tile_inline_style).length != 0"
             ref="tile_inline_style"
             :cssObject="tile_inline_style"
             :el_id="'#tile-inline-css'" 
@@ -533,7 +533,6 @@ import columnEditor from './column-editor.vue'
 
 import tileSettingPosition from './tile-s-position.vue'
 import tileSettingSize from './tile-s-size.vue'
-import tileSettingZIndex from './tile-s-z-index.vue'
 import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
@@ -545,7 +544,7 @@ import tileView from './tile-view.vue'
 export default {
     name: 'unitile',
     mixins: [m,optionHandler,undoRedo],
-    components: {tileSettingPosition, tileSettingSize,tileSettingZIndex,tileView,gridGuides,
+    components: {tileSettingPosition, tileSettingSize,tileView,gridGuides,
     customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks'],
     data: () => ({
@@ -1052,7 +1051,12 @@ export default {
             if(cmd === 'tile-custom-css') {
                 const modal = webpod.dash.modal.show({
                     modalTitle: 'Tile Custom Style',
-                    viewTrigger: (v) => this.$set(this.modals,'tile_css',v ? 'show' : 'hide')
+                    viewTrigger: (v) => {
+                        this.$set(this.modals,'tile_css',v ? 'show' : 'hide')
+                        if(v == false) {
+                            this.tile_inline_style = {}
+                        }
+                    }
                 })
 
                 modal.on('data', (data) => {
