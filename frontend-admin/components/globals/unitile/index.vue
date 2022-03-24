@@ -517,6 +517,22 @@
             ref="tileCustomClassEditor"
             />
         </wp-modal>
+        <!-- view project -->
+        <wp-modal v-if="modals.view_project == 'show'" >
+            <div v-if="gridColumns != undefined"  >
+                <project-preview
+                :gridColumns="gridColumns"
+                :gridContainerJustify="gridContainerJustify"
+                :maxRows="maxRows"
+                :minTileHeight="minTileHeight"
+                :minTileWidth="minTileWidth"
+                :gridGap="gridGap"
+                :gridContainerStyle="gridContainerStyle"
+                :tiles="tiles"
+                :tiles_global_style="tiles_global_style"
+                />
+            </div>
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -531,8 +547,6 @@ import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
 import columnEditor from './column-editor.vue'
 
-import tileSettingPosition from './tile-s-position.vue'
-import tileSettingSize from './tile-s-size.vue'
 import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
@@ -540,13 +554,13 @@ import optContainer from './opt-container.vue'
 
 import uHeader from './header/layout.vue'
 import tileView from './tile-view.vue'
+import projectPreview from './preview.vue'
 
 export default {
     name: 'unitile',
     mixins: [m,optionHandler,undoRedo],
-    components: {tileSettingPosition, tileSettingSize,tileView,gridGuides,
-    customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
-    props: ['myData','config', 'paneIndex', 'hooks'],
+    components: {projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
+    props: ['myData','config', 'paneIndex', 'hooks','tiles_global_style'],
     data: () => ({
         project_title: undefined,
         tiles: [],
@@ -614,8 +628,9 @@ export default {
             tile_css: 'hide',
             tile_classes: 'hide',
             tile_z_index: 'hide',
-            tile_align_item: 'hide'
-        }
+            tile_align_item: 'hide',
+            view_project: 'hide'
+        },
     }),
     watch: {
         'apps.app_selected'(appName) {
@@ -1227,6 +1242,21 @@ export default {
             }
             if(command == 'multiple-select-off') {
                 this.select_multiple_mode = false
+            }
+            if(command == 'view-project') {
+                const modal = webpod.dash.modal.show({
+                    modalTitle: 'Output layout',
+                    fullscreen: true,
+                    viewTrigger: (v) => this.$set(this.modals,'view_project', v ? 'show' : 'hide')
+                })
+
+                modal.on('show', () => {
+                    const wh = window.innerHeight
+                    const ww = window.innerWidth
+                    this.$set(this.view_project_modal,'minHeight', `${wh}px`)
+                    this.$set(this.view_project_modal,'minWidth', `${ww - 100}px`)
+                })
+                
             }
         },
         showTileViewModal() {
