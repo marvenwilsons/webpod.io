@@ -1,5 +1,5 @@
 <template>
-    <div class="fullwidth flex flexcenter" >
+    <div class="fullwidth flex flexcenter " >
         <v-card id="mydiv" class="" elevation="8">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
@@ -27,7 +27,7 @@
                 color="primary"
             ></v-progress-linear>
             
-            <div id="content"  class="pad125 paneBorder" :style="{zIndex:2}" role="content" >
+            <div id="content"  class="pad125 paneBorder" :style="fullscreen ? fullscreen_modal :  {zIndex:2,}" role="content" >
                 <div class="pad125" >
                     <slot></slot>
                 </div>
@@ -41,13 +41,18 @@ import m from '@/m'
 import gsap from "gsap";
 export default {
     mixins: [m],
-    props: ['name','modalTitle', 'modalProgress'],
+    props: ['name','modalTitle', 'modalProgress', 'fullscreen'],
     data: () => ({
         currentId: undefined,
         ready: true,
         title: 'Untitled',
         progress: false,
-        isCollapsed: false
+        isCollapsed: false,
+        fullscreen_modal: {
+            height: undefined,
+            width: undefined,
+            zIndex: 2
+        }
     }),
     methods: {
         handleClose() {
@@ -65,6 +70,18 @@ export default {
         }
     },
     mounted() {
+        const ww = window.innerWidth
+        const wh = window.innerHeight
+        this.$set(this.fullscreen_modal,'height',`${wh-50}px`)
+        this.$set(this.fullscreen_modal,'width',`${ww}px`)
+
+        window.addEventListener('resize', () => {
+            const wh = window.innerHeight
+            const ww = window.innerWidth
+            this.$set(this.fullscreen_modal,'height',`${wh-50}px`)
+            this.$set(this.fullscreen_modal,'width',`${ww}px`)
+        })
+
         dragElement(document.getElementById("mydiv"));
 
         function dragElement(elmnt) {

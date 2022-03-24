@@ -7,7 +7,7 @@
             <main  v-if="!showInitForms" >
                     <v-scale-transition  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
-                            <modal-drag :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
+                            <modal-drag :fullscreen="modalIsFullScreen" :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
                                 <v-expand-transition>
                                     <div v-if="modalError"  class="error marginbottom025 pad050 flex flexcenter flexstart borderRad4" >
                                         <v-icon >mdi-alert-circle</v-icon>
@@ -257,6 +257,7 @@ export default {
         modalTitle: undefined,
         showModalBody: false,
         modalData: undefined,
+        modalIsFullScreen: false,
         modalProgress: {
             show: false,
             value: undefined
@@ -451,6 +452,10 @@ export default {
                             this.modalTitle = conf.modalTitle
                             this.modalIsPlayable = conf.isPlayable || false
                             this.viewTrigger = conf.viewTrigger
+                            if(conf.fullscreen) {
+                                this.modalIsFullScreen = conf.fullscreen
+                            }
+
                             if(conf.viewTrigger != undefined) {
                                 conf.viewTrigger(true)
                             }
@@ -507,6 +512,7 @@ export default {
                             this.modalTitle = undefined
                             this.showModalBody = false
                             this.modalData = undefined
+                            this.modalIsFullScreen = false
                             this.modalButton = {
                                 show: false,
                                 text: undefined,
