@@ -8,6 +8,7 @@
             }" 
         >
             <!-- header -->
+            {{this.selected_multiple_nodes}}
             <u-header
             @HeaderCommand="handleHeaderCommand"
             @renameTitle="headerTitleClick"
@@ -215,18 +216,18 @@
                                 </div>
                             </opt-container>
                             <opt-container :highlighted="highlighted_option" title="Horizontal Span" >
-                                <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="width('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-minus-thick</v-icon>
                                 </div>
-                                <div @click="width('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="width('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-plus-thick</v-icon>
                                 </div>
                             </opt-container>
                             <opt-container :highlighted="highlighted_option" title="Vertical Span" >
-                                <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="height('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-minus-thick</v-icon>
                                 </div>
-                                <div @click="height('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="height('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-plus-thick</v-icon>
                                 </div>
                             </opt-container>
@@ -737,45 +738,73 @@ export default {
                 this.addSessionEntry()
             }, 0)
         },
-        height(mode,id,index) {
+        height(mode,multiple,index) {
             this.addSessionEntry(this.tiles)
             if(mode == 'add') {
-                // this.tiles[index].rowStart = this.tiles[index].rowStart
-                const newRowEndVal = this.tiles[index].rowEnd + 1
-                this.tiles[index].rowEnd = newRowEndVal
-                if(newRowEndVal == this.maxRows) {
-                    this.maxRows = this.maxRows + 1
-                } else {
-                    if(newRowEndVal > this.maxRows) {
-                        this.maxRows = newRowEndVal + 1
+                const add = (i) => {
+                    const newRowEndVal = this.tiles[i].rowEnd + 1
+                    this.tiles[i].rowEnd = newRowEndVal
+                    if(newRowEndVal == this.maxRows) {
+                        this.maxRows = this.maxRows + 1
+                    } else {
+                        if(newRowEndVal > this.maxRows) {
+                            this.maxRows = newRowEndVal + 1
+                        }
                     }
                 }
+                if(multiple) {
+                    this.selected_multiple_nodes.map(n => add(n))
+                } else {
+                    add(index)
+                }
+                
             }
             if(mode == 'minus') {
-                if(this.tiles[index].rowStart + 1 != this.tiles[index].rowEnd) {
-                    this.tiles[index].rowEnd = this.tiles[index].rowEnd - 1
-                    this.removeUnwantedRows()
+                const minus = (i) => {
+                    if(this.tiles[i].rowStart + 1 != this.tiles[i].rowEnd) {
+                        this.tiles[i].rowEnd = this.tiles[i].rowEnd - 1
+                        this.removeUnwantedRows()
+                    } else {
+                        webpod.dash.bottomAlert('Minimum vertical span reached!')
+                    }
+                }
+                if(multiple) {
+                    this.selected_multiple_nodes.map(n => minus(n))
                 } else {
-                    webpod.dash.bottomAlert('Minimum vertical span reached!')
+                    minus(index)
                 }
 
             }
         },
-        width(mode,id,index) {
+        width(mode,multiple,index) {
             if(mode == 'add') {
-                if(this.tiles[index].colEnd != this.maxCol + 1) {
-                    this.tiles[index].colEnd = this.tiles[index].colEnd + 1
-                    // console.log(this.tiles[index].colEnd, this.maxCol)
+                const add = (i) => {
+                    if(this.tiles[i].colEnd != this.maxCol + 1) {
+                        this.tiles[i].colEnd = this.tiles[i].colEnd + 1
+                    } else {
+                        webpod.dash.bottomAlert('Maximum horizonal span reached!')
+                    }  
+                }
+                if(multiple) {
+                    this.selected_multiple_nodes.map(n => add(n))
                 } else {
-                    webpod.dash.bottomAlert('Maximum horizonal span reached!')
-                }   
+                    add(index)
+                }
             }
             if(mode == 'minus') {
-                if(this.tiles[index].colEnd != 2) {
-                    this.tiles[index].colEnd = this.tiles[index].colEnd - 1
-                }  else {
-                    webpod.dash.bottomAlert('Minimum horizonal span reached!')
-                } 
+                const minus = (i) => {
+                    if(this.tiles[i].colEnd != 2) {
+                        this.tiles[i].colEnd = this.tiles[i].colEnd - 1
+                    }  else {
+                        webpod.dash.bottomAlert('Minimum horizonal span reached!')
+                    } 
+                }
+
+                if(multiple) {
+                    this.selected_multiple_nodes.map(n => minus(n))
+                } else {
+                    minus(index)
+                }
 
             }
             setTimeout(() => {
@@ -886,6 +915,10 @@ export default {
         },
         refresh() {
             this.ready = false
+            this.selected_multiple_nodes = []
+            this.tiles.map((n,i) => {
+                this.tiles[i].selected = false
+            })
             setTimeout(() => {
                 this.ready = true
             },0)
@@ -1186,11 +1219,9 @@ export default {
                 this.saveLayout()
             }
             if(command == 'multiple-select-on') {
-                console.log('multiple on')
                 this.select_multiple_mode = true
             }
             if(command == 'multiple-select-off') {
-                console.log('multiple off')
                 this.select_multiple_mode = false
             }
         },
@@ -1227,6 +1258,8 @@ export default {
         registerNodeForMultipleMove(ev,n_index) {
             if(ev.target.checked) {
                 this.selected_multiple_nodes.push(n_index)
+            } else {
+                this.selected_multiple_nodes.splice(this.selected_multiple_nodes.indexOf(n_index),1)
             }
         }
     },
@@ -1332,6 +1365,7 @@ export default {
 
             let largestRowEnd = 0
             this.myData.tiles.map(item => {
+                item.selected = false
                 if(typeof item != 'object') {
                     alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
                     location.reload()
