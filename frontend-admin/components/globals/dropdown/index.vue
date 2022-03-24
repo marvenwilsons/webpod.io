@@ -13,17 +13,17 @@
             :command="option.title"  
             v-for="option in options" 
             :key="uid(option)" 
-            class="pad125"
+            class=""
             :style="{background: selected && selected == option.title ? '#F5F5F5' : ''}"
             >
-                <div class="flex pad025 " >
-                    <div v-if="option.d" style="max-width: 20px;min-width: 20px;" class="marginright050 flex flexcenter" >
+                <div class="flex flexcenter" >
+                    <div style="max-width: 20px;min-width: 20px;" class="marginright050 flex flexcenter" >
                         <svg v-if="option.d" style="width:20px;height:20px" viewBox="0 0 24 24">
                             <path fill="#000000de" :d="option.d" />
                         </svg>
                     </div>
-                    <div style="font-weight:400;" class="flex flex1 fullwidth marginleft050 padright125" >
-                        <div class="fullwidth padtop025" style="color: #000000de; font-size: .875rem;" >{{option.title}}</div>
+                    <div style="font-weight:400;" class="flex flex1 fullwidth marginleft050 padright125 flexcenter" >
+                        <div class="fullwidth " style="color: #000000de; font-size: .875rem;" >{{option.title}}</div>
                     </div>
                 </div>
             </el-dropdown-item>
