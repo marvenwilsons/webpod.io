@@ -49,16 +49,15 @@
                 </v-btn>
             </el-tooltip>
             <!-- PREVIEW ON BUTTON -->
-            <!-- <el-tooltip  class="pad025" content="Preview on" effect="dark" placement="top-start" >
+            <el-tooltip  class="pad025" content="View project" effect="dark" placement="top-start" >
                 <v-btn 
                     style="color:white;" 
-                    v-if="preview == 'off'" 
-                    @click="preview(true)"
+                    @click="HeaderCommand('view-project')"
                     icon plain small 
                 >
                     <v-icon>mdi-eye-outline</v-icon>
                 </v-btn>
-            </el-tooltip> -->
+            </el-tooltip>
             <!-- PREVIEW OFF BUTTON -->
             <!-- <el-tooltip  class="pad025" content="Preview off" effect="dark" placement="top-start" >
                 <v-btn 
