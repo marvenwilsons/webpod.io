@@ -259,10 +259,23 @@
                                 :options="ribbons[0].map(e => {return {title: e}})"
                                 @command="(v) => jumpToRibbon(v)"
                             >
-                                <v-btn fab x-small text >
+                                <v-btn x-small fab text >
                                     <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                             </dropDown>
+                            <v-expand-x-transition>
+                                <dropDown
+                                    v-if="nodeSelectedIndex != undefined"
+                                    :options="options"
+                                    :divideOptionsBefore="['Move down','Expand height','100% width', 'Clone']"
+                                    :disabledOptions="disabledOptions"
+                                    @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
+                                >
+                                    <v-btn x-small fab text >
+                                        <v-icon>mdi-pencil</v-icon>
+                                    </v-btn>
+                                </dropDown>
+                            </v-expand-x-transition>
                         </div>
                     </div>
                 </div>
@@ -294,7 +307,7 @@
                     <div v-for="(item,item_index) in tiles" 
                     :key="item.id" 
                     :id="`${item.id}-${item_index}`"
-                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '']" 
+                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer tile-item', editMode ? 'paneBorder': '']" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
@@ -306,40 +319,54 @@
                         justifySelf: item.align,
                         zIndex: item.zIndex,
                         background:'white',
-                        ...tiles_global_style,
-                        ...item.customStyle,
+                        border: item_index == nodeSelectedIndex ? '1px solid #1870f0' : '',
+                        boxShadow: item_index == nodeSelectedIndex ?'0px 0px 2px #1870f0' : ''
                     }"
                     >
-                        <div class="relative fullheight-percent" >
+                        <div 
+                        
+                        class="relative fullheight-percent " 
+                        >
                             <!-- dropDown component is handled by options.js -->
                             <div 
-                            v-if="editMode && !select_multiple_mode" 
-                            style="right:0;background: #f5f5f5;" 
+                            v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
+                            style="right:0;" 
                             class="flex flexcenter spacebetween pad025 tile-btn absolute" 
                             >
-                                <input class="marginleft025" @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox">
+                                <!-- <input @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox"> -->
                                 <dropDown
-                                    :svgTrigger="'M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z'"
+                                    v-if="nodeSelectedIndex != undefined"
                                     :options="options"
-                                    :divideOptionsBefore="['Move down','Expand height','100% width']"
+                                    :divideOptionsBefore="['Move down','Expand height','100% width', 'Clone']"
                                     :disabledOptions="disabledOptions"
-                                    @command="(cmd) => {handleDropDownCommand(cmd,item_index,item,tiles)}"
-                                />
+                                    @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
+                                >
+                                    <v-btn :ripple="false" small text icon tile >
+                                        <v-icon>mdi-pencil</v-icon>
+                                    </v-btn>
+                                </dropDown>
                             </div>
                             <!-- multiple select mode -->
-                            <div 
+                            <div
                             style="right:0;background: #f5f5f5;" 
                             class="flex flexcenter spacebetween pad025 tile-btn absolute"  
                             v-if="select_multiple_mode" 
                             >
                                 <input @change="(ev) => {registerNodeForMultipleMove(ev,item_index)}" type="checkbox">
+                                <v-btn x-small >
+
+                                </v-btn>
                             </div>
-                            <div :class="[...item.customClasses,'fullheight-percent', 'fullwidth']"  >
+                            <!--  -->
+                            <div
+                            @click="tileClick(item_index)" 
+                            :class="[...item.customClasses,'fullheight-percent', 'fullwidth']"
+                            :style="{...item.customStyle,...tiles_global_style,}" 
+                            >
                                 <!-- view content here -->
                                 <tile-view
-                                v-if="item.view"
-                                :view="item.view"
-                                :myData="item.viewData"
+                                v-if="item.blocks.length > 0"
+                                :blocks="item.blocks"
                                 ></tile-view>
                             </div>
                         </div>
@@ -504,7 +531,6 @@
         <!-- tile inline style modal -->
         <wp-modal v-if="modals.tile_css == 'show'" >
             <custom-css
-            v-if="Object.keys(tile_inline_style).length != 0"
             ref="tile_inline_style"
             :cssObject="tile_inline_style"
             :el_id="'#tile-inline-css'" 
@@ -560,7 +586,7 @@ export default {
     name: 'unitile',
     mixins: [m,optionHandler,undoRedo],
     components: {projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
-    props: ['myData','config', 'paneIndex', 'hooks','tiles_global_style'],
+    props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
         project_title: undefined,
         tiles: [],
@@ -845,6 +871,24 @@ export default {
                 this.tiles[index].selected = false
             }
         },
+        tileClick(index,multiple) {
+            this.tiles[index].selected = !this.tiles[index].selected
+            this.tiles.map((tile,tile_index) => {
+                if(tile.selected) {
+                    if(tile_index != index) {
+                        this.tiles[tile_index].selected = false
+                    }
+                }
+            })
+
+            if(this.tiles[index].selected == false) {
+                this.nodeSelectedIndex = undefined
+            } else {
+                this.nodeSelectedIndex = index
+            }
+
+
+        },
         keydown(e) {
             if(this.nodeSelectedIndex != undefined && this.controlls.selection_tool == 'off') {
                 if(e.key == 'ArrowRight') {
@@ -880,8 +924,7 @@ export default {
                     customStyle: this.tiles[tileIndex].customStyle,
                     customClasses: [],
                     isAClone: this.tiles[tileIndex].id,
-                    view: this.tiles[tileIndex].view,
-                    viewData: this.tiles[tileIndex].viewData,
+                    blocks: [],
                     align: 'stretch',
                     zIndex: 1,
                 })
@@ -896,9 +939,8 @@ export default {
                     selected: false,
                     customClasses: [],
                     customStyle: {},
-                    view: undefined,
-                    viewData: undefined,
                     align: 'stretch',
+                    blocks: [],
                     zIndex: 1,
                 })
             }
@@ -1070,6 +1112,8 @@ export default {
                         this.$set(this.modals,'tile_css',v ? 'show' : 'hide')
                         if(v == false) {
                             this.tile_inline_style = {}
+                        } else {
+                            this.tile_inline_style = this.tiles[this.nodeSelectedIndex].customStyle
                         }
                     }
                 })
@@ -1080,7 +1124,7 @@ export default {
                 })
 
                 modal.on('show', () => {
-                    this.tile_inline_style = this.tiles[this.nodeSelectedIndex].customStyle
+                    
                     this.$refs.tile_inline_style.onError = (err) => {
                         modal.emit('error', err)
                     }
@@ -1454,5 +1498,9 @@ export default {
     background: #F5F5F5;
     cursor: pointer;
     transition: 0.2s;
+}
+.tile-item:hover {
+    border: 1px solid #1870f0;
+    box-shadow: 0px 0px 2px #1870f0
 }
 </style>
