@@ -16,10 +16,10 @@
                 <div class="flex flexcol" >
                     <div
                     id="unitile-ribbon"
-                    :style="{'min-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
+                    :style="{'max-height':'45px', 'z-index': 1, 'overflow':'hidden', }" 
                     class="grey lighten-3 padtop025 padbottom025 padleft050 padright050 flex  elevation-5 relative" 
                     >
-                        <div v-if="!select_multiple_mode" style="right:0px; z-index:3" class="margintop025 relative" >
+                        <div v-if="!select_multiple_mode" style="right:0px; z-index:3" class=" relative" >
                             <div 
                             style="right: 50px;
                             min-height: 45px;
@@ -115,43 +115,43 @@
 
                                 <opt-container :highlighted="highlighted_option" title="Position" >
                                     C:
-                                    <div @click="move('top',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-arrow-up-thick</v-icon>
+                                    <div @click="move('top',null,nodeSelectedIndex)" v-ripple class="borderRad4  marginleft025 padleft025 padright025 ">
+                                        <v-icon  small >mdi-arrow-up</v-icon>
                                     </div>
-                                    <div @click="move('bottom',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-arrow-down-thick</v-icon>
+                                    <div @click="move('bottom',null,nodeSelectedIndex)" v-ripple class="borderRad4   padleft025 padright025 ">
+                                        <v-icon small >mdi-arrow-down</v-icon>
                                     </div>
-                                    <span class="marginleft050" >
+                                    <span class="marginleft050 marginright025" >
                                         R:
                                     </span>
-                                    <div @click="move('left',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-arrow-left-thick</v-icon>
+                                    <div @click="move('left',null,nodeSelectedIndex)" v-ripple class="borderRad4  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-arrow-left</v-icon>
                                     </div>
-                                    <div @click="move('right',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-arrow-right-thick</v-icon>
+                                    <div @click="move('right',null,nodeSelectedIndex)" v-ripple class="borderRad4  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-arrow-right</v-icon>
                                     </div>
                                 </opt-container>
 
                                 <opt-container :highlighted="highlighted_option" title="Horizontal Span" >
-                                    <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-minus-thick</v-icon>
+                                    <div @click="width('minus',null,nodeSelectedIndex)" v-ripple class="  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-minus</v-icon>
                                     </div>
-                                    <div @click="width('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-plus-thick</v-icon>
+                                    <div @click="width('add',null,nodeSelectedIndex)" v-ripple class="  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-plus</v-icon>
                                     </div>
                                 </opt-container>
 
                                 <opt-container :highlighted="highlighted_option" title="Vertical Span" >
-                                    <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-minus-thick</v-icon>
+                                    <div @click="height('minus',null,nodeSelectedIndex)" v-ripple class="borderRad4  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-minus</v-icon>
                                     </div>
-                                    <div @click="height('add',null,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-plus-thick</v-icon>
+                                    <div @click="height('add',null,nodeSelectedIndex)" v-ripple class="borderRad4  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-plus</v-icon>
                                     </div>
                                 </opt-container>
 
                                 <opt-container :highlighted="highlighted_option" title="Tile View" >
-                                    <div @click="showTileViewModal" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                    <div @click="showTileViewModal" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                         <v-icon small >mdi-cog</v-icon>
                                     </div>
                                 </opt-container>
@@ -178,11 +178,11 @@
                                     <div class="borderRad4 paneBorder padleft025 padright025 marginright025">
                                         {{tiles[nodeSelectedIndex].zIndex || 0}}
                                     </div>
-                                    <div @click="handleRibbonContainerCmd('tile-z-index','minus')" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-minus-thick</v-icon>
+                                    <div @click="handleRibbonContainerCmd('tile-z-index','minus')" v-ripple class="borderRad4  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-minus</v-icon>
                                     </div>
-                                    <div @click="handleRibbonContainerCmd('tile-z-index','add')"  v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                        <v-icon small >mdi-plus-thick</v-icon>
+                                    <div @click="handleRibbonContainerCmd('tile-z-index','add')"  v-ripple class="borderRad4  padleft025 padright025 ribbon-item">
+                                        <v-icon small >mdi-plus</v-icon>
                                     </div>
                                 </opt-container>
 
@@ -199,40 +199,40 @@
                             <opt-container :highlighted="highlighted_option" title="Position" >
                                 C:
                                 <div @click="move('top',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-arrow-up-thick</v-icon>
+                                    <v-icon small >mdi-arrow-up</v-icon>
                                 </div>
                                 <div @click="move('bottom',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-arrow-down-thick</v-icon>
+                                    <v-icon small >mdi-arrow-down</v-icon>
                                 </div>
                                 <span class="marginleft050" >
                                     R:
                                 </span>
                                 <div @click="move('left',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-arrow-left-thick</v-icon>
+                                    <v-icon small >mdi-arrow-left</v-icon>
                                 </div>
                                 <div @click="move('right',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-arrow-right-thick</v-icon>
+                                    <v-icon small >mdi-arrow-right</v-icon>
                                 </div>
                             </opt-container>
                             <opt-container :highlighted="highlighted_option" title="Horizontal Span" >
                                 <div @click="width('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-minus-thick</v-icon>
+                                    <v-icon small >mdi-minus</v-icon>
                                 </div>
                                 <div @click="width('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-plus-thick</v-icon>
+                                    <v-icon small >mdi-plus</v-icon>
                                 </div>
                             </opt-container>
                             <opt-container :highlighted="highlighted_option" title="Vertical Span" >
                                 <div @click="height('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-minus-thick</v-icon>
+                                    <v-icon small >mdi-minus</v-icon>
                                 </div>
                                 <div @click="height('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
-                                    <v-icon small >mdi-plus-thick</v-icon>
+                                    <v-icon small >mdi-plus</v-icon>
                                 </div>
                             </opt-container>
                         </div>
                         <!-- SCROLL TO RIGHT -->
-                        <div v-if="!select_multiple_mode" style="z-index:3" class="margintop025 relative flex flexcenter" >
+                        <div v-if="!select_multiple_mode" style="z-index:3" class=" relative flex flexcenter" >
                             <div 
                             style="left: 30px;
                             min-height: 45px;
@@ -272,7 +272,7 @@
                                     @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
                                 >
                                     <v-btn x-small fab text >
-                                        <v-icon>mdi-pencil</v-icon>
+                                        <v-icon>mdi-layers</v-icon>
                                     </v-btn>
                                 </dropDown>
                             </v-expand-x-transition>
@@ -337,12 +337,12 @@
                                 <dropDown
                                     v-if="nodeSelectedIndex != undefined"
                                     :options="options"
-                                    :divideOptionsBefore="['Move down','Expand height','100% width', 'Clone']"
+                                    :divideOptionsBefore="['Move down','Expand height','Add new layer', 'Clone']"
                                     :disabledOptions="disabledOptions"
                                     @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
                                 >
                                     <v-btn :ripple="false" small text icon tile >
-                                        <v-icon>mdi-pencil</v-icon>
+                                        <v-icon>mdi-square-edit-outline</v-icon>
                                     </v-btn>
                                 </dropDown>
                             </div>
@@ -911,6 +911,20 @@ export default {
                 this.nodeSelectedIndex = undefined
             }
         },
+        generateBlockInstance(view,data) {
+            return {
+                block_id: 'block-' + this.uid(),
+                block_view: undefined,
+                block_data: undefined
+            }
+        },
+        generateLayerInstance(index,blocks) {
+            return {
+                layer_id: 'layer-' + this.uid(),
+                layer_index: index,
+                layer_blocks: [], // array of block ids
+            }
+        },
         addNewTile(isClone,tileIndex) {
             if(isClone == true) {
                 this.tiles.push({
@@ -924,12 +938,14 @@ export default {
                     customStyle: this.tiles[tileIndex].customStyle,
                     customClasses: [],
                     isAClone: this.tiles[tileIndex].id,
-                    blocks: [],
+                    blocks: this.tiles[tileIndex].blocks,
+                    layers: this.tiles[tileIndex].layers,
+                    layerOnFocus: 1,
                     align: 'stretch',
                     zIndex: 1,
                 })
             } else {
-                this.tiles.push({
+                let tile = {
                     name: undefined, 
                     id:this.uid(), 
                     rowStart: 1, 
@@ -941,8 +957,12 @@ export default {
                     customStyle: {},
                     align: 'stretch',
                     blocks: [],
+                    layers: [],
+                    layerOnFocus: 1,
                     zIndex: 1,
-                })
+                }
+                tile.blocks.push(this.generateLayerInstance(1))
+                this.tiles.push(tile)
             }
             
             this.clearSelectedNode()

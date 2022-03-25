@@ -1,12 +1,11 @@
 <template>
     <div>
-        {{view}}
-        {{myData}}
+        {{blocks}}
     </div>
 </template>
 
 <script>
 export default {
-    props: ['view','myData']
+    props: ['blocks']
 }
 </script>
