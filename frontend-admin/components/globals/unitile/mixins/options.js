@@ -25,6 +25,14 @@ export default {
     methods: {
         handleDropDownCommand(cmd,itemIndex,item,tiles) {
             switch(cmd) {
+                case 'Add new layer':
+                    this.addNewLayer()
+                break;
+                case 'Manage layers':
+                    const modal = webpod.dash.modal.show({
+                        modalTitle: 'Layers'
+                    })
+                break;
                 case 'Clone':
                     this.addNewTile(true,itemIndex)
                 break;

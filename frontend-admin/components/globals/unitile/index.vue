@@ -196,37 +196,37 @@
                         </div>
                         <!-- MULTIPLE -->
                         <div class="flex" v-if="select_multiple_mode" >
-                            <opt-container :highlighted="highlighted_option" title="Position" >
+                            <opt-container class="marginright025" :highlighted="highlighted_option" title="Position" >
                                 C:
-                                <div @click="move('top',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="move('top',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-arrow-up</v-icon>
                                 </div>
-                                <div @click="move('bottom',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="move('bottom',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-arrow-down</v-icon>
                                 </div>
                                 <span class="marginleft050" >
                                     R:
                                 </span>
-                                <div @click="move('left',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="move('left',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-arrow-left</v-icon>
                                 </div>
-                                <div @click="move('right',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="move('right',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-arrow-right</v-icon>
                                 </div>
                             </opt-container>
-                            <opt-container :highlighted="highlighted_option" title="Horizontal Span" >
-                                <div @click="width('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                            <opt-container class="marginright025" :highlighted="highlighted_option" title="Horizontal Span" >
+                                <div @click="width('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-minus</v-icon>
                                 </div>
-                                <div @click="width('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="width('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-plus</v-icon>
                                 </div>
                             </opt-container>
                             <opt-container :highlighted="highlighted_option" title="Vertical Span" >
-                                <div @click="height('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="height('minus',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-minus</v-icon>
                                 </div>
-                                <div @click="height('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 paneBorder padleft025 padright025 ribbon-item">
+                                <div @click="height('add',true,nodeSelectedIndex)" v-ripple class="borderRad4 padleft025 padright025 ribbon-item">
                                     <v-icon small >mdi-plus</v-icon>
                                 </div>
                             </opt-container>
@@ -240,11 +240,13 @@
                             box-shadow: -28px  1px 15px 19px #EEEEEE;"
                             class="absolute fullheight-percent" >
                             </div>
+                            <!-- button scroll right -->
                             <v-btn @click="ribbonScrollTo('right')" fab x-small text >
                                 <v-icon>
                                     mdi-chevron-right
                                 </v-icon>
                             </v-btn>
+                            <!-- dots jump to for grid settings  -->
                             <dropDown
                                 v-if="nodeSelectedIndex != undefined"
                                 :options="ribbons[1].map(e => {return {title: e}})"
@@ -254,6 +256,7 @@
                                     <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                             </dropDown>
+                            <!-- dots jump to for tile settings-->
                             <dropDown
                                 v-if="nodeSelectedIndex == undefined"
                                 :options="ribbons[0].map(e => {return {title: e}})"
@@ -353,9 +356,6 @@
                             v-if="select_multiple_mode" 
                             >
                                 <input @change="(ev) => {registerNodeForMultipleMove(ev,item_index)}" type="checkbox">
-                                <v-btn x-small >
-
-                                </v-btn>
                             </div>
                             <!--  -->
                             <div
@@ -364,10 +364,7 @@
                             :style="{...item.customStyle,...tiles_global_style,}" 
                             >
                                 <!-- view content here -->
-                                <tile-view
-                                v-if="item.blocks.length > 0"
-                                :blocks="item.blocks"
-                                ></tile-view>
+                                <tile-view :tile="item"></tile-view>
                             </div>
                         </div>
                     </div>
@@ -559,6 +556,10 @@
                 />
             </div>
         </wp-modal>
+        <!-- layers modal -->
+        <wp-modal v-if="modals.manage_layer === 'show'" >
+            
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -566,6 +567,7 @@
 <script>
 import m from '@/m'
 import optionHandler from './mixins/options.js'
+import layer from './mixins/layer'
 import undoRedo from '@/undo-redo.js'
 import gridGuides from './grid-guides.vue'
 
@@ -584,7 +586,7 @@ import projectPreview from './preview.vue'
 
 export default {
     name: 'unitile',
-    mixins: [m,optionHandler,undoRedo],
+    mixins: [m,optionHandler,undoRedo,layer],
     components: {projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
@@ -655,7 +657,8 @@ export default {
             tile_classes: 'hide',
             tile_z_index: 'hide',
             tile_align_item: 'hide',
-            view_project: 'hide'
+            view_project: 'hide',
+            manage_layer: 'hide'
         },
     }),
     watch: {
@@ -918,13 +921,6 @@ export default {
                 block_data: undefined
             }
         },
-        generateLayerInstance(index,blocks) {
-            return {
-                layer_id: 'layer-' + this.uid(),
-                layer_index: index,
-                layer_blocks: [], // array of block ids
-            }
-        },
         addNewTile(isClone,tileIndex) {
             if(isClone == true) {
                 this.tiles.push({
@@ -961,7 +957,7 @@ export default {
                     layerOnFocus: 1,
                     zIndex: 1,
                 }
-                tile.blocks.push(this.generateLayerInstance(1))
+                tile.layers.push(this.generateLayerInstance(1,'default',true))
                 this.tiles.push(tile)
             }
             

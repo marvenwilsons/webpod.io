@@ -1,11 +1,9 @@
 <template>
-    <div>
-        {{tile}}
-    </div>
+    <div></div>
 </template>
 
 <script>
 export default {
-    props: ['tile']
+    props: []
 }
 </script>
