@@ -24,7 +24,7 @@ export default {
             } else {
                 this.tiles[this.nodeSelectedIndex].layers.map((e,i) => {
                     if(e.layer_id == layerId) {
-                        this.tiles[this.nodeSelectedIndex].layers.splice(i)
+                        this.tiles[this.nodeSelectedIndex].layers.splice(i,1)
                     }
                 })
             }
