@@ -30,7 +30,17 @@ export default {
                 break;
                 case 'Manage layers':
                     const modal = webpod.dash.modal.show({
-                        modalTitle: 'Layers'
+                        modalTitle: 'Layers',
+                        viewTrigger: (v) => {
+                            this.$set(this.modals,'layer_manager', v ? 'show' : 'hide')
+                        } 
+                    })
+                    modal.on('close', () => {
+                        this.tiles[this.nodeSelectedIndex].layers.map((layer,index) => {
+                            if(layer.layer_name == "") {
+                                this.tiles[this.nodeSelectedIndex].layers[index].layer_name = 'untitled_' + this.uid()
+                            }
+                        })
                     })
                 break;
                 case 'Clone':
