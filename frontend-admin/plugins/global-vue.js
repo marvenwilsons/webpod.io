@@ -76,6 +76,9 @@ Vue.component("resizable",resizable)
 import modal from '@/components/globals/modal/index.vue'
 Vue.component("wp-modal",modal)
 
+import dragsort from 'vuedraggable'
+Vue.component("drag-sort",dragsort)
+
 
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"
