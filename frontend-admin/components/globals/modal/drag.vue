@@ -3,7 +3,7 @@
         <v-card id="mydiv" class="" elevation="8">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
-                <div class=""  >
+                <div class="body-1"  >
                     <strong>
                         {{modalTitle}}
                     </strong>
