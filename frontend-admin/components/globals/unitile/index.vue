@@ -326,14 +326,11 @@
                         boxShadow: item_index == nodeSelectedIndex ?'0px 0px 2px #1870f0' : ''
                     }"
                     >
-                        <div 
-                        
-                        class="relative fullheight-percent " 
-                        >
+                        <div class="relative fullheight-percent " >
                             <!-- dropDown component is handled by options.js -->
                             <div 
                             v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
-                            style="right:0;" 
+                            style="right:0;z-index:9999" 
                             class="flex flexcenter spacebetween pad025 tile-btn absolute" 
                             >
                                 <!-- <input @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox"> -->
@@ -344,7 +341,7 @@
                                     :disabledOptions="disabledOptions"
                                     @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
                                 >
-                                    <v-btn :ripple="false" small text icon tile >
+                                    <v-btn  small text icon tile >
                                         <v-icon>mdi-square-edit-outline</v-icon>
                                     </v-btn>
                                 </dropDown>
@@ -360,11 +357,11 @@
                             <!--  -->
                             <div
                             @click="tileClick(item_index)" 
-                            :class="[...item.customClasses,'fullheight-percent', 'fullwidth']"
-                            :style="{...item.customStyle,...tiles_global_style,}" 
+                            :class="[...item.customClasses,'fullheight-percent', 'fullwidth flex']"
+                            :style="{...item.customStyle,...tiles_global_style, overflow: 'hidden'}" 
                             >
                                 <!-- view content here -->
-                                <tile-view :tile="item"></tile-view>
+                                <tile-view :ref="item.id" :tile="item"></tile-view>
                             </div>
                         </div>
                     </div>
@@ -557,8 +554,13 @@
             </div>
         </wp-modal>
         <!-- layers modal -->
-        <wp-modal v-if="modals.manage_layer === 'show'" >
-            
+        <wp-modal v-if="modals.layer_manager === 'show'" >
+            <layer-manager
+            :layers="tiles[nodeSelectedIndex].layers"
+            @addNewLayer="addNewLayer"
+            @deleteLayer="deleteLayer"
+            @orderChange="updateLayerOrder"
+            ></layer-manager>
         </wp-modal>
     </main>
 </template>
@@ -583,11 +585,12 @@ import optContainer from './opt-container.vue'
 import uHeader from './header/layout.vue'
 import tileView from './tile-view.vue'
 import projectPreview from './preview.vue'
+import layerManager from './layer-manager.vue'
 
 export default {
     name: 'unitile',
     mixins: [m,optionHandler,undoRedo,layer],
-    components: {projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
+    components: {layerManager, projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
         project_title: undefined,
@@ -658,7 +661,7 @@ export default {
             tile_z_index: 'hide',
             tile_align_item: 'hide',
             view_project: 'hide',
-            manage_layer: 'hide'
+            layer_manager: 'hide'
         },
     }),
     watch: {
@@ -991,9 +994,9 @@ export default {
             this.tiles.map((n,i) => {
                 this.tiles[i].selected = false
             })
-            setTimeout(() => {
+            this.$nextTick(() => {
                 this.ready = true
-            },0)
+            })
         },
         activateSelectionTool(value) {
             let ds = undefined

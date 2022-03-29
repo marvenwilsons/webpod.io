@@ -6,9 +6,9 @@
         v-for="layer in layers" :key="uid(layer)" 
         >
             <layer
-            :backgroundColor="layer.background"
-            :opacity="layer.opacity"
-            :show="layer.show"
+            v-if="layer.layer_show"
+            :backgroundColor="layer.layer_background"
+            :opacity="layer.layer_opacity"
             >
                 layer: {{layer}}
             </layer>
@@ -24,7 +24,7 @@ export default {
     props: ['tile'],
     components: {layer},
     data: () => ({
-        layers: []
+        layers: [],
     }),
     created() {
         this.layers = this.tile.layers

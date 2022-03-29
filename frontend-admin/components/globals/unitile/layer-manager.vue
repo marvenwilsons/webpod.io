@@ -57,7 +57,7 @@
 
 <script>
 export default {
-    props: ['layers'],
+    props: ['layers','item'],
     data: () => ({
         renaming: false,
         renameValue: undefined,
@@ -66,7 +66,7 @@ export default {
     }),
     watch: {
         layers() {
-            this.list  = this.layers
+            // this.list  = this.layers
         }
     },
     computed: {

@@ -1,15 +1,11 @@
 <template>
-    <section 
-        v-show="show != undefined ? show : true" 
-        class="fullwidth fullheight-percent" 
-        :style="{backgroundColor, opacity}"
-    >
+    <section class="fullwidth fullheight-percent"  >
         <slot></slot>
     </section>
 </template>
 
 <script>
 export default {
-    props: ['backgroundColor', 'opacity' , 'show']
+
 }
 </script>

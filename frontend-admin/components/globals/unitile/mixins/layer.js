@@ -25,9 +25,18 @@ export default {
                 this.tiles[this.nodeSelectedIndex].layers.map((e,i) => {
                     if(e.layer_id == layerId) {
                         this.tiles[this.nodeSelectedIndex].layers.splice(i,1)
+                        this.tiles[this.nodeSelectedIndex].layers.splice(this.tiles[this.nodeSelectedIndex].layers.length)
                     }
                 })
             }
+
+            setTimeout(() => {
+                this.refresh()
+            },0)
+        },
+        updateLayerOrder(v) {
+            v.map((e,i) =>  v[i].layer_order = i + 1)
+            this.$set(this.tiles[this.nodeSelectedIndex], 'layers', v)
         }
     },
     mounted() {
