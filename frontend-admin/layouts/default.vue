@@ -5,7 +5,7 @@
                 <init ref="wp-init" @completedForm="handleInitForm" />
             </main>
             <main  v-if="!showInitForms" >
-                    <v-scale-transition  >
+                    <v-scale-transition origin="center"  >
                         <div @click.self="closeModal" v-if="showModal" class="padleft125 padright125 absolute fullwidth fullheight-percent flex flexcenter modal-wrapper"  >
                             <modal-drag :fullscreen="modalIsFullScreen" :class="[shakeModal ? 'err_shake' : '',]" :modalProgress="modalProgress.show" :modalTitle="modalTitle" v-if="showModal && showModalBody" >
                                 <v-expand-transition>
