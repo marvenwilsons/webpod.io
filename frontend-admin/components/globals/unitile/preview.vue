@@ -15,7 +15,7 @@
              v-for="(item,item_index) in tiles" 
             :key="item.id + 'preview'" 
             :id="`${item.id}-${item_index}-preview`"
-            :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer', editMode ? 'paneBorder': '']" 
+            :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer']" 
             :style="{
                 'grid-area':`${item.id}`,
                 'grid-row-start':item.rowStart,

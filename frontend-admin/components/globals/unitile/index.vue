@@ -311,7 +311,7 @@
                     <div v-for="(item,item_index) in tiles" 
                     :key="item.id" 
                     :id="`${item.id}-${item_index}`"
-                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer tile-item', editMode ? 'paneBorder': '']" 
+                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer tile-item','paneBorder']" 
                     :style="{
                         'grid-area':`${item.id}`,
                         'grid-row-start':item.rowStart,
