@@ -2,6 +2,13 @@ export default {
     data: () => ({
         active_layer: undefined
     }),
+    computed: {
+        getActiveLayer() {
+            return ((this.tiles[this.nodeSelectedIndex].layers.filter(layer => {
+                return layer.active_layer != undefined
+            }))[0]).active_layer
+        }
+    },
     methods: {
         generateLayerInstance(index,name,layer_lock) {
             return {
