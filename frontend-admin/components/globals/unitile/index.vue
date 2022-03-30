@@ -327,26 +327,33 @@
                         boxShadow: item_index == nodeSelectedIndex ?'0px 0px 2px #1870f0' : ''
                     }"
                     >
-                        <div class="relative fullheight-percent " >
+                        <div  class="relative fullheight-percent overflow-hidden" >
                             <!-- dropDown component is handled by options.js -->
-                            <div 
-                            v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
-                            style="right:0;z-index:9999" 
-                            class="flex flexcenter spacebetween pad025 tile-btn absolute" 
-                            >
-                                <!-- <input @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox"> -->
-                                <dropDown
-                                    v-if="nodeSelectedIndex != undefined"
-                                    :options="options"
-                                    :divideOptionsBefore="['Move down','Expand height','Add new layer', 'Clone']"
-                                    :disabledOptions="disabledOptions"
-                                    @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
+                            <v-slide-x-reverse-transition>
+                                <div 
+                                v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
+                                style="right:0;z-index:9999" 
+                                class="flex flexcenter spacebetween pad025 tile-btn absolute" 
                                 >
-                                    <v-btn  small text icon tile >
-                                        <v-icon>mdi-square-edit-outline</v-icon>
-                                    </v-btn>
-                                </dropDown>
-                            </div>
+                                    <div>
+                                        {{getActiveLayer.active_layer}}
+                
+                                        {{getActiveLayer.layer_order}}
+                                    </div>
+                                    <!-- <input @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox"> -->
+                                    <dropDown
+                                        v-if="nodeSelectedIndex != undefined"
+                                        :options="options"
+                                        :divideOptionsBefore="['Move down','Expand height','Add new layer', 'Clone']"
+                                        :disabledOptions="disabledOptions"
+                                        @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
+                                    >
+                                        <v-btn  small text icon tile >
+                                            <v-icon>mdi-square-edit-outline</v-icon>
+                                        </v-btn>
+                                    </dropDown>
+                                </div>
+                            </v-slide-x-reverse-transition>
                             <!-- multiple select mode -->
                             <div
                             style="right:0;background: #f5f5f5;" 
@@ -574,6 +581,7 @@ import optionHandler from './mixins/options.js'
 import layer from './mixins/layer'
 import undoRedo from '@/undo-redo.js'
 import gridGuides from './grid-guides.vue'
+import blockManager from './mixins/block'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
@@ -591,7 +599,7 @@ import layerManager from './layer-manager.vue'
 
 export default {
     name: 'unitile',
-    mixins: [m,optionHandler,undoRedo,layer],
+    mixins: [m,optionHandler,undoRedo,layer,blockManager],
     components: {layerManager, projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
