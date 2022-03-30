@@ -759,18 +759,18 @@ export default {
             }
             if(moveDirection == 'bottom') {
                 const moveBottom = (i) => {
-                    this.maxRows++
+                    
                     this.tiles[i].rowStart = this.tiles[i].rowStart + 1
 
                     const newRowEndVal = this.tiles[i].rowEnd + 1
                     this.tiles[i].rowEnd = newRowEndVal
 
                     this.tiles[i].rowEnd = newRowEndVal
-                    if(newRowEndVal - 1 == this.maxRows) {
-                        // this.maxRows = this.maxRows + 1
-                        this.maxRows++
-                        this.removeUnwantedRows()
-                    }
+                    this.$nextTick(() => {
+                        if((newRowEndVal - 1) >  this.maxRows) {
+                            this.maxRows++
+                        }
+                    })
                 }
                 if(multiple) {
                     this.selected_multiple_nodes.map(index => {
@@ -780,9 +780,9 @@ export default {
                     moveBottom(index)
                 }
             }
-            setTimeout(() => {
+            this.$nextTick(() => {
                 this.addSessionEntry()
-            }, 0)
+            })
         },
         height(mode,multiple,index) {
             this.addSessionEntry(this.tiles)
@@ -896,18 +896,19 @@ export default {
 
         },
         keydown(e) {
-            if(this.nodeSelectedIndex != undefined && this.controlls.selection_tool == 'off') {
+            console.log('key down')
+            if(this.nodeSelectedIndex != undefined) {
                 if(e.key == 'ArrowRight') {
-                    this.move('right',null,this.nodeSelectedIndex)
+                    this.move('right',false,this.nodeSelectedIndex)
                 }
                 if(e.key == 'ArrowLeft') {
-                    this.move('left',null,this.nodeSelectedIndex)
+                    this.move('left',false,this.nodeSelectedIndex)
                 }
                 if(e.key == 'ArrowDown') {
-                    this.move('bottom',null,this.nodeSelectedIndex)
+                    this.move('bottom',false,this.nodeSelectedIndex)
                 }
                 if(e.key == 'ArrowUp') {
-                    this.move('top',null,this.nodeSelectedIndex)
+                    this.move('top',false,this.nodeSelectedIndex)
                 }
             }
         },
