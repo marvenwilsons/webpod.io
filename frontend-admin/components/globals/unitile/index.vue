@@ -793,8 +793,8 @@ export default {
                     if(newRowEndVal == this.maxRows) {
                         this.maxRows = this.maxRows + 1
                     } else {
-                        if(newRowEndVal > this.maxRows) {
-                            this.maxRows = newRowEndVal + 1
+                        if(newRowEndVal >= this.maxRows) {
+                            this.maxRows = newRowEndVal
                         }
                     }
                 }
@@ -804,6 +804,7 @@ export default {
                     add(index)
                 }
                 
+                this.removeUnwantedRows()
             }
             if(mode == 'minus') {
                 const minus = (i) => {
