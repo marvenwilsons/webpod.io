@@ -266,10 +266,11 @@
                                     <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                             </dropDown>
+                            <!-- focus layer -->
                             <v-expand-x-transition>
                                 <dropDown
                                     v-if="nodeSelectedIndex != undefined"
-                                    :options="options"
+                                    :options="getTileLayers"
                                     :divideOptionsBefore="['Move down','Expand height','100% width', 'Clone']"
                                     :disabledOptions="disabledOptions"
                                     @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
@@ -560,6 +561,7 @@
             @addNewLayer="addNewLayer"
             @deleteLayer="deleteLayer"
             @orderChange="updateLayerOrder"
+            @changeActiveLayer="changeActiveLayer"
             ></layer-manager>
         </wp-modal>
     </main>
@@ -696,20 +698,15 @@ export default {
         removeUnwantedRows() {
             // get the lowest or the most bottom element in the layout
             let maxRowEnd = 0
-            const rowEnds = this.tiles.map(tile => {
-                // console.log('s',this.maxRows,tile.rowEnd)
-                // console.log(this.maxRows - tile.rowEnd)
-                if(maxRowEnd < tile.rowEnd) {
-                    maxRowEnd = tile.rowEnd
-                }
-            })
-
-            if(maxRowEnd + 1 != this.maxRows) {
-                if(this.maxRows != 4) {
-                    if(maxRowEnd - 1 != this.maxRows) {
-                        this.maxRows-- // remove rows
+            if(this.tiles.length != 0) {
+                this.tiles.map(tile => {
+                    if(maxRowEnd < tile.rowEnd) {
+                        maxRowEnd = tile.rowEnd - 1
                     }
-                }
+                })
+                this.maxRows = maxRowEnd
+            } else {
+                this.maxRows = 1
             }
         },  
         move(moveDirection,multiple,index) {
@@ -762,6 +759,7 @@ export default {
             }
             if(moveDirection == 'bottom') {
                 const moveBottom = (i) => {
+                    this.maxRows++
                     this.tiles[i].rowStart = this.tiles[i].rowStart + 1
 
                     const newRowEndVal = this.tiles[i].rowEnd + 1
@@ -769,7 +767,9 @@ export default {
 
                     this.tiles[i].rowEnd = newRowEndVal
                     if(newRowEndVal - 1 == this.maxRows) {
-                        this.maxRows = this.maxRows + 1
+                        // this.maxRows = this.maxRows + 1
+                        this.maxRows++
+                        this.removeUnwantedRows()
                     }
                 }
                 if(multiple) {
@@ -869,9 +869,9 @@ export default {
                 })
 
                 this.nodeSelectedIndex = undefined
-                setTimeout(() => {
+                this.$nextTick(() => {
                     this.nodeSelectedIndex = index
-                },10)
+                })
             } else {
                 this.nodeSelectedIndex = undefined
                 this.tiles[index].selected = false
@@ -960,7 +960,9 @@ export default {
                     layerOnFocus: 1,
                     zIndex: 1,
                 }
-                tile.layers.push(this.generateLayerInstance(1,'default',true))
+                const default_layer = this.generateLayerInstance(1,'default',true)
+                default_layer.active_layer = 'default'
+                tile.layers.push(default_layer)
                 this.tiles.push(tile)
             }
             
@@ -1435,6 +1437,8 @@ export default {
                 behavior: 'smooth'
             })
         },0)
+
+        this.removeUnwantedRows()
     },
     beforeDestroy() {
         webpod.dash.cog.hide()

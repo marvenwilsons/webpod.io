@@ -22,6 +22,14 @@ export default {
         ],
         disabledOptions: []
     }),
+    computed: {
+        getTileLayers() {
+            return this.tiles[this.nodeSelectedIndex].layers.map(e => ({
+                title: e.layer_name,
+                d: this.active_layer == e.layer_name ? 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' : ''
+            }))
+        }
+    },
     methods: {
         handleDropDownCommand(cmd,itemIndex,item,tiles) {
             switch(cmd) {
@@ -53,6 +61,9 @@ export default {
                     
                     tiles = tiles.splice(itemIndex,1)
                     this.addSessionEntry(tiles)
+                    this.$nextTick(() => {
+                        this.removeUnwantedRows()
+                    })
                 break;
                 case '100% h-span':
                     tiles[itemIndex].colEnd = this.maxCol + 1

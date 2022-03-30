@@ -23,8 +23,14 @@
                         <v-card outlined hover class="pad025 rounded-0 margintop025 pointer flex flexcol" >
                             <div class="flex pad025 flexcenter" >
                                 <div class="flex1 fullheight-percent" >
-                                    <div class=" padright050" >
-                                        <input v-model="layer.layer_name" class="paneBorder fullwidth pad025 body-1"  type="text" >
+                                    
+                                    <div class=" padright050 flex" >
+                                        <div style="min-width: 30px;" class="flex flexcenter flexstart" >
+                                           <!-- <v-radio :ripple="false" ></v-radio> -->
+                                            <v-icon @click="changeActiveLayer(layer.layer_name,layer.layer_id)" v-if="layer.active_layer != layer.layer_name" >mdi-radiobox-blank</v-icon>
+                                            <v-icon v-if="layer.active_layer == layer.layer_name" >mdi-radiobox-marked</v-icon>
+                                        </div>
+                                        <input v-model="layer.layer_name" class="paneBorder fullwidth pad025 body-1 padleft050"  type="text" >
                                     </div>
                                     <v-expand-transition>
                                         <div class="deep-orange--text accent-3"  v-if="layer.layer_name.trim() === ''" >
@@ -33,16 +39,16 @@
                                     </v-expand-transition>
                                 </div>
                                 <div>
-                                    <v-btn icon v-if="layer.layer_show == true" >
-                                        <v-icon @click="layer.layer_show = false" > mdi-eye-outline</v-icon>
+                                    <v-btn @click="layer.layer_show = false" icon v-if="layer.layer_show == true" >
+                                        <v-icon  > mdi-eye-outline</v-icon>
                                     </v-btn>
-                                    <v-btn icon v-if="layer.layer_show == false" >
-                                        <v-icon @click="layer.layer_show = true" > mdi-eye-off-outline</v-icon>
+                                    <v-btn @click="layer.layer_show = true" icon v-if="layer.layer_show == false" >
+                                        <v-icon  > mdi-eye-off-outline</v-icon>
                                     </v-btn>
-                                    <v-btn icon >
-                                        <v-icon @click="$emit('deleteLayer',layer.layer_id)" >mdi-delete</v-icon>
+                                    <v-btn @click="$emit('deleteLayer',layer.layer_id)" icon >
+                                        <v-icon  >mdi-delete</v-icon>
                                     </v-btn>
-                                    <v-btn icon text >
+                                    <v-btn :ripple="false" icon text >
                                         <v-icon>mdi-swap-vertical</v-icon>
                                     </v-btn>
                                 </div>
@@ -82,6 +88,12 @@ export default {
     methods: {
         doneDrag() {
             this.$emit('orderChange', this.list)
+        },
+        changeActiveLayer(name,id) {
+            this.$emit('changeActiveLayer', {
+                target_name: name,
+                target_id: id
+            })
         }
     },
     mounted() {
