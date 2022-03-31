@@ -45,6 +45,7 @@
                                     <v-btn @click="layer.layer_show = true" icon v-if="layer.layer_show == false" >
                                         <v-icon  > mdi-eye-off-outline</v-icon>
                                     </v-btn>
+                                    
                                     <v-btn @click="$emit('deleteLayer',layer.layer_id)" icon >
                                         <v-icon  >mdi-delete</v-icon>
                                     </v-btn>
@@ -65,8 +66,10 @@
                                          </v-btn>
                                      </div>
                                      <div class="paneBorder pad050">
+                                         <!-- rows -->
                                          <div class=" flex flexcenter" v-for="row in layer.layer_rows" :key="uid(row)" >
                                              <v-card outlined tile class=" fullwidth flex marginright025 " >
+                                                 <!-- blocks -->
                                                 <div class="flex " >
                                                     <v-card 
                                                     outlined
@@ -106,18 +109,44 @@
                                                 :options="blockItemOptions"
                                                 @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id})"
                                             >
-                                                <v-btn text icon >
-                                                    <v-icon>mdi-plus</v-icon>
-                                                </v-btn>
+                                                
+                                                <v-tooltip top >
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn v-bind="attrs" v-on="on" text icon >
+                                                            <v-icon>mdi-plus</v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Insert new row</span>
+                                                </v-tooltip>
                                             </dropDown>
-                                             <v-btn icon text >
-                                                 <v-icon>mdi-pencil</v-icon>
-                                             </v-btn>
-                                             <el-tooltip content="Delete row" placement="top" >
-                                                 <v-btn icon text >
-                                                    <v-icon>mdi-delete</v-icon>
-                                                </v-btn>
-                                             </el-tooltip>
+                                            <dropDown
+                                                :options="[
+                                                    {title: 'Clone this row and paste below'}, 
+                                                    {title: 'Wrap items', d: row.wrap_items == true ? 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' : ''}, 
+                                                    {title: 'Inline Style'},
+                                                    {title: 'Manage CSS Classes'},
+                                                ]"
+                                                @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id, payload: row})"
+                                            >   
+                                                <v-tooltip top >
+                                                    <template v-slot:activator="{ on, attrs }">
+                                                        <v-btn v-on="on" v-bind="attrs" text icon >
+                                                            <v-icon>mdi-pencil</v-icon>
+                                                        </v-btn>
+                                                    </template>
+                                                    <span>Row options</span>
+                                                </v-tooltip>
+                                            </dropDown>
+                                             <v-tooltip top >
+                                                 <template v-slot:activator="{ on, attrs }">
+                                                    <v-btn @click="$emit('rowCmd', {cmd: 'Delete row', target_id: row.row_id})" v-on="on" v-bind="attrs" icon text >
+                                                        <v-icon>mdi-delete</v-icon>
+                                                    </v-btn>
+                                                </template>
+                                                <span>
+                                                    Delete row
+                                                </span>
+                                             </v-tooltip>
                                          </div>
                                      </div>
                                  </div>
@@ -192,6 +221,9 @@ export default {
 }
 .layer-block-item:hover {
     background: #F5F5F5;
+}
+.v-tooltip__content {
+    z-index: 800 !important;
 }
 
 </style>

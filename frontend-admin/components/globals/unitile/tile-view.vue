@@ -10,26 +10,19 @@
             :backgroundColor="layer.layer_background"
             :opacity="layer.layer_opacity"
             >
-                <!-- <element-block
-                    v-for="block in tile.blocks"
-                    :key="uid(block)"
-                    :style_type="block.style_type"
-                    @blockClick="() => {}"          
-                /> -->
-                    <section 
-                    :class="['flex flex1 borderred',...row.classes, row.wrap_items ? 'flexwrap' : '']" 
-                    :style="{...row.custom_style}"  
-                    v-for="row in layer.layer_rows" 
-                    :key="uid(row)" 
-                    :id="row.row_id"
-                    >
-                        <div class="borderred flex1"  v-for="block in row.blocks" :key="uid(block)" >
-                            <!-- {{block.component_name}} -->
-                            <div v-if="block.component_name == 'text'" >
-                                {{block.value}}
-                            </div>
+                <section 
+                :class="['flex flex1 borderred',...row.classes, row.wrap_items ? 'flexwrap' : '']" 
+                :style="{...row.custom_style}"  
+                v-for="row in layer.layer_rows" 
+                :key="uid(row)" 
+                :id="row.row_id"
+                >
+                    <div class="borderred flex1"  v-for="block in row.blocks" :key="uid(block)" >
+                        <div v-if="block.component_name == 'text'" >
+                            {{block.value}}
                         </div>
-                    </section>
+                    </div>
+                </section>
             </layer>
         </div>
     </div>

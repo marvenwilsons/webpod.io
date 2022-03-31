@@ -343,7 +343,7 @@
                                     <dropDown
                                         v-if="nodeSelectedIndex != undefined"
                                         :options="options"
-                                        :divideOptionsBefore="['Move down','Expand height','Add new layer', 'Clone']"
+                                        :divideOptionsBefore="['Move down','Expand height', 'Clone']"
                                         :disabledOptions="disabledOptions"
                                         @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
                                     >

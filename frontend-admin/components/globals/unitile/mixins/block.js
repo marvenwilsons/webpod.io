@@ -3,9 +3,9 @@ export default {
         addElementBlock(block) {
             this.tiles[this.nodeSelectedIndex].blocks.push(block)
         },
-        addRowBlock(layer_id) {
+        addRowBlock(layer_id,row) {
             this.tiles[this.nodeSelectedIndex].layers.map(layer => {
-                if(layer.layer_id == layer_id) {
+                if(layer.layer_id == layer_id && row == undefined) {
                     layer.layer_rows.push({
                         custom_style: {},
                         classes: [],
@@ -13,7 +13,18 @@ export default {
                         blocks: [],
                         row_id: this.uid()
                     })
+                } else {
+                    layer.layer_rows.push(row)
                 }
+            })
+        },
+        deleteRow(target_id) {
+            this.tiles[this.nodeSelectedIndex].layers.map((layer,layer_index) => {
+                layer.layer_rows.map((row,row_index) => {
+                    if(row.row_id == target_id) {
+                        this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows.splice(row_index,1)
+                    }
+                })
             })
         },
         generateTextBlock(text_style) {
@@ -64,7 +75,7 @@ export default {
                 })
             })
         },
-        rowCmd({cmd,target_id}) {
+        rowCmd({cmd,target_id,payload}) {
             if(cmd == 'Insert text block') {
                 this.addBlock(target_id,this.generateTextBlock('text'))
             }
@@ -78,6 +89,35 @@ export default {
 
             if(cmd == 'Insert app instance block') {
                 this.addBlock(target_id,this.generateAppBlock('app-instance'))
+            }
+
+            if(cmd == 'Clone this row and paste below') {
+                let p = this.copy(payload)
+                p.row_id = undefined
+                p.row_id = this.uid()
+                this.addRowBlock(target_id,p)
+            }
+
+            if(cmd == 'Wrap items') {
+                console.log('wrap items cmd', target_id)
+
+                this.tiles[this.nodeSelectedIndex].layers.map((layer,layer_index) => {
+                    layer.layer_rows.map((row,row_index) => {
+                        if(row.row_id == target_id) {
+                            let w = this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows[row_index].wrap_items
+
+                            if(w == true) {
+                                this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows[row_index].wrap_items = false
+                            } else {
+                                this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows[row_index].wrap_items = true
+                            }
+                        }
+                    })
+                })
+            }
+
+            if(cmd == 'Delete row') {
+                this.deleteRow(target_id)
             }
         }
     }
