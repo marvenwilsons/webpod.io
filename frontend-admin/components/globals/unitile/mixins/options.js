@@ -51,6 +51,15 @@ export default {
                         })
                     })
                 break;
+                case 'Insert text block':
+                    this.addElementBlock('text', {
+                        style_type: 'text', // h1, h2, h3, h4, h5, h6, p, text
+                        value: 'Lorem Ipsum'
+                    })
+                break;
+                case 'Insert image block':
+                    console.log('inserting image block')
+                break;
                 case 'Clone':
                     this.addNewTile(true,itemIndex)
                 break;
@@ -70,49 +79,9 @@ export default {
                     tiles[itemIndex].colStart = 1
                     this.addSessionEntry(tiles)
                 break;
-                case '50% h-span':
-                    const colEnd = (this.maxCol / 2  + 1) + (tiles[itemIndex].colStart - 1)
-                    console.log(colEnd, this.maxCol)
-                    if(colEnd - 1 < this.maxCol || colEnd - 1 == this.maxCol) {
-                        tiles[itemIndex].colEnd = (this.maxCol / 2  + 1) + (tiles[itemIndex].colStart - 1)
-                    } else {
-                        webpod.dash.alert('Not enough space to perform 50% horizontal span')
-                    }
-                    // this.addSessionEntry(tiles)
-                    // console.log(tiles[itemIndex].customStyle.span = 4)¸
-                break;
                 Move
                 case 'Move down':
                     this.move('bottom',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                case 'Move up':
-                    this.move('top',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                case 'Move left':
-                    this.move('left',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                case 'Move right':
-                    this.move('right',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                // Dimentions
-                case 'Expand height':
-                    this.height('add',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                case 'Decrease height':
-                    this.height('minus',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                case 'Expand width':
-                    this.width('add',item.id,itemIndex)
-                    this.clearSelectedNode()
-                break;
-                case 'Decrease width':
-                    this.width('minus',item.id,itemIndex)
                     this.clearSelectedNode()
                 break;
             }

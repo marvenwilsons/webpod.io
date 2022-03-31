@@ -270,13 +270,13 @@
                             <v-expand-x-transition>
                                 <dropDown
                                     v-if="nodeSelectedIndex != undefined"
-                                    :options="getTileLayers"
-                                    :divideOptionsBefore="['Move down','Expand height','100% width', 'Clone']"
+                                    :options="options"
+                                    :divideOptionsBefore="['Move down','Expand height','Add new layer', 'Clone']"
                                     :disabledOptions="disabledOptions"
                                     @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
                                 >
-                                    <v-btn x-small fab text >
-                                        <v-icon>mdi-layers</v-icon>
+                                    <v-btn  small text icon tile >
+                                        <v-icon>mdi-square-edit-outline</v-icon>
                                     </v-btn>
                                 </dropDown>
                             </v-expand-x-transition>
@@ -289,7 +289,6 @@
                 <div
                     v-if="ready"
                     class="wp-dash-grid relative " 
-                    @keydown="keydown"
                     :id="`grid-${currentUid}`"
                     :style="{
                         ...gridContainerStyle,
@@ -569,6 +568,8 @@
             @deleteLayer="deleteLayer"
             @orderChange="updateLayerOrder"
             @changeActiveLayer="changeActiveLayer"
+            @addRowBlock="addRowBlock"
+            @rowCmd="rowCmd"
             ></layer-manager>
         </wp-modal>
     </main>
@@ -1535,5 +1536,8 @@ export default {
 .tile-item:hover {
     border: 1px solid #1870f0;
     box-shadow: 0px 0px 2px #1870f0
+}
+.block-item:hover {
+    border: 1px solid #1870f0;
 }
 </style>

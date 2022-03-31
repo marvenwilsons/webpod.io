@@ -6,7 +6,7 @@ export default {
         getActiveLayer() {
             return ((this.tiles[this.nodeSelectedIndex].layers.filter(layer => {
                 return layer.active_layer != undefined
-            }))[0]).active_layer
+            }))[0])
         }
     },
     methods: {
@@ -15,6 +15,7 @@ export default {
                 layer_id: 'layer-' + this.uid(),
                 layer_order: index,
                 layer_blocks: [], // array of block ids
+                layer_rows: [],
                 layer_name: name || 'untitled_' + Math.floor(Math.random() * 100),
                 layer_lock: layer_lock != undefined ? layer_lock : false,
                 layer_background: undefined,

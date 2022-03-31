@@ -1,5 +1,5 @@
 <template>
-    <div style="min-width:350px; height: 300px;"   >
+    <div style="min-width:550px; height: 400px;"   >
         <!-- eye | order of layer / name of layer | lock -->
         <section class="flex flexend" >
             <v-btn  @click="$emit('addNewLayer')" icon tile >
@@ -48,11 +48,80 @@
                                     <v-btn @click="$emit('deleteLayer',layer.layer_id)" icon >
                                         <v-icon  >mdi-delete</v-icon>
                                     </v-btn>
+                                    <v-btn @click="blockEditorOpen ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id " icon >
+                                        <v-icon  >mdi-view-sequential</v-icon>
+                                    </v-btn>
                                     <v-btn :ripple="false" icon text >
                                         <v-icon>mdi-swap-vertical</v-icon>
                                     </v-btn>
                                 </div>
                             </div>
+                            <!-- block editor -->
+                            <v-expand-transition>
+                                 <div v-if="blockEditorOpen == layer.layer_id" class="pad025 " >
+                                     <div class="flex flexend" >
+                                         <v-btn @click="$emit('addRowBlock',layer.layer_id)" text icon >
+                                             <v-icon>mdi-plus</v-icon>
+                                         </v-btn>
+                                     </div>
+                                     <div class="paneBorder pad050">
+                                         <div class=" flex flexcenter" v-for="row in layer.layer_rows" :key="uid(row)" >
+                                             <v-card outlined tile class=" fullwidth flex marginright025 " >
+                                                <div class="flex " >
+                                                    <v-card 
+                                                    outlined
+                                                    class="body-1 padleft050 padright050 flex1 pad025 layer-block-item" 
+                                                    v-for="block in row.blocks"
+                                                    :key="uid(block)"
+                                                    tile
+                                                    v-ripple
+                                                    >
+                                                        <div class="flex flexcenter" >
+                                                            <v-icon v-if="block.component_name == 'text'" >
+                                                                mdi-format-text
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'image'" >
+                                                                mdi-image
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'video'" >
+                                                                mdi-video
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'app-instance'" >
+                                                                mdi-application-brackets-outline
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'website'" >
+                                                                mdi-web
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'youtube'" >
+                                                                mdi-youtube
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'instagram'" >
+                                                                mdi-instagram
+                                                            </v-icon>
+                                                        </div>
+                                                    </v-card>
+                                                </div>
+                                             </v-card>
+                                             <dropDown
+                                                :options="blockItemOptions"
+                                                @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id})"
+                                            >
+                                                <v-btn text icon >
+                                                    <v-icon>mdi-plus</v-icon>
+                                                </v-btn>
+                                            </dropDown>
+                                             <v-btn icon text >
+                                                 <v-icon>mdi-pencil</v-icon>
+                                             </v-btn>
+                                             <el-tooltip content="Delete row" placement="top" >
+                                                 <v-btn icon text >
+                                                    <v-icon>mdi-delete</v-icon>
+                                                </v-btn>
+                                             </el-tooltip>
+                                         </div>
+                                     </div>
+                                 </div>
+                            </v-expand-transition>
                         </v-card>
                     </div>
                 </transition-group>
@@ -62,13 +131,22 @@
 </template>
 
 <script>
+import m from '@/m'
 export default {
+    mixins: [m],
     props: ['layers','item'],
     data: () => ({
         renaming: false,
         renameValue: undefined,
         drag: false,
-        list: undefined
+        list: undefined,
+        blockEditorOpen: undefined,
+        blockItemOptions: [
+            {title: 'Insert text block', d: 'M18.5,4L19.66,8.35L18.7,8.61C18.25,7.74 17.79,6.87 17.26,6.43C16.73,6 16.11,6 15.5,6H13V16.5C13,17 13,17.5 13.33,17.75C13.67,18 14.33,18 15,18V19H9V18C9.67,18 10.33,18 10.67,17.75C11,17.5 11,17 11,16.5V6H8.5C7.89,6 7.27,6 6.74,6.43C6.21,6.87 5.75,7.74 5.3,8.61L4.34,8.35L5.5,4H18.5Z'},
+            {title: 'Insert image block', d: 'M8.5,13.5L11,16.5L14.5,12L19,18H5M21,19V5C21,3.89 20.1,3 19,3H5A2,2 0 0,0 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19Z'},
+            {title: 'Insert video block', d: 'M15,8V16H5V8H15M16,6H4A1,1 0 0,0 3,7V17A1,1 0 0,0 4,18H16A1,1 0 0,0 17,17V13.5L21,17.5V6.5L17,10.5V7A1,1 0 0,0 16,6Z'},
+            {title: 'Insert app instance block', d: 'M21 2H3C1.9 2 1 2.9 1 4V20C1 21.1 1.9 22 3 22H21C22.1 22 23 21.1 23 20V4C23 2.9 22.1 2 21 2M21 20H3V6H21V20Z'},
+        ]
     }),
     watch: {
         layers() {
@@ -94,7 +172,7 @@ export default {
                 target_name: name,
                 target_id: id
             })
-        }
+        },
     },
     mounted() {
         this.list = this.layers
@@ -111,6 +189,9 @@ export default {
 }
 .no-move {
   transition: transform 0s;
+}
+.layer-block-item:hover {
+    background: #F5F5F5;
 }
 
 </style>
