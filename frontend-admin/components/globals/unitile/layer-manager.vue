@@ -79,29 +79,7 @@
                                                     tile
                                                     v-ripple
                                                     >
-                                                        <div class="flex flexcenter" >
-                                                            <v-icon v-if="block.component_name == 'text'" >
-                                                                mdi-format-text
-                                                            </v-icon>
-                                                            <v-icon v-if="block.component_name == 'image'" >
-                                                                mdi-image
-                                                            </v-icon>
-                                                            <v-icon v-if="block.component_name == 'video'" >
-                                                                mdi-video
-                                                            </v-icon>
-                                                            <v-icon v-if="block.component_name == 'app-instance'" >
-                                                                mdi-application-brackets-outline
-                                                            </v-icon>
-                                                            <v-icon v-if="block.component_name == 'website'" >
-                                                                mdi-web
-                                                            </v-icon>
-                                                            <v-icon v-if="block.component_name == 'youtube'" >
-                                                                mdi-youtube
-                                                            </v-icon>
-                                                            <v-icon v-if="block.component_name == 'instagram'" >
-                                                                mdi-instagram
-                                                            </v-icon>
-                                                        </div>
+                                                        <block-menu :block="block" ></block-menu>
                                                     </v-card>
                                                 </div>
                                              </v-card>
@@ -121,10 +99,10 @@
                                             </dropDown>
                                             <dropDown
                                                 :options="[
-                                                    {title: 'Clone this row and paste below'}, 
+                                                    {title: 'Clone & paste below', d: 'M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z'}, 
                                                     {title: 'Wrap items', d: row.wrap_items == true ? 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' : ''}, 
-                                                    {title: 'Inline Style'},
-                                                    {title: 'Manage CSS Classes'},
+                                                    {title: 'Inline Style', d: 'M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z'},
+                                                    {title: 'Manage CSS Classes', d: 'M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z'},
                                                 ]"
                                                 @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id, payload: row})"
                                             >   
@@ -161,14 +139,17 @@
 
 <script>
 import m from '@/m'
+import blockMenu from './block-menu.vue'
 export default {
     mixins: [m],
     props: ['layers','item'],
+    components: {blockMenu},
     data: () => ({
         renaming: false,
         renameValue: undefined,
         drag: false,
         list: undefined,
+        menu: false,
         blockEditorOpen: undefined,
         blockItemOptions: [
             {title: 'Insert text block', d: 'M18.5,4L19.66,8.35L18.7,8.61C18.25,7.74 17.79,6.87 17.26,6.43C16.73,6 16.11,6 15.5,6H13V16.5C13,17 13,17.5 13.33,17.75C13.67,18 14.33,18 15,18V19H9V18C9.67,18 10.33,18 10.67,17.75C11,17.5 11,17 11,16.5V6H8.5C7.89,6 7.27,6 6.74,6.43C6.21,6.87 5.75,7.74 5.3,8.61L4.34,8.35L5.5,4H18.5Z'},

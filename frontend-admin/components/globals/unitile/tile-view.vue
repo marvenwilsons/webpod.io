@@ -19,7 +19,7 @@
                 >
                     <div class="borderred flex1"  v-for="block in row.blocks" :key="uid(block)" >
                         <div v-if="block.component_name == 'text'" >
-                            {{block.value}}
+                            {{block.value}} - {{block.id}}
                         </div>
                     </div>
                 </section>

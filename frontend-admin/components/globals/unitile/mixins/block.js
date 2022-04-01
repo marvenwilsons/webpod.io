@@ -91,7 +91,7 @@ export default {
                 this.addBlock(target_id,this.generateAppBlock('app-instance'))
             }
 
-            if(cmd == 'Clone this row and paste below') {
+            if(cmd == 'Clone & paste below') {
                 let p = this.copy(payload)
                 p.row_id = undefined
                 p.row_id = this.uid()
