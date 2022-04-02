@@ -1,6 +1,6 @@
 <template>
     <main :class="['flex spacebetween fullheight-percent borderRad4', editMode ? '' : '']" >
-        <div :class="['flex flexcol']" 
+        <div :class="['flex flexcol relative']" 
             :style="{'max-width': !editMode && '1920px', 
                 'border': editMode ? '1px solid #d3d3d3' : '',
                 overflow: 'hidden',
@@ -374,6 +374,30 @@
                     </div>
                 </div>
             </section>
+            <section style="min-height:300px; max-height:300px; z-index:1080;"  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
+                <v-card :elevation="5" style="background: #fdfdfd" outlined class=" fullheight-percent flex" >
+                    <div class="flex fullheight-percent" >
+                        <div style="min-width:50%" class="paneBorder fullheight-percent overflow-y-auto pad050" >
+                            <layer-manager
+                            :layers="tiles[nodeSelectedIndex].layers"
+                            @addNewLayer="addNewLayer"
+                            @deleteLayer="deleteLayer"
+                            @orderChange="updateLayerOrder"
+                            @changeActiveLayer="changeActiveLayer"
+                            @addRowBlock="addRowBlock"
+                            @rowCmd="rowCmd"
+                            @blockClick="(b) => selected_block = b"
+                            ></layer-manager>
+                        </div>
+                        <div v-if="selected_block" style="width:50%" class="flex2" >
+                            <block-menu 
+                            :block="selected_block" 
+                            @deleteBlock="deleteBlock"
+                            />
+                        </div>
+                    </div>
+                </v-card>
+            </section>
         </div>
         <wp-modal v-if="modals.grid_settings == 'show'" class=" borderred">
             <div  v-if="editMode && !controlls.preview == 'on'" 
@@ -561,7 +585,7 @@
             </div>
         </wp-modal>
         <!-- layers modal -->
-        <wp-modal v-if="modals.layer_manager === 'show'" >
+        <!-- <wp-modal v-if="modals.layer_manager === 'show'" >
             <layer-manager
             :layers="tiles[nodeSelectedIndex].layers"
             @addNewLayer="addNewLayer"
@@ -571,7 +595,7 @@
             @addRowBlock="addRowBlock"
             @rowCmd="rowCmd"
             ></layer-manager>
-        </wp-modal>
+        </wp-modal> -->
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -583,6 +607,7 @@ import layer from './mixins/layer'
 import undoRedo from '@/undo-redo.js'
 import gridGuides from './grid-guides.vue'
 import blockManager from './mixins/block'
+import blockMenu from './block-menu.vue'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
@@ -601,7 +626,7 @@ import layerManager from './layer-manager.vue'
 export default {
     name: 'unitile',
     mixins: [m,optionHandler,undoRedo,layer,blockManager],
-    components: {layerManager, projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
+    components: {blockMenu, layerManager, projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
         project_title: undefined,

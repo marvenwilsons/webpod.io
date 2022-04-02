@@ -1,5 +1,5 @@
 <template>
-    <div style="min-width:550px; height: 400px;"   >
+    <div style="min-width:250px;"   >
         <!-- eye | order of layer / name of layer | lock -->
         <section class="flex flexend" >
             <v-btn  @click="$emit('addNewLayer')" icon tile >
@@ -78,8 +78,32 @@
                                                     :key="uid(block)"
                                                     tile
                                                     v-ripple
+                                                    @click="$emit('blockClick', block)"
                                                     >
-                                                        <block-menu :block="block" ></block-menu>
+                                                        <!-- <block-menu  :block="block" ></block-menu> -->
+                                                        <div @click="menu = block.id" class="flex flexcenter" >
+                                                            <v-icon v-if="block.component_name == 'text'" >
+                                                                mdi-format-text
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'image'" >
+                                                                mdi-image
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'video'" >
+                                                                mdi-video
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'app-instance'" >
+                                                                mdi-application-brackets-outline
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'website'" >
+                                                                mdi-web
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'youtube'" >
+                                                                mdi-youtube
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'instagram'" >
+                                                                mdi-instagram
+                                                            </v-icon>
+                                                        </div>
                                                     </v-card>
                                                 </div>
                                              </v-card>

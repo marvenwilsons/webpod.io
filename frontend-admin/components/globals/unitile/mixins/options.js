@@ -30,6 +30,13 @@ export default {
             }))
         }
     },
+    watch: {
+        nodeSelectedIndex() {
+            if(this.nodeSelectedIndex == undefined) {
+                this.$set(this.modals,'layer_manager', false ? 'show' : 'hide')
+            }
+        }
+    },
     methods: {
         handleDropDownCommand(cmd,itemIndex,item,tiles) {
             switch(cmd) {
@@ -37,19 +44,20 @@ export default {
                     this.addNewLayer()
                 break;
                 case 'Manage layers':
-                    const modal = webpod.dash.modal.show({
-                        modalTitle: 'Layers',
-                        viewTrigger: (v) => {
-                            this.$set(this.modals,'layer_manager', v ? 'show' : 'hide')
-                        } 
-                    })
-                    modal.on('close', () => {
-                        this.tiles[this.nodeSelectedIndex].layers.map((layer,index) => {
-                            if(layer.layer_name == "") {
-                                this.tiles[this.nodeSelectedIndex].layers[index].layer_name = 'untitled_' + this.uid()
-                            }
-                        })
-                    })
+                    this.$set(this.modals,'layer_manager', true ? 'show' : 'hide')
+                    // const modal = webpod.dash.modal.show({
+                    //     modalTitle: 'Layers',
+                    //     viewTrigger: (v) => {
+                    //         this.$set(this.modals,'layer_manager', v ? 'show' : 'hide')
+                    //     } 
+                    // })
+                    // modal.on('close', () => {
+                    //     this.tiles[this.nodeSelectedIndex].layers.map((layer,index) => {
+                    //         if(layer.layer_name == "") {
+                    //             this.tiles[this.nodeSelectedIndex].layers[index].layer_name = 'untitled_' + this.uid()
+                    //         }
+                    //     })
+                    // })
                 break;
                 case 'Insert text block':
                     this.addElementBlock('text', {

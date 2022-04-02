@@ -1,4 +1,14 @@
 export default {
+    data: () => ({
+        selected_block: undefined
+    }),
+    watch: {
+        nodeSelectedIndex() {
+            if(this.nodeSelectedIndex == undefined) {
+                this.selected_block = undefined
+            }
+        }
+    },
     methods: {
         addElementBlock(block) {
             this.tiles[this.nodeSelectedIndex].blocks.push(block)
@@ -119,6 +129,9 @@ export default {
             if(cmd == 'Delete row') {
                 this.deleteRow(target_id)
             }
+        },
+        deleteBlock() {
+            console.log('deleting', this.selected_block)
         }
     }
 }

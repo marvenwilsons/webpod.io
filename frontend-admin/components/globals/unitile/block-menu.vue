@@ -1,33 +1,7 @@
 <template>
-    <v-menu  bottom offset-x :nudge-width="'160'" :close-on-content-click="false">
-        <!-- block display -->
-        <template v-slot:activator="{ on, attrs }" >
-            <div @click="menu = block.id" v-bind="attrs" v-on="on" class="flex flexcenter" >
-                <v-icon v-if="block.component_name == 'text'" >
-                    mdi-format-text
-                </v-icon>
-                <v-icon v-if="block.component_name == 'image'" >
-                    mdi-image
-                </v-icon>
-                <v-icon v-if="block.component_name == 'video'" >
-                    mdi-video
-                </v-icon>
-                <v-icon v-if="block.component_name == 'app-instance'" >
-                    mdi-application-brackets-outline
-                </v-icon>
-                <v-icon v-if="block.component_name == 'website'" >
-                    mdi-web
-                </v-icon>
-                <v-icon v-if="block.component_name == 'youtube'" >
-                    mdi-youtube
-                </v-icon>
-                <v-icon v-if="block.component_name == 'instagram'" >
-                    mdi-instagram
-                </v-icon>
-            </div>
-        </template>
+    <div class="fullheight-percent overflow-y-auto" >
         <!-- menu content -->
-        <v-card style="min-width:400px;" class="pad125" :elavation="5" outlined >
+        <div  class="pad125 fullheight-percen"  >
             <div class="flex spacebetween flexcenter marginbottom050">
                 <div class="body-1 paneBorder pad025 padright050" style="background: #f5f5f5;">
                     <v-icon v-if="block.component_name == 'text'" >
@@ -54,9 +28,14 @@
                     {{block.component_name}}-block
                 </div>
                 <div class="" >
-                    <v-btn  icon text>
-                        <v-icon>mdi-delete</v-icon>
-                    </v-btn>
+                    <v-tooltip top>
+                        <template v-slot:activator="{on, attrs}" >
+                             <v-btn @click="$emit('deleteBlock')" v-on="on" v-bind="attrs"  icon text>
+                                <v-icon>mdi-delete</v-icon>
+                            </v-btn>
+                        </template>
+                        <span>Delete this {{block.component_name}} block</span>
+                    </v-tooltip>
                 </div>
             </div>
             <!-- id -->
@@ -74,16 +53,16 @@
                         <!--  -->
                         <div style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
                             <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
-                                Id
+                                id
                             </div > 
                             <input v-model="block.id" class="flex2 fullwidth"  type="text">
                         </div>
                          <!--  -->
                         <div style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
                             <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
-                                Id
+                                text-value
                             </div > 
-                            <input v-model="block.id" class="flex2 fullwidth"  type="text">
+                            <input v-model="block.value" class="flex2 fullwidth"  type="text">
                         </div>
 
                     </div>
@@ -96,8 +75,8 @@
                 </div>
             </div>
             <!-- classes -->
-        </v-card>
-    </v-menu>
+        </div>
+    </div>
 </template>
 
 <script>
