@@ -42,7 +42,7 @@
             
             <!-- native block properties -->
             <!-- inline style -->
-            <div style="overflow: hidden; max-height: 200px;" class="margintop050 paneBorder" >
+            <div style="max-height: 200px;" class="margintop050 paneBorder" >
                 <div class="flex " style="background: #f5f5f5;" >
                     <div @click="menu_nav = 'properties'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'properties' ? 'block-menu-nav--active' : '']" >Properties</div>
                     <div @click="menu_nav = 'inline style'"  v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'inline style' ? 'block-menu-nav--active' : '']">Inline Style</div>
@@ -67,11 +67,18 @@
 
                     </div>
                 </div>
-                <div v-if="menu_nav == 'inline style'" >
-                    <custom-css></custom-css>
+                <div class="padbottom125" v-if="menu_nav == 'inline style'" >
+                    <custom-css
+                    ref="block_inline_style"
+                    @change="apllyBlockInlineStyle"
+                    :cssObject="block_inline_style"
+                    :el_id="`#${block.id}`" 
+                    />
                 </div>
-                <div v-if="menu_nav == 'classes'" >
-                    classes
+                <div class="padbottom125" v-if="menu_nav == 'classes'" >
+                    <custom-classes
+                    ref="classEditor"
+                    />
                 </div>
             </div>
             <!-- classes -->
@@ -81,12 +88,39 @@
 
 <script>
 import customCss from './custom-css.vue'
+import customClasses from './cutom-classes.vue'
 export default {
-    components: {customCss},
+    components: {customCss, customClasses },
     props: ['block'],
     data: () => ({
-        menu_nav: 'properties'
-    })
+        menu_nav: 'properties',
+        block_inline_style: {}
+    }),
+    methods: {
+        apllyBlockInlineStyle(css) {
+            this.block_inline_style = css
+            this.block.custom_inline_style = css
+        },
+        applyBlockCustomClasses(c){
+
+        }
+    },
+    watch: {
+        menu_nav(n) {
+            if(n == 'classes') {
+                this.$nextTick(()=> {
+                    this.$refs.classEditor.setClasses(this.block.classes)
+                    this.$refs.classEditor.onData = (c) => {
+                        this.block.classes = c
+                    }
+                })
+            }
+        }
+    },
+    mounted(){
+        this.block_inline_style = this.block.custom_inline_style
+        
+    }
 }
 </script>
 
