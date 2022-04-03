@@ -19,7 +19,9 @@
                 >
                     <div class="borderred flex1"  v-for="block in row.blocks" :key="uid(block)" >
                         <div v-if="block.component_name == 'text'" >
-                            {{block.value}} - {{block.id}}
+                            <span :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </span>
                         </div>
                     </div>
                 </section>
