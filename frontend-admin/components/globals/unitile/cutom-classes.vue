@@ -39,6 +39,8 @@ export default {
 
             if(classesArray.length != 0) {
                 this.onData(classesArray)
+            } else {
+                this.onData([])
             }
         },
         setClasses(arr) {
