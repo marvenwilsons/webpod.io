@@ -184,7 +184,7 @@ export default {
         this.currentUid = this.uid()
         const CodeMirror = this.$CodeMirror 
 
-        setTimeout(() => {
+        this.$nextTick(() => {
             const codeMirrorEditorInstance = CodeMirror.fromTextArea(document.getElementById(`cm-editor${this.currentUid}`), {
                 tabSize: 4,
                 mode: this.lang || 'javascript',
@@ -314,8 +314,8 @@ export default {
             // refresh on load
             setTimeout(() => {
                 codeMirrorEditorInstance.refresh()
-            },50)
-        },10)
+            },60)
+        })
     }
 }
 </script>
