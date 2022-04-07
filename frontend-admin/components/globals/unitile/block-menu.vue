@@ -30,7 +30,7 @@
                 <div class="" >
                     <v-tooltip top>
                         <template v-slot:activator="{on, attrs}" >
-                             <v-btn @click="$emit('deleteBlock')" v-on="on" v-bind="attrs"  icon text>
+                             <v-btn @click="$emit('deleteBlock', block)" v-on="on" v-bind="attrs"  icon text>
                                 <v-icon>mdi-delete</v-icon>
                             </v-btn>
                         </template>
@@ -42,11 +42,12 @@
             
             <!-- native block properties -->
             <!-- inline style -->
-            <div style="max-height: 200px;" class="margintop050 paneBorder" >
+            <div  class="margintop050 paneBorder" >
                 <div class="flex " style="background: #f5f5f5;" >
                     <div @click="menu_nav = 'properties'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'properties' ? 'block-menu-nav--active' : '']" >Properties</div>
                     <div @click="menu_nav = 'inline style'"  v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'inline style' ? 'block-menu-nav--active' : '']">Inline Style</div>
                     <div @click="menu_nav = 'classes'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'classes' ? 'block-menu-nav--active' : '']">Classes</div>
+                    <div @click="menu_nav = 'animation'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'animation' ? 'block-menu-nav--active' : '']">Animation</div>
                 </div>
                 <div v-if="menu_nav == 'properties'" >
                     <div class="body-2 flex flexcol flexcenter paneBorder" >
@@ -80,6 +81,34 @@
                     ref="classEditor"
                     />
                 </div>
+                <div class="padbottom125" v-if="menu_nav == 'animation'"  >
+                    <div class="flex"  style="background: #f5f5f5; border-top: 1px solid lightgray;" >
+                        <div @click="animation_nav = 'load'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', animation_nav == 'load' ? 'block-menu-nav--active' : '']">Load</div>
+                        <div @click="animation_nav = 'leave'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', animation_nav == 'leave' ? 'block-menu-nav--active' : '']">Leave</div>
+                        <div @click="animation_nav = 'hover'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', animation_nav == 'hover' ? 'block-menu-nav--active' : '']">Hover</div>
+                        <div @click="animation_nav = 'click'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', animation_nav == 'click' ? 'block-menu-nav--active' : '']">Click</div>
+                    </div>
+                    <div v-if="animation_nav == 'load'" class="pad025" >
+                        Load animations <br>
+                        - fade-in <br>
+                        - slide-in-from-top <br>
+                        - slide-in-from-left <br>
+                        - slide-in-from-right <br>
+                        - slide-in-from-bottom <br>
+                        - scale-in-from-top <br>
+                        - scale-in-from-left <br>
+                        - scale-in-from-right <br>
+                        - scale-in-from-bottom <br>
+                    </div>
+                    <div v-if="animation_nav == 'leave'" class="pad025" >
+                        Load animations <br>
+                        - fade-in <br>
+                        - slide-in-from-top <br>
+                        - slide-in-from-left <br>
+                        - slide-in-from-right <br>
+                        - slide-in-from-bottom <br>
+                    </div>
+                </div>
             </div>
             <!-- classes -->
         </div>
@@ -94,6 +123,7 @@ export default {
     props: ['block'],
     data: () => ({
         menu_nav: 'properties',
+        animation_nav: 'load',
         block_inline_style: {}
     }),
     methods: {
@@ -127,8 +157,15 @@ export default {
 <style>
 .block-menu-nav:hover {
     background: lightgray !important;
+     /* -webkit-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
+    -moz-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
+    box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572); */
+
 }
 .block-menu-nav--active {
     background: lightgray !important;
+    /* -webkit-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
+    -moz-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
+    box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572); */
 }
 </style>

@@ -1,6 +1,6 @@
 export default {
     data: () => ({
-        active_layer: undefined
+        active_layer: undefined,
     }),
     computed: {
         getActiveLayer() {
@@ -8,6 +8,9 @@ export default {
                 return layer.active_layer != undefined
             }))[0])
         }
+    },
+    mounted() {
+        
     },
     methods: {
         generateLayerInstance(index,name,layer_lock) {
@@ -33,10 +36,11 @@ export default {
             const layer = this.generateLayerInstance(len + 1, null, false)
             layer.active_layer = layer.layer_name
             this.tiles[this.nodeSelectedIndex].layers.push(layer)
+            this.active_layer = layer.layer_name
+            this.selected_block = undefined
+
             this.$nextTick(() => {
                 this.addSessionEntry() 
-                this.active_layer = layer.layer_name
-                console.log('asdf', this.active_layer)
             })
         },
         deleteLayer(layerId) {
@@ -75,8 +79,12 @@ export default {
 
                 if(layer.layer_name == target_name && layer.layer_id == target_id) {
                     layer.active_layer = target_name
+                    this.active_layer = layer
                 }
             })
+        },
+        openLayerAndBlockcontroller() {
+            this.$set(this.layerAndBlockContoller,'show', true)
         }
     }
 }

@@ -1,6 +1,7 @@
 export default {
     data: () => ({
-        selected_block: undefined
+        selected_block: undefined,
+        selected_layer_row: undefined
     }),
     watch: {
         nodeSelectedIndex() {
@@ -13,9 +14,10 @@ export default {
         addElementBlock(block) {
             this.tiles[this.nodeSelectedIndex].blocks.push(block)
         },
-        addRowBlock(layer_id,row) {
+        addRowBlock(layer_id) {
+
             this.tiles[this.nodeSelectedIndex].layers.map(layer => {
-                if(layer.layer_id == layer_id && row == undefined) {
+                if(layer.layer_id == layer_id) {
                     layer.layer_rows.push({
                         custom_style: {},
                         classes: [],
@@ -23,8 +25,6 @@ export default {
                         blocks: [],
                         row_id: this.uid()
                     })
-                } else {
-                    layer.layer_rows.push(row)
                 }
             })
         },
@@ -79,9 +79,12 @@ export default {
         addBlock(target_id,block) {
             this.tiles[this.nodeSelectedIndex].layers.map((layer,layer_index) => {
                 layer.layer_rows.map((row,row_index) => {
-                    if(row.row_id == target_id) {
-                        this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows[row_index].blocks.push(block)
+                    if(row != undefined) {
+                        if(row.row_id == target_id) {
+                            this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows[row_index].blocks.push(block)
+                        }
                     }
+                   
                 })
             })
         },
@@ -130,8 +133,16 @@ export default {
                 this.deleteRow(target_id)
             }
         },
-        deleteBlock() {
-            console.log('deleting', this.selected_block)
+        deleteBlock(block,layer_row_id) {
+            this.selected_layer_row.blocks.map((b,i) => {
+                if(b.id == block.id) {
+                    this.selected_layer_row.blocks.splice(i,1)
+                    this.$nextTick(() => {
+                        this.selected_block = undefined
+                        this.selected_layer_row = undefined
+                    })
+                }
+            })
         }
     }
 }

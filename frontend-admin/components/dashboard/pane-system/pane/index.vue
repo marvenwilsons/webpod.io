@@ -1,28 +1,6 @@
 <template>
 <!-- PANE -->
     <main v-if="ready"  class="fullheight-percent flex flexcol relative overflowhidden " >
-        <!-- <section :style="{background: 'transparent'}" class="flex spacebetween pad025 padleft050 padright025" >
-            <div class="paneTextColor  padleft125 padtop125 padright125  fullwidth" 
-            style="z-index:100; display: block; max-width:95%;" >
-                <div class="flex spacebetween flexcenter" >
-                    <paneTitle  :paneCollection="paneCollection" :paneIndex="paneIndex" ></paneTitle>
-                    <div class="" style="z-index:100" >
-                        <div class="flex" >
-                            <v-btn 
-                                @click="onRemovePaneCollectionItem" class="flex flexcenter pointer"
-                                icon
-                                 v-if="typeof paneCollection[paneIndex].paneConfig.isClosable == 'boolean' ? paneCollection[paneIndex].paneConfig.isClosable : true" 
-                            > <v-icon>mdi-close</v-icon> </v-btn>
-                        </div>
-                    </div>
-                </div>
-                <section role="service ribbon" class="margintop050 marginbottom025 flex" >
-                    <paneRibbon :onRibbonClick="viewHooks.onRibbonClick" :ribbons="paneCollection[paneIndex].viewConfig.ribbons" ></paneRibbon>
-                </section>
-                <div class="" style="border-bottom: 1px solid lightgray;" ></div>
-            </div>
-        </section> -->
-        <!-- BODY -->
         <section
             :style="{zIndex:1, overflow: paneModalisActive ? '':'auto'}" 
             class="fullheight-percent relative flex" 
@@ -291,7 +269,11 @@ export default {
         try {
             setTimeout(() => {
                 const el = document.getElementById(`pane${this.paneIndex}`)
-                el.scrollIntoView({behavior: webpod.dashSettings['Pane Slide'] == 'yes' ? 'smooth' : 'auto', block: "center", inline: "center"})
+                // el.scrollIntoView({block: "end"})
+                el.scrollIntoView({
+                    behavior: webpod.dashSettings['Pane Slide'] == 'yes' ? 'smooth' : 'auto', 
+                    block: 'end'
+                })
             },300)
         } catch(err) {}
     }

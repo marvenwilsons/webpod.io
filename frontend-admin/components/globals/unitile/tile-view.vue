@@ -11,13 +11,13 @@
             :opacity="layer.layer_opacity"
             >
                 <section 
-                :class="['flex flex1 borderred',...row.classes, row.wrap_items ? 'flexwrap' : '']" 
-                :style="{...row.custom_style}"  
-                v-for="row in layer.layer_rows" 
-                :key="uid(row)" 
-                :id="row.row_id"
+                v-for="(row,i) in layer.layer_rows"
+                :key="uid(i)" 
+                :style="row && {...row.custom_style}"  
+                :class="row && ['flex flex1',...row.classes, row.wrap_items ? 'flexwrap' : '']" 
+                :id="row && row.row_id"
                 >
-                    <div class="borderred flex1"  v-for="block in row.blocks" :key="uid(block)" >
+                    <div class="flex1"  v-for="block in row.blocks" :key="uid(block)" >
                         <div v-if="block.component_name == 'text'" >
                             <span :style="{...block.custom_inline_style}" :class="[...block.classes]" >
                                 {{block.value}}

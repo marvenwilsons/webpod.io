@@ -386,14 +386,22 @@
                             @changeActiveLayer="changeActiveLayer"
                             @addRowBlock="addRowBlock"
                             @rowCmd="rowCmd"
-                            @blockClick="(b) => selected_block = b"
+                            @blockClick="({block,row}) => {selected_block = block, selected_layer_row = row, layerAndBlockContoller.show = false}"
+                            @openLayerAndBlockcontroller="openLayerAndBlockcontroller"
                             ></layer-manager>
                         </div>
-                        <div v-if="selected_block" style="width:50%" class="flex2" >
+                        <div v-if="selected_block && layerAndBlockContoller.show == false" style="width:50%" class="flex2" >
                             <block-menu 
                             :block="selected_block" 
                             @deleteBlock="deleteBlock"
                             />
+                        </div>
+                        <div v-if="layerAndBlockContoller.show == true" style="width:50%" class="flex2" >
+                            <codeEditor
+                                :readOnly="false"
+                                :lang="'javascript'"
+                                :code="layerAndBlockContoller.code"
+                            ></codeEditor>
                         </div>
                     </div>
                 </v-card>
@@ -584,18 +592,6 @@
                 />
             </div>
         </wp-modal>
-        <!-- layers modal -->
-        <!-- <wp-modal v-if="modals.layer_manager === 'show'" >
-            <layer-manager
-            :layers="tiles[nodeSelectedIndex].layers"
-            @addNewLayer="addNewLayer"
-            @deleteLayer="deleteLayer"
-            @orderChange="updateLayerOrder"
-            @changeActiveLayer="changeActiveLayer"
-            @addRowBlock="addRowBlock"
-            @rowCmd="rowCmd"
-            ></layer-manager>
-        </wp-modal> -->
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -608,6 +604,7 @@ import undoRedo from '@/undo-redo.js'
 import gridGuides from './grid-guides.vue'
 import blockManager from './mixins/block'
 import blockMenu from './block-menu.vue'
+import layerBlockController from './mixins/layer-block-controller'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
@@ -625,7 +622,7 @@ import layerManager from './layer-manager.vue'
 
 export default {
     name: 'unitile',
-    mixins: [m,optionHandler,undoRedo,layer,blockManager],
+    mixins: [m,optionHandler,undoRedo,layer,blockManager, layerBlockController],
     components: {blockMenu, layerManager, projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
@@ -713,17 +710,17 @@ export default {
                 this.highlighted_option = this.ribbons[1][0]
                 setTimeout(() => {
                     const el =  document.getElementById(this.highlighted_option)
-                    el.scrollIntoView({
-                        behavior: 'smooth'
-                    })
+                    // el.scrollIntoView({
+                    //     behavior: 'smooth'
+                    // })
                 },0)
             } else {
                 this.highlighted_option = this.ribbons[0][0]
                 setTimeout(() => {
                     const el =  document.getElementById(this.highlighted_option)
-                    el.scrollIntoView({
-                        behavior: 'smooth'
-                    })
+                    // el.scrollIntoView({
+                    //     behavior: 'smooth'
+                    // })
                 },0)
             }
         }
@@ -998,6 +995,7 @@ export default {
                 }
                 const default_layer = this.generateLayerInstance(1,'default',true)
                 default_layer.active_layer = 'default'
+                this.active_layer = 'default'
                 tile.layers.push(default_layer)
                 this.tiles.push(tile)
             }
@@ -1248,9 +1246,9 @@ export default {
                     this.highlighted_option = this.ribbons[opt][this.highlighted_option_index]
                     const el =  document.getElementById(this.highlighted_option)
                     if(el) {
-                        el.scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        // el.scrollIntoView({
+                        //     behavior: 'smooth'
+                        // });
                     } else {
                         this.highlighted_option = this.ribbons[opt][0]
                         document.getElementById(this.highlighted_option).scrollIntoView({
@@ -1267,9 +1265,9 @@ export default {
                     this.highlighted_option = this.ribbons[opt][this.highlighted_option_index]
                     const el =  document.getElementById(this.highlighted_option)
                     if(el) {
-                        el.scrollIntoView({
-                            behavior: 'smooth'
-                        });
+                        // el.scrollIntoView({
+                        //     behavior: 'smooth'
+                        // });
                     } else {
                         this.highlighted_option = this.ribbons[opt][this.ribbons[opt].length - 1]
                         document.getElementById(this.highlighted_option).scrollIntoView({
@@ -1468,10 +1466,10 @@ export default {
         // default ribbon highlighted option
         this.highlighted_option = this.ribbons[0][0]
         setTimeout(() => {
-            const el =  document.getElementById(this.highlighted_option)
-            el.scrollIntoView({
-                behavior: 'smooth'
-            })
+            // const el =  document.getElementById(this.highlighted_option)
+            // el.scrollIntoView({
+            //     behavior: 'smooth'
+            // })
         },0)
 
         this.removeUnwantedRows()

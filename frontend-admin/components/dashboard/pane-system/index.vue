@@ -108,15 +108,7 @@ export default {
                     if(activator) {
                         paneItemObject.activator = activator
                     }
-                    // slide to end effect
-                    const slideToEnd = () => {
-                        try {
-                            setTimeout(() => {
-                            // const el = document.getElementById(`pane${paneIndexOrigin + 1}`)
-                                // el.scrollIntoView({behavior: webpod.dashSettings['Pane Slide'] == 'yes' ? 'smooth' : 'auto', block: "center", inline: "center"})
-                            },100)
-                        } catch(err) {}
-                    }
+                    
                     // pane toggle
                     if(this.paneCollection.length - 1 == paneIndexOrigin){
                         // this.paneCollection = []
@@ -131,12 +123,10 @@ export default {
                             this.paneCollection.splice(paneIndexOrigin + 1, this.paneCollection.length - 1, paneItemObject)
                             setTimeout(() => {
                                 this.$refs.paneActivator.ready = true // to re render a pane with a posibility of a new data
-                                slideToEnd()
                             },100)
                         } else {
                             // add new pane
                             this.paneCollection.splice(paneIndexOrigin + 1, 0, paneItemObject)
-                            slideToEnd()
                         }
                     }
                 }
