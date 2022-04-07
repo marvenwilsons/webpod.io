@@ -93,6 +93,7 @@ export default {
   plugins: [
     { src: '~/plugins/global-vue.js', mode: 'client' },
     { src: '~/plugins/element-ui.js', mode: 'client' },
+    { src: '~/plugins/gsap.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
