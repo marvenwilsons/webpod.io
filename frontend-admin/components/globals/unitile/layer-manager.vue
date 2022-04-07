@@ -139,6 +139,18 @@
                                                             <v-icon v-if="block.component_name == 'instagram'" >
                                                                 mdi-instagram
                                                             </v-icon>
+                                                            <v-icon v-if="block.component_name == 'twitter'" >
+                                                                mdi-twitter
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'iframe'" >
+                                                                mdi-application-parentheses-outline
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'paragraph'" >
+                                                                mdi-format-paragraph
+                                                            </v-icon>
+                                                            <v-icon v-if="block.component_name == 'heading'" >
+                                                                mdi-format-header-pound
+                                                            </v-icon>
                                                         </div>
                                                     </v-card>
                                                    <div class="pat-1 fullwidth" style="min-height:30px;" v-if="row.blocks.length == 0" ></div>

@@ -37,12 +37,6 @@ export default {
                 })
             })
         },
-        generateTextBlock(text_style) {
-            return {
-                text_style: 'text', // text, p, h1, h2, h3, h4, h5, h6
-                ...this.generateCommonElementProp('Lorem ipsum','text')
-            }
-        },
         generateImageBlock() {
             return {
                 alt: '',
@@ -50,21 +44,6 @@ export default {
                 height: '',
                 src: '',
                 ...this.generateCommonElementProp(null,'image')
-            }
-        },
-        generateVideoBlock() {
-            return {
-                width: '',
-                height: '',
-                src: '',
-                ...this.generateCommonElementProp(null,'video')
-            }
-        },
-        generateAppBlock() {
-            return {
-                app_name: '',
-                app_instance_name: '',
-                ...this.generateCommonElementProp(null,'app-instance')
             }
         },
         generateCommonElementProp(value,component_name) {
@@ -90,19 +69,82 @@ export default {
         },
         rowCmd({cmd,target_id,payload}) {
             if(cmd == 'Insert text block') {
-                this.addBlock(target_id,this.generateTextBlock('text'))
+                this.addBlock(target_id, {
+                    text_style: 'text',
+                    ...this.generateCommonElementProp('Lorem ipsum','text')
+                })
             }
+
+            if(cmd == 'Insert paragraph block') {
+                this.addBlock(target_id, {
+                    text_style: 'paragraph',// text, p, h1, h2, h3, h4, h5, h6
+                    ...this.generateCommonElementProp('Lorem ipsum','paragraph')
+                })
+            }
+
+            if(cmd == 'Insert heading block') {
+                console.log('heading')
+                this.addBlock(target_id, {
+                    text_style: 'heading',// text, p, h1, h2, h3, h4, h5, h6
+                    ...this.generateCommonElementProp('Lorem ipsum','heading')
+                })
+            }
+
             if(cmd == 'Insert image block') {
-                this.addBlock(target_id,this.generateImageBlock('image'))
+                this.addBlock(target_id,{
+                    alt: '',
+                    width: '',
+                    height: '',
+                    src: '',
+                    ...this.generateCommonElementProp(null,'image')
+                })
             }
 
             if(cmd == 'Insert video block') {
-                this.addBlock(target_id,this.generateVideoBlock('video'))
+                this.addBlock(target_id,{
+                    width: '',
+                    height: '',
+                    src: '',
+                    ...this.generateCommonElementProp(null,'video')
+                })
             }
 
             if(cmd == 'Insert app instance block') {
-                this.addBlock(target_id,this.generateAppBlock('app-instance'))
+                this.addBlock(target_id,{
+                    app_name: '',
+                    app_instance_name: '',
+                    ...this.generateCommonElementProp(null,'app-instance')
+                })
             }
+
+            if(cmd == 'Insert youtube video') {
+                this.addBlock(target_id,{
+                    youtube_source: '',
+                    ...this.generateCommonElementProp(null,'youtube')
+                })
+            }
+
+            if(cmd == 'Insert instagram feed') {
+                this.addBlock(target_id,{
+                    feed_source: '',
+                    ...this.generateCommonElementProp(null,'instagram')
+                })
+            }
+
+            if(cmd == 'Insert twitter feed') {
+                this.addBlock(target_id,{
+                    feed_source: '',
+                    ...this.generateCommonElementProp(null,'twitter')
+                })
+            }
+
+            if(cmd == 'Insert iframe block') {
+                this.addBlock(target_id,{
+                    link: '',
+                    ...this.generateCommonElementProp(null,'iframe')
+                })
+            }
+
 
             if(cmd == 'Clone & paste below') {
                 let p = this.copy(payload)
