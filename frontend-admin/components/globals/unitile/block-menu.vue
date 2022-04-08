@@ -47,34 +47,45 @@
                     </v-tooltip>
                 </div>
             </div>
-            <!-- id -->
-            
-            <!-- native block properties -->
-            <!-- inline style -->
+            <!-- block editor -->
             <div  class="margintop050 paneBorder" >
+                <!-- main block tab navs -->
                 <div class="flex " style="background: #f5f5f5;" >
                     <div @click="menu_nav = 'properties'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'properties' ? 'block-menu-nav--active' : '']" >Properties</div>
                     <div @click="menu_nav = 'inline style'"  v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'inline style' ? 'block-menu-nav--active' : '']">Inline Style</div>
                     <div @click="menu_nav = 'classes'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'classes' ? 'block-menu-nav--active' : '']">Classes</div>
                     <div @click="menu_nav = 'animation'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'animation' ? 'block-menu-nav--active' : '']">Animation</div>
                 </div>
+                <!-- properties tab -->
                 <div v-if="menu_nav == 'properties'" >
-                    <div class="body-2 flex flexcol flexcenter paneBorder" >
-                        <!--  -->
+                    <div  class="body-2 flex flexcol flexcenter paneBorder" >
+                        <!-- id -->
                         <div style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
                             <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
                                 id
                             </div > 
                             <input v-model="block.id" class="flex2 fullwidth"  type="text">
                         </div>
-                         <!--  -->
-                        <div style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
+                        <!-- text -->
+                        <div v-if="block.component_name == 'text'" style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
                             <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
                                 text-value
                             </div > 
                             <input v-model="block.value" class="flex2 fullwidth"  type="text">
                         </div>
-
+                        <!-- paragraph -->
+                        <div v-if="block.component_name == 'paragraph'" style="border-bottom:1px solid lightgray; align-items: stretch;" class="flex flexend fullwidth" >
+                            <div style="border-right:1px solid lightgray; max-width:110px; align-items:center" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                text-value
+                            </div > 
+                            <!-- <textarea  v-model="block.value" class="flex2 fullwidth"  name="" id="" cols="30" rows="10"></textarea> -->
+                            <p-block
+                                :value="block_value"
+                                :block="block"
+                                class="flex2" 
+                                style="align-self: center;" 
+                            />
+                        </div>
                     </div>
                 </div>
                 <div class="padbottom125" v-if="menu_nav == 'inline style'" >
@@ -127,13 +138,15 @@
 <script>
 import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
+import pBlock from './block-menu/p-block.vue'
 export default {
-    components: {customCss, customClasses },
+    components: {customCss, customClasses, pBlock },
     props: ['block'],
     data: () => ({
         menu_nav: 'properties',
         animation_nav: 'load',
-        block_inline_style: {}
+        block_inline_style: {},
+        block_value: undefined
     }),
     methods: {
         apllyBlockInlineStyle(css) {
@@ -142,6 +155,9 @@ export default {
         },
         applyBlockCustomClasses(c){
 
+        },
+        p(v) {
+            console.log(v)
         }
     },
     watch: {
@@ -158,7 +174,7 @@ export default {
     },
     mounted(){
         this.block_inline_style = this.block.custom_inline_style
-        
+        this.block_value = this.block.value
     }
 }
 </script>

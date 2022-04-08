@@ -377,7 +377,7 @@
             <section style="min-height:300px; max-height:300px; z-index:1080;"  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
                 <v-card :elevation="5" style="background: #fdfdfd" outlined class=" fullheight-percent flex" >
                     <div class="flex fullheight-percent" >
-                        <div style="min-width:50%" class="paneBorder fullheight-percent overflow-y-auto pad050" >
+                        <div v-show="show_layer_manager" style="min-width:50%" class="paneBorder fullheight-percent overflow-y-auto pad050" >
                             <layer-manager
                             :layers="tiles[nodeSelectedIndex].layers"
                             @addNewLayer="addNewLayer"
@@ -390,18 +390,26 @@
                             @openLayerAndBlockcontroller="openLayerAndBlockcontroller"
                             ></layer-manager>
                         </div>
-                        <div v-if="selected_block && layerAndBlockContoller.show == false" style="width:50%" class="flex2" >
-                            <block-menu 
-                            :block="selected_block" 
-                            @deleteBlock="deleteBlock"
-                            />
-                        </div>
-                        <div v-if="layerAndBlockContoller.show == true" style="width:50%" class="flex2" >
-                            <codeEditor
-                                :readOnly="false"
-                                :lang="'javascript'"
-                                :code="layerAndBlockContoller.code"
-                            ></codeEditor>
+                        <div class=" flex" >
+                            <div class="" >
+                                <div style="background:#f5f5f5;" class="flex flexcenter  fullheight-percent" >
+                                    <v-icon v-if="show_layer_manager" @click="show_layer_manager = false" class="pointer" x-small >mdi-arrow-expand-left</v-icon>
+                                    <v-icon v-if="!show_layer_manager" @click="show_layer_manager = true" class="pointer" x-small >mdi-arrow-expand-right</v-icon>
+                                </div>
+                            </div>
+                            <div v-if="selected_block && layerAndBlockContoller.show == false" style="width:50%" class="flex2" >
+                                <block-menu 
+                                :block="selected_block" 
+                                @deleteBlock="deleteBlock"
+                                />
+                            </div>
+                            <div v-if="layerAndBlockContoller.show == true" style="width:50%" class="flex2" >
+                                <codeEditor
+                                    :readOnly="false"
+                                    :lang="'javascript'"
+                                    :code="layerAndBlockContoller.code"
+                                ></codeEditor>
+                            </div>
                         </div>
                     </div>
                 </v-card>

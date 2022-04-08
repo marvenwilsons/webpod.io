@@ -1,6 +1,7 @@
 export default {
     data: () => ({
         active_layer: undefined,
+        show_layer_manager: true,
     }),
     computed: {
         getActiveLayer() {
@@ -9,8 +10,12 @@ export default {
             }))[0])
         }
     },
-    mounted() {
-        
+    watch: {
+        nodeSelectedIndex(n) {
+            if(!n) {
+                this.show_layer_manager = true
+            }
+        }
     },
     methods: {
         generateLayerInstance(index,name,layer_lock) {

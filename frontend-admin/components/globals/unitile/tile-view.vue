@@ -23,6 +23,10 @@
                                 {{block.value}}
                             </span>
                         </div>
+                        <div v-if="block.component_name == 'paragraph'" >
+                            <p v-html="block.value" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                            </p>
+                        </div>
                     </div>
                 </section>
             </layer>
