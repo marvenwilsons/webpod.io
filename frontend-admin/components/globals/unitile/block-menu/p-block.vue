@@ -7,6 +7,9 @@
             <v-btn tile icon >
                 <v-icon>mdi-format-italic</v-icon>
             </v-btn>
+            <v-btn tile icon >
+                <v-icon>mdi-format-underline</v-icon>
+            </v-btn>
             <dropDown
                 :options="heading_options"
             >
@@ -17,7 +20,7 @@
             
         </div>
         <div class="fullwidth overflow-auto padright050" style="height: 200px;" >
-            <div @input="v => {block.value = v.target.innerHTML}"  
+            <div :class="[...block.classes]" @input="v => {block.value = v.target.innerHTML}"  
                 contenteditable
                 class=" fullwidth"
                 v-html="text"

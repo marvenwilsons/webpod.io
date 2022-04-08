@@ -375,9 +375,12 @@
                 </div>
             </section>
             <section style="min-height:300px; max-height:300px; z-index:1080;"  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
-                <v-card :elevation="5" style="background: #fdfdfd" outlined class=" fullheight-percent flex" >
+                <v-card  tile :elevation="5" style="background: #fdfdfd" outlined class=" fullheight-percent flex" >
+                    <div style="background: #f5f5f5" class="flex flexcenter" >
+                        <v-icon x-small >mdi-dots-horizontal</v-icon>
+                    </div>
                     <div class="flex fullheight-percent" >
-                        <div v-show="show_layer_manager" style="min-width:50%" class="paneBorder fullheight-percent overflow-y-auto pad050" >
+                        <div v-show="show_layer_manager" style="min-width:45%" class="paneBorder fullheight-percent overflow-y-auto pad050" >
                             <layer-manager
                             :layers="tiles[nodeSelectedIndex].layers"
                             @addNewLayer="addNewLayer"
@@ -390,14 +393,14 @@
                             @openLayerAndBlockcontroller="openLayerAndBlockcontroller"
                             ></layer-manager>
                         </div>
-                        <div class=" flex" >
+                        <div class="flex3 flex" >
                             <div class="" >
                                 <div style="background:#f5f5f5;" class="flex flexcenter  fullheight-percent" >
                                     <v-icon v-if="show_layer_manager" @click="show_layer_manager = false" class="pointer" x-small >mdi-arrow-expand-left</v-icon>
                                     <v-icon v-if="!show_layer_manager" @click="show_layer_manager = true" class="pointer" x-small >mdi-arrow-expand-right</v-icon>
                                 </div>
                             </div>
-                            <div v-if="selected_block && layerAndBlockContoller.show == false" style="width:50%" class="flex2" >
+                            <div v-if="selected_block && layerAndBlockContoller.show == false"  class=" paneBorder" >
                                 <block-menu 
                                 :block="selected_block" 
                                 @deleteBlock="deleteBlock"
