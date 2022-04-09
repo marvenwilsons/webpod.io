@@ -375,9 +375,9 @@
                 </div>
             </section>
             <section style="min-height:300px; max-height:300px; z-index:1080;"  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
-                <v-card  tile :elevation="5" style="background: #fdfdfd" outlined class=" fullheight-percent flex" >
-                    <div style="background: #f5f5f5" class="flex flexcenter" >
-                        <v-icon x-small >mdi-dots-horizontal</v-icon>
+                <v-card  tile :elevation="5" style="background: #fdfdfd" outlined id="block-menu-container" class=" fullheight-percent flex" >
+                    <div style="background: #f5f5f5; cursor: grab;" class="flex flexcenter" >
+                        <v-icon small >mdi-dots-horizontal</v-icon>
                     </div>
                     <div class="flex fullheight-percent" >
                         <div v-show="show_layer_manager" style="min-width:45%" class="paneBorder fullheight-percent overflow-y-auto pad050" >
@@ -400,7 +400,7 @@
                                     <v-icon v-if="!show_layer_manager" @click="show_layer_manager = true" class="pointer" x-small >mdi-arrow-expand-right</v-icon>
                                 </div>
                             </div>
-                            <div v-if="selected_block && layerAndBlockContoller.show == false"  class=" paneBorder" >
+                            <div v-if="selected_block && layerAndBlockContoller.show == false"  class="fullwidth paneBorder" >
                                 <block-menu 
                                 :block="selected_block" 
                                 @deleteBlock="deleteBlock"
@@ -1408,6 +1408,26 @@ export default {
         }
     },
     mounted() {
+        this.$interact('#block-menu-container')
+        .resizable({
+            edges: { top: true, left: false, bottom: false, right: false },
+            listeners: {
+                move: function (event) {
+                    let { x, y } = event.target.dataset
+
+                    x = (parseFloat(x) || 0) + event.deltaRect.left
+                    y = (parseFloat(y) || 0) + event.deltaRect.top
+
+                    Object.assign(event.target.style, {
+                        width: `${event.rect.width}px`,
+                        height: `${event.rect.height}px`,
+                        transform: `translate(${x}px, ${y}px)`
+                    })
+
+                    Object.assign(event.target.dataset, { x, y })
+                }
+            }
+        })
         // bottom alert
         const welcomMsg = webpod.dash.bottomAlert('Welcome to Unitile v-0.1', 'learn more')
         welcomMsg.on('btn-click', () => {
