@@ -75,10 +75,10 @@ export default {
                 })
             }
 
-            if(cmd == 'Insert paragraph block') {
+            if(cmd == 'Insert rich text') {
                 this.addBlock(target_id, {
-                    text_style: 'paragraph',// text, p, h1, h2, h3, h4, h5, h6
-                    ...this.generateCommonElementProp('Lorem ipsum','paragraph')
+                    text_style: 'rich text',// text, p, h1, h2, h3, h4, h5, h6
+                    ...this.generateCommonElementProp('Lorem ipsum','rich text')
                 })
             }
 

@@ -374,8 +374,8 @@
                     </div>
                 </div>
             </section>
-            <section style="min-height:300px; max-height:300px; z-index:1080;"  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
-                <v-card  tile :elevation="5" style="background: #fdfdfd; min-height: 20px;" outlined  v-resizable="['top','right']" class=" fullheight-percent flex" >
+            <section style="min-height:300px; max-height:300px; z-index:1080; "  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
+                <v-card  tile :elevation="5" style="background: #fdfdfd; min-height: 20px;" outlined  v-resizable="['top','right']" class=" fullheight-percent flex overflow-hidden" >
                     <div style="background: #f5f5f5; cursor: grab;" class="flex flexcenter" >
                         <v-icon small >mdi-dots-horizontal</v-icon>
                     </div>
@@ -612,15 +612,14 @@ import m from '@/m'
 import optionHandler from './mixins/options.js'
 import layer from './mixins/layer'
 import undoRedo from '@/undo-redo.js'
-import gridGuides from './grid-guides.vue'
 import blockManager from './mixins/block'
-import blockMenu from './block-menu.vue'
 import layerBlockController from './mixins/layer-block-controller'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
 import columnEditor from './column-editor.vue'
-
+import blockMenu from './block-menu.vue'
+import gridGuides from './grid-guides.vue'
 import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
@@ -634,7 +633,21 @@ import layerManager from './layer-manager.vue'
 export default {
     name: 'unitile',
     mixins: [m,optionHandler,undoRedo,layer,blockManager, layerBlockController],
-    components: {blockMenu, layerManager, projectPreview, tileView,gridGuides, customCss,customClasses,alignSelf,gridGap, containerJustifyItems, columnEditor, optContainer, uHeader},
+    components: {
+        blockMenu, 
+        layerManager, 
+        projectPreview, 
+        tileView,
+        gridGuides, 
+        customCss,
+        customClasses,
+        alignSelf,
+        gridGap, 
+        containerJustifyItems, 
+        columnEditor, 
+        optContainer, 
+        uHeader
+    },
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
         project_title: undefined,

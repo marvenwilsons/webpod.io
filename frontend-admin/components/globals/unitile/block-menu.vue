@@ -1,5 +1,5 @@
 <template>
-    <div class="fullheight-percent overflow-y-auto" >
+    <div id="block-menu" class="fullheight-percent overflow-y-auto" >
         <!-- menu content -->
         <div  class="pad125 fullheight-percen"  >
             <div class="flex spacebetween flexcenter marginbottom050">
@@ -74,17 +74,16 @@
                             <input v-model="block.value" class="flex2 fullwidth"  type="text">
                         </div>
                         <!-- paragraph -->
-                        <div v-if="block.component_name == 'paragraph'" style="border-bottom:1px solid lightgray; align-items: stretch;" class="flex flexend fullwidth" >
-                            <div style="border-right:1px solid lightgray; max-width:110px; align-items:center" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                        <div v-if="block.component_name == 'rich text'" style="border-bottom:1px solid lightgray; align-items: stretch;" class="flex flexend fullwidth" >
+                            <div style="border-right:1px solid lightgray; max-width:110px; align-items:center" class="caption padright050 padtop025 padbottom025  flex flexend" >
                                 text-value
                             </div > 
-                            <!-- <textarea  v-model="block.value" class="flex2 fullwidth"  name="" id="" cols="30" rows="10"></textarea> -->
-                            <p-block
-                                :value="block_value"
-                                :block="block"
-                                class="flex2" 
-                                style="align-self: center;" 
-                            />
+                            <div class="flex2 pad050">
+                                <tiptap-editor
+                                @contentChange="(v) => block.value = v"
+                                :content="block.value"
+                                ></tiptap-editor>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -139,8 +138,9 @@
 import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import pBlock from './block-menu/p-block.vue'
+import TiptapEditor from './rich-text-editor/TiptapEditor.vue'
 export default {
-    components: {customCss, customClasses, pBlock },
+    components: {customCss, customClasses, pBlock, TiptapEditor },
     props: ['block'],
     data: () => ({
         menu_nav: 'properties',

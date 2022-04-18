@@ -179,8 +179,6 @@ export default {
                         email: email.value
                     }
 
-                    console.log(this.firstFormValue)
-
                     this.hasError = false
 
                     this.isLoading = true

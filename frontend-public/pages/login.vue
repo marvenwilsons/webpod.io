@@ -210,7 +210,7 @@ export default {
 
                                     setTimeout(() => {
                                         location.href = '/wpadmin'
-                                    },100)
+                                    },500)
                                 },500)
                             } else {
                                 this.currentForm.disabled = false
