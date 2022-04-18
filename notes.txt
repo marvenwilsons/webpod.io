@@ -36,6 +36,11 @@ SVG Manipulation
 GSAP Key Frames
 ==> https://greensock.com/docs/v3/GSAP/gsap.to()
 
+Cool CSS Tricks
+==> https://doodad.dev/pattern-generator/
+
+Rich Text Editor
+==> https://tiptap.dev/installation/nuxt
 
 
 ============================================  TODO  ============================================
