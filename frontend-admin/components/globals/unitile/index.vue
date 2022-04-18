@@ -389,7 +389,7 @@
                             @changeActiveLayer="changeActiveLayer"
                             @addRowBlock="addRowBlock"
                             @rowCmd="rowCmd"
-                            @blockClick="({block,row}) => {selected_block = block, selected_layer_row = row, layerAndBlockContoller.show = false}"
+                            @blockClick="blockClick"
                             @openLayerAndBlockcontroller="openLayerAndBlockcontroller"
                             ></layer-manager>
                         </div>

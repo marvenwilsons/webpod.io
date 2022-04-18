@@ -28,7 +28,7 @@
                     <v-icon v-if="block.component_name == 'twitter'" >
                         mdi-twitter
                     </v-icon>
-                    <v-icon v-if="block.component_name == 'paragraph'" >
+                    <v-icon v-if="block.component_name == 'rich text'" >
                         mdi-format-paragraph
                     </v-icon>
                     <v-icon v-if="block.component_name == 'heading'" >
@@ -156,9 +156,6 @@ export default {
         applyBlockCustomClasses(c){
 
         },
-        p(v) {
-            console.log(v)
-        }
     },
     watch: {
         menu_nav(n) {

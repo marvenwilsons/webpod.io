@@ -185,6 +185,18 @@ export default {
                     })
                 }
             })
+        },
+        blockClick({block,row}) {
+            this.selected_block = undefined
+            this.selected_layer_row = undefined
+            this.$set(this.layerAndBlockContoller,'show', false)
+
+            this.$nextTick(() => {
+                this.selected_block = block
+                this.selected_layer_row = row
+                this.$set(this.layerAndBlockContoller,'show', false)
+            })
+            
         }
     }
 }

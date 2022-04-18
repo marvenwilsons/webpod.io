@@ -23,7 +23,7 @@
                                 {{block.value}}
                             </span>
                         </div>
-                        <div v-if="block.component_name == 'paragraph'" >
+                        <div v-if="block.component_name == 'rich text'" >
                             <p v-html="block.value" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
                             </p>
                         </div>
