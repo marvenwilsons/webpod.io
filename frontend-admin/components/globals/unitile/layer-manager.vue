@@ -105,17 +105,18 @@
                                      <div class=" ">
                                          <!-- rows -->
                                          <div class=" flex flexcenter" v-for="row in layer.layer_rows" :key="uid(row)" >
-                                             <v-card v-if="row != undefined" outlined tile class=" fullwidth flex marginright025 " >
+                                             <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 borderred" >
                                                  <!-- blocks -->
                                                 <div class="flex " >
-                                                    <v-card 
+                                                    <v-card
+                                                    :ripple="false" 
                                                     outlined
-                                                    class="body-1 padleft050 padright050 flex1 pad025 layer-block-item" 
+                                                    class="body-1 padleft050 padright050 flex1 pad025 layer-block-item"
+                                                    :style="{background: selectedBlock.id == block.id ? '#EEEEEE' : ''}"
                                                     v-for="block in row.blocks"
                                                     :key="uid(block)"
                                                     tile
-                                                    v-ripple
-                                                    @click="$emit('blockClick', {block,row})"
+                                                    @click="blockClick(block,row)"
                                                     >
                                                         <div @click="menu = block.id" class="flex flexcenter" >
                                                             <v-icon v-if="block.component_name == 'text'" >
@@ -220,6 +221,7 @@ export default {
     props: ['layers','item'],
     components: {blockMenu},
     data: () => ({
+        selectedBlock: '',
         renaming: false,
         renameValue: undefined,
         drag: false,
@@ -264,6 +266,10 @@ export default {
                 target_id: id
             })
         },
+        blockClick(block,row) {
+            this.selectedBlock = block
+            this.$emit('blockClick', {block,row})
+        }
     },
     mounted() {
         this.list = this.layers
