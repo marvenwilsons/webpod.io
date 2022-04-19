@@ -22,7 +22,7 @@
             </v-tooltip>
             
         </section>
-        <section style="background: #f5f5f5 " class="paneBorder pad050 marginbottom125 " >
+        <section style="background: #f5f5f5 " class="paneBorder rounded-lg pad050 marginbottom125 " >
             <drag-sort 
             @start="drag = true"
             @end="drag = false, doneDrag()"
@@ -30,8 +30,8 @@
             v-model="list" 
             >
                 <transition-group type="transition" :name="!drag ? 'flip-list' : null" >
-                    <div v-for="layer in list" :key="layer.layer_id" >
-                        <v-card outlined hover class="pad025 rounded-0 margintop025 pointer flex flexcol " >
+                    <div  v-for="layer in list" :key="layer.layer_id" >
+                        <v-card outlined hover  class="pad025 rounded-0 margintop025 pointer flex flexcol rounded-lg" >
                             <!-- layer name and active button -->
                             <div class="flex pad025 flexcenter" >
                                 <div class="flex1 fullheight-percent" >
@@ -42,7 +42,7 @@
                                             <v-icon @click="changeActiveLayer(layer.layer_name,layer.layer_id)" v-if="layer.active_layer != layer.layer_name" >mdi-radiobox-blank</v-icon>
                                             <v-icon v-if="layer.active_layer == layer.layer_name" >mdi-radiobox-marked</v-icon>
                                         </div>
-                                        <input v-model="layer.layer_name" class="paneBorder fullwidth pad025 body-1 padleft050"  type="text" >
+                                        <input v-model="layer.layer_name" class="paneBorder borderRad4 fullwidth pad025 body-1 padleft050"  type="text" >
                                     </div>
                                     <v-expand-transition>
                                         <div class="deep-orange--text accent-3"  v-if="layer.layer_name.trim() === ''" >
@@ -104,14 +104,15 @@
                                      </div>
                                      <div class=" ">
                                          <!-- rows -->
-                                         <div class=" flex flexcenter" v-for="row in layer.layer_rows" :key="uid(row)" >
-                                             <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 borderred" >
+                                         <div class=" flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
+                                             <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad025 rounded-lg" >
+                                                 <div class="caption" >Layer row {{rowIndex + 1}}</div>
                                                  <!-- blocks -->
                                                 <div class="flex " >
                                                     <v-card
                                                     :ripple="false" 
                                                     outlined
-                                                    class="body-1 padleft050 padright050 flex1 pad025 layer-block-item"
+                                                    class="body-1 padleft050 padright050 flex1 pad025 layer-block-item rounded-lg"
                                                     :style="{background: selectedBlock.id == block.id ? '#EEEEEE' : ''}"
                                                     v-for="block in row.blocks"
                                                     :key="uid(block)"
