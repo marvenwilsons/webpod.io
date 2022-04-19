@@ -105,10 +105,10 @@
                                      <div class=" ">
                                          <!-- rows -->
                                          <div class=" flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
-                                             <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad025 rounded-lg" >
+                                             <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad050 rounded-lg" >
                                                  <div class="caption" >Layer row {{rowIndex + 1}}</div>
                                                  <!-- blocks -->
-                                                <div class="flex " >
+                                                <div class="flex" style="gap:2px;" >
                                                     <v-card
                                                     :ripple="false" 
                                                     outlined
