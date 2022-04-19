@@ -3,7 +3,7 @@
         <!-- menu content -->
         <div  class="pad125 fullheight-percen"  >
             <div class="flex spacebetween flexcenter marginbottom050">
-                <div class="body-1 paneBorder pad025 padright050" style="background: #f5f5f5;">
+                <div class="body-1 borderRad4 pad025 padright050" style="background: #f5f5f5;">
                     <v-icon v-if="block.component_name == 'text'" >
                         mdi-format-text
                     </v-icon>
@@ -48,17 +48,17 @@
                 </div>
             </div>
             <!-- block editor -->
-            <div  class="margintop050 paneBorder" >
+            <v-card elevation="0"  class="margintop050" >
                 <!-- main block tab navs -->
-                <div class="flex " style="background: #f5f5f5;" >
-                    <div @click="menu_nav = 'properties'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'properties' ? 'block-menu-nav--active' : '']" >Properties</div>
-                    <div @click="menu_nav = 'inline style'"  v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'inline style' ? 'block-menu-nav--active' : '']">Inline Style</div>
-                    <div @click="menu_nav = 'classes'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'classes' ? 'block-menu-nav--active' : '']">Classes</div>
-                    <div @click="menu_nav = 'animation'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav', menu_nav == 'animation' ? 'block-menu-nav--active' : '']">Animation</div>
+                <div class="flex marginbottom050"  >
+                    <div @click="menu_nav = 'properties'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav caption marginright025 rounded-lg', menu_nav == 'properties' ? 'block-menu-nav--active' : '']" >Properties</div>
+                    <div @click="menu_nav = 'inline style'"  v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav caption marginright025 rounded-lg', menu_nav == 'inline style' ? 'block-menu-nav--active' : '']">Inline Style</div>
+                    <div @click="menu_nav = 'classes'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav caption marginright025 rounded-lg', menu_nav == 'classes' ? 'block-menu-nav--active' : '']">Classes</div>
+                    <div @click="menu_nav = 'animation'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav caption rounded-lg', menu_nav == 'animation' ? 'block-menu-nav--active' : '']">Animation</div>
                 </div>
                 <!-- properties tab -->
                 <div v-if="menu_nav == 'properties'" >
-                    <div  class="body-2 flex flexcol flexcenter paneBorder" >
+                    <div  class="body-2 flex flexcol flexcenter paneBorder rounded-lg overflow-hidden" >
                         <!-- id -->
                         <div style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
                             <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
@@ -67,13 +67,15 @@
                             <input v-model="block.id" class="flex2 fullwidth"  type="text">
                         </div>
                         <!-- text -->
-                        <div v-if="block.component_name == 'text'" style="border-bottom:1px solid lightgray;" class="flex flexcenter flexend fullwidth" >
-                            <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
-                                text-value
-                            </div > 
-                            <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                        <div v-if="block.component_name == 'text'"  class="flex flexcol flexend fullwidth" >
+                            <div class="flex"  >
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    text-value
+                                </div > 
+                                <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                            </div>
                         </div>
-                        <!-- paragraph -->
+                        <!-- rich text -->
                         <div v-if="block.component_name == 'rich text'" style="border-bottom:1px solid lightgray; align-items: stretch;" class="flex flexend fullwidth" >
                             <div style="border-right:1px solid lightgray; max-width:110px; align-items:center" class="caption padright050 padtop025 padbottom025  flex flexend" >
                                 text-value
@@ -83,6 +85,28 @@
                                 @contentChange="(v) => block.value = v"
                                 :content="block.value"
                                 ></tiptap-editor>
+                            </div>
+                        </div>
+                        <!-- heading -->
+                         <div v-if="block.component_name == 'heading'"  class="flex flexcol flexend fullwidth" >
+                            <div class="flex" style="border-bottom:1px solid lightgray;" >
+                                <div style="border-right:1px solid lightgray; max-width:110px; min-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    level
+                                </div > 
+                                <div class="flex padright050 flexwrap pad025" >
+                                    <v-btn v-for="h in (['h1','h2','h3','h4','h5','h6'])" 
+                                    :key="h"
+                                    @click="block.level = h" :class="['rounded-lg', block.level == h ? 'grey lighten-3' : '' ]" icon   >
+                                        {{h}}
+                                    </v-btn>
+                                </div>
+                                <!-- <input v-model="block.value" class="flex2 fullwidth"  type="text"> -->
+                            </div>
+                            <div class="flex">
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    text
+                                </div > 
+                                <input v-model="block.value" class="flex2 fullwidth"  type="text">
                             </div>
                         </div>
                     </div>
@@ -128,7 +152,7 @@
                         - slide-in-from-bottom <br>
                     </div>
                 </div>
-            </div>
+            </v-card>
             <!-- classes -->
         </div>
     </div>
@@ -178,14 +202,14 @@ export default {
 
 <style>
 .block-menu-nav:hover {
-    background: lightgray !important;
+    background: #EEEEEE !important;
      /* -webkit-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
     -moz-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
     box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572); */
 
 }
 .block-menu-nav--active {
-    background: lightgray !important;
+    background: #EEEEEE !important;
     /* -webkit-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
     -moz-box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572);
     box-shadow: inset 0px 0px 9px 3px rgba(133, 133, 133, 0.572); */
