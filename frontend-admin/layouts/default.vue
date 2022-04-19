@@ -49,13 +49,13 @@
                                 <span style="border-radius: 100%;" class="absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
                                     <h1
                                     class="merri-font" 
-                                    style="font-size:120px; color: #1e1e1e; margin:0; text-shadow:2px 2px 1px #1e1e1e" >
+                                    style="font-size:120px; color: #1565C0; margin:0; text-shadow:2px 2px 1px #0D47A1" >
                                     W</h1>
                                 </span>
                                 <v-progress-circular
                                 :size="200"
                                 :width="1"
-                                color="#1e1e1e"
+                                color="#0D47A1"
                                 indeterminate
                                 ></v-progress-circular>
                             </div>
