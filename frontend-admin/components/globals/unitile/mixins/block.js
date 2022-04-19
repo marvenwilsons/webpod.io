@@ -191,12 +191,11 @@ export default {
             this.selected_layer_row = undefined
             this.$set(this.layerAndBlockContoller,'show', false)
 
-            this.$nextTick(() => {
+            setTimeout(() => {
                 this.selected_block = block
                 this.selected_layer_row = row
                 this.$set(this.layerAndBlockContoller,'show', false)
-            })
-            
+            },100)
         }
     }
 }
