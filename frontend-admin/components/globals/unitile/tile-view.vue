@@ -18,11 +18,34 @@
                 :id="row && row.row_id"
                 >
                     <div class="flex1"  v-for="block in row.blocks" :key="uid(block)" >
+                        <!-- text -->
                         <div v-if="block.component_name == 'text'" >
                             <span :style="{...block.custom_inline_style}" :class="[...block.classes]" >
                                 {{block.value}}
                             </span>
                         </div>
+                        <!-- heading -->
+                         <div v-if="block.component_name == 'heading'" >
+                            <h1 v-if="block.level == 'h1'" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </h1>
+                            <h2 v-if="block.level == 'h2'" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </h2>
+                            <h3 v-if="block.level == 'h3'" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </h3>
+                            <h4 v-if="block.level == 'h4'" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </h4>
+                            <h5 v-if="block.level == 'h5'" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </h5>
+                            <h6 v-if="block.level == 'h6'" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
+                                {{block.value}}
+                            </h6>
+                        </div>
+                        <!-- rich text -->
                         <div v-if="block.component_name == 'rich text'" >
                             <p v-html="block.value" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
                             </p>
