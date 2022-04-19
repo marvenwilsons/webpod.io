@@ -77,15 +77,15 @@ export default {
 
             if(cmd == 'Insert rich text') {
                 this.addBlock(target_id, {
-                    text_style: 'rich text',// text, p, h1, h2, h3, h4, h5, h6
+                    text_style: 'rich text',
                     ...this.generateCommonElementProp('Lorem ipsum','rich text')
                 })
             }
 
             if(cmd == 'Insert heading block') {
-                console.log('heading')
                 this.addBlock(target_id, {
-                    text_style: 'heading',// text, p, h1, h2, h3, h4, h5, h6
+                    text_style: 'heading',
+                    level: 'h1',
                     ...this.generateCommonElementProp('Lorem ipsum','heading')
                 })
             }
