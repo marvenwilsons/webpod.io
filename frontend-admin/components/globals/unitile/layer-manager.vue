@@ -106,7 +106,57 @@
                                          <!-- rows -->
                                          <div class=" flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
                                              <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad050 rounded-lg" >
-                                                 <div class="caption" >Layer row {{rowIndex + 1}}</div>
+                                                <div class="flex flexcenter spacebetween" >
+                                                    <div class="caption" >Layer row {{rowIndex + 1}}</div>
+                                                    <div class="marginbottom025" >
+                                                        <!-- row method insert row block -->
+                                                        <dropDown
+                                                            :options="blockItemOptions"
+                                                            :divideOptionsBefore="['Insert image block','Insert app instance block','Insert youtube video']"
+                                                            @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id})"
+                                                        >
+                                                            
+                                                            <v-tooltip top >
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-btn v-bind="attrs" v-on="on" text icon >
+                                                                        <v-icon>mdi-plus</v-icon>
+                                                                    </v-btn>
+                                                                </template>
+                                                                <span>Insert element block to this row</span>
+                                                            </v-tooltip>
+                                                        </dropDown>
+                                                        <!-- row method, display row options -->
+                                                        <dropDown
+                                                            :options="[
+                                                                {title: 'Clone & paste below', d: 'M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z'}, 
+                                                                {title: 'Wrap items', d: row != undefined && row.wrap_items == true ? 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' : ''}, 
+                                                                {title: 'Inline Style', d: 'M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z'},
+                                                                {title: 'Manage CSS Classes', d: 'M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z'},
+                                                            ]"
+                                                            @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id, payload: row})"
+                                                        >   
+                                                            <v-tooltip top >
+                                                                <template v-slot:activator="{ on, attrs }">
+                                                                    <v-btn v-on="on" v-bind="attrs" text icon >
+                                                                        <v-icon>mdi-pencil</v-icon>
+                                                                    </v-btn>
+                                                                </template>
+                                                                <span>Row options</span>
+                                                            </v-tooltip>
+                                                        </dropDown>
+                                                        <!-- row method, delete row -->
+                                                        <v-tooltip top >
+                                                            <template v-slot:activator="{ on, attrs }">
+                                                                <v-btn @click="$emit('rowCmd', {cmd: 'Delete row', target_id: row.row_id})" v-on="on" v-bind="attrs" icon text >
+                                                                    <v-icon>mdi-delete</v-icon>
+                                                                </v-btn>
+                                                            </template>
+                                                            <span>
+                                                                Delete row
+                                                            </span>
+                                                        </v-tooltip>
+                                                    </div>
+                                                </div>
                                                  <!-- blocks -->
                                                 <div class="flex" style="gap:2px;" >
                                                     <v-card
@@ -158,49 +208,7 @@
                                                    <div class="pat-1 fullwidth" style="min-height:30px;" v-if="row.blocks.length == 0" ></div>
                                                 </div>
                                              </v-card>
-                                             <dropDown
-                                                :options="blockItemOptions"
-                                                :divideOptionsBefore="['Insert image block','Insert app instance block','Insert youtube video']"
-                                                @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id})"
-                                            >
-                                                
-                                                <v-tooltip top >
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn v-bind="attrs" v-on="on" text icon >
-                                                            <v-icon>mdi-plus</v-icon>
-                                                        </v-btn>
-                                                    </template>
-                                                    <span>Insert element block to this row</span>
-                                                </v-tooltip>
-                                            </dropDown>
-                                            <dropDown
-                                                :options="[
-                                                    {title: 'Clone & paste below', d: 'M19,21H8V7H19M19,5H8A2,2 0 0,0 6,7V21A2,2 0 0,0 8,23H19A2,2 0 0,0 21,21V7A2,2 0 0,0 19,5M16,1H4A2,2 0 0,0 2,3V17H4V3H16V1Z'}, 
-                                                    {title: 'Wrap items', d: row != undefined && row.wrap_items == true ? 'M21,7L9,19L3.5,13.5L4.91,12.09L9,16.17L19.59,5.59L21,7Z' : ''}, 
-                                                    {title: 'Inline Style', d: 'M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z'},
-                                                    {title: 'Manage CSS Classes', d: 'M5,3L4.35,6.34H17.94L17.5,8.5H3.92L3.26,11.83H16.85L16.09,15.64L10.61,17.45L5.86,15.64L6.19,14H2.85L2.06,18L9.91,21L18.96,18L20.16,11.97L20.4,10.76L21.94,3H5Z'},
-                                                ]"
-                                                @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id, payload: row})"
-                                            >   
-                                                <v-tooltip top >
-                                                    <template v-slot:activator="{ on, attrs }">
-                                                        <v-btn v-on="on" v-bind="attrs" text icon >
-                                                            <v-icon>mdi-pencil</v-icon>
-                                                        </v-btn>
-                                                    </template>
-                                                    <span>Row options</span>
-                                                </v-tooltip>
-                                            </dropDown>
-                                             <v-tooltip top >
-                                                 <template v-slot:activator="{ on, attrs }">
-                                                    <v-btn @click="$emit('rowCmd', {cmd: 'Delete row', target_id: row.row_id})" v-on="on" v-bind="attrs" icon text >
-                                                        <v-icon>mdi-delete</v-icon>
-                                                    </v-btn>
-                                                </template>
-                                                <span>
-                                                    Delete row
-                                                </span>
-                                             </v-tooltip>
+                                            
                                          </div>
                                          <div class="pat-1" style="min-height:30px;" v-if="layer.layer_rows.length == 0" >
                                          </div>
