@@ -36,16 +36,57 @@
                     </v-icon>
                     {{block.component_name}}-block
                 </div>
-                <div class="" >
-                    <v-tooltip top>
-                        <template v-slot:activator="{on, attrs}" >
-                             <v-btn @click="$emit('deleteBlock', block)" v-on="on" v-bind="attrs"  icon text>
-                                <v-icon>mdi-delete</v-icon>
-                            </v-btn>
-                        </template>
-                        <span>Delete this {{block.component_name}} block</span>
-                    </v-tooltip>
+                <div>
+                    <div class="flex " >
+                        <v-tooltip top>
+                            <template v-slot:activator="{on, attrs}" >
+                                <v-btn  v-on="on" v-bind="attrs"  icon text>
+                                    <v-icon>mdi-arrow-left</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Move this block to left</span>
+                        </v-tooltip>
+                        
+                        <v-tooltip top>
+                            <template v-slot:activator="{on, attrs}" >
+                                <v-btn  v-on="on" v-bind="attrs"  icon text>
+                                    <v-icon>mdi-arrow-right</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Move block to right</span>
+                        </v-tooltip>
+
+                        <v-tooltip top>
+                            <template v-slot:activator="{on, attrs}" >
+                                <v-btn  v-on="on" v-bind="attrs"  icon text>
+                                    <v-icon>mdi-content-copy</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Copy block content</span>
+                        </v-tooltip>
+
+                        <v-tooltip top>
+                            <template v-slot:activator="{on, attrs}" >
+                                <v-btn  v-on="on" v-bind="attrs"  icon text>
+                                    <v-icon>mdi-import</v-icon>
+                                </v-btn>
+                            </template>
+                            <span>Import block content</span>
+                        </v-tooltip>
+
+                        <div class="" >
+                            <v-tooltip top>
+                                <template v-slot:activator="{on, attrs}" >
+                                    <v-btn @click="$emit('deleteBlock', block)" v-on="on" v-bind="attrs"  icon text>
+                                        <v-icon>mdi-delete</v-icon>
+                                    </v-btn>
+                                </template>
+                                <span>Delete this {{block.component_name}} block</span>
+                            </v-tooltip>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
             <!-- block editor -->
             <v-card elevation="0"  class="margintop050" >
