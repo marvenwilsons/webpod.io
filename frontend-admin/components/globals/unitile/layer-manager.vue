@@ -28,6 +28,7 @@
             @end="drag = false, doneDrag()"
             v-bind="dragOptions"
             v-model="list" 
+            :handle="'.drag-handle'"
             >
                 <transition-group type="transition" :name="!drag ? 'flip-list' : null" >
                     <div  v-for="layer in list" :key="layer.layer_id" >
@@ -78,11 +79,11 @@
                                     
                                     <v-tooltip top>
                                         <template v-slot:activator="{on, attrs}" >
-                                            <v-btn v-bind="attrs" v-on="on" @click="blockEditorOpen == layer.layer_id ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id " icon >
+                                            <v-btn class="drag-handle" v-bind="attrs" v-on="on" @click="blockEditorOpen == layer.layer_id ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id " icon >
                                                 <v-icon  >mdi-view-sequential</v-icon>
                                             </v-btn>
                                         </template>
-                                        <span>Layer row and row blocks manager</span>
+                                        <span>Open Layer and row options / drag handle</span>
                                     </v-tooltip>
                                     
                                     <!-- <v-btn :ripple="false" icon text >
