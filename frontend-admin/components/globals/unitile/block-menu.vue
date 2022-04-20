@@ -38,7 +38,7 @@
                 </div>
                 <div>
                     <div class="flex " >
-                        <v-tooltip top>
+                        <!-- <v-tooltip top>
                             <template v-slot:activator="{on, attrs}" >
                                 <v-btn  v-on="on" v-bind="attrs"  icon text>
                                     <v-icon>mdi-arrow-left</v-icon>
@@ -54,11 +54,11 @@
                                 </v-btn>
                             </template>
                             <span>Move block to right</span>
-                        </v-tooltip>
+                        </v-tooltip> -->
 
                         <v-tooltip top>
                             <template v-slot:activator="{on, attrs}" >
-                                <v-btn  v-on="on" v-bind="attrs"  icon text>
+                                <v-btn @click="copyBlockContent(block)" v-on="on" v-bind="attrs"  icon text>
                                     <v-icon>mdi-content-copy</v-icon>
                                 </v-btn>
                             </template>
@@ -67,7 +67,7 @@
 
                         <v-tooltip top>
                             <template v-slot:activator="{on, attrs}" >
-                                <v-btn  v-on="on" v-bind="attrs"  icon text>
+                                <v-btn @click="importBlockContent" v-on="on" v-bind="attrs"  icon text>
                                     <v-icon>mdi-import</v-icon>
                                 </v-btn>
                             </template>
@@ -211,7 +211,8 @@ export default {
         menu_nav: 'properties',
         animation_nav: 'load',
         block_inline_style: {},
-        block_value: undefined
+        block_value: undefined,
+        openImportBlockContentWindow: false
     }),
     methods: {
         apllyBlockInlineStyle(css) {
@@ -221,6 +222,14 @@ export default {
         applyBlockCustomClasses(c){
 
         },
+        importBlockContent() {
+            this.openImportBlockContentWindow = true
+        },
+        copyBlockContent(block) {
+            navigator.clipboard.writeText(JSON.stringify(block))
+
+            webpod.dash.bottomAlert('Block content copied to clip board! Ctrl + v to paste')
+        }
     },
     watch: {
         menu_nav(n) {
