@@ -374,7 +374,7 @@
                     </div>
                 </div>
             </section>
-            <section style="min-height:300px; max-height:300px; z-index:1080; "  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
+            <section style="min-height:400px; max-height:400px; z-index:1080; "  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
                 <v-card  tile :elevation="5" style="background: #fdfdfd; min-height: 20px;" outlined  v-resizable="['top','right']" class=" fullheight-percent flex overflow-hidden" >
                     <div style="background: #f5f5f5; cursor: grab;" class="flex flexcenter" >
                         <v-icon small >mdi-dots-horizontal</v-icon>
