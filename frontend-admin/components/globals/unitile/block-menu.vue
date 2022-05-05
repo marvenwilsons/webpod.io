@@ -2,6 +2,7 @@
     <div id="block-menu" class="fullheight-percent overflow-y-auto" >
         <!-- menu content -->
         <div  class="pad125 fullheight-percen"  >
+            <!-- block info -->
             <div class="flex spacebetween flexcenter marginbottom050">
                 <div class="body-1 borderRad4 pad025 padright050" style="background: #f5f5f5;">
                     <v-icon v-if="block.component_name == 'text'" >
@@ -36,26 +37,9 @@
                     </v-icon>
                     {{block.component_name}}-block
                 </div>
+                <!-- right side heading buttons -->
                 <div>
-                    <div class="flex " >
-                        <!-- <v-tooltip top>
-                            <template v-slot:activator="{on, attrs}" >
-                                <v-btn  v-on="on" v-bind="attrs"  icon text>
-                                    <v-icon>mdi-arrow-left</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Move this block to left</span>
-                        </v-tooltip>
-                        
-                        <v-tooltip top>
-                            <template v-slot:activator="{on, attrs}" >
-                                <v-btn  v-on="on" v-bind="attrs"  icon text>
-                                    <v-icon>mdi-arrow-right</v-icon>
-                                </v-btn>
-                            </template>
-                            <span>Move block to right</span>
-                        </v-tooltip> -->
-
+                    <div class="flex" >
                         <v-tooltip top>
                             <template v-slot:activator="{on, attrs}" >
                                 <v-btn @click="copyBlockContent(block)" v-on="on" v-bind="attrs"  icon text>
@@ -67,7 +51,7 @@
 
                         <v-tooltip top>
                             <template v-slot:activator="{on, attrs}" >
-                                <v-btn @click="importBlockContent" v-on="on" v-bind="attrs"  icon text>
+                                <v-btn @click="openImportContentWindow()" v-on="on" v-bind="attrs"  icon text>
                                     <v-icon>mdi-import</v-icon>
                                 </v-btn>
                             </template>
@@ -86,10 +70,28 @@
                         </div>
                     </div>
                 </div>
-                
             </div>
+            <v-card class="pad050 flex flexcol" v-if="openImportBlockContentWindow" >
+                <div class="caption" >
+                    Copied block content string is auto pasted below. <br> <br>
+                    To avoid weird results please avoid editing the <em>"auto pasted block content"</em> unless you know what you're doing.
+                    <br> <br>
+                </div>
+                <div class="flex flexend flexcenter" >
+                   <div class="marginright050" >Auto assign unique block id </div>
+                   <v-switch v-model="autoAssignUniqueId" x-small ></v-switch>
+                </div>
+                <textarea style="resize:none; height:100px; font-family:Menlo;" class="paneBorder fullwidth pad050 code" v-model="importedBlockContent"></textarea>
+                <div class=" text-err caption" v-if="importBlockContentError" >
+                    {{importBlockContentError}}
+                </div>
+                <div class="flex flexend">
+                    <v-btn small @click="cancelBlockImport" class="marginright050" >cancel</v-btn>
+                    <v-btn small @click="saveAndValidatedBlockContent" >validate & save</v-btn>
+                </div>
+            </v-card>
             <!-- block editor -->
-            <v-card elevation="0"  class="margintop050" >
+            <v-card v-if="!openImportBlockContentWindow" elevation="0"  class="margintop050" >
                 <!-- main block tab navs -->
                 <div class="flex marginbottom050"  >
                     <div @click="menu_nav = 'properties'" v-ripple :class="['body-2 paneBorder pad025 padleft050 padright050 pointer block-menu-nav caption marginright025 rounded-lg', menu_nav == 'properties' ? 'block-menu-nav--active' : '']" >Properties</div>
@@ -212,7 +214,12 @@ export default {
         animation_nav: 'load',
         block_inline_style: {},
         block_value: undefined,
-        openImportBlockContentWindow: false
+        // Importing block content data
+        openImportBlockContentWindow: false,
+        importedBlockContent: undefined,
+        importBlockContentError: undefined,
+        autoAssignUniqueId: true,
+        copiedBlockValue: undefined
     }),
     methods: {
         apllyBlockInlineStyle(css) {
@@ -222,14 +229,45 @@ export default {
         applyBlockCustomClasses(c){
 
         },
-        importBlockContent() {
-            this.openImportBlockContentWindow = true
-        },
         copyBlockContent(block) {
-            navigator.clipboard.writeText(JSON.stringify(block))
+            webpod.dash.temp = JSON.stringify(block)
+            // navigator.clipboard.writeText(JSON.stringify(block))
 
-            webpod.dash.bottomAlert('Block content copied to clip board! Ctrl + v to paste')
+            webpod.dash.bottomAlert('Block content copied!')
+        },
+        // Importing block content methods
+        openImportContentWindow() {
+            this.openImportBlockContentWindow = true
+            this.copiedBlockValue = webpod.dash.temp
+
+            if(this.copiedBlockValue != undefined) {
+                this.importedBlockContent = this.copiedBlockValue
+                webpod.dash.bottomAlert('Block content pasted successfully!')
+                setTimeout(() => {
+                    webpod.dash.temp = null
+                },100)
+            }
+        },
+        validateBlockContent() {
+            try {
+                const block = JSON.parse(`${this.importedBlockContent}`)
+                const blockKeys = Object.keys(block)
+                if(blockKeys.includes('id') && blockKeys.includes('classes') && blockKeys.includes('custom_inline_style') && blockKeys.includes('component_name')) {
+                    console.log('yep all important keys are there')
+                }
+            } catch(err) {
+                this.importBlockContentError = 'Invalid block string entry'
+            }
+        },
+        saveAndValidatedBlockContent() {
+            this.validateBlockContent()
+        },
+        cancelBlockImport() {
+            this.openImportBlockContentWindow = false
+            this.importedBlockContent = undefined,
+            this.importBlockContentError = undefined
         }
+        // end
     },
     watch: {
         menu_nav(n) {

@@ -38,6 +38,24 @@ export default {
             })
         }
     },
+    fetchAppInstanceData: function ({app_name,instance_title},cb) {
+        if(appInstance[instance_title] != undefined) {
+            cb(appInstance[instance_title])
+        } else {
+            fetch(`${process.env.API_URL}/apps/${app_name}/data/${instance_title}`)
+            .then(response => response.json())
+            .then(data => {
+                appInstance[instance_title] = data
+                cb(data)
+            })
+            .catch(err => {
+                webpod.dash.alertError({
+                    message: `<span>An error occured while fetching app instance for app: <strong>"${app_name}"</strong> target instance title:  <strong>"${instance_title}"</strong> <br> server says: <strong >"${err.message}"</strong> </span>`,
+                    reload: true
+                })
+            })
+        }
+    },
     insertAppInstance: function ({app_name,instance_title}, cb) {
         const url = `${process.env.API_URL}/apps/${app_name}/${instance_title}`
         

@@ -49,7 +49,7 @@ function init (body, cb) {
             dbEvents.emit('install-default-apps')
         }
 
-        if(event_count == 40) {
+        if(event_count == 23) {
             global.progress('100%')
             global.log('finishing up ...')
             const man = {

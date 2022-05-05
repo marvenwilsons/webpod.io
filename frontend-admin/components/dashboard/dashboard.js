@@ -142,6 +142,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             dash.showInitForms(true,generated_db_info)
         } else {    
             if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
+                console.log('token detected', socket)
                 socket.emit('req', {
                     name: 'getUserServices',
                     payload: {

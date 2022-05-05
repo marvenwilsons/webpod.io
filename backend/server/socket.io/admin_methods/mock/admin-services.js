@@ -827,6 +827,7 @@ function getName() {
         body: {
           paneConfig: {
             title: 'Layout Builder (unitile ver-alpha)',
+            isClosable: true
           },
           view: 'unitile',
           viewData: [

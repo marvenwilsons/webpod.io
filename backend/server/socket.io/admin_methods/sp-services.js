@@ -121,6 +121,7 @@ async function  getServiceVersion(service_id, version_name) {
   console.log(`=== getServiceVersion ${service_id} ===`)
 
   const ver9_instancer = {
+    // instancer sample
     instance_types: [
       {
         type: 'Static Layout',

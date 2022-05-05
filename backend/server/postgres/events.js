@@ -477,6 +477,10 @@ dbEvents.on('alter-app-instance', function (cb = df) {
     
 })
 
+dbEvents.on('get-app-instance-data', function () {
+    
+}) 
+
 
 // collections
 dbEvents.on('create-collections-table', function (cb = df) {
