@@ -382,6 +382,7 @@
                     <div class="flex fullheight-percent" >
                         <div v-show="show_layer_manager" style="min-width:45%" v-resizable="'right'" class="paneBorder fullheight-percent overflow-y-auto pad050" >
                             <layer-manager
+                            v-if="show_layer_manager"
                             :layers="tiles[nodeSelectedIndex].layers"
                             @addNewLayer="addNewLayer"
                             @deleteLayer="deleteLayer"
@@ -404,6 +405,7 @@
                                 <block-menu 
                                 :block="selected_block" 
                                 @deleteBlock="deleteBlock"
+                                @onImportBlock="onImportBlock"
                                 />
                             </div>
                             <div v-if="layerAndBlockContoller.show == true" style="width:50%" class="flex2" >

@@ -287,7 +287,7 @@ export default {
         service.getAllServices(this)
         this.use_socket = true
         // console.log(`${location.href}${process.env.API_URL}`)
-        
+        console.log('default.vue created hook!')
     },
     methods: {
         historyClick(i) {

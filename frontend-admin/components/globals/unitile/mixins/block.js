@@ -196,6 +196,35 @@ export default {
                 this.selected_layer_row = row
                 this.$set(this.layerAndBlockContoller,'show', false)
             },100)
+        },
+        onImportBlock(block, row_id) {
+            console.log('on import block', block)
+            // console.log(this.tiles[this.nodeSelectedIndex].layers)
+            this.tiles[this.nodeSelectedIndex].layers.map((layer,layer_index) => {
+                //  locate active layer
+                if(layer.layer_name == this.getActiveLayer.layer_name) {
+                    // locate the target row
+                   layer.layer_rows.map((row,row_index) => {
+                        if(row.row_id === this.selected_layer_row.row_id) {
+                            // locate the target block
+                            row.blocks.map((sblock,block_index) => {
+                                if(sblock.id == this.selected_block.id) {
+                                    // mutate block
+                                    this.tiles[this.nodeSelectedIndex]
+                                        .layers[layer_index]
+                                        .layer_rows[row_index]
+                                        .blocks[block_index] = block
+
+                                    this.show_layer_manager = false
+                                    this.$nextTick(() => {
+                                        this.show_layer_manager = true
+                                    })
+                                }
+                            })
+                        }
+                   })
+                }
+            })
         }
     }
 }

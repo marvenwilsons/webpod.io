@@ -108,7 +108,7 @@
                                          <div class=" flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
                                              <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad050 rounded-lg" >
                                                 <div class="flex flexcenter spacebetween" >
-                                                    <div class="caption" >Layer row {{rowIndex + 1}}</div>
+                                                    <div class="caption" > <v-chip small >Layer row {{rowIndex + 1}} </v-chip> </div>
                                                     <div class="marginbottom025" >
                                                         <!-- row method insert row block -->
                                                         <dropDown
@@ -254,6 +254,7 @@ export default {
     watch: {
         layers() {
             this.list  = this.layers
+            console.log('layers changed!')
         }
     },
     computed: {

@@ -243,7 +243,7 @@ export default {
             if(this.copiedBlockValue != undefined) {
                 this.importedBlockContent = this.copiedBlockValue
                 webpod.dash.bottomAlert('Block content pasted successfully!')
-                setTimeout(() => {
+                setTimeout(() => {                           
                     webpod.dash.temp = null
                 },100)
             }
@@ -254,6 +254,10 @@ export default {
                 const blockKeys = Object.keys(block)
                 if(blockKeys.includes('id') && blockKeys.includes('classes') && blockKeys.includes('custom_inline_style') && blockKeys.includes('component_name')) {
                     console.log('yep all important keys are there')
+                    this.$emit('onImportBlock', block)
+                    this.$nextTick(() => {
+                        this.cancelBlockImport()
+                    })
                 }
             } catch(err) {
                 this.importBlockContentError = 'Invalid block string entry'
