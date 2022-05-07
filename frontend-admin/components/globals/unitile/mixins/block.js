@@ -198,7 +198,6 @@ export default {
             },100)
         },
         onImportBlock(block, row_id) {
-            console.log('on import block', block)
             // console.log(this.tiles[this.nodeSelectedIndex].layers)
             this.tiles[this.nodeSelectedIndex].layers.map((layer,layer_index) => {
                 //  locate active layer
@@ -215,10 +214,6 @@ export default {
                                         .layer_rows[row_index]
                                         .blocks[block_index] = block
 
-                                    this.show_layer_manager = false
-                                    this.$nextTick(() => {
-                                        this.show_layer_manager = true
-                                    })
                                 }
                             })
                         }
