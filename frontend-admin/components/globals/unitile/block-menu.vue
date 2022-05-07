@@ -206,9 +206,11 @@ import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import pBlock from './block-menu/p-block.vue'
 import TiptapEditor from './rich-text-editor/TiptapEditor.vue'
+import m from '@/m'
 export default {
     components: {customCss, customClasses, pBlock, TiptapEditor },
     props: ['block'],
+    mixins: [m],
     data: () => ({
         menu_nav: 'properties',
         animation_nav: 'load',
@@ -254,6 +256,7 @@ export default {
                 const blockKeys = Object.keys(block)
                 if(blockKeys.includes('id') && blockKeys.includes('classes') && blockKeys.includes('custom_inline_style') && blockKeys.includes('component_name')) {
                     console.log('yep all important keys are there')
+                    block.id = this.uid()
                     this.$emit('onImportBlock', block)
                     this.$nextTick(() => {
                         this.cancelBlockImport()
