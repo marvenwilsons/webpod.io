@@ -401,6 +401,7 @@
                                     <v-icon v-if="!show_layer_manager" @click="show_layer_manager = true" class="pointer" x-small >mdi-arrow-expand-right</v-icon>
                                 </div>
                             </div>
+                            <!-- block menu -->
                             <div v-if="selected_block && layerAndBlockContoller.show == false"  class="fullwidth paneBorder" >
                                 <block-menu 
                                 :block="selected_block" 
@@ -408,6 +409,7 @@
                                 @onImportBlock="onImportBlock"
                                 />
                             </div>
+                            <!-- layer and block controller code editor -->
                             <div v-if="layerAndBlockContoller.show == true" style="width:50%" class="flex2" >
                                 <codeEditor
                                     :readOnly="false"
@@ -415,6 +417,7 @@
                                     :code="layerAndBlockContoller.code"
                                 ></codeEditor>
                             </div>
+                            
                         </div>
                     </div>
                 </v-card>
@@ -605,6 +608,16 @@
                 />
             </div>
         </wp-modal>
+        <!-- Inline style for row -->
+        <wp-modal v-if="modals.row_inline_css_editor == 'show'" >
+            <custom-css
+            ref="layer_row_inline_style"
+            :el_id="'#layer-row-inline-css'" 
+            :cssObject="selected_layer_row.custom_style"
+            style="min-width:400px;" >
+            </custom-css>
+        </wp-modal>
+        <!-- CSS Class for row -->
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -720,7 +733,9 @@ export default {
             tile_z_index: 'hide',
             tile_align_item: 'hide',
             view_project: 'hide',
-            layer_manager: 'hide'
+            layer_manager: 'hide',
+            row_inline_css_editor: 'hide',
+            row_css_classes_editor: 'hide'
         },
     }),
     watch: {

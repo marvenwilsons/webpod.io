@@ -42,7 +42,7 @@ export default {
         setCodeString(cssObject,elementId) {
             try {
                 // console.log(cssObject)
-                const cssString = `${elementId} {\n \t${jsToCss(cssObject)} \n}`
+                const cssString = `${elementId || this.el_id} {\n \t${jsToCss(cssObject)} \n}`
                 // console.log(cssString)
                 this.code = cssString
             } catch(err) {
