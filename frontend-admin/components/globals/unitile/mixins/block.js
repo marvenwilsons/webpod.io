@@ -187,6 +187,14 @@ export default {
             if(cmd == 'Delete row') {
                 this.deleteRow(target_id)
             }
+
+            if(cmd == 'Inline Style') {
+                console.log('Row Inline Style')
+            }
+
+            if(cmd == 'CSS Classes') {
+                console.log('CSS Classes')
+            }
         },
         deleteBlock(block,layer_row_id) {
             this.selected_layer_row.blocks.map((b,i) => {
