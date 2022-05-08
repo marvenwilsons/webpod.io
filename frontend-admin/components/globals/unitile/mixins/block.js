@@ -14,17 +14,30 @@ export default {
         addElementBlock(block) {
             this.tiles[this.nodeSelectedIndex].blocks.push(block)
         },
-        addRowBlock(layer_id) {
-
+        addRowBlock(layer_id, block_payload) {
+            console.log('Adding row block! ', layer_id)
             this.tiles[this.nodeSelectedIndex].layers.map(layer => {
                 if(layer.layer_id == layer_id) {
-                    layer.layer_rows.push({
-                        custom_style: {},
-                        classes: [],
-                        wrap_items: false,
-                        blocks: [],
-                        row_id: this.uid()
-                    })
+                    if(block_payload) {
+                        const newBlocks = block_payload.blocks.map(b => {
+                            b.id = this.uid()
+                            return b
+                        })
+
+                        block_payload.blocks = newBlocks
+                        layer.layer_rows.push(block_payload)
+                    } else {
+                        layer.layer_rows.push({
+                            custom_style: {},
+                            classes: [],
+                            wrap_items: false,
+                            blocks: [],
+                            row_id: this.uid()
+                        })
+                    }
+                    
+                } else {
+                    console.log('Layer not found!', layer_id)
                 }
             })
         },
@@ -146,11 +159,11 @@ export default {
             }
 
 
-            if(cmd == 'Clone & paste below') {
+            if(cmd == 'Clone this row') {
+                console.log('Cloning row!')
                 let p = this.copy(payload)
-                p.row_id = undefined
-                p.row_id = this.uid()
-                this.addRowBlock(target_id,p)
+                p.row.row_id = this.uid()
+                this.addRowBlock(p.layer.layer_id,p.row)
             }
 
             if(cmd == 'Wrap items') {
