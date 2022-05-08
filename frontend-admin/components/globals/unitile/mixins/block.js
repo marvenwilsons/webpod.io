@@ -197,28 +197,24 @@ export default {
                     viewTrigger: (v) => this.$set(this.modals,'row_inline_css_editor', v ? 'show' : 'hide')
                 })
 
-                modalInstace.on('data', (data) => {
-                    // this.selected_layer_row.custom_style = data
-                    this.tiles[this.nodeSelectedIndex].layers.map((layer,layer_index) => {
-                        //  locate active layer
-                        if(layer.layer_name == this.getActiveLayer.layer_name) {
-                            // locate the target row
-                           layer.layer_rows.map((row,row_index) => {
-                                if(row.row_id === this.selected_layer_row.row_id) {
-                                    // locate the target block
-                                    this.tiles[this.nodeSelectedIndex].layers[layer_index].layer_rows[row_index].custom_style = data
-                                }
-                           })
-                        }
-                    })
-                })
+                modalInstace.on('data', (data) => this.selected_layer_row.custom_style = data)
             }
 
             if(cmd == 'CSS Classes') {
-                console.log('CSS Classes')
-                // const modalInstace = webpod.modal.show({
-                    
-                // })
+                this.selected_layer_row = payload.row
+
+                const modalInstace = webpod.dash.modal.show({
+                    modalTitle: 'Row CSS Classes',
+                    viewTrigger: (v) => this.$set(this.modals,'row_css_classes_editor', v ? 'show' : 'hide')
+                })
+
+                modalInstace.on('show', () => {
+                    this.$refs.rowClasses.setClasses(payload.row.classes)
+
+                    this.$refs.rowClasses.onData = (classesArray) => {
+                        this.selected_layer_row.classes = classesArray
+                    }
+                })
             }
         },
         deleteBlock(block,layer_row_id) {

@@ -618,6 +618,11 @@
             </custom-css>
         </wp-modal>
         <!-- CSS Class for row -->
+        <wp-modal v-if="modals.row_css_classes_editor == 'show'" >
+            <custom-classes
+            ref="rowClasses"
+            />
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
