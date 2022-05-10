@@ -262,8 +262,8 @@
                                 :options="ribbons[0].map(e => {return {title: e}})"
                                 @command="(v) => jumpToRibbon(v)"
                             >
-                                <v-btn x-small fab text >
-                                    <v-icon>mdi-dots-vertical</v-icon>
+                                <v-btn tile small icon >
+                                    <v-icon  >mdi-dots-vertical</v-icon>
                                 </v-btn>
                             </dropDown>
                             <!-- focus layer -->
@@ -275,22 +275,43 @@
                                     :disabledOptions="disabledOptions"
                                     @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
                                 >
-                                    <v-btn  small text icon tile >
-                                        <v-icon>mdi-square-edit-outline</v-icon>
+                                    <v-btn tile small text icon  >
+                                        <v-icon  >  mdi-square-edit-outline</v-icon>
                                     </v-btn>
                                 </dropDown>
                             </v-expand-x-transition>
+                        </div>
+                        <div class="flex flexcenter caption" > 
+                            <v-btn icon small tile class="marginright025" > <v-icon  >mdi-responsive</v-icon> </v-btn>
+                            <strong>W:</strong> <span><span id="prs" >N/A</span>px</span>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- tile presentation -->
-            <section v-resizable="{edges: ['right'], infoWidth: '#prs'}" id="tile-presentation" style="max-width:100%;  min-width: 100px;" 
-            class="flex1 grey lighten-5  paneBorder paneShadow relative" >
-                <div style="z-index:9999; right:-125px; top: 20px; background: white;" class="absolute pad050 paneBorder flex flexcenter paneShadow" >
-                    Width: <span id="prs" ></span> px
-                    <!-- <v-icon small >mdi-dots-vertical</v-icon> -->
+            <section 
+                v-resizable="{
+                    edges: ['right'], 
+                    infoWidth: '#prs'
+                }" 
+                id="tile-presentation" 
+                style="max-width:100%;  min-width: 100px; overflow-x: hidden;" 
+                class="flex1 grey lighten-5  paneBorder paneShadow relative" 
+            >
+                <div 
+                    style="z-index:9999; right:-220px; top: 20px; background: white; min-width: 200px; cursor: pointer;" 
+                    class="absolute pad050  paneBorder flex  paneShadow rounded-lg flex flexcol" 
+                >
+                    <div class="flex spacebetween flexcenter padleft025 padright025" > 
+                      
+                      <v-btn small rounded icon ><v-icon>mdi-plus</v-icon></v-btn>
+                    </div>
+                     <div class="padleft025 padright025" >
+                        Break point list
+                    </div>
                 </div>
+
+
                 <div
                     v-if="ready"
                     class="wp-dash-grid relative " 
