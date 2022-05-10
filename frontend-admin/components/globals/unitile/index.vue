@@ -285,7 +285,12 @@
                 </div>
             </div>
             <!-- tile presentation -->
-            <section id="tile-presentation" style="overflow:auto; " class="flex1 grey lighten-5" >
+            <section v-resizable="{edges: ['right'], infoWidth: '#prs'}" id="tile-presentation" style="max-width:100%;  min-width: 100px;" 
+            class="flex1 grey lighten-5  paneBorder paneShadow relative" >
+                <div style="z-index:9999; right:-125px; top: 20px; background: white;" class="absolute pad050 paneBorder flex flexcenter paneShadow" >
+                    Width: <span id="prs" ></span> px
+                    <!-- <v-icon small >mdi-dots-vertical</v-icon> -->
+                </div>
                 <div
                     v-if="ready"
                     class="wp-dash-grid relative " 
