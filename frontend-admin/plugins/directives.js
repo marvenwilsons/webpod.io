@@ -98,7 +98,9 @@ Vue.directive('resizable', {
                       document.querySelector(infoWidthElement).textContent = w
                     }
                   } else {
-                    document.querySelector(infoWidthElement).textContent = `${Math.round(event.rect.width)}`
+                    if(infoWidthElement) {
+                      document.querySelector(infoWidthElement).textContent = `${Math.round(event.rect.width)}`
+                    }
                   }
 
                   if(event.target.style['min-height'] != '') {
@@ -108,7 +110,9 @@ Vue.directive('resizable', {
                       document.querySelector(infoHeightElement).textContent = h
                     }
                   } else {
-                    document.querySelector(infoHeightElement).textContent = `${Math.round(event.rect.height)}`
+                    if(infoHeightElement) {
+                      document.querySelector(infoHeightElement).textContent = `${Math.round(event.rect.height)}`
+                    }
                   }
                   
                 }
