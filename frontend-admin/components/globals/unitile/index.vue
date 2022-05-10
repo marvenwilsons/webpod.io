@@ -282,36 +282,24 @@
                             </v-expand-x-transition>
                         </div>
                         <div class="flex flexcenter caption" > 
-                            <v-btn icon small tile class="marginright025" > <v-icon  >mdi-responsive</v-icon> </v-btn>
-                            <strong>W:</strong> <span><span id="prs" >N/A</span>px</span>
+                            <v-btn @click="showResponsiveOptionModal" icon small tile class="marginright025" > <v-icon  >mdi-responsive</v-icon> </v-btn>
+                            <strong>W:</strong> <span><span id="prs" class="menlo" >N/A</span>px</span>
                         </div>
                     </div>
                 </div>
             </div>
             <!-- tile presentation -->
-            <section 
+            <section
+                @keydown="keydown"
                 v-resizable="{
                     edges: ['right'], 
                     infoWidth: '#prs'
                 }" 
                 id="tile-presentation" 
                 style="max-width:100%;  min-width: 100px; overflow-x: hidden;" 
+                tabindex="1"
                 class="flex1 grey lighten-5  paneBorder paneShadow relative" 
             >
-                <div 
-                    style="z-index:9999; right:-220px; top: 20px; background: white; min-width: 200px; cursor: pointer;" 
-                    class="absolute pad050  paneBorder flex  paneShadow rounded-lg flex flexcol" 
-                >
-                    <div class="flex spacebetween flexcenter padleft025 padright025" > 
-                      
-                      <v-btn small rounded icon ><v-icon>mdi-plus</v-icon></v-btn>
-                    </div>
-                     <div class="padleft025 padright025" >
-                        Break point list
-                    </div>
-                </div>
-
-
                 <div
                     v-if="ready"
                     class="wp-dash-grid relative " 
@@ -357,7 +345,7 @@
                             <v-slide-x-reverse-transition>
                                 <div 
                                 v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
-                                style="right:0;z-index:9999" 
+                                style="right:0;z-index:99" 
                                 class="flex flexcenter spacebetween pad025 tile-btn absolute" 
                                 >
                                     <div>
@@ -660,6 +648,8 @@ import layer from './mixins/layer'
 import undoRedo from '@/undo-redo.js'
 import blockManager from './mixins/block'
 import layerBlockController from './mixins/layer-block-controller'
+import responsiveOptions from './mixins/responsive-options'
+import blockPosition from './mixins/block-position'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
@@ -678,7 +668,7 @@ import layerManager from './layer-manager.vue'
 
 export default {
     name: 'unitile',
-    mixins: [m,optionHandler,undoRedo,layer,blockManager, layerBlockController],
+    mixins: [m,optionHandler,undoRedo,layer,blockManager, layerBlockController, responsiveOptions,blockPosition],
     components: {
         blockMenu, 
         layerManager, 
@@ -812,81 +802,7 @@ export default {
                 this.maxRows = 1
             }
         },  
-        move(moveDirection,multiple,index) {
-
-            if(moveDirection == 'right') {
-                const moveRight = (i) => {
-                    if(this.tiles[i].colEnd != this.maxCol + 1) {
-                        this.tiles[i].colStart = this.tiles[i].colStart + 1
-                        this.tiles[i].colEnd = this.tiles[i].colEnd + 1
-                    }
-                }
-                if(multiple) {
-                    this.selected_multiple_nodes.map(index => {
-                        moveRight(index)
-                    })
-                } else {
-                    moveRight(index)
-                }
-            }
-            if(moveDirection == 'left') {
-                const moveLeft = (i) => {
-                    if(this.tiles[i].colStart + 1 != 2 ) {
-                        this.tiles[i].colStart = this.tiles[i].colStart - 1
-                        this.tiles[i].colEnd = this.tiles[i].colEnd - 1
-                    }
-                }
-                if(multiple) {
-                    this.selected_multiple_nodes.map(index => {
-                        moveLeft(index)
-                    })
-                } else {
-                    moveLeft(index)
-                }
-            }
-            if(moveDirection == 'top') {
-                const moveTop = (i) => {
-                    if(this.tiles[i].rowStart + 1 != 2 ) {
-                        this.tiles[i].rowStart = this.tiles[i].rowStart - 1
-                        this.tiles[i].rowEnd = this.tiles[i].rowEnd - 1
-                        this.removeUnwantedRows()
-                    } 
-                }
-                if(multiple) {
-                    this.selected_multiple_nodes.map(index => {
-                        moveTop(index)
-                    })
-                } else {
-                    moveTop(index)
-                }
-            }
-            if(moveDirection == 'bottom') {
-                const moveBottom = (i) => {
-                    
-                    this.tiles[i].rowStart = this.tiles[i].rowStart + 1
-
-                    const newRowEndVal = this.tiles[i].rowEnd + 1
-                    this.tiles[i].rowEnd = newRowEndVal
-
-                    this.tiles[i].rowEnd = newRowEndVal
-                    this.$nextTick(() => {
-                        if((newRowEndVal - 1) >  this.maxRows) {
-                            this.maxRows++
-                        }
-                    })
-                }
-                if(multiple) {
-                    this.selected_multiple_nodes.map(index => {
-                        moveBottom(index)
-                    })
-                } else {
-                    moveBottom(index)
-                }
-            }
-            this.$nextTick(() => {
-                this.addSessionEntry()
-            })
-        },
+        
         height(mode,multiple,index) {
             this.addSessionEntry(this.tiles)
             if(mode == 'add') {
@@ -1003,6 +919,7 @@ export default {
             console.log('key down')
             if(this.nodeSelectedIndex != undefined) {
                 if(e.key == 'ArrowRight') {
+                    console.log('arrow right')
                     this.move('right',false,this.nodeSelectedIndex)
                 }
                 if(e.key == 'ArrowLeft') {
