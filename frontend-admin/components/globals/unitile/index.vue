@@ -765,6 +765,9 @@ export default {
             row_css_classes_editor: 'hide',
             define_responsive_layout: 'hide'
         },
+        layoutInstances: {
+            default: null
+        }
     }),
     watch: {
         'apps.app_selected'(appName) {
