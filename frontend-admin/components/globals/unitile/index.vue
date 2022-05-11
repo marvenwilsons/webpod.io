@@ -637,6 +637,10 @@
             ref="rowClasses"
             />
         </wp-modal>
+        <!-- define responsive layout -->
+        <wp-modal v-if="modals.define_responsive_layout == 'show'" >
+            <define-responsive-layout></define-responsive-layout>
+        </wp-modal>
     </main>
 </template>
 // https://github.com/ThibaultJanBeyer/DragSelect
@@ -660,6 +664,7 @@ import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
 import optContainer from './opt-container.vue'
+import defineResponsiveLayout from './define-responsive-layout.vue'
 
 import uHeader from './header/layout.vue'
 import tileView from './tile-view.vue'
@@ -682,7 +687,8 @@ export default {
         containerJustifyItems, 
         columnEditor, 
         optContainer, 
-        uHeader
+        uHeader,
+        defineResponsiveLayout
     },
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
@@ -756,7 +762,8 @@ export default {
             view_project: 'hide',
             layer_manager: 'hide',
             row_inline_css_editor: 'hide',
-            row_css_classes_editor: 'hide'
+            row_css_classes_editor: 'hide',
+            define_responsive_layout: 'hide'
         },
     }),
     watch: {
@@ -1289,7 +1296,7 @@ export default {
                     } else {
                         const rename_info = {
                             instance_from: 'unitile',
-                            title: this.myData.title
+                            title: this.myData.default.title
                         }
                         webpod.server.apps.renameAppInstanceTitle(data,rename_info,(data) => {
                             if(data.message == 'OK') {
@@ -1478,8 +1485,9 @@ export default {
         const _alert = webpod.dash.alert
         webpod.session.allowOverflow = false
 
-        if(this.myData) {
-            this.project_title = this.myData.title
+        const data = this.myData.default
+        if(data) {
+            this.project_title = data.title
 
             if(Object.keys(this.config).includes('editable')) {
                 this.editMode = this.config.editable
@@ -1489,7 +1497,7 @@ export default {
             }
 
             let largestRowEnd = 0
-            this.myData.tiles.map(item => {
+            data.tiles.map(item => {
                 item.selected = false
                 if(typeof item != 'object') {
                     alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
@@ -1504,13 +1512,13 @@ export default {
             })
 
             // default grid settings
-            if(this.myData.maxCol) { this.maxCol = this.myData.maxCol }
-            if(this.myData.gridGap) { this.gridGap = this.myData.gridGap }
-            if(this.myData.gridContainerStyle) { this.gridContainerStyle = this.myData.gridContainerStyle }
+            if(data.maxCol) { this.maxCol = data.maxCol }
+            if(data.gridGap) { this.gridGap = data.gridGap }
+            if(data.gridContainerStyle) { this.gridContainerStyle = data.gridContainerStyle }
             this.maxRows = largestRowEnd + 2
 
-            if(this.myData.gridColumns != undefined) {
-                this.gridColumns = this.myData.gridColumns
+            if(data.gridColumns != undefined) {
+                this.gridColumns = data.gridColumns
             } else {
                 let col = []
                 for(let i = 0; i < this.maxCol; i++) {
