@@ -111,7 +111,9 @@ app.get('/apps/:app_name/:instance_title', (req,res) => {
         allowOverflow: false
       },
       view: 'unitile',
-      viewData: {"title":"My Custom Layout","tiles":[{"id":"vCQM4lQca1","rowStart":1,"rowEnd":7,"colStart":2,"colEnd":6,"selected":true,"customClasses":[],"customStyle":{},"align":"stretch","blocks":[],"layers":[{"layer_id":"layer-ViZEdLwwUW","layer_order":1,"layer_blocks":[],"layer_rows":[{"custom_style":{},"classes":[],"wrap_items":false,"blocks":[{"text_style":"text","value":"Lorem ipsum","component_name":"text","custom_inline_style":{},"classes":[],"id":"QifCUXZ9mt"}],"row_id":"MtXwLRK3Ma"}],"layer_name":"default","layer_lock":true,"layer_show":true,"active_layer":"default"}],"layerOnFocus":1,"zIndex":1}],"gridGap":5,"maxCol":6,"gridContainerStyle":{"background":"#E0F2F1"},"tiles_global_style":{},"gridColumns":["1fr","3fr","3fr","3fr","3fr","1fr"],"gridContainerJustify":"stretch"},
+      viewData: {
+        default: {"title":"My Custom Layout","tiles":[{"id":"vCQM4lQca1","rowStart":1,"rowEnd":7,"colStart":2,"colEnd":6,"selected":true,"customClasses":[],"customStyle":{},"align":"stretch","blocks":[],"layers":[{"layer_id":"layer-ViZEdLwwUW","layer_order":1,"layer_blocks":[],"layer_rows":[{"custom_style":{},"classes":[],"wrap_items":false,"blocks":[{"text_style":"text","value":"Lorem ipsum","component_name":"text","custom_inline_style":{},"classes":[],"id":"QifCUXZ9mt"}],"row_id":"MtXwLRK3Ma"}],"layer_name":"default","layer_lock":true,"layer_show":true,"active_layer":"default"}],"layerOnFocus":1,"zIndex":1}],"gridGap":5,"maxCol":6,"gridContainerStyle":{"background":"#E0F2F1"},"tiles_global_style":{},"gridColumns":["1fr","3fr","3fr","3fr","3fr","1fr"],"gridContainerJustify":"stretch"}
+      },
       viewHooks: stringify((paneCollection,pane,view) => ({
         onSaveLayout(layout) {
           layout.map(e => {
