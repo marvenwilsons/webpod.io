@@ -1015,6 +1015,32 @@ export default {
                 gridColumns: this.gridColumns,
                 gridContainerJustify: this.gridContainerJustify
             }
+
+            const modalInstance = webpod.dash.modal.show({
+                modalTitle: 'Define responsive layout',
+                viewTrigger: (v) =>  this.$set(this.modals,'define_responsive_layout',v ? 'show' : 'hide'),
+                
+            })
+
+            modalInstance.on('data', ({name, payload}) => {
+                console.log('modal data')
+                if(name == 'addTrigger') {
+                    console.log('adding trigger')
+                }
+
+                if(name == 'removeTrigger') {
+                    console.log('removing trigger')
+                }
+
+                if(name == 'updateTrigger') {
+                    
+                }
+            })
+
+            modalInstance.on('data', (data) => {
+                console.log(data)
+                // data = {firstName: 'Jane', lastName: 'Doe}
+            })
             // this.hooks.onSaveLayout(data)
             console.log(JSON.stringify(data))
             webpod.server.apps.update(data, (response) => {

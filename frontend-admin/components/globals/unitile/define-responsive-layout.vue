@@ -75,7 +75,10 @@ export default {
                     startLayoutOn: selectedWidth,
                     layout: null
                 })
-                webpod.dash.modal.setData(this.layouts)
+                webpod.dash.modal.setData({
+                    name:'addTrigger',
+                    payload: selectedWidth
+                })
             }
             
             if(this.layouts.length == 1) {
@@ -118,7 +121,10 @@ export default {
                         break
                     }
                 }
-                // this.layouts.splice(1)
+            }
+
+            if(commandTitle == 'Copy trigger layout content') {
+                console.log('copy trigger content')
             }
         }
     }

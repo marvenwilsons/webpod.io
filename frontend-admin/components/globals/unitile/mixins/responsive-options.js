@@ -6,10 +6,7 @@ export default {
                 viewTrigger: (v) =>  this.$set(this.modals,'define_responsive_layout',v ? 'show' : 'hide')
             })
 
-            modalInstance.on('data', (data) => {
-                console.log(data)
-                // data = {firstName: 'Jane', lastName: 'Doe}
-            })
+            
         }
     }
 }
