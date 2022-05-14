@@ -17,6 +17,7 @@ Vue.directive('resizable', {
     let infoHeightElement =  null
     let stopWidthAtValue = null
     let stopHeightValue = null
+    let onResizeFunction = () => {}
 
     if(typeof value == 'string') {
       if( valid_values.includes(value) ) {
@@ -38,7 +39,7 @@ Vue.directive('resizable', {
     }
 
     if(!Array.isArray(value) && typeof value == 'object') {
-      const {edges, infoWidth, infoHeight, stopWidthAt, stopHeight} = value
+      const {edges, infoWidth, infoHeight, stopWidthAt, stopHeight, onResize} = value
 
       if(typeof edges == 'string') {
         if( valid_values.includes(edges) ) {
@@ -74,6 +75,11 @@ Vue.directive('resizable', {
       if(stopHeight) {
         stopHeightValue = stopHeight
       }
+
+      if(onResize) {
+        onResizeFunction = onResize
+      }
+
     }
 
     interact(el).resizable({
@@ -115,6 +121,10 @@ Vue.directive('resizable', {
                     }
                   }
                   
+                  onResizeFunction({
+                    width: Math.round(event.rect.width),
+                    height: Math.round(event.rect.height)
+                  })
                 }
 
                 startResize()
