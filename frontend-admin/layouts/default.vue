@@ -47,9 +47,15 @@
                         <div  class="pad125 modalShadow flexcenter" >
                             <div class="flex flexcol relative" >
                                 <span style="border-radius: 100%;" class="absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
+                                    <!-- logo LOGO -->
                                     <h1
                                     class="merri-font" 
-                                    style="font-size:120px; color: #1565C0; margin:0; text-shadow:2px 2px 1px #0D47A1" >
+                                    style="
+                                        font-size:120px; 
+                                        color: #1565C0; 
+                                        margin:0; 
+                                        text-shadow:2px 2px 1px #0D47A1" 
+                                        >
                                     W</h1>
                                 </span>
                                 <v-progress-circular
@@ -676,5 +682,8 @@ html {
 }
 .v-menu__content {
     z-index: 1000 !important;
+}
+.lobster-font {
+    font-family: 'Lobster', cursive;
 }
 </style>
