@@ -289,105 +289,110 @@
                 </div>
             </div>
             <!-- tile presentation -->
-            <section
-                @keydown="keydown"
-                v-resizable="{
-                    edges: ['right'], 
-                    infoWidth: '#prs'
-                }" 
+            <content-rect
                 id="tile-presentation" 
                 style="max-width:100%;  min-width: 100px; overflow-x: hidden;" 
                 tabindex="1"
                 class="flex1 grey lighten-5  paneBorder paneShadow relative" 
+                :observerFunc="editorWidthObserver"
+                @keydown="keydown"
+                v-resizable="{
+                    edges: ['right'], 
+                }"
             >
-                <div
-                    v-if="ready"
-                    class="wp-dash-grid relative " 
-                    :id="`grid-${currentUid}`"
-                    :style="{
-                        ...gridContainerStyle,
-                        'justify-items': gridContainerJustify,
-                        'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
-                        'min-width': `${minTileWidth}`,
-                        'grid-template-columns': `${gridColumns.join(' ')}`,
-                        'grid-gap': `${gridGap}px`
-
-                    }"
+                <section
+                     
                 >
-                    <grid-guides
-                     v-if="useGridGuides"
-                     :maxRows="maxRows"
-                     :maxCol="maxCol"
-                     :minTileWidth="minTileWidth"
-                     :minTileHeight="minTileHeight"
-                    ></grid-guides>
-                    <div v-for="(item,item_index) in tiles" 
-                    :key="item.id" 
-                    :id="`${item.id}-${item_index}`"
-                    :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer tile-item','paneBorder']" 
-                    :style="{
-                        'grid-area':`${item.id}`,
-                        'grid-row-start':item.rowStart,
-                        'grid-row-end':item.rowEnd,
-                        'grid-column-start':item.colStart,
-                        'grid-column-end':item.colEnd,
-                        'overflow':'auto',
-                        'min-width': '50px',
-                        justifySelf: item.align,
-                        zIndex: item.zIndex,
-                        background:'white',
-                        border: item_index == nodeSelectedIndex ? '1px solid #1870f0' : '',
-                        boxShadow: item_index == nodeSelectedIndex ?'0px 0px 2px #1870f0' : ''
-                    }"
+                    <div
+                        v-if="ready"
+                        class="wp-dash-grid relative " 
+                        :id="`grid-${currentUid}`"
+                        :style="{
+                            ...gridContainerStyle,
+                            'justify-items': gridContainerJustify,
+                            'grid-template-rows': `repeat(${maxRows}, ${minTileHeight})`,
+                            'min-width': `${minTileWidth}`,
+                            'grid-template-columns': `${gridColumns.join(' ')}`,
+                            'grid-gap': `${gridGap}px`
+
+                        }"
                     >
-                        <div  class="relative fullheight-percent overflow-hidden" >
-                            <!-- dropDown component is handled by options.js -->
-                            <v-slide-x-reverse-transition>
-                                <div 
-                                v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
-                                style="right:0;z-index:99" 
-                                class="flex flexcenter spacebetween pad025 tile-btn absolute" 
-                                >
-                                    <div>
-                                        {{getActiveLayer.active_layer}}
-                
-                                        {{getActiveLayer.layer_order}}
-                                    </div>
-                                    <!-- <input @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox"> -->
-                                    <dropDown
-                                        v-if="nodeSelectedIndex != undefined"
-                                        :options="options"
-                                        :divideOptionsBefore="['Move down','Expand height', 'Clone']"
-                                        :disabledOptions="disabledOptions"
-                                        @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
+                        <grid-guides
+                        v-if="useGridGuides"
+                        :maxRows="maxRows"
+                        :maxCol="maxCol"
+                        :minTileWidth="minTileWidth"
+                        :minTileHeight="minTileHeight"
+                        ></grid-guides>
+                        <div v-for="(item,item_index) in tiles" 
+                        :key="item.id" 
+                        :id="`${item.id}-${item_index}`"
+                        :class="['selectable-nodes wp-dash-grid-item flex flexcol pointer tile-item','paneBorder']" 
+                        :style="{
+                            'grid-area':`${item.id}`,
+                            'grid-row-start':item.rowStart,
+                            'grid-row-end':item.rowEnd,
+                            'grid-column-start':item.colStart,
+                            'grid-column-end':item.colEnd,
+                            'overflow':'auto',
+                            'min-width': '50px',
+                            justifySelf: item.align,
+                            zIndex: item.zIndex,
+                            background:'white',
+                            border: item_index == nodeSelectedIndex ? '1px solid #1870f0' : '',
+                            boxShadow: item_index == nodeSelectedIndex ?'0px 0px 2px #1870f0' : ''
+                        }"
+                        >
+                            <div  class="relative fullheight-percent overflow-hidden" >
+                                <!-- dropDown component is handled by options.js -->
+                                <v-slide-x-reverse-transition>
+                                    <div 
+                                    v-if="!select_multiple_mode && item_index === nodeSelectedIndex" 
+                                    style="right:0;z-index:99" 
+                                    class="flex flexcenter spacebetween pad025 tile-btn absolute" 
                                     >
-                                        <v-btn  small text icon tile >
-                                            <v-icon>mdi-square-edit-outline</v-icon>
-                                        </v-btn>
-                                    </dropDown>
+                                        <div>
+                                            {{getActiveLayer.active_layer}}
+                    
+                                            {{getActiveLayer.layer_order}}
+                                        </div>
+                                        <!-- <input @change="(ev) => {nodeSelect(ev,item_index)}" v-model="item.selected" type="checkbox"> -->
+                                        <dropDown
+                                            v-if="nodeSelectedIndex != undefined"
+                                            :options="options"
+                                            :divideOptionsBefore="['Move down','Expand height', 'Clone']"
+                                            :disabledOptions="disabledOptions"
+                                            @command="(cmd) => {handleDropDownCommand(cmd,nodeSelectedIndex,tiles[nodeSelectedIndex],tiles)}"
+                                        >
+                                            <v-btn  small text icon tile >
+                                                <v-icon>mdi-square-edit-outline</v-icon>
+                                            </v-btn>
+                                        </dropDown>
+                                    </div>
+                                </v-slide-x-reverse-transition>
+                                <!-- multiple select mode -->
+                                <div
+                                style="right:0;background: #f5f5f5;" 
+                                class="flex flexcenter spacebetween pad025 tile-btn absolute"  
+                                v-if="select_multiple_mode" 
+                                >
+                                    <input @change="(ev) => {registerNodeForMultipleMove(ev,item_index)}" type="checkbox">
                                 </div>
-                            </v-slide-x-reverse-transition>
-                            <!-- multiple select mode -->
-                            <div
-                            style="right:0;background: #f5f5f5;" 
-                            class="flex flexcenter spacebetween pad025 tile-btn absolute"  
-                            v-if="select_multiple_mode" 
-                            >
-                                <input @change="(ev) => {registerNodeForMultipleMove(ev,item_index)}" type="checkbox">
-                            </div>
-                            <!--  -->
-                            <div
-                            @click="tileClick(item_index)" 
-                            :class="[...item.customClasses,'fullheight-percent', 'fullwidth flex']"
-                            :style="{...item.customStyle,...tiles_global_style, overflow: 'hidden'}" 
-                            >
-                                <!-- view content here -->
-                                <tile-view :ref="item.id" :tile="item"></tile-view>
+                                <!--  -->
+                                <div
+                                @click="tileClick(item_index)" 
+                                :class="[...item.customClasses,'fullheight-percent', 'fullwidth flex']"
+                                :style="{...item.customStyle,...tiles_global_style, overflow: 'hidden'}" 
+                                >
+                                    <!-- view content here -->
+                                    <tile-view :ref="item.id" :tile="item"></tile-view>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
+            </content-rect>
+            <!-- layer manager -->
             <section style="min-height:400px; max-height:400px; z-index:1080; "  v-if="modals.layer_manager === 'show'" class="absoulute fullwidth" >
                 <v-card  tile :elevation="5" style="background: #fdfdfd; min-height: 20px;" outlined  v-resizable="['top','right']" class=" fullheight-percent flex overflow-hidden" >
                     <div style="background: #f5f5f5; cursor: grab;" class="flex flexcenter" >
@@ -437,6 +442,7 @@
                 </v-card>
             </section>
         </div>
+        <!-- MODALS -->
         <wp-modal v-if="modals.grid_settings == 'show'" class=" borderred">
             <div  v-if="editMode && !controlls.preview == 'on'" 
                 style="background:white; font-family: 'Menlo'; overflow: auto; max-width:500px;" 
@@ -639,7 +645,9 @@
         </wp-modal>
         <!-- define responsive layout -->
         <wp-modal v-if="modals.define_responsive_layout == 'show'" >
-            <define-responsive-layout></define-responsive-layout>
+            <layout-manager
+            :screenLayoutRanges="myData.screens"
+            />
         </wp-modal>
     </main>
 </template>
@@ -654,6 +662,10 @@ import blockManager from './mixins/block'
 import layerBlockController from './mixins/layer-block-controller'
 import responsiveOptions from './mixins/responsive-options'
 import blockPosition from './mixins/block-position'
+import layoutUtils from './mixins/layouts'
+import modalMixin from './mixins/modal'
+import unitileCreated from './mixins/unitile-created'
+import unitileMounted from './mixins/unitile-mounted'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
@@ -664,7 +676,7 @@ import customCss from './custom-css.vue'
 import customClasses from './cutom-classes.vue'
 import alignSelf from './self-align.vue'
 import optContainer from './opt-container.vue'
-import defineResponsiveLayout from './define-responsive-layout.vue'
+import layoutManager from './layout-manager.vue'
 
 import uHeader from './header/layout.vue'
 import tileView from './tile-view.vue'
@@ -673,7 +685,13 @@ import layerManager from './layer-manager.vue'
 
 export default {
     name: 'unitile',
-    mixins: [m,optionHandler,undoRedo,layer,blockManager, layerBlockController, responsiveOptions,blockPosition],
+    mixins: [
+        m,
+        optionHandler,undoRedo,layer,blockManager, 
+        layerBlockController, responsiveOptions,
+        blockPosition,modalMixin,
+        unitileCreated, unitileMounted
+    ],
     components: {
         blockMenu, 
         layerManager, 
@@ -688,7 +706,7 @@ export default {
         columnEditor, 
         optContainer, 
         uHeader,
-        defineResponsiveLayout
+        layoutManager
     },
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
@@ -748,25 +766,8 @@ export default {
             use_grid_guides: 'off',
             selection_tool: 'off'
         },
-        modals: {
-            grid_container_inline_style: 'hide',
-            tiles_global_inline_style: 'hide',
-            column_editor: 'hide',
-            grid_settings: 'hide',
-            rename_title: 'hide',
-            tile_view: 'hide',
-            tile_css: 'hide',
-            tile_classes: 'hide',
-            tile_z_index: 'hide',
-            tile_align_item: 'hide',
-            view_project: 'hide',
-            layer_manager: 'hide',
-            row_inline_css_editor: 'hide',
-            row_css_classes_editor: 'hide',
-            define_responsive_layout: 'hide'
-        },
-        layoutInstances: {
-            default: null
+        screenLayouts: {
+            layouts: {}
         }
     }),
     watch: {
@@ -798,6 +799,51 @@ export default {
         }
     },
     methods: {
+        editorWidthObserver(rect) {
+            /**
+             * This function executes when
+             * - Editor mounted
+             * - Editor is resizing
+             * - Window is resising
+             */
+
+            const { width } = rect
+            const currentWidth = Math.round(width)
+
+            // assign current width string to editor's width info
+            document.getElementById('prs').textContent = currentWidth
+
+            // get max widths on screens
+            const maxWidthArray = layoutUtils.getLayoutKeys(this.myData.screens).max
+
+            // get layout range
+            const layoutRanges = layoutUtils.constructLayoutRange(maxWidthArray).minMax
+            
+            // get layout range
+            const layoutRange = layoutUtils.getLayoutRange( currentWidth , layoutRanges )
+
+            try {
+                let layout = null
+
+                if(layoutRange.split('-')[1] == 'Infinity') {
+                    layout = this.myData.screens['default']
+                } else {
+                    layout = this.myData.screens[layoutRange]
+                }
+
+                const { tiles, maxCol, tiles_global_style, gridGap, gridContainerStyle, gridContainerJustify, gridColumns } = layout
+                this.tiles = tiles
+                this.maxCol = maxCol
+                this.tiles_global_style = tiles_global_style
+                this.gridGap = gridGap,
+                this.gridContainerStyle = gridContainerStyle
+                this.gridContainerJustify = gridContainerJustify
+                this.gridColumns = gridColumns
+
+            } catch(err) {}
+
+
+        },
         removeUnwantedRows() {
             // get the lowest or the most bottom element in the layout
             let maxRowEnd = 0
@@ -811,8 +857,22 @@ export default {
             } else {
                 this.maxRows = 1
             }
-        },  
-        
+        },
+        getLayout() {
+            // get the parent width
+            const el = 'paneManager'
+            const container = document.getElementById(el)
+            const containerWidth = container.offsetWidth
+
+            // determine which layout should be rendered according the given conatainerWidth
+            return layoutUtils.getLayoutString(this.myData.screens,containerWidth)
+        },
+        getTileContents() {
+            return {
+                title: this.myData.title,
+                ...this.myData.screens[this.getLayout()]
+            }
+        },
         height(mode,multiple,index) {
             this.addSessionEntry(this.tiles)
             if(mode == 'add') {
@@ -1017,16 +1077,11 @@ export default {
             }
 
             const modalInstance = webpod.dash.modal.show({
-                modalTitle: 'Define responsive layout',
+                modalTitle: 'Save Options',
                 viewTrigger: (v) =>  this.$set(this.modals,'define_responsive_layout',v ? 'show' : 'hide'),
-                
             })
 
             modalInstance.on('data', ({name, payload}) => {
-                console.log('modal data')
-                if(name == 'addTrigger') {
-                    console.log('adding trigger')
-                }
 
                 if(name == 'removeTrigger') {
                     console.log('removing trigger')
@@ -1035,14 +1090,22 @@ export default {
                 if(name == 'updateTrigger') {
                     
                 }
+
+                if(name == 'saveLayout') {
+                    console.log('saving layout', payload)
+                    // webpod.dash.modal.hide()
+                    // webpod.dash.bottomAlert(`Layout successfully saved!`)
+                }
+                if(name == 'createLayoutScreen') {
+                    // console.lig('createLayoutScreen', payload)
+                    console.log(this.myData.screens)
+                }
             })
 
-            modalInstance.on('data', (data) => {
-                console.log(data)
-                // data = {firstName: 'Jane', lastName: 'Doe}
+            modalInstance.on('show', () => {
+                console.log('Modal is showing')
             })
             // this.hooks.onSaveLayout(data)
-            console.log(JSON.stringify(data))
             webpod.server.apps.update(data, (response) => {
                 if(response.message == 'success') {
                     // saving is successfull
@@ -1325,7 +1388,7 @@ export default {
                     } else {
                         const rename_info = {
                             instance_from: 'unitile',
-                            title: this.myData.default.title
+                            title: this.getTileContents().title
                         }
                         webpod.server.apps.renameAppInstanceTitle(data,rename_info,(data) => {
                             if(data.message == 'OK') {
@@ -1421,85 +1484,6 @@ export default {
             }
         }
     },
-    mounted() {
-        
-        // bottom alert
-        const welcomMsg = webpod.dash.bottomAlert('Welcome to Unitile v-0.1', 'learn more')
-        welcomMsg.on('btn-click', () => {
-            // show documentation in modal
-        })
-
-        // sidebar cog
-        const cog = webpod.dash.cog.show()
-        cog.on('click', () => {
-            webpod.dash.modal.show({
-                modalTitle: 'GRID SETTINGS',
-                viewTrigger: (v) => this.$set(this.modals,'grid_settings',v ? 'show' : 'hide')
-            })
-        })
-        
-        // when toggling pane hide the cog
-        webpod.session.onPaneToggle = (currentIndex) => {
-            if(this.paneIndex != currentIndex) {
-                webpod.dash.cog.hide()
-            } else {
-                setTimeout(() => {
-                    const x = webpod.dash.cog.show()
-                    x.on('click', () => {
-                        webpod.dash.modal.show({
-                            modalTitle: 'GRID SETTINGS',
-                        })
-                    })
-                }, 100)
-            }
-        }
-
-        // for undo and redo manager
-        this.setSessionTrackData(() => {
-            return {
-                title: this.project_title,
-                tiles: this.tiles,
-                gridGap: this.gridGap,
-                maxCol: this.maxCol,
-                gridContainerStyle: this.gridContainerStyle,
-                tiles_global_style: this.tiles_global_style,
-                gridColumns: this.gridColumns,
-                gridContainerJustify: this.gridContainerJustify
-            }
-        })
-
-        // update the specified properties when undo or redo is triggered
-        this.session.onUndoRedo = ({tiles, gridGap, maxCol, title, gridColumns, gridContainerStyle, tiles_global_style, gridContainerJustify}) => {
-            // data contains the tracked content
-            this.changeGridColumn(maxCol)
-            this.project_title = title
-            this.tiles = tiles
-            this.gridGap = gridGap
-            this.gridContainerStyle = gridContainerStyle
-            this.tiles_global_style = tiles_global_style
-            this.gridColumns = gridColumns
-            this.gridContainerJustify = gridContainerJustify
-        }
-
-        // undo redo on msg
-        this.session.onMsg = (msg) => {
-            webpod.dash.bottomAlert(msg)
-        }
-
-        // get all installed apps TODO
-        this.apps.all = ['Unitile','Form builder','Simple Slider']
-
-        // default ribbon highlighted option
-        this.highlighted_option = this.ribbons[0][0]
-        setTimeout(() => {
-            // const el =  document.getElementById(this.highlighted_option)
-            // el.scrollIntoView({
-            //     behavior: 'smooth'
-            // })
-        },0)
-
-        this.removeUnwantedRows()
-    },
     beforeDestroy() {
         webpod.dash.cog.hide()
         this.nodeSelectedIndex = undefined
@@ -1509,58 +1493,6 @@ export default {
         // clear undoRedo session
         this.clearSession()
     },
-    created() {
-        this.currentUid = this.uid()
-        const _alert = webpod.dash.alert
-        webpod.session.allowOverflow = false
-
-        const data = this.myData.default
-        if(data) {
-            this.project_title = data.title
-
-            if(Object.keys(this.config).includes('editable')) {
-                this.editMode = this.config.editable
-            } else {
-                _alert('Error: Cannot find editable property in viewConfig, defaulting to read only mode.')
-                this.editMode = false
-            }
-
-            let largestRowEnd = 0
-            data.tiles.map(item => {
-                item.selected = false
-                if(typeof item != 'object') {
-                    alert(`Found invalid type inside unitile's viewData it should be an array of objects`)
-                    location.reload()
-                } else {
-                    if(largestRowEnd < item.rowEnd) {
-                        largestRowEnd = item.rowEnd
-                    }   
-                    
-                    this.tiles.push(item)
-                }
-            })
-
-            // default grid settings
-            if(data.maxCol) { this.maxCol = data.maxCol }
-            if(data.gridGap) { this.gridGap = data.gridGap }
-            if(data.gridContainerStyle) { this.gridContainerStyle = data.gridContainerStyle }
-            this.maxRows = largestRowEnd + 2
-
-            if(data.gridColumns != undefined) {
-                this.gridColumns = data.gridColumns
-            } else {
-                let col = []
-                for(let i = 0; i < this.maxCol; i++) {
-                    col.push(`1fr`)
-                }
-                this.gridColumns = col
-            }
-            
-
-        } else {
-            _alert('Error: unitile data is undefined')
-        }
-    }
 }
 </script>
 

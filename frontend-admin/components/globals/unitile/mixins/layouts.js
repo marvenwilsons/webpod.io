@@ -105,7 +105,7 @@ export default {
             const max = range[1]
             if(maxWidth <= min && maxWidth > max) {
                 return `${min}-${max}`
-            } else if(maxWidth > min && max > maxWidth) {
+            } else if(maxWidth >= min && max > maxWidth) {
                 return `${min}-${max}`
             }
         })).filter(a => a != undefined)
