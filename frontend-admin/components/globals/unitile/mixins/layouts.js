@@ -100,10 +100,17 @@ export default {
                 parseInt(range.split('-')[1])
             ]
         })
+        const range = (numberfyRangeArray.map(range => {
+            const min = range[0]
+            const max = range[1]
+            if(maxWidth <= min && maxWidth > max) {
+                return `${min}-${max}`
+            } else if(maxWidth > min && max > maxWidth) {
+                return `${min}-${max}`
+            }
+        })).filter(a => a != undefined)
 
-        numberfyRangeArray.map(range => {
-            console.log(range)
-        })
+        return range[0]
 
     }
 }
