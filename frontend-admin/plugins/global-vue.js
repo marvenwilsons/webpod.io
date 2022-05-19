@@ -79,6 +79,10 @@ Vue.component("wp-modal",modal)
 import dragsort from 'vuedraggable'
 Vue.component("drag-sort",dragsort)
 
+import contentRect from '@/components/globals/content-rect/content-rect.vue'
+Vue.component("content-rect",contentRect)
+
+
 
 // CodeMirror CSS Essentials
 import "./codemirror/addon/hint/show-hint.css"

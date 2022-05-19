@@ -55,6 +55,13 @@ export default {
         rel: 'stylesheet', 
         href: 'https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.0/theme/base16-light.min.css' 
       },
+      //lobster font
+      { 
+        rel: 'stylesheet', 
+        href: 'https://fonts.googleapis.com/css2?family=Lobster&display=swap' 
+      },
+
+      //
       {
         rel: 'stylesheet',
         href: 'https://unpkg.com/codemirror@5.65.0/lib/codemirror.css'

@@ -14,8 +14,8 @@ export default {
         let layout = 'default'
         Object.keys(screens).map(e => {
             if(e != 'default') {
-                const min = parseInt(e.split('-')[0])
-                const max = parseInt(e.split('-')[1])
+                const min = parseFloat(e.split('-')[0])
+                const max = parseFloat(e.split('-')[1])
                 
                 if(containerWidth >= min && containerWidth <= max) {
                     layout = e
@@ -33,8 +33,8 @@ export default {
             // parsed sample output: [100,700]
             parsed: Object.keys(screens).map(e => {
                 if(e != 'default') {
-                    const min = parseInt(e.split('-')[0])
-                    const max = parseInt(e.split('-')[1])
+                    const min = parseFloat(e.split('-')[0])
+                    const max = parseFloat(e.split('-')[1])
                     return [min,max]
                 } else {
                     return Infinity
@@ -43,7 +43,7 @@ export default {
             // max sample output: [100,200,700]
             max: (Object.keys(screens).map(e => {
                 if(e != 'default') {
-                    const max = parseInt(e.split('-')[1])
+                    const max = parseFloat(e.split('-')[1])
                     return max
                 } else {
                     return Infinity
@@ -96,8 +96,8 @@ export default {
 
         const numberfyRangeArray = rangesArray.map(range => {
             return [
-                parseInt(range.split('-')[0]),
-                parseInt(range.split('-')[1])
+                parseFloat(range.split('-')[0]),
+                parseFloat(range.split('-')[1])
             ]
         })
         const range = (numberfyRangeArray.map(range => {
