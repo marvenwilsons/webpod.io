@@ -15,7 +15,7 @@ export default {
             layer_manager: 'hide',
             row_inline_css_editor: 'hide',
             row_css_classes_editor: 'hide',
-            define_responsive_layout: 'hide'
+            layout_manager: 'hide'
         }
     })
 }

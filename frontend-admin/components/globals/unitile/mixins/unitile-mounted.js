@@ -35,7 +35,7 @@ export default {
         // for undo and redo manager
         this.setSessionTrackData(() => {
             return {
-                title: this.project_title,
+                title: this.projectTitle,
                 tiles: this.tiles,
                 gridGap: this.gridGap,
                 maxCol: this.maxCol,
@@ -50,7 +50,7 @@ export default {
         this.session.onUndoRedo = ({tiles, gridGap, maxCol, title, gridColumns, gridContainerStyle, tiles_global_style, gridContainerJustify}) => {
             // data contains the tracked content
             this.changeGridColumn(maxCol)
-            this.project_title = title
+            this.projectTitle = title
             this.tiles = tiles
             this.gridGap = gridGap
             this.gridContainerStyle = gridContainerStyle
@@ -69,12 +69,6 @@ export default {
 
         // default ribbon highlighted option
         this.highlighted_option = this.ribbons[0][0]
-        setTimeout(() => {
-            // const el =  document.getElementById(this.highlighted_option)
-            // el.scrollIntoView({
-            //     behavior: 'smooth'
-            // })
-        },0)
 
         this.removeUnwantedRows()
     }

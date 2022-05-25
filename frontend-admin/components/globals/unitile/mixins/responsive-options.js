@@ -2,8 +2,8 @@ export default {
     methods:{
         showResponsiveOptionModal() {
             const modalInstance = webpod.dash.modal.show({
-                modalTitle: 'Select layout variant',
-                viewTrigger: (v) =>  this.$set(this.modals,'define_responsive_layout',v ? 'show' : 'hide')
+                modalTitle: 'Manage Layout Variants',
+                viewTrigger: (v) =>  this.$set(this.modals,'layout_manager',v ? 'show' : 'hide')
             })
 
             

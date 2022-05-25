@@ -300,9 +300,7 @@
                     edges: ['right'], 
                 }"
             >
-                <section
-                     
-                >
+                <section>
                     <div
                         v-if="ready"
                         class="wp-dash-grid relative " 
@@ -556,7 +554,7 @@
         <!-- rename title -->
         <wp-modal v-if="modals.rename_title == 'show'"   >
             <div >
-                <v-text-field v-model="project_title" ></v-text-field>
+                <v-text-field v-model="projectTitle" ></v-text-field>
                 <div @click="validateAndRenameProjectTitle" class="flex flexend" >
                     <v-btn>
                         Save
@@ -644,9 +642,10 @@
             />
         </wp-modal>
         <!-- define responsive layout -->
-        <wp-modal v-if="modals.define_responsive_layout == 'show'" >
+        <wp-modal v-if="modals.layout_manager == 'show'" >
             <layout-manager
             :screenLayoutRanges="myData.screens"
+            ref="layoutManager"
             />
         </wp-modal>
     </main>
@@ -666,6 +665,7 @@ import layoutUtils from './mixins/layouts'
 import modalMixin from './mixins/modal'
 import unitileCreated from './mixins/unitile-created'
 import unitileMounted from './mixins/unitile-mounted'
+import unitileData from './mixins/unitile-data'
 
 import gridGap from './c-grid-gap.vue'
 import containerJustifyItems from './c-justify-items.vue'
@@ -689,7 +689,7 @@ export default {
         m,
         optionHandler,undoRedo,layer,blockManager, 
         layerBlockController, responsiveOptions,
-        blockPosition,modalMixin,
+        blockPosition,modalMixin, unitileData,
         unitileCreated, unitileMounted
     ],
     components: {
@@ -710,19 +710,8 @@ export default {
     },
     props: ['myData','config', 'paneIndex', 'hooks',],
     data: () => ({
-        project_title: undefined,
-        tiles: [],
-        maxRows: 4,
-        maxCol: 4,
-        gridGap: 5,
-        gridColumns: undefined,
-        gridContainerStyle: {},
-        gridContainerJustify: 'stretch',
-        tiles_global_style: {},
-        tile_inline_style: {},
+        // Editor Configurations
         nodeSelectedIndex: undefined,
-        minTileWidth: '50px',
-        minTileHeight: '50px',
         ready: true,
         editMode: true,
         select_multiple_mode: false,
@@ -1064,49 +1053,32 @@ export default {
                 this.addSessionEntry(this.copy(this.tiles))
             },0)
         },
+        
         saveLayout() {
-            const data = {
-                title: this.project_title,
-                tiles: this.tiles,
-                gridGap: this.gridGap,
-                maxCol: this.maxCol,
-                gridContainerStyle: this.gridContainerStyle,
-                tiles_global_style: this.tiles_global_style,
-                gridColumns: this.gridColumns,
-                gridContainerJustify: this.gridContainerJustify
-            }
+            const editorData = this.getEditorData()
 
             const modalInstance = webpod.dash.modal.show({
                 modalTitle: 'Save Options',
-                viewTrigger: (v) =>  this.$set(this.modals,'define_responsive_layout',v ? 'show' : 'hide'),
+                viewTrigger: (v) =>  this.$set(this.modals,'layout_manager',v ? 'show' : 'hide'),
             })
 
             modalInstance.on('data', ({name, payload}) => {
-
-                if(name == 'removeTrigger') {
-                    console.log('removing trigger')
-                }
-
-                if(name == 'updateTrigger') {
-                    
-                }
-
                 if(name == 'saveLayout') {
-                    console.log('saving layout', payload)
+                    // screen range selected
+                    const screenRangeSelected = payload
+                    
+
+
                     // webpod.dash.modal.hide()
                     // webpod.dash.bottomAlert(`Layout successfully saved!`)
-                }
-                if(name == 'createLayoutScreen') {
-                    // console.lig('createLayoutScreen', payload)
-                    console.log(this.myData.screens)
                 }
             })
 
             modalInstance.on('show', () => {
-                console.log('Modal is showing')
+                this.$refs.layoutManager.saveMode = true
             })
             // this.hooks.onSaveLayout(data)
-            webpod.server.apps.update(data, (response) => {
+            webpod.server.apps.update(editorData, (response) => {
                 if(response.message == 'success') {
                     // saving is successfull
                 }
@@ -1406,7 +1378,7 @@ export default {
         },
         validateAndRenameProjectTitle() {
             // pass data on the modal instance
-            webpod.dash.modal.setData(this.project_title)
+            webpod.dash.modal.setData(this.projectTitle)
         },
         handleHeaderCommand(command) {
             if(command == 'Refresh') {

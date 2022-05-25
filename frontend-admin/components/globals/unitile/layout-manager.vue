@@ -1,39 +1,37 @@
 <template>
     <div style="width:400px;" >
-        <div>
+        <!-- <div v-if="saveMode == false" >
             Select width variant for this layout
-        </div>
+        </div> -->
         <!-- add -->
-        <div class="flex flexend" >
+        <div v-if="saveMode == false" class="flex flexend" >
             <v-btn @click="addLayoutEntry" tile icon >
                 <v-icon>mdi-eye-plus-outline</v-icon>
             </v-btn>
         </div>
         <!-- representation -->
-        <div style="min-height: 50px; gap: 3px;" 
+        <div v-if="saveMode == false" style="min-height: 50px; gap: 3px;" 
         class="flex paneBorder flexcol pad025" >
-            <!-- <v-card  v-ripple v-for="(layout,index) in layouts" :key="index"
-            :class="['flex flexcenter pointer light-blue darken-4 pad125',layout.name == 'default' ? 'fullwidth' : '']"
+            <v-card  v-ripple v-for="(layout,index) in layouts" :key="index"
+            :class="['flex flexcenter pointer light-blue darken-4 pad125']"
             :style="{ minWidth: '50px'}"
             >
                 <div style="font-family: 'Menlo'" class="flex fullheight-percent flexcol white--text" >
                     <div class="flex spacebetween marginbottom025" >
                         <div>
-                            <strong>{{layout.name != 'default' ? `${layout.maxWidth}px` : 'Default'}}</strong>
-                            <div v-if="layout.name != 'default'" class="caption" >Save layout for {{layout.maxWidth}}px screen width</div>
+                            <strong>{{layout != 'default' ? `${layout}px` : 'Default'}}</strong>
+                            <div v-if="layout != 'default'" class="caption" >Layout for {{layout}}px screen width</div>
                         </div>
                         <dropDown
                             @command="(title) => handleCmd(title,layout)"
                             :options="
-                            layout.name != 'default' ?
+                            layout != 'default' ?
                             [
                                 {title: 'Remove', d: 'M9,3V4H4V6H5V19A2,2 0 0,0 7,21H17A2,2 0 0,0 19,19V6H20V4H15V3H9M7,6H17V19H7V6M9,8V17H11V8H9M13,8V17H15V8H13Z'},
-                                {title: 'Save layout'},
-                                {title: 'Update trigger'},
-                                {title: 'Copy trigger layout content'},
+                                {title: 'Update range'},
+                                {title: 'Copy layout content'},
                             ] :
                             [
-                                {title: 'Save layout'},
                                 {title: 'Copy trigger layout content'},
                             ]"
                         >
@@ -41,26 +39,25 @@
                                 <v-icon color="white" >mdi-dots-vertical</v-icon>
                             </v-btn>
                         </dropDown>
-                        
-                    </div>
-                    <div v-if="layout.name == 'default'" class="caption" >
-                        This layout trigger will be activated starting on 
-                        <strong v-if="layouts[1]" >{{layouts[1].maxWidth}}px</strong>
-                        up until maximum screen width is reached.
-                    </div>
-                    <div class="caption" v-if="layout.name != 'default' " >
-                        This layout trigger will be actiavated starting on 
-                        <strong>{{layouts[index].maxWidth}}px</strong> up until
-                        <strong>{{layouts[index + 1] == undefined ? 'the lowest screen width is reached' : layouts[index + 1].maxWidth + 'px'}}</strong>
                     </div>
                 </div>
-            </v-card> -->
-            <v-card
-            v-for="(layout,index) in layouts" :key="index"
+            </v-card>
+        </div>
+        <!-- representation save options -->
+        <div v-if="saveMode == true" style="min-height: 50px; gap: 3px;" 
+        class="flex paneBorder flexcol pad025" >
+            <v-card @click="handleCmd('Save layout', layout)"  v-ripple v-for="(layout,index) in layouts" :key="index"
             :class="['flex flexcenter pointer light-blue darken-4 pad125']"
             :style="{ minWidth: '50px'}"
             >
-            {{layout}}
+                <div style="font-family: 'Menlo'" class="flex fullheight-percent flexcol white--text" >
+                    <div class="flex spacebetween marginbottom025" >
+                        <div>
+                            <strong>{{layout != 'default' ? `${layout}px` : 'Default'}}</strong>
+                            <div v-if="layout != 'default'" class="caption" >Layout for {{layout}}px screen width</div>
+                        </div>
+                    </div>
+                </div>
             </v-card>
         </div>
         <!-- list -->
@@ -74,12 +71,15 @@ export default {
     props: ['screenLayoutRanges'],
     data: () => ({
         layouts: [],
-        errorMsg: null
+        errorMsg: null,
+        saveMode: false
     }),
     mounted() {
         const layoutKeys = layoutUtils.getLayoutKeys(this.screenLayoutRanges)
-        const layoutRanges = layoutUtils.constructLayoutRange(layoutKeys.max).minMax
+        const layoutRanges = layoutUtils.constructLayoutRange(layoutKeys.max).maxMin
+        layoutRanges[0] = 'default'
 
+        this.layouts = layoutRanges
         
     },
     methods: {
@@ -94,36 +94,6 @@ export default {
             } else {
                 webpod.dash.bottomAlert(`new entry should have lower width than current fullwidth value`)
             }
-
-            
-            // adding entry conditions
-            // if(this.layouts.length == 1) {
-            //     if(prsElement.textContent != 'N/A') {
-            //         addEntry()
-            //         assignMinToEntries()
-            //     } else {
-            //         webpod.dash.bottomAlert(`new entry should have lower width than current fullwidth value`)
-            //     }
-            // } else {
-            //     const lastLayout = this.layouts[this.layouts.length - 1]
-            //     if(prsElement.textContent != 'N/A') {
-            //         if(lastLayout.maxWidth == selectedWidth) {
-            //             webpod.dash.bottomAlert(`new entry should have lower width than ${selectedWidth}px`)
-            //         } else {
-            //             const entryIsUnique = this.layouts.map(e => e.maxWidth == selectedWidth).every(e => e == false)
-            //             if(entryIsUnique) {
-            //                 addEntry()
-            //                 assignMinToEntries()
-            //             } else {
-            //                 webpod.dash.bottomAlert('entry already exist')
-            //             }
-            //         }
-            //     } else {
-            //         webpod.dash.bottomAlert(`new entry should have lower width than current fullwidth value`)
-            //     }
-            // }
-
-            
         },
         updateWidth() {
             const selectedWidth = document.getElementById('prs').textContent
@@ -138,7 +108,7 @@ export default {
 
             if(commandTitle == 'Remove') {
                 for(let i = 0; i < this.layouts.length; i++) {
-                    if(this.layouts[i].maxWidth == layout.maxWidth) {
+                    if(this.layouts[i] == layout) {
                         this.layouts.splice(i,1)
                         break
                     }
