@@ -644,7 +644,7 @@
         <!-- define responsive layout -->
         <wp-modal v-if="modals.layout_manager == 'show'" >
             <layout-manager
-            :screenLayoutRanges="myData.screens"
+            :screenLayoutRanges="screens"
             ref="layoutManager"
             />
         </wp-modal>

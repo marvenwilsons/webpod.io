@@ -14,7 +14,7 @@ export default {
         minTileWidth: '50px',
         minTileHeight: '50px',
         lastEdited: 'A minute ago',
-        screen: {
+        screens: {
             default: null
         }
     }),
@@ -34,7 +34,7 @@ export default {
                 nodeSelectedIndex: this.nodeSelectedIndex,
                 minTileWidth: this.minTileWidth,
                 minTileHeight: this.minTileHeight,
-                screen: this.screen
+                screens: this.screens
             }
         },
         alterProjectTitle(val) {
@@ -74,26 +74,41 @@ export default {
                 cb(true)
             }
         },
-        alterGridContainerJustify() {
-
+        alterGridContainerJustify(val) {
+            if(val && typeof val == 'string') {
+                this.gridContainerJustify = val
+            }
         },
-        alterTilesGlobalStyle() {
-
+        alterTilesGlobalStyle(val) {
+            if(val && typeof val == 'object') {
+                this.tiles_global_style = val
+            }
         },
-        alterTilesInlineStyle() {
-
+        alterTilesInlineStyle(val) {
+            if(val && typeof val == 'object') {
+                this.tile_inline_style = val
+            }
         },
-        alterMinTileWidth() {
-
+        alterMinTileWidth(val) {
+            if(val && typeof val == 'number') {
+                this.minTileWidth = val
+            }
         },
-        alterMinTileHeight() {
-
+        alterMinTileHeight(val) {
+            if(val && typeof val == 'number') {
+                this.minTileHeight = val
+            }
         },
-        alterLastEdited() {
-
+        alterScreen(val) {
+            this.screens = val
         },
-        alterScreen() {
-            
+        dropScreenItem(val) {
+            if(val && typeof val == 'string') {
+                this.$delete(this.screens,val)
+            }
+        },
+        alterLastEdited(val) {
+
         }
      },
     created() {
@@ -133,6 +148,9 @@ export default {
                     this.alterGridColumns(col)
                 }
             })
+
+            this.alterScreen(this.myData.screens)
+
         } else {
             _alert('Error: unitile data is undefined')
         }

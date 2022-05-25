@@ -72,17 +72,25 @@ export default {
     data: () => ({
         layouts: [],
         errorMsg: null,
-        saveMode: false
+        saveMode: false,
+        ready: false
     }),
     mounted() {
-        const layoutKeys = layoutUtils.getLayoutKeys(this.screenLayoutRanges)
-        const layoutRanges = layoutUtils.constructLayoutRange(layoutKeys.max).maxMin
-        layoutRanges[0] = 'default'
-
-        this.layouts = layoutRanges
-        
+        this.initializedLayout()        
+    },
+    watch: {
+        screenLayoutRanges() {
+            this.initializedLayout()        
+        }
     },
     methods: {
+        initializedLayout() {
+            const layoutKeys = layoutUtils.getLayoutKeys(this.screenLayoutRanges)
+            const layoutRanges = layoutUtils.constructLayoutRange(layoutKeys.max).maxMin
+            layoutRanges[0] = 'default'
+
+            this.layouts = layoutRanges
+        },
         addLayoutEntry() {
             const prsElement = document.getElementById('prs')
             const selectedWidth = parseInt(prsElement.textContent)
@@ -107,12 +115,16 @@ export default {
             }
 
             if(commandTitle == 'Remove') {
-                for(let i = 0; i < this.layouts.length; i++) {
-                    if(this.layouts[i] == layout) {
-                        this.layouts.splice(i,1)
-                        break
-                    }
-                }
+                webpod.dash.modal.setData({
+                    name: 'dropLayout',
+                    payload: layout
+                })
+                // for(let i = 0; i < this.layouts.length; i++) {
+                //     if(this.layouts[i] == layout) {
+                //         this.layouts.splice(i,1)
+                //         break
+                //     }
+                // }
             }
 
             if(commandTitle == 'Copy trigger layout content') {
