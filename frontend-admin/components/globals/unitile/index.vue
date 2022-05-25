@@ -1065,8 +1065,20 @@ export default {
             modalInstance.on('data', ({name, payload}) => {
                 if(name == 'saveLayout') {
                     // screen range selected
-                    const screenRangeSelected = payload
-                    
+                    const screenRangeSelected = payload.split('-').sort((a,b) => a-b).join('-')
+                    this.alterScreenItem({
+                        key: screenRangeSelected,
+                        val: this.getEditorData()
+                    })
+
+                    console.log(this.screens)
+                    this.$nextTick(() => {
+                        webpod.server.apps.update(JSON.stringify(this.screens), (response) => {
+                            if(response.message == 'success') {
+                                // saving is successfull
+                            }
+                        })
+                    })
 
 
                     // webpod.dash.modal.hide()
@@ -1078,11 +1090,7 @@ export default {
                 this.$refs.layoutManager.saveMode = true
             })
             // this.hooks.onSaveLayout(data)
-            webpod.server.apps.update(editorData, (response) => {
-                if(response.message == 'success') {
-                    // saving is successfull
-                }
-            })
+            
         },
         refresh() {
             this.ready = false

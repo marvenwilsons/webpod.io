@@ -14,6 +14,10 @@ export default {
                     const layoutRangeKey = payload.split('-').sort((a,b) => a-b).join('-')
                     this.dropScreenItem(layoutRangeKey)
                 }
+
+                if(name == 'addLayout') {
+                    
+                }
             })
 
             

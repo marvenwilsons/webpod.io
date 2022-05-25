@@ -107,6 +107,13 @@ export default {
                 this.$delete(this.screens,val)
             }
         },
+        alterScreenItem({key,val}) {
+            if(this.screens[key] != undefined) {
+                this.$set(this.screens,key,val)
+            } else {
+                console.error(`Error while altering screen item, key "${key}" returns undefined!`)
+            }
+        },
         alterLastEdited(val) {
 
         }
