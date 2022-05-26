@@ -5,18 +5,38 @@
         </div> -->
         <!-- add -->
         <div v-if="saveMode == false" class="flex flexend" >
-            <v-btn @click="addLayoutEntry" tile icon >
-                <v-icon>mdi-eye-plus-outline</v-icon>
+            <v-btn @click="addLayoutRangeEntry" icon >
+                <v-icon>mdi-plus</v-icon>
             </v-btn>
         </div>
+        <v-expand-transition>
+            <div v-if="addLayoutRangeForm.show" class=" rounded pad025 marginbottom050" >
+            <div class="padtop050" >
+                <v-text-field
+                class="marginleft050 marginright050"
+                label="Minimum Width"
+                type="number"
+                />
+                <v-text-field
+                class="marginleft050 marginright050"
+                label="Maximum Width"
+                type="number"
+                />
+            </div>
+            <div class="flex flexend" >
+                <v-btn @click="closeLayoutRangeForm" icon > <v-icon>mdi-close</v-icon> </v-btn>
+                <v-btn icon > <v-icon>mdi-plus</v-icon> </v-btn>
+            </div>
+        </div>
+        </v-expand-transition>
         <!-- representation -->
         <div v-if="saveMode == false" style="min-height: 50px; gap: 3px;" 
-        class="flex paneBorder flexcol pad025" >
+        class="flex paneBorder flexcol pad050 rounded" >
             <v-card  v-ripple v-for="(layout,index) in layouts" :key="index"
             :class="['flex flexcenter pointer light-blue darken-4 pad125']"
             :style="{ minWidth: '50px'}"
             >
-                <div style="font-family: 'Menlo'" class="flex fullheight-percent flexcol white--text" >
+                <div class="flex fullheight-percent flexcol white--text" >
                     <div class="flex spacebetween marginbottom025" >
                         <div>
                             <strong>{{layout != 'default' ? `${layout}px` : 'Default'}}</strong>
@@ -73,7 +93,12 @@ export default {
         layouts: [],
         errorMsg: null,
         saveMode: false,
-        ready: false
+        ready: false,
+        addLayoutRangeForm: {
+            show: false,
+            minWidth: undefined,
+            maxWidth: undefined
+        }
     }),
     mounted() {
         this.initializedLayout()        
@@ -91,17 +116,21 @@ export default {
 
             this.layouts = layoutRanges
         },
-        addLayoutEntry() {
-            const prsElement = document.getElementById('prs')
-            const selectedWidth = parseInt(prsElement.textContent)
-            if(prsElement.textContent != 'N/A') {
-                webpod.dash.modal.setData({
-                    name: 'createLayoutScreen',
-                    payload: selectedWidth
-                })
-            } else {
-                webpod.dash.bottomAlert(`new entry should have lower width than current fullwidth value`)
-            }
+        addLayoutRangeEntry() {
+            this.$set(this.addLayoutRangeForm,'show',true)
+            // const prsElement = document.getElementById('prs')
+            // const selectedWidth = parseInt(prsElement.textContent)
+            // if(prsElement.textContent != 'N/A') {
+            //     webpod.dash.modal.setData({
+            //         name: 'createLayoutScreen',
+            //         payload: selectedWidth
+            //     })
+            // } else {
+            //     webpod.dash.bottomAlert(`new entry should have lower width than current fullwidth value`)
+            // }
+        },
+        closeLayoutRangeForm() {
+            this.$set(this.addLayoutRangeForm,'show',false)
         },
         updateWidth() {
             const selectedWidth = document.getElementById('prs').textContent

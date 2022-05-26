@@ -15,8 +15,8 @@ export default {
                     this.dropScreenItem(layoutRangeKey)
                 }
 
-                if(name == 'addLayout') {
-                    
+                if(name == 'addLayoutRange') {
+                    console.log('adding layout')
                 }
             })
 

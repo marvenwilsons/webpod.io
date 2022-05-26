@@ -100,8 +100,9 @@ export default {
             }
         },
         alterScreen(val) {
-            this.screens = this.copy(val)
-            console.log('alterScreen',this.screens)
+            if(val && typeof val == 'object') {
+                this.screens = this.copy(val)
+            }
         },
         dropScreenItem(val) {
             if(val && typeof val == 'string') {
