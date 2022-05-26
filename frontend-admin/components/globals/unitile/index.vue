@@ -682,6 +682,7 @@ import uHeader from './header/layout.vue'
 import tileView from './tile-view.vue'
 import projectPreview from './preview.vue'
 import layerManager from './layer-manager.vue'
+import {parse, stringify, toJSON, fromJSON} from 'flatted'
 
 export default {
     name: 'unitile',
@@ -1055,7 +1056,7 @@ export default {
         },
         
         saveLayout() {
-            const editorData = this.getEditorData()
+            const editorData = this.copy(this.getEditorData())
 
             const modalInstance = webpod.dash.modal.show({
                 modalTitle: 'Save Options',
@@ -1068,21 +1069,20 @@ export default {
                     const screenRangeSelected = payload.split('-').sort((a,b) => a-b).join('-')
                     this.alterScreenItem({
                         key: screenRangeSelected,
-                        val: this.getEditorData()
+                        val: editorData
                     })
 
-                    console.log(this.screens)
+                    // server update
                     this.$nextTick(() => {
-                        webpod.server.apps.update(JSON.stringify(this.screens), (response) => {
-                            if(response.message == 'success') {
+                        webpod.server.apps.update(this.copy(this.screens), (response) => {
+                            if(response.message == 'OK') {
                                 // saving is successfull
+                                webpod.dash.modal.hide()
+                                webpod.dash.bottomAlert(`Layout successfully saved!`)
                             }
                         })
                     })
 
-
-                    // webpod.dash.modal.hide()
-                    // webpod.dash.bottomAlert(`Layout successfully saved!`)
                 }
             })
 

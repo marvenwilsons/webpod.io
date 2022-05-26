@@ -4997,6 +4997,11 @@
   "resolved" "https://registry.npmjs.org/flat/-/flat-5.0.2.tgz"
   "version" "5.0.2"
 
+"flatted@^3.2.5":
+  "integrity" "sha512-WIWGi2L3DyTUvUrwRKgGi9TwxQMUEqPOPQBVi71R96jZXJdFskXEmf54BoZaS1kknGODoIGASGEzBUYdyMCBJg=="
+  "resolved" "https://registry.npmjs.org/flatted/-/flatted-3.2.5.tgz"
+  "version" "3.2.5"
+
 "flatten@^1.0.2":
   "integrity" "sha512-dVsPA/UwQ8+2uoFe5GHtiBMu48dWLTdsuEd7CKGlZlD78r1TTWBvDuFaFGKCo/ZfEr95Uk56vZoX86OsHkUeIg=="
   "resolved" "https://registry.npmjs.org/flatten/-/flatten-1.0.3.tgz"

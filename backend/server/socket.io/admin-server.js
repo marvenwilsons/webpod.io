@@ -181,6 +181,7 @@ app.post('/apps/:app_name/:instance_title', (req,res) => {
 })
 app.put('/apps/:app_name/:instance_title', (req,res) => {
   // update existing
+  console.log('updating')
   const {app_name, instance_title} = req.params
   const body = req.body
   const query = req.query

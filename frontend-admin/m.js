@@ -117,12 +117,12 @@ export default {
       copy(o) {
         if (o === null) return null;
             
-                    var output, v, key;
-                output = Array.isArray(o) ? [] : {};
-                for (key in o) {
-                v = o[key];
-                output[key] = typeof v === "object" ? this.copy(v) : v;
-            }
+        var output, v, key;
+        output = Array.isArray(o) ? [] : {};
+        for (key in o) {
+            v = o[key];
+            output[key] = typeof v === "object" ? this.copy(v) : v;
+          }
             
         return output;
       }

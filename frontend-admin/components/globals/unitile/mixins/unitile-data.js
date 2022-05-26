@@ -100,7 +100,8 @@ export default {
             }
         },
         alterScreen(val) {
-            this.screens = val
+            this.screens = this.copy(val)
+            console.log('alterScreen',this.screens)
         },
         dropScreenItem(val) {
             if(val && typeof val == 'string') {
@@ -155,8 +156,7 @@ export default {
                     this.alterGridColumns(col)
                 }
             })
-
-            this.alterScreen(this.myData.screens)
+            this.alterScreen(this.copy(this.myData.screens))
 
         } else {
             _alert('Error: unitile data is undefined')
