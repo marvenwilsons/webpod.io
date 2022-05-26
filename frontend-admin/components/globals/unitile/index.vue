@@ -1056,8 +1056,6 @@ export default {
         },
         
         saveLayout() {
-            const editorData = this.copy(this.getEditorData())
-
             const modalInstance = webpod.dash.modal.show({
                 modalTitle: 'Save Options',
                 viewTrigger: (v) =>  this.$set(this.modals,'layout_manager',v ? 'show' : 'hide'),
@@ -1069,7 +1067,7 @@ export default {
                     const screenRangeSelected = payload.split('-').sort((a,b) => a-b).join('-')
                     this.alterScreenItem({
                         key: screenRangeSelected,
-                        val: editorData
+                        val: this.copy(this.getEditorData())
                     })
 
                     // server update

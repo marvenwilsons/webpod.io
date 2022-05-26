@@ -70,7 +70,7 @@
                 </v-btn>
             </el-tooltip> -->
             <!-- SELECTCTION TOOL  -->
-            <el-tooltip  
+            <!-- <el-tooltip  
                 class="pad025" 
                 content="Move multiple mode" 
                 effect="dark" 
@@ -87,7 +87,7 @@
                 >
                    <v-icon>mdi-axis-arrow</v-icon>
                 </v-btn>
-            </el-tooltip>
+            </el-tooltip> -->
             <!-- REFRESH BUTTON -->
             <el-tooltip  class="pad025" content="Refresh Editor" effect="dark" placement="top-start" >
                 <v-btn 
