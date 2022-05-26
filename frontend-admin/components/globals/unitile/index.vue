@@ -1,6 +1,9 @@
 <template>
     <main :class="['flex spacebetween fullheight-percent borderRad4', editMode ? '' : '']" >
-        <div :class="['flex flexcol relative']" 
+        <div
+            @keydown="keydown"
+            tabindex="1"
+            :class="['flex flexcol relative']" 
             :style="{'max-width': !editMode && '1920px', 
                 'border': editMode ? '1px solid #d3d3d3' : '',
                 overflow: 'hidden',
@@ -292,10 +295,9 @@
             <content-rect
                 id="tile-presentation" 
                 style="max-width:100%;  min-width: 100px; overflow-x: hidden;" 
-                tabindex="1"
                 class="flex1 grey lighten-5  paneBorder paneShadow relative" 
                 :observerFunc="editorWidthObserver"
-                @keydown="keydown"
+               
                 v-resizable="{
                     edges: ['right'], 
                 }"
