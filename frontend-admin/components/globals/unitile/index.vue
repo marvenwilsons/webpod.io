@@ -647,6 +647,7 @@
         <wp-modal v-if="modals.layout_manager == 'show'" >
             <layout-manager
             :screenLayoutRanges="screens"
+            @renameRange="renameScreenRange"
             ref="layoutManager"
             />
         </wp-modal>
@@ -817,11 +818,7 @@ export default {
             try {
                 let layout = null
 
-                if(layoutRange.split('-')[1] == 'Infinity') {
-                    layout = this.myData.screens['default']
-                } else {
-                    layout = this.myData.screens[layoutRange]
-                }
+                layout = this.myData.screens[layoutRange]
 
                 const { tiles, maxCol, tiles_global_style, gridGap, gridContainerStyle, gridContainerJustify, gridColumns } = layout
                 this.tiles = tiles
@@ -1387,6 +1384,9 @@ export default {
         validateAndRenameProjectTitle() {
             // pass data on the modal instance
             webpod.dash.modal.setData(this.projectTitle)
+        },
+        renameScreenRange({newRange, targetRange, ranges}) {
+            console.log('asdf')
         },
         handleHeaderCommand(command) {
             if(command == 'Refresh') {

@@ -11,17 +11,12 @@ export default {
          * Notes
          * - 'default' means wide screen or 100% width, or in number is equivalent to Infinity
          */
-        let layout = 'default'
+        let layout = undefined
         Object.keys(screens).map(e => {
-            if(e != 'default') {
-                const min = parseFloat(e.split('-')[0])
-                const max = parseFloat(e.split('-')[1])
-                
-                if(containerWidth >= min && containerWidth <= max) {
-                    layout = e
-                } else {
-                    layout = 'default'
-                }
+            const min = parseFloat(e.split('-')[0])
+            const max = parseFloat(e.split('-')[1])
+            if(containerWidth >= min && containerWidth <= max) {
+                layout = e
             }
         })
         return layout
@@ -42,15 +37,21 @@ export default {
             }),
             // max sample output: [100,200,700]
             max: (Object.keys(screens).map(e => {
-                if(e != 'default') {
+                if(e) {
                     const max = parseFloat(e.split('-')[1])
                     return max
-                } else {
-                    return Infinity
                 }
             })).sort((a,b) => b-a)
 
         }
+    },
+    getLayoutMax(ranges) {
+        /**
+         * sample input: ['Infinity-700','700-300','300-1'] (MaxMin is the format of ranges)
+         * output shoule be: ['Infinity','700','300']
+         */
+
+        return ranges.map(range => parseFloat(range.split('-')[0]))
     },
     constructLayoutRange(maxScreenArray) {
         /**
