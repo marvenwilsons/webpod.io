@@ -143,6 +143,12 @@ export default {
                 this.$set(this.addLayoutRangeForm,'minWidth', latestMinimumRange)
                 this.$set(this.addLayoutRangeForm,'maxWidth', latestMinimumRange + 1)
             }
+        },
+        'updateRangeForm.key'(n) {
+            if(n == undefined) {
+                this.$set(this.updateRangeForm,'error',undefined)
+                this.$set(this.updateRangeForm,'loading',false)
+            }
         }
     },
     methods: {
@@ -169,22 +175,29 @@ export default {
                 // if there are error messages clear it
                 this.$set(this.updateRangeForm,'error',undefined)
                 this.$set(this.updateRangeForm,'loading',true)
-                console.log(this.updateRangeForm)
-
 
                 // get the new range defined by the user
                 const newRange = (layoutUtils.constructLayoutRange(currentMaxSet).maxMin)[layoutIndex]
 
                 // send outside
                 this.$emit('renameRange', {
-                    targetRange: oldRange,
-                    newRange,
-                    ranges: currentMaxSet
+                    targetRange: `${oldRange.split('-')[1]}-${oldRange.split('-')[0]}`,
+                    newRange: `${newRange.split('-')[1]}-${newRange.split('-')[0]}`,
+                    ranges: currentMaxSet,
+                    done: () => {
+                        this.$set(this.updateRangeForm,'loading',false)
+                        this.$set(this.updateRangeForm,'key',undefined)
+                        this.$set(this.updateRangeForm,'index',undefined)
+                    }, 
+                    error: (err) => {
+
+                    }
                 })
             }
         },
         closeLayoutRangeForm() {
             this.$set(this.addLayoutRangeForm,'show',false)
+            
         },
         updateWidth() {
             const selectedWidth = document.getElementById('prs').textContent
