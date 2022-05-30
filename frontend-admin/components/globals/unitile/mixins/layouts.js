@@ -62,8 +62,10 @@ export default {
 
         let resultMinMax = []
         let resultMaxMin = []
-
-        maxScreenArray.map((e,i) => {
+        
+        maxScreenArray
+        .sort((a,b) => b-a)
+        .map((e,i) => {
             const prevMax = maxScreenArray[i+1]
             resultMinMax.push( 
                 ( (prevMax == undefined ? 1 : prevMax) +'-'+ e )

@@ -106,7 +106,12 @@ export default {
         },
         dropScreenItem(val) {
             if(val && typeof val == 'string') {
-                this.$delete(this.screens,val)
+
+                if(this.screens[val] == undefined) {
+                    webpod.dash.bottomAlert(`There is no such "${val}" range in screens array! `)
+                } else {
+                    this.$delete(this.screens,val)
+                }
             }
         },
         alterScreenItem({key,val}) {

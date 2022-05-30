@@ -11,21 +11,18 @@
             <div class="padtop050" >
                 <v-text-field
                 class="marginleft050 marginright050"
-                label="Minimum Width"
-                type="number"
-                v-model="addLayoutRangeForm.minWidth"
-                disabled
-                />
-                <v-text-field
-                class="marginleft050 marginright050"
-                label="Maximum Width"
+                label="Maximum Range"
                 type="number"
                 v-model="addLayoutRangeForm.maxWidth"
+                :hint="addLayoutRangeForm.hint"
+                persistent-hint
+                :error="addLayoutRangeForm.error ? true : false"
+                :error-messages="addLayoutRangeForm.error"
                 />
             </div>
             <div class="flex flexend" >
-                <v-btn icon > <v-icon>mdi-plus</v-icon> </v-btn>
                 <v-btn @click="closeLayoutRangeForm" icon > <v-icon>mdi-close</v-icon> </v-btn>
+                <v-btn icon @click="createNewRange" > <v-icon>mdi-arrow-right</v-icon> </v-btn>
             </div>
         </div>
         <!-- representation -->
@@ -119,8 +116,9 @@ export default {
         ready: false,
         tab: undefined,
         addLayoutRangeForm: {
-            minWidth: undefined,
-            maxWidth: undefined
+            maxWidth: undefined,
+            hint: undefined,
+            error: undefined
         },
         updateRangeForm: {
             maxWidth: undefined,
@@ -139,11 +137,22 @@ export default {
         },
         tab(n) {
             if(n == 1) {
-                const latestMinimumRange = parseFloat(this.layouts[1].split('-')[0])
-                this.$set(this.addLayoutRangeForm,'minWidth', latestMinimumRange)
-                this.$set(this.addLayoutRangeForm,'maxWidth', latestMinimumRange + 1)
+                const latestMinimumRange = parseFloat(this.layouts[this.layouts.length - 1].split('-')[0])
+                this.$set(this.addLayoutRangeForm,'maxWidth', latestMinimumRange - 1)
+                this.$set(this.addLayoutRangeForm,'hint', `Input a number below ${latestMinimumRange - 1} only`)
             }
         },
+        'addLayoutRangeForm.maxWidth'(n) {
+            const latestMinimumRange = parseFloat(this.layouts[this.layouts.length - 1].split('-')[0])
+            if(n >= latestMinimumRange) {
+                this.addLayoutRangeForm.error = `Value cannot go above or equal ${latestMinimumRange}`
+                this.$nextTick(() => {
+                    this.$set(this.addLayoutRangeForm,'maxWidth', latestMinimumRange - 1)
+                })
+            } else {
+                this.addLayoutRangeForm.error = undefined
+            }
+        },  
         'updateRangeForm.key'(n) {
             if(n == undefined) {
                 this.$set(this.updateRangeForm,'error',undefined)
@@ -229,7 +238,16 @@ export default {
                     payload: layout
                 })
             }
-        }
+        },
+        createNewRange() {
+            const currentMaxSet = layoutUtils.getLayoutMax(this.layouts)
+
+            const userDefinedMaxWidth = parseInt(this.addLayoutRangeForm.maxWidth)
+            currentMaxSet.push(userDefinedMaxWidth)
+            const newRangeSet = layoutUtils.constructLayoutRange(currentMaxSet).minMax
+
+            this.$emit('createNewRange', newRangeSet[newRangeSet.length - 1])
+        },
     }
 }
 </script>

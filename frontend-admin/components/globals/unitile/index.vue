@@ -648,6 +648,7 @@
             <layout-manager
             :screenLayoutRanges="screens"
             @renameRange="renameScreenRange"
+            @createNewRange="createNewRange"
             ref="layoutManager"
             />
         </wp-modal>
@@ -1384,30 +1385,6 @@ export default {
         validateAndRenameProjectTitle() {
             // pass data on the modal instance
             webpod.dash.modal.setData(this.projectTitle)
-        },
-        renameScreenRange({newRange, targetRange, ranges, done, error}) {
-
-            const newRanges = layoutUtils.constructLayoutRange(ranges).minMax
-            let newScreensObject = {}
-
-            newRanges.map((range,rangeIndex) => {
-                newScreensObject[range] = this.screens[Object.keys(this.screens)[rangeIndex]]
-            })
-            // TODO: server update needs to be finalized!
-            webpod.server.apps.update(newScreensObject, (response) => {
-                if(response.message == 'OK') {
-                    // saving is successfull
-                    webpod.dash.bottomAlert(`Layout successfully updated!`)
-                    this.alterScreen(newScreensObject)
-                } else {
-                    error(response.message)
-                }
-            })
-            
-
-            setTimeout(() => {
-                done()
-            },1000)
         },
         handleHeaderCommand(command) {
             if(command == 'Refresh') {

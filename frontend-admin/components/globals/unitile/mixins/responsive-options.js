@@ -9,18 +9,43 @@ export default {
 
             modalInstance.on('data', ({name,payload}) => {
                 if(name == 'dropLayout') {
-                    // flips into a min max format, for example if payload is
-                    // 700-300 this code will flip it to 300-700
+                    console.log('removing ', payload)
+                    /**
+                     * flips into a min max format, for example if payload is 
+                     * 700-300 this code will flip it to 300-700
+                     */
                     const layoutRangeKey = payload.split('-').sort((a,b) => a-b).join('-')
                     this.dropScreenItem(layoutRangeKey)
                 }
+            })
+        },
+        renameScreenRange({ranges, done, error}) {
 
-                if(name == 'addLayoutRange') {
-                    console.log('adding layout')
+            const newRanges = layoutUtils.constructLayoutRange(ranges).minMax
+            let newScreensObject = {}
+
+            newRanges.map((range,rangeIndex) => {
+                newScreensObject[range] = this.screens[Object.keys(this.screens)[rangeIndex]]
+            })
+            // TODO: server update needs to be finalized!
+            webpod.server.apps.update(newScreensObject, (response) => {
+                if(response.message == 'OK') {
+                    // saving is successfull
+                    webpod.dash.bottomAlert(`Layout successfully updated!`)
+                    this.alterScreen(newScreensObject)
+                } else {
+                    error(response.message)
                 }
             })
-
             
-        }
+
+            setTimeout(() => {
+                done()
+            },1000)
+        },
+        createNewRange(v) {
+            this.$set(this.screens,v,{})
+            webpod.dash.bottomAlert(`${v} range added!`)
+        },
     }
 }
