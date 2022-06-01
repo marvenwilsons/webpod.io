@@ -1,3 +1,4 @@
+import layoutUtil from './layouts'
 export default {
     data: () => ({
         // Editor data of a specific screen
@@ -100,21 +101,41 @@ export default {
             }
         },
         alterScreen(val) {
+            console.log('***     ALTER SCREEN')
             if(val && typeof val == 'object') {
                 this.screens = this.copy(val)
             }
         },
         dropScreenItem(val) {
+            /**
+             * val is the range to be dropped
+             * 
+             * 1. 
+             */
             if(val && typeof val == 'string') {
 
                 if(this.screens[val] == undefined) {
-                    webpod.dash.bottomAlert(`There is no such "${val}" range in screens array! `)
+                    webpod.dash.bottomAlert(`There is no such "${layoutUtil.flipLayoutRange(val)}" range in screens array! `)
+                    console.log(this.screens)
                 } else {
-                    this.$delete(this.screens,val)
+                    const targetMax = parseFloat(val.split('-')[1])
+                    const ranges =layoutUtil.getLayoutKeys(this.screens).max
+                    ranges.splice(ranges.indexOf(targetMax),1)
+                    
+                    const newRangeSet = layoutUtil.constructLayoutRange(ranges).minMax
+
+                    console.log(val)
+
+                    
+                    // console.log('keys', Object.keys(this.screens))
+                    // console.log('entrires', Object.entries(this.screens))
+
+                    // this.$delete(this.screens,val)
                 }
             }
         },
         alterScreenItem({key,val}) {
+            console.log('*** ALTER SCREEN ITEM')
             if(this.screens[key] != undefined) {
                 this.$set(this.screens,key,val)
             } else {

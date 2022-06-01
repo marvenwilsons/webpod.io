@@ -115,5 +115,13 @@ export default {
 
         return range[0]
 
-    }
+    },
+    flipLayoutRange(layoutRange) {
+        /**
+         * input type should be string
+         * sample input: '700-300'
+         * sample output: '300-700'
+         */
+        return `${layoutRange.split('-')[1]}-${layoutRange.split('-')[0]}`
+    },
 }

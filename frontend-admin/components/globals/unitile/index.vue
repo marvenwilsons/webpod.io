@@ -649,6 +649,7 @@
             :screenLayoutRanges="screens"
             @renameRange="renameScreenRange"
             @createNewRange="createNewRange"
+            @rangeUpdate="rangeUpdate"
             ref="layoutManager"
             />
         </wp-modal>
