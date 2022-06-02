@@ -651,6 +651,7 @@
             @createNewRange="createNewRange"
             @rangeUpdate="rangeUpdate"
             ref="layoutManager"
+            style="min-width:600px;"
             />
         </wp-modal>
     </main>

@@ -43,7 +43,7 @@ export default {
              * newScreensObject is temp variable
              */
             let newScreensObject = {}
-            
+
 
             /**
              * loop through each screens property to locate the screen item to
@@ -73,17 +73,22 @@ export default {
 
             
         },
-        createNewRange(v) {
-            /**
-             * 1. Add new range
-             * 2. Correct the ranges on screen object
-             */
-            // this.$set(this.screens,v,{})
-            const max = v.split('-')[1]
+        createNewRange(newRangeStringToCreate) {        
+            const v = newRangeStringToCreate
+            const targetScreensPropertyMax = v.split('-')[1]
+
+            let temp = {}
             Object.entries(this.screens).forEach(
                 ([key, value]) => {
+                    /**
+                     * Find the smallest range in screens array then delete it but keep its contents,
+                     * add new property to the screens array with old contents as its value
+                     * sample output: '1-300', or '1-500'
+                     * anything that there is 1 in it is considered to be the smallest range 
+                     */
                     if(key.includes('1')) {
-                        console.log('--->' ,key, value)
+                        temp = value
+                        this.dropScreenItem(key)
                     }
                 }
             );
