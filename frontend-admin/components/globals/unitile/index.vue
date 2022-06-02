@@ -647,11 +647,10 @@
         <wp-modal v-if="modals.layout_manager == 'show'" >
             <layout-manager
             :screenLayoutRanges="screens"
-            @renameRange="renameScreenRange"
+            @renameRange="correctifyScreenRanges"
             @createNewRange="createNewRange"
             @rangeUpdate="rangeUpdate"
             ref="layoutManager"
-            style="min-width:600px;"
             />
         </wp-modal>
     </main>
@@ -806,8 +805,10 @@ export default {
             const { width } = rect
             const currentWidth = Math.round(width)
 
-            // assign current width string to editor's width info
-            document.getElementById('prs').textContent = currentWidth
+            try {
+                // assign current width string to editor's width info
+                document.getElementById('prs').textContent = currentWidth
+            } catch(err) {}
 
             // get max widths on screens
             const maxWidthArray = layoutUtils.getLayoutKeys(this.myData.screens).max

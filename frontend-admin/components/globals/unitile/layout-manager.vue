@@ -5,7 +5,6 @@
             <v-tabs v-model="tab" >
                 <v-tab>Layout ranges list</v-tab>
                 <v-tab>Add new range</v-tab>
-                <v-tab>Layout snapshots</v-tab>
             </v-tabs>
         </div> 
         <div v-if="tab == 1" class=" rounded pad025 marginbottom050" >

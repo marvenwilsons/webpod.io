@@ -18,7 +18,7 @@ export default {
                 }
             })
         },
-        renameScreenRange({ranges, done, error}) {
+        correctifyScreenRanges({ranges, done, error}) {
             /**
              * inputs: 
              * ranges is an array of max widths, sample ['Infinity', '700']
@@ -52,8 +52,9 @@ export default {
              * the temp variable will be holding a screens item property
              */
             newRanges.map((range,rangeIndex) => {
-                newScreensObject[range] = this.screens[Object.keys(this.screens)[rangeIndex]]
+                newScreensObject[range] = this.screens[Object.keys(this.screens)[rangeIndex]] || {}
             })
+
 
 
             // TODO: server update needs to be finalized!
@@ -63,36 +64,28 @@ export default {
                     webpod.dash.bottomAlert(`Layout successfully updated!`)
                     this.alterScreen(newScreensObject)
                     setTimeout(() => {
-                        done()
+                        if(done) {
+                            done()
+                        }
                     },1000)
                 } else {
-                    error(response.message)
+                    if(error) {
+                        error(response.message)
+                    }
                 }
             })
-            
 
-            
+
+            return newScreensObject
         },
         createNewRange(newRangeStringToCreate) {        
             const v = newRangeStringToCreate
-            const targetScreensPropertyMax = v.split('-')[1]
+            const targetScreensPropertyMax = parseFloat(v.split('-')[1])
+            const maxRanges = layoutUtils.getLayoutKeys(this.screens).max
 
-            let temp = {}
-            Object.entries(this.screens).forEach(
-                ([key, value]) => {
-                    /**
-                     * Find the smallest range in screens array then delete it but keep its contents,
-                     * add new property to the screens array with old contents as its value
-                     * sample output: '1-300', or '1-500'
-                     * anything that there is 1 in it is considered to be the smallest range 
-                     */
-                    if(key.includes('1')) {
-                        temp = value
-                        this.dropScreenItem(key)
-                    }
-                }
-            );
+            maxRanges.push(targetScreensPropertyMax)
 
+            this.correctifyScreenRanges({ranges: maxRanges})
             webpod.dash.bottomAlert(`${v} range added!`)
         },
         rangeUpdate(v) {
