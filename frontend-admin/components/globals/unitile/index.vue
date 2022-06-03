@@ -530,8 +530,8 @@
             </div>
         </wp-modal>
         <!-- modal column editor -->
-        <wp-modal v-if="modals.column_editor == 'show'">
-            <div class="fullheight-percent fullwidth padbottom125"   >
+        <wp-modal   v-if="modals.column_editor == 'show'">
+            <div style="max-width: 800px;" class="fullheight-percent fullwidth padbottom125"   >
                 {{maxCol}} Columns 
                 <columnEditor ref="colEditor" :maxCol="maxCol" :gridColumns="copy(gridColumns)" />
             </div>
@@ -1315,9 +1315,9 @@ export default {
                     this.highlighted_option = this.ribbons[opt][this.highlighted_option_index]
                     const el =  document.getElementById(this.highlighted_option)
                     if(el) {
-                        // el.scrollIntoView({
-                        //     behavior: 'smooth'
-                        // });
+                        el.scrollIntoView({
+                            behavior: 'smooth'
+                        });
                     } else {
                         this.highlighted_option = this.ribbons[opt][0]
                         document.getElementById(this.highlighted_option).scrollIntoView({
@@ -1334,9 +1334,9 @@ export default {
                     this.highlighted_option = this.ribbons[opt][this.highlighted_option_index]
                     const el =  document.getElementById(this.highlighted_option)
                     if(el) {
-                        // el.scrollIntoView({
-                        //     behavior: 'smooth'
-                        // });
+                        el.scrollIntoView({
+                            behavior: 'smooth'
+                        });
                     } else {
                         this.highlighted_option = this.ribbons[opt][this.ribbons[opt].length - 1]
                         document.getElementById(this.highlighted_option).scrollIntoView({
@@ -1355,6 +1355,18 @@ export default {
             document.getElementById(this.highlighted_option).scrollIntoView({
                 behavior: 'smooth'
             });
+
+            if(v == 'Column Size') {
+                this.openColumnEditor()
+            }
+
+            if(v == 'Grid Container Custom CSS') {
+                this.handleRibbonContainerCmd('grid-container-custom-css')
+            }
+
+            if(v == 'Tiles Global Style') {
+                this.handleRibbonContainerCmd('grid-tile-custom-css')
+            }
         },
         headerTitleClick() {
             const w = webpod.dash.modal.show({

@@ -2,7 +2,7 @@
     <v-sheet :id="title" 
         :style="{
             height:'30px', 
-            border: highlighted == title ? '1px solid #BDBDBD' : '1px solid #CFD8DC', 
+            border: highlighted == title ? '1px solid #1870f0' : '1px solid #CFD8DC', 
             background: highlighted == title ? '#FAFAFA' : ''
         }" 
         elevation="0" class="pad050 borderRad4" >
