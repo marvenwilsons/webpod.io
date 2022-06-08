@@ -37,6 +37,7 @@
                     </v-icon>
                     {{block.component_name}}-block
                 </div>
+                
                 <!-- right side heading buttons -->
                 <div>
                     <div class="flex" >
@@ -90,6 +91,18 @@
                     <v-btn small @click="saveAndValidatedBlockContent" >validate & save</v-btn>
                 </div>
             </v-card>
+            <div v-if="block.component_name == 'video'" >
+                <v-alert type="info" >
+                    Embeding vimeo, youtube & other external videos is possible for this block.
+                </v-alert>
+            </div>
+            <div v-if="block.component_name == 'instagram'" >
+                <v-alert type="info" >
+                    Only copy the last series of characters in instagram url for the source field, for example 
+                    <strong style="text-decoration: underline;" >https://www.instagram.com/p/abcd/</strong>
+                    the <strong style="text-decoration: underline;" >abcd</strong> characters are the only characters needed to be pasted to the source field.
+                </v-alert>
+            </div>
             <!-- block editor -->
             <v-card v-if="!openImportBlockContentWindow" elevation="0"  class="margintop050" >
                 <!-- main block tab navs -->
@@ -150,6 +163,70 @@
                                     text
                                 </div > 
                                 <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                            </div>
+                        </div>
+                        <!-- Image -->
+                        <div v-if="block.component_name == 'image'"  class="flex flexcol flexend fullwidth" >
+                             <div class="flex" style="border-bottom:1px solid lightgray;">
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    source
+                                </div > 
+                                <div class="flex" >
+                                    <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{on, attrs}" >
+                                            <v-icon class="marginright025 marginleft050 pointer" v-on="on" v-bind="attrs" >mdi-folder-multiple-image</v-icon>
+                                        </template>
+                                        <span>Media explorer</span>
+                                    </v-tooltip>
+                                </div>
+                            </div>
+                            <div class="flex">
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    alt
+                                </div > 
+                                <div class="flex" >
+                                    <input v-model="block.alt" class="flex2 fullwidth"  type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- video -->
+                        <div v-if="block.component_name == 'video'"  class="flex flexcol flexend fullwidth" >
+                            <div class="flex" style="border-bottom:1px solid lightgray;">
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    source
+                                </div > 
+                                <div class="flex" >
+                                    <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                                    <v-tooltip top>
+                                        <template v-slot:activator="{on, attrs}" >
+                                            <v-icon class="marginright025 marginleft050 pointer" v-on="on" v-bind="attrs" >mdi-folder-multiple-image</v-icon>
+                                        </template>
+                                        <span>Media explorer</span>
+                                    </v-tooltip>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- instagram -->
+                        <div v-if="block.component_name == 'instagram'"  class="flex flexcol flexend fullwidth" >
+                            <div class="flex" >
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    path
+                                </div > 
+                                <div class="flex" >
+                                    <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- twitter -->
+                        <div v-if="block.component_name == 'twitter'"  class="flex flexcol flexend fullwidth" >
+                            <div class="flex" >
+                                <div style="border-right:1px solid lightgray; max-width:110px;" class="caption padright050 padtop025 padbottom025 marginright050 flex flexend" >
+                                    embed-code
+                                </div > 
+                                <div class="flex" >
+                                    <input v-model="block.value" class="flex2 fullwidth"  type="text">
+                                </div>
                             </div>
                         </div>
                     </div>

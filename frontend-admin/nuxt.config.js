@@ -85,6 +85,14 @@ export default {
       //   integrity: "sha384-KAZ4DtjNhLChOB/hxXuKqhMLYvx3b5MlT55xPEiNmREKRzeEm+RVPlTnAn0ajQNs",
       //   crossorigin: "anonymous"
       // }
+      {
+        src: 'https://www.instagram.com/static/bundles/es6/EmbedSDK.js/ab12745d93c5.js',
+        crossorigin: "anonymous"
+      },
+      {
+        src: 'https://platform.twitter.com/widgets.js',
+        crossorigin: "anonymous"
+      }
     ]
   },
 

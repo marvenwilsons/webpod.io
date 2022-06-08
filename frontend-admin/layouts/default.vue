@@ -664,7 +664,6 @@ export default {
                 el.scrollIntoView()
             } catch(err) {}
         }
-       
     }
 }
 </script>

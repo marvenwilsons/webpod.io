@@ -811,7 +811,7 @@ export default {
             } catch(err) {}
 
             // get max widths on screens
-            const maxWidthArray = layoutUtils.getLayoutKeys(this.myData.screens).max
+            const maxWidthArray = layoutUtils.getLayoutKeys(this.screens).max
 
             // get layout range
             const layoutRanges = layoutUtils.constructLayoutRange(maxWidthArray).minMax
@@ -820,18 +820,27 @@ export default {
             const layoutRange = layoutUtils.getLayoutRange( currentWidth , layoutRanges )
 
             try {
-                let layout = null
 
-                layout = this.myData.screens[layoutRange]
+                // when user added a new range, the screens object is empty by default so
+                // when its empty dont use that screens object
+                if(Object.keys(this.screens[layoutRange]).length != 0) {
+                    let layout = null
 
-                const { tiles, maxCol, tiles_global_style, gridGap, gridContainerStyle, gridContainerJustify, gridColumns } = layout
-                this.tiles = tiles
-                this.maxCol = maxCol
-                this.tiles_global_style = tiles_global_style
-                this.gridGap = gridGap,
-                this.gridContainerStyle = gridContainerStyle
-                this.gridContainerJustify = gridContainerJustify
-                this.gridColumns = gridColumns
+                    layout = this.screens[layoutRange]
+
+                    const { tiles, maxCol, tiles_global_style, gridGap, gridContainerStyle, gridContainerJustify, gridColumns } = layout
+                    this.tiles = tiles
+                    this.maxCol = maxCol
+                    this.tiles_global_style = tiles_global_style
+                    this.gridGap = gridGap,
+                    this.gridContainerStyle = gridContainerStyle
+                    this.gridContainerJustify = gridContainerJustify
+                    this.gridColumns = gridColumns
+
+                    this.removeUnwantedRows()
+                }
+
+                
 
             } catch(err) {}
 

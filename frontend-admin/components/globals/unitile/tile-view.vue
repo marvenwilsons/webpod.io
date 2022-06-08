@@ -47,12 +47,59 @@
                         </div>
                         <!-- rich text -->
                         <div v-if="block.component_name == 'rich text'" >
+
                             <p v-html="block.value" :style="{...block.custom_inline_style}" :class="[...block.classes]" >
                             </p>
+                        </div>
+                        <!-- img -->
+                        <div v-if="block.component_name == 'image'" >
+                            <v-icon>mdi-image-area</v-icon>
+                            <img 
+                                v-if="block.value" 
+                                :src="block.value" 
+                                :alt="block.alt"
+                                :style="{...block.custom_inline_style}" :class="[...block.classes]"
+                                :crossorigin="'anonymous'"
+                            >
+                        </div>
+                        <!-- video -->
+                        <div v-if="block.component_name == 'video'" >
+                            <v-icon>mdi-video-area</v-icon>
+                            <!-- <video 
+                                v-if="block.value" 
+                                preload
+                                :alt="block.alt"
+                                :style="{...block.custom_inline_style}" :class="[...block.classes]"
+                                :crossorigin="'anonymous'"
+                            >
+                                <source :src="block.value" type="video/mp4">
+                            </video> -->
+                            <embed 
+                                v-if="block.value" 
+                                :src="block.value" 
+                                :alt="block.alt"
+                                :style="{...block.custom_inline_style}" :class="[...block.classes]"
+                                :crossorigin="'anonymous'"
+                            >
+                        </div>
+                        <!-- instagram -->
+                        <div v-if="block.component_name == 'instagram'" >
+                            <instagram 
+                                v-if="block.value"
+                                :instaLink="block.value"
+                            />
+                        </div>
+                        <!-- twitter -->
+                        <div v-if="block.component_name == 'twitter'" >
+                            <twitter 
+                                v-if="block.value"
+                                :embedCode="block.value"
+                            />
                         </div>
                     </div>
                 </section>
             </layer>
+            
         </div>
     </div>
 </template>
@@ -61,15 +108,18 @@
 import m from '@/m'
 import layer from './layer.vue'
 import elementBlock from './elementBlock.vue'
+import instagram from './instagram.vue'
+import twitter from './twitter.vue'
+
 export default {
     mixins: [m],
     props: ['tile'],
-    components: {layer, elementBlock},
+    components: {layer, elementBlock, instagram, twitter},
     data: () => ({
         layers: [],
     }),
     created() {
         this.layers = this.tile.layers
-    }
+    },
 }
 </script>

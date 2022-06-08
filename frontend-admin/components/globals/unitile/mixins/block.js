@@ -137,14 +137,14 @@ export default {
                 })
             }
 
-            if(cmd == 'Insert instagram feed') {
+            if(cmd == 'Insert instagram post') {
                 this.addBlock(target_id,{
                     feed_source: '',
                     ...this.generateCommonElementProp(null,'instagram')
                 })
             }
 
-            if(cmd == 'Insert twitter feed') {
+            if(cmd == 'Insert twitter post') {
                 this.addBlock(target_id,{
                     feed_source: '',
                     ...this.generateCommonElementProp(null,'twitter')
