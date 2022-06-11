@@ -1,11 +1,11 @@
 <template>
     <div style="min-width:250px;"   >
         <!-- eye | order of layer / name of layer | lock -->
-        <section class="flex flexend" >
+        <section class="flex flexend marginbottom050" >
             <!-- block controller -->
             <v-tooltip top >
                 <template  v-slot:activator="{on, attrs}" >
-                    <v-btn @click="$emit('openLayerAndBlockcontroller')" v-bind="attrs" v-on="on"  icon tile >
+                    <v-btn @click="$emit('openLayerAndBlockcontroller')" v-bind="attrs" v-on="on"  icon >
                         <v-icon>mdi-code-parentheses</v-icon>
                     </v-btn>
                 </template>
@@ -14,7 +14,7 @@
             <!-- toggle layer swap mode -->
             <v-tooltip top>
                 <template v-slot:activator="{on, attrs}" >
-                    <v-btn v-on="on" v-bind="attrs" @click="mutateLayerSwapMode" icon tile >
+                    <v-btn v-on="on" v-bind="attrs" @click="mutateLayerSwapMode" icon >
                         <v-icon 
                             :color="layerSwapModeIsEnabled ? 'green' : ''" 
                             class="pointer" 
@@ -29,7 +29,7 @@
             <!-- add new layer -->
             <v-tooltip top>
                 <template v-slot:activator="{on, attrs}" >
-                    <v-btn v-on="on" v-bind="attrs" @click="$emit('addNewLayer')" icon tile >
+                    <v-btn v-on="on" v-bind="attrs" @click="$emit('addNewLayer')" icon >
                         <v-icon  class="pointer" >mdi-plus</v-icon>
                     </v-btn>
                 </template>
@@ -50,7 +50,6 @@
             id="layerDraggableContainer"
             :disabled="disableLayerDrag"
             >
-                <transition-group type="transition" :name="!drag ? 'flip-list' : null" >
                     <!-- Layer -->
                     <div  v-for="layer in list" :key="layer.layer_id" >
                         <v-card outlined hover  class="pad025 rounded-0 margintop025 pointer flex flexcol rounded-lg" >
@@ -98,33 +97,22 @@
                                         <span>Delete this layer </span>
                                     </v-tooltip>
                                     
-       
                                     <v-btn v-if="layerSwapModeIsEnabled == true" top 
-                                            @mouseenter="layerItemIsAboutToBeDrag" 
-                                            class="layer-drag-handle" 
-                                            icon 
-                                            >
-                                            <v-icon>mdi-arrow-all</v-icon>
-                                        </v-btn>
+                                        @mouseenter="layerItemIsAboutToBeDrag" 
+                                        class="layer-drag-handle" 
+                                        icon 
+                                        >
+                                        <v-icon>mdi-arrow-all</v-icon>
+                                    </v-btn>
 
-                                    <v-tooltip v-if="layerSwapModeIsEnabled == false" top>
-                                        <template v-slot:activator="{on, attrs}" >
-                                            <v-btn 
-                                                @mouseenter="layerItemIsAboutToBeDrag" 
-                                                v-bind="attrs" 
-                                                v-on="on" 
-                                                @click="blockEditorOpen == layer.layer_id ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id" 
-                                                icon 
-                                                >
-                                                <v-icon>mdi-chevron-down</v-icon>
-                                            </v-btn>
-                                        </template>
-                                        <span>Open Layer and row options / drag handle</span>
-                                    </v-tooltip>
+                                    <v-btn v-if="layerSwapModeIsEnabled == false"
+                                        @mouseenter="layerItemIsAboutToBeDrag" 
+                                        @click="blockEditorOpen == layer.layer_id ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id" 
+                                        icon 
+                                        >
+                                        <v-icon>mdi-chevron-down</v-icon>
+                                    </v-btn>
                                     
-                                    <!-- <v-btn :ripple="false" icon text >
-                                        <v-icon>mdi-swap-vertical</v-icon>
-                                    </v-btn> -->
                                 </div>
                             </div>
                             <!-- block editor -->
@@ -132,7 +120,7 @@
                                      <div class="flex flexend" >
                                         <v-tooltip top >
                                             <template v-slot:activator="{ on, attrs }">
-                                                <v-btn  @click="$emit('addRowBlock',layer.layer_id)" v-bind="attrs" v-on="on" text icon tile >
+                                                <v-btn  @click="$emit('addRowBlock',layer.layer_id)" v-bind="attrs" v-on="on" text icon >
                                                     <v-icon>mdi-plus</v-icon>
                                                 </v-btn>
                                             </template>
@@ -151,7 +139,7 @@
                                         @end="rowMoveEnd"
                                         >
                                              <div class="flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
-                                                <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad050 rounded-lg" >
+                                                <v-card v-if="row != undefined" class=" fullwidth flex marginright025 pad050 rounded-lg" >
                                                     <div class="flex flexcenter spacebetween" >
                                                         <div class="caption" > <v-chip small >Layer row {{rowIndex + 1}} </v-chip> </div>
                                                         <div class="marginbottom025" >
@@ -217,7 +205,6 @@
                                                             :style="{background: selectedBlock.id == block.id ? '#EEEEEE' : ''}"
                                                             v-for="block in row.blocks"
                                                             :key="uid(block)"
-                                                            tile
                                                             @click="blockClick(block,row)"
                                                             >
                                                                 <div @click="menu = block.id" class="flex flexcenter" >
@@ -268,7 +255,6 @@
                                  </div>
                         </v-card>
                     </div>
-                </transition-group>
             </drag-sort>
         </section>
     </div>
