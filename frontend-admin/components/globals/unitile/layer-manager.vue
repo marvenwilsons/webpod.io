@@ -2,6 +2,7 @@
     <div style="min-width:250px;"   >
         <!-- eye | order of layer / name of layer | lock -->
         <section class="flex flexend" >
+            <!-- block controller -->
             <v-tooltip top >
                 <template  v-slot:activator="{on, attrs}" >
                     <v-btn @click="$emit('openLayerAndBlockcontroller')" v-bind="attrs" v-on="on"  icon tile >
@@ -10,6 +11,22 @@
                 </template>
                 <span>Layer & block controller</span>
             </v-tooltip>
+            <!-- toggle layer swap mode -->
+            <v-tooltip top>
+                <template v-slot:activator="{on, attrs}" >
+                    <v-btn v-on="on" v-bind="attrs" @click="mutateLayerSwapMode" icon tile >
+                        <v-icon 
+                            :color="layerSwapModeIsEnabled ? 'green' : ''" 
+                            class="pointer" 
+                        >
+                        mdi-swap-vertical</v-icon>
+                    </v-btn>
+                </template>
+                <span>
+                    Toggle layer swap mode
+                </span>
+            </v-tooltip>
+            <!-- add new layer -->
             <v-tooltip top>
                 <template v-slot:activator="{on, attrs}" >
                     <v-btn v-on="on" v-bind="attrs" @click="$emit('addNewLayer')" icon tile >
@@ -28,9 +45,13 @@
             @end="drag = false, doneDrag()"
             v-bind="dragOptions"
             v-model="list" 
-            :handle="'.drag-handle'"
+            :handle="'.layer-drag-handle'"
+            :move="checkLayerMove"
+            id="layerDraggableContainer"
+            :disabled="disableLayerDrag"
             >
                 <transition-group type="transition" :name="!drag ? 'flip-list' : null" >
+                    <!-- Layer -->
                     <div  v-for="layer in list" :key="layer.layer_id" >
                         <v-card outlined hover  class="pad025 rounded-0 margintop025 pointer flex flexcol rounded-lg" >
                             <!-- layer name and active button -->
@@ -46,14 +67,14 @@
                                         <input v-model="layer.layer_name" class="paneBorder borderRad4 fullwidth pad025 body-1 padleft050"  type="text" >
                                     </div>
                                     <v-expand-transition>
-                                        <div class="deep-orange--text accent-3"  v-if="layer.layer_name.trim() === ''" >
+                                        <div class="deep-orange--text accent-3"  v-if="layer && layer.layer_name.trim() === ''" >
                                             Layer name cannot be undefined
                                         </div>
                                     </v-expand-transition>
                                 </div>
                                 <!-- layer side controlls -->
                                 <div>
-                                    <v-tooltip top>
+                                    <v-tooltip  top>
                                         <template v-slot:activator="{on,attrs}" >
                                             <span v-bind="attrs" v-on="on"  >
                                                 <v-btn @click="layer.layer_show = false" icon v-if="layer.layer_show == true" >
@@ -68,7 +89,7 @@
                                     </v-tooltip>
                                     
                                     
-                                    <v-tooltip top>
+                                    <v-tooltip v-if="layerSwapModeIsEnabled == false" top>
                                         <template v-slot:activator="{on,attrs}">
                                             <v-btn v-bind="attrs" v-on="on" @click="$emit('deleteLayer',layer.layer_id)" icon >
                                                 <v-icon  >mdi-delete</v-icon>
@@ -77,10 +98,25 @@
                                         <span>Delete this layer </span>
                                     </v-tooltip>
                                     
-                                    <v-tooltip top>
+       
+                                    <v-btn v-if="layerSwapModeIsEnabled == true" top 
+                                            @mouseenter="layerItemIsAboutToBeDrag" 
+                                            class="layer-drag-handle" 
+                                            icon 
+                                            >
+                                            <v-icon>mdi-arrow-all</v-icon>
+                                        </v-btn>
+
+                                    <v-tooltip v-if="layerSwapModeIsEnabled == false" top>
                                         <template v-slot:activator="{on, attrs}" >
-                                            <v-btn class="drag-handle" v-bind="attrs" v-on="on" @click="blockEditorOpen == layer.layer_id ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id " icon >
-                                                <v-icon  >mdi-view-sequential</v-icon>
+                                            <v-btn 
+                                                @mouseenter="layerItemIsAboutToBeDrag" 
+                                                v-bind="attrs" 
+                                                v-on="on" 
+                                                @click="blockEditorOpen == layer.layer_id ? blockEditorOpen = undefined : blockEditorOpen = layer.layer_id" 
+                                                icon 
+                                                >
+                                                <v-icon>mdi-chevron-down</v-icon>
                                             </v-btn>
                                         </template>
                                         <span>Open Layer and row options / drag handle</span>
@@ -103,19 +139,23 @@
                                             <span>Insert new row block</span>
                                         </v-tooltip>
                                      </div>
-                                     <div class=" ">
+                                     <div>
                                          <!-- rows -->
                                         <drag-sort
                                         v-bind="dragOptions"
                                         v-model="layer.layer_rows" 
-                                        :handle="'.drag-handle'"
+                                        :handle="'.row-drag-handle'"
+                                        :move="checkRowMove"
+                                        id="rowElementsContainer"
+                                        :disabled="disableRowDrag"
+                                        @end="rowMoveEnd"
                                         >
-                                             <div class=" flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
+                                             <div class="flex flexcenter margintop025" v-for="(row, rowIndex) in layer.layer_rows" :key="uid(row)" >
                                                 <v-card v-if="row != undefined"  tile class=" fullwidth flex marginright025 pad050 rounded-lg" >
                                                     <div class="flex flexcenter spacebetween" >
                                                         <div class="caption" > <v-chip small >Layer row {{rowIndex + 1}} </v-chip> </div>
                                                         <div class="marginbottom025" >
-                                                            <v-btn class="drag-handle" icon >
+                                                            <v-btn @mouseenter="rowItemIsAboutToBeDrag" class="row-drag-handle" icon >
                                                                 <v-icon>mdi-arrow-all</v-icon>
                                                             </v-btn>
                                                             <!-- row method insert row block -->
@@ -124,7 +164,6 @@
                                                                 :divideOptionsBefore="['Insert image block','Insert instagram post','Insert app instance block',]"
                                                                 @command="(cmd) => $emit('rowCmd', {cmd, target_id: row.row_id})"
                                                             >
-                                                                
                                                                 <v-tooltip top >
                                                                     <template v-slot:activator="{ on, attrs }">
                                                                         <v-btn v-bind="attrs" v-on="on" text icon >
@@ -246,10 +285,16 @@ export default {
         selectedBlock: '',
         renaming: false,
         renameValue: undefined,
-        drag: false,
         list: undefined,
         menu: false,
         blockEditorOpen: undefined,
+        // row and layer drag n drop state
+        drag: false,
+        disableRowDrag: false,
+        disableLayerDrag: false,
+        // layer swap mode state
+        layerSwapModeIsEnabled: false,
+        // options
         blockItemOptions: [
             {title: 'Insert text block', d: 'M18.5,4L19.66,8.35L18.7,8.61C18.25,7.74 17.79,6.87 17.26,6.43C16.73,6 16.11,6 15.5,6H13V16.5C13,17 13,17.5 13.33,17.75C13.67,18 14.33,18 15,18V19H9V18C9.67,18 10.33,18 10.67,17.75C11,17.5 11,17 11,16.5V6H8.5C7.89,6 7.27,6 6.74,6.43C6.21,6.87 5.75,7.74 5.3,8.61L4.34,8.35L5.5,4H18.5Z'},
             {title: 'Insert rich text', d: 'M13,4A4,4 0 0,1 17,8A4,4 0 0,1 13,12H11V18H9V4H13M13,10A2,2 0 0,0 15,8A2,2 0 0,0 13,6H11V10H13Z'},
@@ -291,6 +336,41 @@ export default {
         blockClick(block,row) {
             this.selectedBlock = block
             this.$emit('blockClick', {block,row})
+        },
+        /**
+         * Row move
+         */
+        checkRowMove(evt) {
+            if(evt.from.id != evt.to.id) {
+                this.disableRowDrag = true
+            }
+        },
+        rowItemIsAboutToBeDrag() {
+            if(this.disableRowDrag == true) {
+                webpod.dash.bottomAlert('prevent dragging row items outside of its container scope to avoid glitches')
+                this.disableRowDrag = false
+            }
+        },
+        rowMoveEnd() {
+            
+        },
+        /**
+         * Layer move
+         */
+        checkLayerMove(evt) {
+            if(evt.from.id != evt.to.id) {
+                // this.disableLayerDrag = true
+            }
+        },
+        layerItemIsAboutToBeDrag() {
+            if(this.disableLayerDrag == true) {
+                webpod.dash.bottomAlert('prevent dragging layer items outside of its container scope to avoid glitches')
+                this.disableLayerDrag = false
+            }
+        },
+        mutateLayerSwapMode() {
+            this.layerSwapModeIsEnabled = !this.layerSwapModeIsEnabled
+            this.blockEditorOpen = undefined
         }
     },
     mounted() {
