@@ -175,7 +175,7 @@
                                     <input v-model="block.value" class="flex2 fullwidth"  type="text">
                                     <v-tooltip top>
                                         <template v-slot:activator="{on, attrs}" >
-                                            <v-icon class="marginright025 marginleft050 pointer" v-on="on" v-bind="attrs" >mdi-folder-multiple-image</v-icon>
+                                            <v-icon @click="spawnMediaExplorer" class="marginright025 marginleft050 pointer" v-on="on" v-bind="attrs" >mdi-folder-multiple-image</v-icon>
                                         </template>
                                         <span>Media explorer</span>
                                     </v-tooltip>
@@ -350,8 +350,11 @@ export default {
             this.openImportBlockContentWindow = false
             this.importedBlockContent = undefined,
             this.importBlockContentError = undefined
-        }
+        },
         // end
+        spawnMediaExplorer() {
+            this.$emit('spawnMediaExplorer',['jpg','png','jpeg'])
+        }
     },
     watch: {
         menu_nav(n) {

@@ -117,7 +117,7 @@
                             </div>
                             <!-- block editor -->
                                  <div v-if="blockEditorOpen == layer.layer_id" class="pad025 " >
-                                     <div class="flex flexend" >
+                                     <div v-if="layerSwapModeIsEnabled == false" class="flex flexend" >
                                         <v-tooltip top >
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-btn  @click="$emit('addRowBlock',layer.layer_id)" v-bind="attrs" v-on="on" text icon >

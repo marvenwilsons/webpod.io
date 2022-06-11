@@ -82,6 +82,9 @@ Vue.component("drag-sort",dragsort)
 import contentRect from '@/components/globals/content-rect/content-rect.vue'
 Vue.component("content-rect",contentRect)
 
+import mediaExplorer from '@/components/globals/media-explorer/index.vue'
+Vue.component("media-explorer",mediaExplorer)
+
 
 
 // CodeMirror CSS Essentials

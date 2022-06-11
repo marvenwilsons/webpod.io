@@ -426,6 +426,7 @@
                                 :block="selected_block" 
                                 @deleteBlock="deleteBlock"
                                 @onImportBlock="onImportBlock"
+                                @spawnMediaExplorer="spawnMediaExplorer"
                                 />
                             </div>
                             <!-- layer and block controller code editor -->
@@ -652,6 +653,12 @@
             @rangeUpdate="rangeUpdate"
             ref="layoutManager"
             />
+        </wp-modal>
+        <!-- Media Explorer -->
+        <wp-modal v-if="modals.media_explorer == 'show'" >
+            <media-explorer
+                ref="mediaExplorer"
+            ></media-explorer>
         </wp-modal>
     </main>
 </template>
@@ -1484,6 +1491,18 @@ export default {
             } else {
                 this.selected_multiple_nodes.splice(this.selected_multiple_nodes.indexOf(n_index),1)
             }
+        },
+        spawnMediaExplorer(fileTypes) {
+            const modalInstance = webpod.dash.modal.show({
+                modalTitle: 'Media Explorer',
+                viewTrigger: (v) => this.$set(this.modals,'media_explorer', v ? 'show' : 'hide'),
+                fullscreen: true
+            })
+
+            modalInstance.on('show', () => {
+                console.log('media explorer modal mounted')
+                this.$refs.mediaExplorer
+            })
         }
     },
     beforeDestroy() {

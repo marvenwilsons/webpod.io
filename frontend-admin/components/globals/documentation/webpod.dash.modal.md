@@ -15,6 +15,15 @@ export default {
     }),
     methods: {
         showModal() {
+            /**
+             * Properties
+             * - modalTitle <String>
+             * - isPlayable <Boolean>
+             * - viewTrigger <Function>
+             * - button <String>
+             * - fullscreen <Boolean>
+            */
+
             // Create a modal instance
             const modalInstance = webpod.dash.modal.show({
                 modalTitle: 'Column Editor',
