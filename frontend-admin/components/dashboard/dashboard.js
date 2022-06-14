@@ -16,6 +16,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     
     // fires everytime menu select property changes
     menu.onSelect = ({selected, menu}) => {
+        console.log('Menu on select', menu, selected)
         const menuMappingRole = dash.menuMappingRole
         const serviceMappingRole = dash.serviceMappingRole
         const primary_version = menuMappingRole[menu.menu_id].primary_version
@@ -23,6 +24,8 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         const view = serviceMappingRole[ service_id ][ primary_version ]
         const { instancer, version_data, version_name } = view
         let selected_service = undefined
+
+        console.log('version_data', version_data == '')
 
 
         if(instancer){
@@ -42,8 +45,24 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 }
             }
         } else {
-            // if service has an instancer object, it means the view data of the next service willxcv be provided by the instancer
-            selected_service = service.getService(selected)
+            
+            if(!version_data) {
+                // empty
+                selected_service = {
+                    body: {
+                      paneConfig: {
+                        isClosable: false,
+                        title: 'No service assigned',
+                      },
+                      viewConfig: {},
+                      view: 'pd',
+                      viewData: undefined,
+                      viewHooks: ''
+                    }
+                }
+            } else {    
+                selected_service = {...version_data}
+            }
         }
 
         // empty the pane before rendering a new pane

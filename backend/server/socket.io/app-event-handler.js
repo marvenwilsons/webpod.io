@@ -2,19 +2,19 @@ const server = require('./admin-server')
 
 server.on('ready', (admin,dashboard) => {
 
-    /** DASHBOARD EVENTS */
-    dashboard.on('getDashboardResource', async (admin_id) => {
+    /** DASHBOARD OR CLIENT EVENTS */
+    dashboard.on('getDashboardResource', async (payload) => {
 
         // get admin
-        const  { name, email, user, avatar, role_id }  = await admin.getAdmin(admin_id)
+        const  { name, email, user, avatar, role_id }  = await admin.getAdmin(payload.user)
 
         // set user info to dashboard
         dashboard.exec('dash','setUser', { name, email, user, avatar })
-        console.log('yesasdf')
+
         // get admin role
         const role = await admin.getRole(role_id)
         const { role_name, role_menu } = role
-        console.log('role', role)
+
         let each_menu = []
         let selected_service_version = []
         let selected_service = []
@@ -30,6 +30,7 @@ server.on('ready', (admin,dashboard) => {
 
         })
 
+        // menu bar
         Promise.all(each_menu).then((value) => value.map(({menu_id,menu_name},_) => {
           // setting menubar menu
           dashboard.exec('menu','addItem', {menu_id,menu_name})
@@ -61,12 +62,16 @@ server.on('ready', (admin,dashboard) => {
         })
     })
 
+    dashboard.on('menuChange', async ({ token, user, menu }) => {
+      console.log('menuChange: ', menu)
+    })
+
     /** ADMIN EVENTS */
     admin.on('login', () => {
-      
+      console.log('admin login')
     })
     admin.on('logout', () => {
-
+      console.log('admin logout')
     })
 
     /** ADMIN TOKEN EVENTS */

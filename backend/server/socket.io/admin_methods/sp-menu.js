@@ -23,7 +23,7 @@ async function getMenu(menu_id) {
         },
         {
           menu_id: 'menu-id-lkasdn6',
-          menu_name: 'Media',
+          menu_name: 'Media Files',
         },
         {
           menu_id: 'menu-id-lkasdn7',

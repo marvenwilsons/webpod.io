@@ -1,0 +1,20 @@
+- When user inputs the dashboard url in browser and webpod detects the token and user info from localstorage, 
+  and also when socket conenction is istablished.
+
+1. dashboard.js will 
+  a. send the user info and token info using the socket connection to the server by
+  b. emitting a server event "getUserServices event" and "getDashboardResource event", this events can be found in the back end
+     or in the server.
+
+2. server will 
+  a. validate the token and user info if it returns valid it will proceed on relaying the event to the sever event handler.
+  b. the "getDashboardResource" event will retrive data from database then emits an event back to the dashboard or client.
+
+3. dashboard will
+  a. executes methods and passes data to the executed methods
+
+
+Note:
+- Every dashboard client event is handled in the server
+
+  

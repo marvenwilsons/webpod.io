@@ -19,6 +19,7 @@ export default {
   getService(serviceName) {
     // fetch service in database
     // serviceName is the name of the service that is located in the database
+    console.log('getServices: ',services)
     const selectedService = services.filter(e => e.name == serviceName)[0]
     if(selectedService) {
 

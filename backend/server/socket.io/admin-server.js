@@ -260,7 +260,7 @@ io.on('connection', async function (socket) {
 
           if(authenticate_admin.is_valid) {
 
-            dashboardEvents.emit(name, payload.user)
+            dashboardEvents.emit(name, payload)
             const requested_method = admin_methods()[name]
 
             if(requested_method) {

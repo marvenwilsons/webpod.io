@@ -8,7 +8,7 @@ module.exports =  {
     user: 'marvenwilsons',
     avatar: '',
     app_name: 'marvenwilsondonque.com',
-    menu_items: ['Dashboard','Collections','Site','Services','Settings','Media','Apps','User & Roles','Layout Builder'],
+    // menu_items: ['Dashboard','Collections','Site','Services','Settings','Media Files','Apps','User & Roles','Layout Builder'],
     services: [
       {
         name: 'Dashboard',
