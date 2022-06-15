@@ -1,9 +1,9 @@
 <template>
-    <main class="flex fullwidth flexcol" >
-        <div class="marginbottom125 text-uppercase " >
+    <main class="flex fullwidth flexcol relative " >
+        <!-- <div class="marginbottom125 text-uppercase " >
             <span style="font-weight:500; color: #424242;" >Get Started</span>
-        </div>
-        <!-- CREATE NEW INSTANCE BUTTONS -->
+        </div> -->
+        <!-- CREATE NEW INSTANCE BUTTONS
         <div style="gap:10px;" class="flex  flexwrap marginbottom125 " >
             <div 
                 style="max-width:450px; min-width:450px;" 
@@ -33,13 +33,35 @@
                     </v-card>
                 </v-hover>
             </div>
+        </div> -->
+        <div style="height: 400px; 
+            background: linear-gradient(90deg, rgba(112,76,156,1) 0%, rgba(9,9,121,1) 100%)" 
+        class="absolute fullwidth fullheight-percent rounded-xl" >
         </div>
-        <!-- EXISTING PROJECTS TITLE  -->
-        <div class="marginbottom125 text-uppercase" >
-            <span style="font-weight:500; color: #424242;" >Existing {{menuTitle}}'s</span>
+        <div style="max-height:300px; z-index: 1; " class="pad125" >
+           <div class="pad125" >
+             <div class="flex flexcenter flexstart margintop025" >
+                <h4 class="merri-font marginright050" style="color:white; margin-bottom: 0; margin-top:0;">{{menuTitle}}</h4>
+                <dropDown
+                    @command="(item) => createInstance( (instance_types.filter(e => e.type == item))[0] )"
+                    :options="instance_types.map(e => {return {title: e.type}})"
+                >
+                    <v-btn fab small >
+                        <v-icon>mdi-plus</v-icon>
+                    </v-btn>
+                </dropDown>
+            </div>
+            <div class="flex flexcenter flexstart" >
+                <v-icon small color="white" class="marginright050" >mdi-account</v-icon>
+                <span style="color:white;" >{{user}}</span>
+            </div>
+           </div>
         </div>
-        <!-- EXISTING PROJECTS CONTAINER -->
-        <v-card :elevation="2" class="pad125 fullheight-percent flex flexcenter flexcol" style="background: white; max-width:1920px; ">
+        <v-card 
+            :elevation="5" 
+            class="rounded-xl pad125 flex flexcenter flexcol marginleft125 marginright125 marginbottom125" 
+            style="background: white; max-width:1920px; "
+        >
             <!-- RENAME MODAL -->
             <portal to="modal">
                 <div v-if="renameData"  style="background: white;  min-width: 400px; height: 100%;" :class="['', renameError ? 'err_shake' : '']" >
@@ -285,8 +307,8 @@ export default {
         selectedModifiedDay: undefined,
         filterByDateButtonIsDisable: true,
         isBeenFilteredOnce: false,
-        dateFilterItemsFound: undefined
-        
+        dateFilterItemsFound: undefined,
+        user: undefined
     }),
     watch: {
         renameNewValue() {
@@ -562,7 +584,9 @@ export default {
             }
         }
     },
+
     created() {
+        this.user = webpod.dash.getUser().name
         const topAlert = webpod.dash.topAlert('loading...')
 
         if(this.myData.instancer.instance_types && this.myData.instancer.instance_types.length) {

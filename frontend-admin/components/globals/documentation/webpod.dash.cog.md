@@ -1,7 +1,7 @@
-@docs webpod.dash.cog
+@docs webpod.dash.infoButton
 ```js
 // renders the cog buton in the corner
-const cog = webpod.dash.cog.show()
+const cog = webpod.dash.infoButton.show()
 
 // cog event
 cog.on('click', () => {
@@ -9,5 +9,5 @@ cog.on('click', () => {
 })
 
 // cog hide
-webpod.dash.cog.hide()
+webpod.dash.infoButton.hide()
 ```

@@ -1506,7 +1506,7 @@ export default {
         }
     },
     beforeDestroy() {
-        webpod.dash.cog.hide()
+        webpod.dash.infoButton.hide()
         this.nodeSelectedIndex = undefined
         this.tiles = []
         this.refresh()

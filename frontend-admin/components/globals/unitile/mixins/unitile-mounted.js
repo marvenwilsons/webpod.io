@@ -8,7 +8,7 @@ export default {
         })
 
         // sidebar cog
-        const cog = webpod.dash.cog.show()
+        const cog = webpod.dash.infoButton.show()
         cog.on('click', () => {
             webpod.dash.modal.show({
                 modalTitle: 'GRID SETTINGS',
@@ -19,10 +19,10 @@ export default {
         // when toggling pane hide the cog
         webpod.session.onPaneToggle = (currentIndex) => {
             if(this.paneIndex != currentIndex) {
-                webpod.dash.cog.hide()
+                webpod.dash.infoButton.hide()
             } else {
                 setTimeout(() => {
-                    const x = webpod.dash.cog.show()
+                    const x = webpod.dash.infoButton.show()
                     x.on('click', () => {
                         webpod.dash.modal.show({
                             modalTitle: 'GRID SETTINGS',

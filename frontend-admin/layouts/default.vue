@@ -96,7 +96,7 @@
                 <accent-bg/>
                 <!-- menubar -->
                 <section style="z-index:2" class="pane" >
-                    <v-card dark style="z-index:800; min-width:220px;" class="flexcol margin050" >
+                    <v-card elevation="5" style="z-index:800; min-width:220px; background: #303341;" class="flexcol margin050 rounded-xl" >
                         <menubar  ref="menubar" />
                     </v-card>
                 </section>
@@ -116,7 +116,7 @@
                                     @click="cog.click()"
                                 >
                                     <v-icon dark>
-                                        mdi-cog-outline
+                                        mdi-information-variant
                                     </v-icon>
                                 </v-btn>
                             </v-scale-transition>
@@ -602,7 +602,7 @@ export default {
                     }
                 },
                 setIfPaneIsClosable: (isClosable) => this.currentPaneIsClosable = isClosable,
-                cog: {
+                infoButton: {
                     show: () => {
                         setTimeout(() => {
                             this.$set(this.cog,'show',true)
@@ -649,6 +649,9 @@ export default {
                             this.$set(this.topAlert,'show', false)
                         }
                     }
+                },
+                getUser: ()  => {
+                    return this.user
                 }
             }
 
