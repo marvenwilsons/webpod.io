@@ -21,8 +21,9 @@
                 </dropDown>
             </div>
             <div class="flex flexcenter flexstart" >
-                <v-icon small color="white" class="marginright050" >mdi-account</v-icon>
-                <span style="color:white;" >{{user}}</span>
+                <!-- <v-icon small color="white" class="marginright050" >mdi-account</v-icon>
+                <span style="color:white;" >{{user}}</span> -->
+                Schemas Collections
             </div>
             <!-- <div style="max-width: 500px;" >Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta consequuntur veritatis beatae sunt animi iusto cumque sapiente et voluptate, ullam esse fuga nulla eum doloribus dolorem tempore unde saepe incidunt!</div> -->
            </div>

@@ -1,6 +1,6 @@
 <template>
     <div class="fullwidth flex flexcenter " >
-        <v-card id="mydiv" class="" elevation="8">
+        <v-card id="mydiv" class="rounded-xl" elevation="8">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
                 <div class="body-1"  >
@@ -27,7 +27,7 @@
                 color="primary"
             ></v-progress-linear>
             
-            <div id="content"  class="pad125 paneBorder" :style="fullscreen ? fullscreen_modal :  {zIndex:2,}" role="content" >
+            <div id="wp-modal-content-container"  class="pad125 paneBorder" :style="fullscreen ? fullscreen_modal :  {zIndex:2,}" role="content" >
                 <div class="pad125" >
                     <slot></slot>
                 </div>
@@ -60,13 +60,13 @@ export default {
         },
         collapse() {
             this.isCollapsed = true
-            gsap.to("#content", {height: 0, duration: 0.3, ease: "power3.inOut"});
-            gsap.to("#content", {width: '250px', duration: 0.3, ease: "power3.inOut"});
+            gsap.to("#wp-modal-content-container", {height: 0, duration: 0.3, ease: "power3.inOut"});
+            gsap.to("#wp-modal-content-container", {width: '250px', duration: 0.3, ease: "power3.inOut"});
         },
         expand() {
             this.isCollapsed = false
-            gsap.to("#content", {height: 'auto', duration: 0.3, ease: "power3.inOut"});
-            gsap.to("#content", {width: 'auto', duration: 0.3, ease: "power3.inOut"});
+            gsap.to("#wp-modal-content-container", {height: 'auto', duration: 0.3, ease: "power3.inOut"});
+            gsap.to("#wp-modal-content-container", {width: 'auto', duration: 0.3, ease: "power3.inOut"});
         }
     },
     mounted() {
@@ -136,7 +136,7 @@ export default {
   
 }
 
-#content {
+#wp-modal-content-container {
     resize: both !important;
     overflow: auto;
 }

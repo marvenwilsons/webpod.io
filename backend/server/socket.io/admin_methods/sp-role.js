@@ -18,7 +18,7 @@ async function getRole (_role_id) {
     resolve({
       role_id,
       role_menu: [
-        {
+        { // Dashboard Menu
           /**
            * purpose of this, is I want you to get all of the service version that has this service_id
            * then narrow or filter out all service version that has no same version_name
@@ -52,55 +52,55 @@ async function getRole (_role_id) {
           // the user can toggle through this versions to have a different view in the dashboard
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2'] 
         },
-        {
+        { // Collections Menu
           menu_id: 'menu-id-lkasdn2',
           service_id: 'service-id-dmni10',
-          primary_version: 'my-custom-version',
+          primary_version: 'my-custom-version2',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
-        {
+        { // Site Menu
           menu_id: 'menu-id-lkasdn3',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version1',
           versions: ['my-custom-version', 'my-custom-version1']
         },
-        {
+        { // Services Menu
           menu_id: 'menu-id-lkasdn4',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version2',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
-        {
+        { // Settings Menu
           menu_id: 'menu-id-lkasdn5',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version3',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
-        {
+        { // Media Files
           menu_id: 'menu-id-lkasdn6',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version4',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
-        {
+        { // Apps
           menu_id: 'menu-id-lkasdn7',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version5',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
-        {
+        { // User
           menu_id: 'menu-id-lkasdn8',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version6',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
         },
-        {
+        { // Roles
           menu_id: 'menu-id-lkasdn9',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version7',
-          versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
+          versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version7']
         },
-        {
+        { // Layout Builder
           menu_id: 'menu-id-lkasdn10',
           service_id: 'service-id-dmni10',
           primary_version: 'my-custom-version8',

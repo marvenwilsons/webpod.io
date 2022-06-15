@@ -82,8 +82,14 @@ Vue.component("drag-sort",dragsort)
 import contentRect from '@/components/globals/content-rect/content-rect.vue'
 Vue.component("content-rect",contentRect)
 
-import mediaExplorer from '@/components/globals/media-explorer/index.vue'
+import mediaExplorer from '@/components/globals/wp-media-explorer/index.vue'
 Vue.component("media-explorer",mediaExplorer)
+
+import collections from '@/components/globals/wp-collections/index.vue'
+Vue.component("collections", collections)
+
+import role from '@/components/globals/wp-role/index.vue'
+Vue.component("Wp-Role", role)
 
 
 

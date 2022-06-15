@@ -16,7 +16,7 @@
                                         </span>
                                     </div>
                                 </v-expand-transition>
-                                <div class="" style="max-height:500px;" >
+                                <div id="modal-portal-target-content" >
                                     <portal-target style="min-width: 300px; height: 100%"  @change="portalTargetChanged"  name="modal" />
                                     <!-- modal button -->
                                     <div class="flex flexend"  v-if="modalButton.show" >
