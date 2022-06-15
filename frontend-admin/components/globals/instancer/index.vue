@@ -1,45 +1,14 @@
 <template>
     <main class="flex fullwidth flexcol relative " >
-        <!-- <div class="marginbottom125 text-uppercase " >
-            <span style="font-weight:500; color: #424242;" >Get Started</span>
-        </div> -->
-        <!-- CREATE NEW INSTANCE BUTTONS
-        <div style="gap:10px;" class="flex  flexwrap marginbottom125 " >
-            <div 
-                style="max-width:450px; min-width:450px;" 
-                class=" instances_box   pointer  flex" 
-                v-for="type in instance_types" :key="uid(type)" 
-                @click="createInstance(type)"
-            >
-                <v-hover v-slot="{ hover }" >
-                     <v-card  :disabled="false" :loading="false" :elevation="hover ? 12 : 1" v-ripple  plain   class=" fullheight-percent fullwidth" >
-                        <main class="pad125" >
-                            <div class="padtop125 flex fullwidth" >
-                            <div style="max-width:35px;" class="flex bordrred" >
-                                <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                                    <path fill="#1976d2" :d="type.svg || 'M17.9,17.39C17.64,16.59 16.89,16 16,16H15V13A1,1 0 0,0 14,12H8V10H10A1,1 0 0,0 11,9V7H13A2,2 0 0,0 15,5V4.59C17.93,5.77 20,8.64 20,12C20,14.08 19.2,15.97 17.9,17.39M11,19.93C7.05,19.44 4,16.08 4,12C4,11.38 4.08,10.78 4.21,10.21L9,15V16A2,2 0 0,0 11,18M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2Z'" />
-                                </svg>
-                            </div>
-                            <div class="flex flexcol marginleft050 " >
-                                <div class="text-uppercase flex flexstart" > 
-                                    <span class="" style="font-weight:500; font-size: 105%;">CREATE {{type.type}}</span> 
-                                </div>
-                                <div class="caption text--secondary text-uppercase flex flexstart flexwrap" >
-                                    {{type.desc || 'No available description'}}
-                                </div>
-                            </div>
-                        </div>
-                        </main>
-                    </v-card>
-                </v-hover>
-            </div>
-        </div> -->
+        <!-- banner -->
         <div style="height: 400px; 
             background: linear-gradient(90deg, rgba(112,76,156,1) 0%, rgba(9,9,121,1) 100%)" 
         class="absolute fullwidth fullheight-percent rounded-xl" >
         </div>
+        <!--  -->
         <div style="max-height:300px; z-index: 1; " class="pad125" >
            <div class="pad125" >
+            <!-- title -->
              <div class="flex flexcenter flexstart margintop025" >
                 <h4 class="merri-font marginright050" style="color:white; margin-bottom: 0; margin-top:0;">{{menuTitle}}</h4>
                 <dropDown
@@ -55,6 +24,7 @@
                 <v-icon small color="white" class="marginright050" >mdi-account</v-icon>
                 <span style="color:white;" >{{user}}</span>
             </div>
+            <!-- <div style="max-width: 500px;" >Lorem ipsum dolor sit amet consectetur, adipisicing elit. Dicta consequuntur veritatis beatae sunt animi iusto cumque sapiente et voluptate, ullam esse fuga nulla eum doloribus dolorem tempore unde saepe incidunt!</div> -->
            </div>
         </div>
         <v-card 
