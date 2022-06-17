@@ -36,9 +36,11 @@
            </div>
         </div>
         <!--  -->
-        <v-card class="marginleft125 marginright125 marginbottom125 rounded-xl pad125 flex " >
+        <v-card tile class="marginleft125 marginright125 marginbottom125 rounded-br-xl rounded-bl-lg rounded-tl-lg  flex " >
             <!-- <h6>{{activeTab}}</h6> -->
             <!-- <div class="flex flexcenter" >Fetching {{activeTab}} ...</div> -->
+            <WpRole v-if="activeTab == 'Roles'" ></WpRole>
+            <WpUsers v-if="activeTab == 'Users'" ></WpUsers>
         </v-card>
         <!-- modals -->
         <wp-modal   v-if="addNewUsersModalShow" >
@@ -66,9 +68,11 @@
 <script>
 import emptyBox from './empty-box.vue'
 import m from '@/m'
+import WpRole from './roles.vue'
+import WpUsers from './users.vue'
 export default {
     mixins: [m],
-    components: {emptyBox},
+    components: {emptyBox,WpRole,WpUsers},
     props: ['myData', 'hooks'],
     data: () => ({
         menuTitle: 'System Manager',
