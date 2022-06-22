@@ -1,12 +1,12 @@
 <template>
-    <el-dropdown  @command="handleCommand" size="small" trigger="click">
+    <el-dropdown placement="bottom-start"  @command="handleCommand" size="small" trigger="click">
         <div style="color: #000000de; " class="pointer" >
             <svg v-if="svgTrigger" style="width:20px;height:20px" viewBox="0 0 24 24">
                 <path fill="gray" :d="svgTrigger" />
             </svg>
             <slot></slot>
         </div>
-        <el-dropdown-menu  style="font-family: 'Roboto'; font-size: 1rem;"  slot="dropdown">
+        <el-dropdown-menu    style="font-family: 'Roboto'; font-size: 1rem;"  slot="dropdown">
             <el-dropdown-item 
             :divided="divideOptionsBefore && divideOptionsBefore.includes(option.title)"
             :disabled="disabledOptions && disabledOptions.includes(option.title)"
@@ -22,8 +22,9 @@
                             <path fill="#000000de" :d="option.d" />
                         </svg>
                     </div>
-                    <div style="font-weight:400;" class="flex flex1 fullwidth marginleft050 padright050 flexcenter" >
+                    <div style="font-weight:400;" class="flex flexcol flex1 fullwidth marginleft050 padright050 flexcenter" >
                         <div class="fullwidth" style="color: #000000de; font-size: .875rem;" >{{option.title}}</div>
+                        <div style="color: gray; max-width:250px;" v-if="option.desc" class=" fullwidth caption" >{{option.desc}}</div>
                     </div>
                 </div>
             </el-dropdown-item>
@@ -46,7 +47,7 @@ export default {
         }
     },
     mounted() {
-        this.indented_off = (this.options.map(opt => Object.keys(opt).length == 1)).every(v => v == true)
+        this.indented_off = (this.options.map(opt => !Object.keys(opt).includes('d') )).every(v => v == true)
         
     }
 }
