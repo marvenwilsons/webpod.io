@@ -6,7 +6,7 @@
             </svg>
             <slot></slot>
         </div>
-        <el-dropdown-menu    style="font-family: 'Roboto'; font-size: 1rem;"  slot="dropdown">
+        <el-dropdown-menu  style="font-family: 'Roboto'; font-size: 1rem;"  slot="dropdown">
             <el-dropdown-item 
             :divided="divideOptionsBefore && divideOptionsBefore.includes(option.title)"
             :disabled="disabledOptions && disabledOptions.includes(option.title)"
@@ -35,7 +35,7 @@
 <script>
 import m from '@/m'
 export default {
-    name:"wp-dropdown",
+    name:"dropDown",
     mixins: [m],
     props: ['options','svgTrigger','divideOptionsBefore','disabledOptions', 'selected'],
     data: () => ({

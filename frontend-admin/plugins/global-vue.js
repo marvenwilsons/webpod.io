@@ -91,6 +91,9 @@ Vue.component("collections", collections)
 import role from '@/components/globals/wp-role/index.vue'
 Vue.component("Wp-Role", role)
 
+import wpDropDownOne from '@/components/globals/wp-dropdown-one/index.vue'
+Vue.component('wp-dropdown-one',wpDropDownOne)
+
 
 
 // CodeMirror CSS Essentials
