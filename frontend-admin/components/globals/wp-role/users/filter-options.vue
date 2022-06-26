@@ -4,7 +4,6 @@
             <div>
                 <span class="caption">Filter by role</span>
             </div>
-            {{selectedFilter}}
             <div style="gap: 8px; max-width: 350px;" class="flex margintop050 flexwrap">
                 <v-chip 
                 @click="setFilterRole(role)" 
@@ -36,16 +35,16 @@
 
 <script>
 export default {
-    props: ['roles'],
+    props: ['roles','defaultRole'],
     data: () => ({
         userRoles: [],
         filter: {
             role: undefined
         },
-        selectedFilter: 'firstname',
+        selectedFilter: 'firstName',
         selectedRole: undefined,
         radioGroup: undefined,
-        radioOptions: ['username','lastname','firstname','email']
+        radioOptions: ['username','lastName','firstName','email']
     }),
     watch: {
         radioGroup() {
@@ -57,8 +56,9 @@ export default {
         // this.userRoles = this.roles
         this.userRoles = ['Admin1','Admin2','Admin3', 'Admin4', 'Admin5']
 
-        this.radioGroup = this.radioOptions.indexOf('firstname')
-        console.log('kwe!',this.radioOptions[this.radioOptions.indexOf('firstname')])
+        this.radioGroup = this.radioOptions.indexOf('firstName')
+        this.selectedRole = this.defaultRole
+        console.log('filter option mounted', this.selectedRole)
 
     },
     methods: {

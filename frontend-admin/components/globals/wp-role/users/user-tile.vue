@@ -1,22 +1,37 @@
 <template>
     <div @click="$emit('selectUser',user)" >
-        <v-banner
-        elevation="2" v-ripple class=" pointer margintop050 grey lighten-4" >
+        <v-card
+        elevation="2" 
+        v-ripple 
+        class=" pointer margintop050 grey lighten-4 pad050" 
+        outlined
+        >
             <div class="flex flexcenter flexstart" >
-                <v-icon outlined class="marginright050" >mdi-account</v-icon>
-                <span class="" >
-                    ey {{user.firstName}} {{user.lastName}}
+                <!-- <v-icon outlined class="marginright050" >mdi-account</v-icon> -->
+                <v-avatar
+                    :color="getRandomColor()"
+                    size="36"
+                >
+                    <span class="white--text text-h6 text-uppercase">
+                        {{user.firstName.charAt(0)}}{{user.lastName.charAt(0)}}
+                    </span>
+                </v-avatar>
+                <span class="marginleft050 body-1" >
+                    {{user.firstName}} {{user.lastName}}
                 </span>
             </div>
-        </v-banner>
+        </v-card>
     </div>
 </template>
 <script>
 export default { 
     props: ['user'],
     methods: {
-        c() {
-            console.log('ey')
+        getRandomColor() {
+            const colors = ['blue','pink','indigo','purple','deep-purple','cyan', 'teal', 'green', 'amber','orange','deep-orange']
+            // const i = Math.floor(Math.random() * colors.length - 1) + 1;
+            const i = 2
+            return `${colors[i]} lighten-1`
         }
     }
 }

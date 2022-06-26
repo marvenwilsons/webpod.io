@@ -21,18 +21,31 @@
                     </template>
                     <template v-slot:content="{close}" >
                          <userFilter
+                         :defaultRole="roleMode"
                          @apply="(v) => {close(), setFilterMode(v)}"
                          />
                     </template>
                  </wp-dropdown-one>
             </div>
+            <div class="margintop025" v-if="roleMode" >
+                <v-chip small style="padding-right:0" >
+                    {{roleMode}} 
+                    <v-icon 
+                        class="pointer marginright025 marginleft025" 
+                        small
+                        @click="setFilterMode(filterMode)"
+                    >
+                        mdi-close-circle
+                    </v-icon> 
+                </v-chip>
+            </div>
         </div>
         <div :style="{overflow: 'auto'}" class="flex1  relative" >
             <div style="overflow:auto;" class="  absolute fullwidth padright050" >
-                <div class=" fullwidth fullheight-percent ">
+                <div class=" fullwidth fullheight-percent padbottom125">
                     <user-tile
                         @selectUser="selectUser"
-                        v-for="(user,index) in allUsers" :key="uid(user)" 
+                        v-for="(user,index) in displayedUsers" :key="uid(user)" 
                         :user="user"
                         :index="index"
                     ></user-tile>
@@ -78,19 +91,16 @@
             <div
             elevation="0"
             style="-webkit-box-shadow: -6px 15px 24px 0px #757575; 
-                box-shadow: -6px 15px 24px 0px #757575;"
-            class="pad125  fullheight-percent fullwidth rounded-br-xl rounded-bl-xl" >
-                 <div class="" >
+                box-shadow: -6px 15px 24px 0px #757575;
+                overflow: auto;
+            "
+            class="pad125 fullheight-percent fullwidth rounded-br-xl rounded-bl-xl relative" >
+                 <div class="absolute pad125" style="" >
                     <userHome v-if="!selectedUser" />
+                    <userGeneralInfo v-if="selectedUser" :user="selectedUser" />
                 </div>
             </div>
         </div>
-        <!-- modal -->
-        <wp-modal v-if="filterModal" >
-            <div style="min-width:400px; min-height:300px" >
-                <userFilter/>
-            </div>
-        </wp-modal>
     </div>
 </template>
 
@@ -98,13 +108,15 @@
 import userTile from './users/user-tile.vue'
 import userHome from './users/home.vue'
 import userFilter from './users/filter-options.vue'
+import userGeneralInfo from './users/user-general.vue'
 import m from '@/m'
 export default {
-    components: {userTile, userHome, userFilter},
+    components: {userTile, userHome, userFilter, userGeneralInfo},
     mixins: [m],
     data: () => ({
         selectedUser: undefined,
         allUsers: [],
+        displayedUsers: [],
         filterModal: false,
         opt1: [
             {title: 'Home'},
@@ -127,12 +139,29 @@ export default {
                 {title: 'Admin2'}
             ]},
         ],
-        filterMode: 'firstname',
+        filterMode: 'firstName',
+        roleMode: undefined,
         searchQuery: undefined
     }),
     watch: {
         searchQuery(n,o) {
-            // TODO:
+            this.displayedUsers = this.allUsers
+
+            if(n) {
+                this.displayedUsers = this.displayedUsers.filter((u) => {
+                    if(this.roleMode) {
+                        if(u[this.filterMode].toLowerCase().includes(n.toLowerCase()) && u.role == this.roleMode) {
+                            console.log('rolemode', u.role)
+
+                            return u
+                        } 
+                    } else {
+                        if(u[this.filterMode].toLowerCase().includes(n.toLowerCase())) {
+                            return u
+                        }
+                    }
+                })
+            }
         }
     },
     methods: {
@@ -143,27 +172,49 @@ export default {
             })
         },
         selectUser(user) {
-            this.selectedUser = user
+            this.selectedUser = undefined
+            this.$nextTick(() => {
+                this.selectedUser = user
+            })
         },
         setFilterMode(val) {
-            console.log(val)
-            this.filterMode = val
+            console.log('setting filter mode ', val)
+            if(val.includes('/')) {
+                this.displayedUsers = this.allUsers
+                this.roleMode = val.split('/')[1]
+                this.filterMode = val.split('/')[0]
+
+                this.$nextTick(() => {
+                    this.displayedUsers = this.displayedUsers.filter(u => u.role == this.roleMode)
+                })
+            } else {
+                this.filterMode = val
+                this.roleMode = undefined
+            }
+
+
             this.searchQuery = undefined
         }
     },
     mounted() {
+        const firstNames = ['Marven','Johny','Hannah','Chris','Eugine','Kwenten','Jun','Maverick','Ricky']
+        const lastName = ['Jefersons','Wilsons','Dov','Vanny', 'golley','Xavier','Yowoming','Kent','Niner']
         setTimeout(() => {
-            for(let i = 0; i < 1; i++) {
+            for(let i = 0; i < firstNames.length - 1; i++) {
                 this.allUsers.push({
-                    firstName: 'John',
-                    lastName: 'Doe',
-                    email: 'jdoe@smail.com',
-                    username: 'jdoe123',
-                    password: ''
+                    firstName: firstNames[i],
+                    lastName: lastName[i],
+                    email: `${lastName[i]}${firstNames[i]}@smail.com`,
+                    username: `${firstNames[i]}${i * 89}`,
+                    password: 'jaghalsjdieklrwlke',
+                    role: i > 3 ? 'Admin1' : i > 6 ? 'Admin3' : 'Admin2' 
                 })
             }
-             // this.selectedUser = 'hey'
         }, 1000)
+
+        this.$nextTick(() => {
+            this.displayedUsers = this.allUsers
+        })
     }
 }
 </script>
