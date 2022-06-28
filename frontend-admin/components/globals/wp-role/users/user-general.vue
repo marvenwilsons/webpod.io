@@ -69,6 +69,7 @@ export default {
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: false,
+                allowNumericCharacters: false,
                 mode: null, 
                 maxChar: 40,
                 minChar: 5,
@@ -92,6 +93,7 @@ export default {
                 hoverInfo: '',
                 allowWhiteSpace: false,
                 allowSpecialChars: false,
+                allowNumericCharacters: true,
                 mode: null, 
                 maxChar: 50,
                 minChar: 5
@@ -102,6 +104,7 @@ export default {
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: true,
+                allowNumericCharacters: true,
                 mode: null, 
                 maxChar: 50,
                 minChar: 5
@@ -112,6 +115,7 @@ export default {
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: false,
+                allowNumericCharacters: true,
                 mode: 'password', 
                 maxChar: 40,
                 minChar: 5,
@@ -134,6 +138,7 @@ export default {
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: false,
+                allowNumericCharacters: true,
                 mode: null, 
                 maxChar: 40,
                 minChar: 5

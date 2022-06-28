@@ -112,7 +112,24 @@ export default {
         }
       },
       allowNumericCharacters(val, arg, err) {
-        console.log('allowNumericCharacters')
+        if (!arg.allowSpecialChars) {
+          const regex = /[0-9]+/gim;
+          if (regex.exec(val) != null) {
+            err({
+              Msg: `Numeric characters not allowed`,
+              App: "objectfySingle",
+              onMethod: "change"
+            });
+            return {
+              status: false,
+              msg: "Numeric characters not allowed"
+            };
+          } else {
+            return {
+              status: true
+            };
+          }
+        }
       },
       allowSpecialChars(val, arg, err) {
         if (!arg.allowSpecialChars) {
@@ -175,7 +192,8 @@ export default {
         "minChar",
         "maxChar",
         "allowSpecialChars",
-        "allowWhiteSpace"
+        "allowWhiteSpace",
+        "allowNumericCharacters"
       ]);
 
       // perform string validation from the validation set

@@ -557,7 +557,7 @@ export default {
         return output;
     },
     data_change({ err, value, key }) {
-      if(value == undefined) {
+      if(value == undefined && this.config.operation != 'rw') {
         console.error(key, 'is undefined')
       }
 
@@ -693,7 +693,7 @@ export default {
                 }
 
                 // add the rest of properties that is required here
-                const requiredProps = ['type','allowWhiteSpace','allowSpecialChars','mode','maxChar','minChar','hoverInfo']
+                const requiredProps = ['type','allowWhiteSpace','allowNumericCharacters','allowSpecialChars','mode','maxChar','minChar','hoverInfo']
 
                 // scan item and find out if there are missing properties if a missing property is detected return true
                 const itemsThatHasMissingProps = scanForMissingProps(requiredProps,item)
