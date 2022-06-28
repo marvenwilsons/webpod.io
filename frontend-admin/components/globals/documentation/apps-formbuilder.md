@@ -8,6 +8,7 @@
 - appendBefore - String
 - appendAfter - String
 - operation - String | 'rw', 'w', 'r'
+- description - Array of Strings
 - hooks - Object of methods
     - method - onMount: fn(fields)
     - method - onInput: fn(fields)

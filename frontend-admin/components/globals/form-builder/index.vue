@@ -37,22 +37,35 @@ export default {
   mounted() {
     let finalData = {}
 
-    // setting operation type
-    if(this.config != undefined && this.config.operation != undefined) {
-      Object.entries(this.d).forEach(([key, value]) => {
-        finalData[key] = {
-          ...value,
-          operation: this.config.operation
-        }
-      })
-    } else if(this.config.operation == undefined) {
-      Object.entries(this.d).forEach(([key, value]) => {
-        finalData[key] = {
-          ...value,
-          operation: 'w'
-        }
-      })
+    if(!this.config) {
+      if(webpod) {
+        webpod.dash.alertError({
+            message: 'FormBuilder component error: Config property is undefined', // msg
+            reload: true  // reloads the page
+        })
+      } else {
+        console.error('FormBuilder component error: Config property is undefined')
+      }
+    } else {
+      // setting operation type
+      if(this.config != undefined && this.config.operation != undefined) {
+        Object.entries(this.d).forEach(([key, value]) => {
+          finalData[key] = {
+            ...value,
+            operation: this.config.operation
+          }
+        })
+      } else if(this.config.operation == undefined) {
+        Object.entries(this.d).forEach(([key, value]) => {
+          finalData[key] = {
+            ...value,
+            operation: 'w'
+          }
+        })
+      }
     }
+
+    
 
     // display
     this.d = finalData

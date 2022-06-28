@@ -134,7 +134,7 @@
             class="margin025 fullheight-percent flexcenter flex"
           >
             <div class="flex fullwidth">
-                <loading class="" v-if="loading || xloading" />
+                <!-- <loading class="" v-if="loading || xloading" /> -->
                 <checkAnimation v-if="showCheck" :check="showCheck" />
             </div>
           </div>
@@ -194,65 +194,57 @@
     <!-- err 2 -->
     <div
       v-if="errors.length != 0"
-      class="pad025 flex borderRad4 margintop050"
+      class="pad050 flex borderRad4 margintop050"
       style="background: #ffebee; border: 1px solid #ef9a9a"
     >
-      <div class="padtop025 padright050">
+      <!-- <div class="padtop025 padright050">
         <svg style="width: 24px; height: 24px" viewBox="0 0 24 24">
           <path fill="#C62828" d="M10 3H14V14H10V3M10 21V17H14V21H10Z" />
         </svg>
-      </div>
+      </div> -->
       <div style="max-width: 382px" class="flex flexcol">
-        <span style="color: #c62828"> <strong>Error</strong> </span>
+        <!-- <span style="color: #c62828"> <strong>Error</strong> </span> -->
         <div
           class="flex margintop025"
           v-for="errmsg in errors"
           :key="uid(errmsg)"
         >
           <svg style="min-width: 24px; height: 24px" viewBox="0 0 24 24">
-            <path fill="#C62828" d="M10,14V10H14V14H10Z" />
+            <path fill="#C62828" d="M12,10A2,2 0 0,0 10,12C10,13.11 10.9,14 12,14C13.11,14 14,13.11 14,12A2,2 0 0,0 12,10Z" />
           </svg>
           <div v-html="errmsg" style="color: #c62828"></div>
         </div>
       </div>
     </div>
     <!-- Update Trigger -->
-    <v-expand-transition>
-      <div
-        v-if="showUpdateControls"
-        class="flex flexend pointer padtop025 margintop125"
+    <div
+      v-if="showUpdateControls"
+      class="flex flexend pointer padtop025 margintop125"
+    >
+      <!-- To cancel or close the update mode -->
+      <v-btn
+        elevation="1"
+        outlined
+        :disabled="updateOnProgress != false"
+        class=" marginright050 primary--text"
+        fab small
+        @click="cancel"
       >
-        <!-- Begin update process -->
-        <v-expand-transition>
-          <span
-            v-if="
-              errors.length == 0 &&
-              showUpdateBtn &&
-              isUpdateAllowed &&
-              !showCheck
-            "
-            :style="{ border: !updateOnProgress ? '1px solid #1976d2' : '' }"
-            class="flat_action marginright050 clickable-span borderRad4"
-          >
-            <strong>
-              <!-- <span v-if="updateOnProgress" >Updating ...</span> -->
-              <span class="borderRad4" @click="update" v-if="!updateOnProgress"
-                >Save</span
-              >
-            </strong>
-          </span>
-        </v-expand-transition>
-        <!-- To cancel or close the update mode -->
-        <span
-          v-if="updateOnProgress == false"
-          @click="cancel"
-          class="clickable-span flat_action borderRad4"
-          style="border: 1px solid #1976d2"
-        >
-          <strong>Close</strong>
-        </span>
-      </div>
-    </v-expand-transition>
+        <v-icon>mdi-close</v-icon>
+      </v-btn>
+      <!-- Begin update process -->
+      <v-btn
+        outlined
+        elevation="1"
+        :disabled="showCheck || updateOnProgress || !showUpdateBtn"
+        :loading="updateOnProgress"
+        class=" marginright050 primary--text"
+        fab small
+        @click="update"
+      >
+        <v-icon>mdi-arrow-right</v-icon>
+      </v-btn>
+    </div>
 
     <!-- Cacel Trigger -->
     <div class="flex flexend pointer padtop025">
@@ -261,7 +253,7 @@
         @click="cancelUpdateDueServerError"
         class="clickable-span flat_action"
       >
-        Close
+        <strong>Close</strong>
       </span>
     </div>
   </div>
@@ -275,9 +267,6 @@ export default {
   mixins: [m, updateMixin],
   components: { checkAnimation },
   props: [
-    "errState",
-    "errMsg",
-    "errKey",
     "data",
     "inputKey",
     "loading",
@@ -305,7 +294,7 @@ export default {
       return this.errors.length != 0
         ? `1px solid #C62828`
         : `${this.isActive ? "2px" : "1px"} solid ${
-            this.isActive ? "#7986CB" : "#ECEFF1"
+            this.isActive ? "#1a76d2" : "#ECEFF1"
           }`;
     },
     getLatestDataValue() {
@@ -421,9 +410,9 @@ export default {
     // set id
     this.currentId = this.uid();
     // set defaults
-    if (this.data && this.data.description != undefined) {
-      this.description = this.data.description;
-    }
+    // if (this.data && this.data.description != undefined) {
+    //   this.description = this.data.description;
+    // }
     // save hook methods
     this.hookMethods = {
       setDescription: this.setDescription,
@@ -436,15 +425,19 @@ export default {
         set: this.setError,
       },
     };
-    // hooks
-    if (this.data && this.data.hooks) {
-      this.currentHooks = Object.keys(this.data.hooks);
-    }
-    //
-    if (this.data.operation == "rw") {
-      this.allowMutationOnInput = true;
-    }
   },
+
+  /**
+   * what is allowMutationOnInput do?
+   * - this property is only used for 'rw' operation
+   * - in 'rw' operation the user has the ability to cancel the update by pressing the close button
+   * - when the user cancel's the update, the input that the user writes should be discarded and should not affect the initial value of the input
+   * - allowMutationOnInput protects the initial input from being mutated by a discarded input data
+   * 
+   * when does allowMutationOnInput mutates the input data?
+   * - when the user presses the save button 
+   * - it means the user is ready to replace the old data with the new data
+   */
 };
 </script>
 

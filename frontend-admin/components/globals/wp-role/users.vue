@@ -94,8 +94,8 @@
                 box-shadow: -6px 15px 24px 0px #757575;
                 overflow: auto;
             "
-            class="pad125 fullheight-percent fullwidth rounded-br-xl rounded-bl-xl relative" >
-                 <div class="absolute pad125" style="" >
+            class=" fullheight-percent fullwidth rounded-br-xl rounded-bl-xl relative " >
+                 <div class="absolute fullwidth" style="" >
                     <userHome v-if="!selectedUser" />
                     <userGeneralInfo v-if="selectedUser" :user="selectedUser" />
                 </div>

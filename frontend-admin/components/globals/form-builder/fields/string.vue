@@ -111,6 +111,9 @@ export default {
           };
         }
       },
+      allowNumericCharacters(val, arg, err) {
+        console.log('allowNumericCharacters')
+      },
       allowSpecialChars(val, arg, err) {
         if (!arg.allowSpecialChars) {
           const regex = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/gim;
@@ -197,7 +200,6 @@ export default {
       // when autocomp is active
       // autocomplete component reference
       const autocomplete = this.$refs[this._key+this.currentId]
-      
       // when there are no errors found
       if (errors.length == 0) {
         // when the main input is active

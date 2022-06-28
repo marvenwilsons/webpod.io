@@ -1,4 +1,7 @@
-@docs webpod.dash.alertError
+There are two types of alert methods
+- alertError
+- alert
+
 ```js
 //  Alert error
 webpod.dash.alertError({

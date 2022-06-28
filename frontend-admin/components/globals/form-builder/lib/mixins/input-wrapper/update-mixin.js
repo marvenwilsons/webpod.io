@@ -51,8 +51,13 @@ export default {
           key: this.inputKey,
           value: this.$value.value
         })
+
+        setTimeout(() => {
+          this.cancel()
+        }, 500)
       } else {
         this.setCheck(false)
+        
       }
       
     },
