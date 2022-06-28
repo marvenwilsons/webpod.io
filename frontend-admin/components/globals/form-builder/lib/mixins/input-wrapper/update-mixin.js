@@ -9,7 +9,14 @@ export default {
   }),
   watch: {
     inputObject(n,o) {
+      console.log('inputObect',this.data.value.trim(),n.value)
       this.showUpdateBtn = true
+
+      // this.$nextTick(() => {
+      //   if(this.data.value.trim() == this.inputObject.value.trim()) {
+      //     this.showUpdateBtn = false
+      //   }
+      // })
     }
   },
   methods: {
@@ -52,15 +59,8 @@ export default {
           value: this.$value.value
         })
 
-        // setTimeout(() => {
-        //   this.cancel()
-        //   this.$nextTick(() => {
-        //     this.cancel()
-        //   })
-        // }, 500)
       } else {
         this.setCheck(false)
-        
       }
       
     },

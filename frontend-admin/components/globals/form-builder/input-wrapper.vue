@@ -341,6 +341,9 @@ export default {
   },
   methods: {
     onInput(input) {
+      if(this.data.value.trim() == input.value.trim()) {
+        this.showUpdateBtn = false
+      }
       /** executes the onInput hook function from the input object data property,
       this method runs every time an input is changed */
       if (
