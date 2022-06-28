@@ -52,9 +52,12 @@ export default {
           value: this.$value.value
         })
 
-        setTimeout(() => {
-          this.cancel()
-        }, 500)
+        // setTimeout(() => {
+        //   this.cancel()
+        //   this.$nextTick(() => {
+        //     this.cancel()
+        //   })
+        // }, 500)
       } else {
         this.setCheck(false)
         
@@ -83,6 +86,15 @@ export default {
       this.allowMutationOnInput = true
       this.updateMode(false)
       this.errors = []
+      this.showUpdateBtn = false
+      this.$nextTick(() => {
+        // LOL I Dont know why things dont reset without repeating this code
+        this.onInput(this.initialDataObject)
+        this.allowMutationOnInput = true
+        this.updateMode(false)
+        this.errors = []
+        this.showUpdateBtn = false
+      })
     },
     cancelUpdateDueServerError() {
       this.updateMode(false)

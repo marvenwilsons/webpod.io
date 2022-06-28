@@ -221,6 +221,11 @@
       v-if="showUpdateControls"
       class="flex flexend pointer padtop025 margintop125"
     >
+      <!-- <div class="flex flexcol" >
+        <div>showCheck:{{showCheck}}</div>
+        <div>updateOnProgress:{{updateOnProgress}}</div>
+        <div>showUpdateBtn:{{showUpdateBtn}}</div>
+      </div> -->
       <!-- To cancel or close the update mode -->
       <v-btn
         elevation="1"
