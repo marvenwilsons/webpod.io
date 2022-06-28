@@ -77,9 +77,25 @@
                                     <v-icon>mdi-dots-vertical</v-icon>
                                 </v-btn>
                             </dropDown>
-                            <v-btn v-if="selectedUser"  class=""  fab small icon >
-                                <v-icon>mdi-delete-outline</v-icon>
-                            </v-btn>
+                            <wp-dropdown-one  v-if="selectedUser">
+                                <template  v-slot:trigger="{ on, attrs }" >
+                                    <!-- trigger for the menu -->
+                                    <v-btn
+                                    v-bind="attrs"
+                                    v-on="on"
+                                     class=" " v-ripple="false" fab small icon >
+                                        <v-icon>mdi-delete-outline</v-icon>
+                                    </v-btn>
+                                </template>
+                                <template v-slot:content >
+                                    <!-- close the dropdown -->
+                                    <div style="max-width:300px;" class="body-1 marginbottom125" >
+                                        This action will delete the user in the database and all its associated content, are you sure you want to perform this action?
+                                    </div>
+                                    <wp-stop-go></wp-stop-go>
+                                </template>
+                            </wp-dropdown-one>
+
                              <v-btn @click="selectedUser = undefined" v-if="selectedUser"  class=""  fab small icon >
                                 <v-icon>mdi-close-outline</v-icon>
                             </v-btn>

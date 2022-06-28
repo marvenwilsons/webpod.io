@@ -54,9 +54,9 @@ export default {
                         // goes to server
                         console.log('first name updating', input.value)
                         setTimeout(() => {
-                            console.log(input)
-                            input.update.done('done!')
-                        }, 500)
+                            // console.log(input)
+                            input.update.done()
+                        }, 100)
                     },
                     onInput: (input) => {
                         // input.error.push('This field is required')

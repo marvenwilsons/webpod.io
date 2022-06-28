@@ -94,6 +94,9 @@ Vue.component("Wp-Role", role)
 import wpDropDownOne from '@/components/globals/wp-dropdown-one/index.vue'
 Vue.component('wp-dropdown-one',wpDropDownOne)
 
+import wpStopGo from '@/components/globals/wp-stop-go-btn/index.vue'
+Vue.component('wp-stop-go',wpStopGo)
+
 
 
 // CodeMirror CSS Essentials
