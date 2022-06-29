@@ -44,7 +44,7 @@ export default {
         selectedFilter: 'firstName',
         selectedRole: undefined,
         radioGroup: undefined,
-        radioOptions: ['username','lastName','firstName','email']
+        radioOptions: ['username','last_name','first_name','email']
     }),
     watch: {
         radioGroup() {

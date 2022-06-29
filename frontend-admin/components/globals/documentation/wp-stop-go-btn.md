@@ -11,6 +11,7 @@
 - setLoading(Boolean)
 - disableALl(Void)
 - enableAll(Void)
+- setError(String)
 - disableBtn(String)
     - "go"
     - "stop"

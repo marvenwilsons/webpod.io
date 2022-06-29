@@ -11,8 +11,11 @@ const serverEvents = new events.EventEmitter()
 const adminEvents = new events.EventEmitter()
 const tokenEvents = new events.EventEmitter()
 const dashboardEvents = new events.EventEmitter()
+const users = require('../users')
 
 app.use(express.json())
+
+users(app)
 
 app.get('/', async (req,res) => {
   const r = await query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`)

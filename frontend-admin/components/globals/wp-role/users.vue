@@ -87,12 +87,16 @@
                                         <v-icon>mdi-delete-outline</v-icon>
                                     </v-btn>
                                 </template>
-                                <template v-slot:content >
+                                <template v-slot:content="{close}" >
                                     <!-- close the dropdown -->
                                     <div style="max-width:300px;" class="body-1 marginbottom125" >
                                         This action will delete the user in the database and all its associated content, are you sure you want to perform this action?
                                     </div>
-                                    <wp-stop-go></wp-stop-go>
+                                    <wp-stop-go
+                                        @stop="close()"
+                                        @go="deleteUser()"
+                                        ref="stopAndGo"
+                                    />
                                 </template>
                             </wp-dropdown-one>
 
@@ -125,6 +129,7 @@ import userTile from './users/user-tile.vue'
 import userHome from './users/home.vue'
 import userFilter from './users/filter-options.vue'
 import userGeneralInfo from './users/user-general.vue'
+import server from './users/mixins/server'
 import m from '@/m'
 export default {
     components: {userTile, userHome, userFilter, userGeneralInfo},
@@ -155,7 +160,7 @@ export default {
                 {title: 'Admin2'}
             ]},
         ],
-        filterMode: 'firstName',
+        filterMode: 'first_name',
         roleMode: undefined,
         searchQuery: undefined
     }),
@@ -210,26 +215,15 @@ export default {
 
 
             this.searchQuery = undefined
+        },
+        deleteUser() {
+            this.$refs.stopAndGo.setLoading(true)
         }
     },
     mounted() {
-        const firstNames = ['Marven','Johny','Hannah','Chris','Eugine','Kwenten','Jun','Maverick','Ricky']
-        const lastName = ['Jefersons','Wilsons','Dov','Vanny', 'golley','Xavier','Yowoming','Kent','Niner']
-        setTimeout(() => {
-            for(let i = 0; i < firstNames.length - 1; i++) {
-                this.allUsers.push({
-                    firstName: firstNames[i],
-                    lastName: lastName[i],
-                    email: `${lastName[i]}${firstNames[i]}@smail.com`,
-                    username: `${firstNames[i]}${i * 89}`,
-                    password: 'jaghalsjdieklrwlke',
-                    role: i > 3 ? 'Admin1' : i > 6 ? 'Admin3' : 'Admin2' 
-                })
-            }
-        }, 1000)
-
-        this.$nextTick(() => {
-            this.displayedUsers = this.allUsers
+        server.user.getUsers(users => {
+            this.allUsers = users
+            this.$nextTick(() => this.displayedUsers = this.allUsers)
         })
     }
 }

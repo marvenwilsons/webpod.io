@@ -13,11 +13,11 @@
                     size="36"
                 >
                     <span class="white--text t text-uppercase">
-                        {{user.firstName.charAt(0)}}{{user.lastName.charAt(0)}}
+                        {{user.first_name.charAt(0)}}{{user.last_name.charAt(0)}}
                     </span>
                 </v-avatar>
                 <span class="marginleft050 " >
-                    {{user.firstName}} {{user.lastName}}
+                    {{user.first_name}} {{user.last_name}}
                 </span>
             </div>
         </v-card>

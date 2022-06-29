@@ -104,8 +104,34 @@ dbEvents.on('insert-user', function (user, cb = df) {
     
 })
 
-dbEvents.on('list-all-users', function (cb = df) {
+dbEvents.on('list-all-users', function await (cb = df) {
+    /**
+     * SELECT user_id, username, email, user_password, first_name, last_name, last_login, role_id, avatar FROM public.czdo_users;
+     */
+    const queryString = `
+        SELECT email,username,first_name,last_name,role_id,user_password FROM ${tablePrefix}users 
+    `
+    query(queryString)
+    .then(d => {
+        cb(d.rows)
+    })
 
+
+    // let users = []
+    // const firstNames = ['Marven','Johny','Hannah','Chris','Eugine','Kwenten','Jun','Maverick','Ricky']
+    // const lastName = ['Jefersons','Wilsons','Dov','Vanny', 'golley','Xavier','Yowoming','Kent','Niner']
+    // for(let i = 0; i < firstNames.length - 1; i++) {
+    //     users.push({
+    //         firstName: firstNames[i],
+    //         lastName: lastName[i],
+    //         email: `${lastName[i]}${firstNames[i]}@smail.com`,
+    //         username: `${firstNames[i]}${i * 89}`,
+    //         password: 'jaghalsjdieklrwlke',
+    //         role: i > 3 ? 'Admin1' : i > 6 ? 'Admin3' : 'Admin2',
+    //         userId: ''
+    //     })
+    // }
+    // cb(users)
 })
 
 dbEvents.on('get-user', function (user_name,cb = df) {

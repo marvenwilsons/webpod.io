@@ -2,7 +2,6 @@
     <v-menu
        :close-on-content-click="false"
        :nudge-width="200"
-       offset-y
        v-model="menu"
     >
        <template v-slot:activator="{ on, attrs }" >
@@ -10,7 +9,6 @@
               name="trigger"
               :attrs="attrs"
               :on="on"
-              
                >
            </slot>
        </template>

@@ -7,7 +7,7 @@
             >
             <transition name="fade" >
                 <section
-                    v-if="paneOnFocus == this.paneIndex"
+                    v-show="paneOnFocus == this.paneIndex"
                     role="content" 
                     :class="['fullwidth pad050', this.paneCollection[this.paneIndex].view == 'unitile' ? 'fullheight-percent' : '']" 
                     :style="this.paneCollection[this.paneIndex].paneConfig.allowOverflow ? {} : this.paneCollection[this.paneIndex].paneConfig.allowOverflow == undefined ? {} : {overflow: 'hidden'}"

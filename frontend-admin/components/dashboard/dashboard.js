@@ -16,7 +16,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     
     // fires everytime menu select property changes
     menu.onSelect = ({selected, menu}) => {
-        console.log('Menu on select', menu, selected)
+        // console.log('Menu on select', menu, selected)
         const menuMappingRole = dash.menuMappingRole
         const serviceMappingRole = dash.serviceMappingRole
         const primary_version = menuMappingRole[menu.menu_id].primary_version
@@ -24,9 +24,6 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         const view = serviceMappingRole[ service_id ][ primary_version ]
         const { instancer, version_data, version_name } = view
         let selected_service = undefined
-
-        console.log('version_data', version_data == '')
-
 
         if(instancer){
             selected_service = {

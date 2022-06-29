@@ -1,6 +1,13 @@
 <template>
-    <div class="fullwidth flex flexend" >
-        <div>
+    <div class="fullwidth flex  flexcol" >
+        <v-expand-transition>
+            <v-card v-if="errorMsg" outlined style="background: #ffebee" class="err_shake fullwidth pad050  marginbottom050 rounded body-1 " > 
+                <span class="padleft025 padright025 text-err" >
+                    {{errorMsg}}
+                </span> 
+            </v-card>
+        </v-expand-transition>
+        <div class="flex flexend" >
             <v-btn
                 elevation="1"
                 outlined
@@ -32,7 +39,8 @@ export default {
     data: () => ({
         disableGoBtn: false,
         disableStopBtn: false,
-        loadingGobtn: false
+        loadingGobtn: false,
+        errorMsg: undefined
     }),
     methods: {
         setLoading(state) {
@@ -52,6 +60,10 @@ export default {
             } else if(btnName == 'stop') {
                 this.disableStopBtn = true
             }
+        },
+        setError(msg) {
+            this.loadingGobtn = false
+            this.errorMsg = msg
         }
     }
 }

@@ -6,6 +6,7 @@
       <!-- main input -->
       <div v-if="data.appendBefore" style="color: #616161" class="marginleft025" >{{data.appendBefore}}</div>
       <input
+        :readonly="!textfield_is_active"
         autocomplete="off"
         @focus="$emit('onFucos',_key), textfield_is_active = true"
         @blur="textfield_is_active = false"
@@ -37,6 +38,7 @@
     <!-- confirm password box -->
     <div style="border-top: 1px solid #E0E0E0;" v-if="show_confirm_password_field" class="marginleft050 marginright050 pad025" >
         <input
+          :readonly="!confirm_password_field_is_active"
           autocomplete="off" 
           :tabindex="parseInt(parseInt(key_index.split(',')[1]))" 
           class="padtop025 padbottom025 fullwidth" placeholder="confirm password" 

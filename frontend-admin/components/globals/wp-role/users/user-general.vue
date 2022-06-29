@@ -30,18 +30,18 @@ export default {
     }),
     mounted() {
         console.log(this.user)
-        const { firstName, lastName, username, email, password, role } = this.user
-        this.firstName = firstName
-        this.lastName = lastName
+        const { first_name, last_name, username, email, user_password, role } = this.user
+        this.firstName = first_name
+        this.lastName = last_name
         this.username = username
         this.email = email
-        this.password = password
+        this.password = user_password
         this.role = role
 
         this.fields = {
             'First Name': {
                 type: 'string',
-                value: firstName,
+                value: first_name,
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: false,
@@ -65,7 +65,7 @@ export default {
             },
             'Last Name': {
                 type: 'string',
-                value: lastName,
+                value: last_name,
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: false,
@@ -111,7 +111,7 @@ export default {
             },
             'Password': {
                 type: 'string',
-                value: password,
+                value: user_password,
                 hoverInfo: '',
                 allowWhiteSpace: true,
                 allowSpecialChars: false,

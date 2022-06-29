@@ -1,5 +1,5 @@
 <template>
-    <div style="gap: 15px" class="flex " >
+    <div style="gap: 15px" class="flex pad125" >
         <homeWidget
             :title="'Total Users'"
             :data="allUsers"

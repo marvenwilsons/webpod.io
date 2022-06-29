@@ -6,8 +6,8 @@
 
 <script>
 export default {
-    setup() {
-        
-    },
+    mounted() {
+        console.log('collections mounted!')
+    }
 }
 </script>
