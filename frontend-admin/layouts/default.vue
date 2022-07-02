@@ -43,7 +43,7 @@
                     
                 <!-- loading -->
                 <v-fade-transition>
-                    <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper" >
+                    <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper flexcol" >
                         <div  class="pad125 modalShadow flexcenter" >
                             <div class="flex flexcol relative" >
                                 <span style="border-radius: 100%;" class="absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
@@ -66,12 +66,15 @@
                                 ></v-progress-circular>
                             </div>
                         </div>
+                        <!-- <div style="color: #1565c0;" class="body-1 grey--text text--darken-2" >
+                            <strong>fetching resources please wait ...</strong>
+                        </div> -->
                     </div>
                 </v-fade-transition>
                 <!-- Alert -->
                 <v-fade-transition>
                     <div v-if="alertMsg && !loading" class="modal-wrapper absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
-                        <v-card class="pad125 borderRad4 margin125" 
+                        <v-card elevation="10" class="pad125 borderRad4 margin125" 
                             style="background:white; color: #3f444a; min-width: 400px; max-width: 1080px;" >
                             <div style="max-height:500px; overflow-x: auto;" >
                                 <div class="body-1" v-html="alertMsg" ></div>

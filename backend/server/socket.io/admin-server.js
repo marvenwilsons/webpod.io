@@ -11,6 +11,7 @@ const serverEvents = new events.EventEmitter()
 const adminEvents = new events.EventEmitter()
 const tokenEvents = new events.EventEmitter()
 const dashboardEvents = new events.EventEmitter()
+const dbEvents = require('../postgres/events')
 const users = require('../users')
 
 app.use(express.json())
@@ -46,6 +47,15 @@ app.post('/init', (req,res) => {
       })
     }
   })
+})
+
+app.post('/wp-get', (req,res) => {
+  console.log('wp-get!!!')
+  setTimeout(() => {
+    res.json({
+      message: 'OK'
+    })
+  },500)
 })
 
 app.get('/apps', (req,res) => {
@@ -238,11 +248,13 @@ io.on('connection', async function (socket) {
     }
   })
  
-  serverEvents.emit('ready',adminEvents,dashboard)
+  serverEvents.emit('ready',adminEvents,dashboard,dbEvents)
 
   // on request
   socket.on('req', async function ({name, payload}) {
     try {
+      console.log('** REQUESTING!!', name)
+
       if(payload) {
         if(payload.token == undefined && payload.user == undefined) {
           // without user and token in payload object is invalid request
@@ -262,19 +274,20 @@ io.on('connection', async function (socket) {
           tokenEvents.emit('data',payload.token)
 
           if(authenticate_admin.is_valid) {
+            console.log('** PROCESSING REQUEST!!', name)
 
-            dashboardEvents.emit(name, payload)
-            const requested_method = admin_methods()[name]
+            dashboard.emit(name, payload)
+            // const requested_method = admin_methods()[name]
 
-            if(requested_method) {
-              const request_response = await requested_method(payload)
-              // response to request
-              socket.emit('notification', {
-                method_name: name,
-                payload: request_response
-              })
-            }
-
+            // if(requested_method) {
+            //   const request_response = await requested_method(payload)
+            //   // response to request
+            //   socket.emit('notification', {
+            //     method_name: name, 
+            //     payload: request_response
+            //   })
+            // }
+ 
           } else {
             tokenEvents.emit('expire')
 

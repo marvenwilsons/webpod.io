@@ -91,7 +91,7 @@ async function getUserServices(payload) {
 }
 
 async function  getService(service_id) {
-  console.log(`=== getService ${service_id} ===`)
+  // console.log(`=== getService ${service_id} ===`)
 
   const mock_services = [
     {
@@ -118,7 +118,7 @@ async function  getService(service_id) {
 
 async function  getServiceVersion(service_id, version_name) {
   // db("SELECT * FROM service_versions WHERE service_id = $1 AND version_name = $2", [service_id,version_name])
-  console.log(`=== getServiceVersion ${service_id} ===`)
+  // console.log(`=== getServiceVersion ${service_id} ===`)
 
   const ver9_instancer = {
     // instancer sample
@@ -200,11 +200,18 @@ async function  getServiceVersion(service_id, version_name) {
     body: {
         paneConfig: {
             isClosable: false,
-            title: 'Collections',
+            title: '',
         },
         viewConfig: {},
         view: 'Wp-Role',
-        viewData: undefined,
+        viewData: {
+          'wp-get': [
+            'users',
+            'roles',
+            'services',
+            'collections/staff'
+          ]
+        },
         viewHooks: ''
     }
   }

@@ -16,7 +16,9 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     
     // fires everytime menu select property changes
     menu.onSelect = ({selected, menu}) => {
-        // console.log('Menu on select', menu, selected)
+        
+        
+        console.log('Menu on select', menu, selected)
         const menuMappingRole = dash.menuMappingRole
         const serviceMappingRole = dash.serviceMappingRole
         const primary_version = menuMappingRole[menu.menu_id].primary_version
@@ -95,11 +97,81 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             }
         }
         
+        /**
+         * handling each menu change to server
+         */
+         socket.emit('req', {
+            name: 'menuChange',
+            payload: {
+                token:localStorage.getItem('token'),
+                user: localStorage.getItem('user'),
+                menu: selected
+            }
+        })
+
+       
+        
         setTimeout(() => {
             try {
-                paneCollection.insertPaneCollectionItem(0)(selected_service.body)
+                 /**
+                 * Check if viewData has wp-get property
+                 * wp-get is used to fetch data from the database like collections data
+                 * or users, app data.
+                 * 
+                 * wp-get property holds an array of route strings ei.
+                 * ['users','collections/flowers'] .. from this example it will fetch all users
+                 * and the all the flowers in the collections,
+                 * 
+                 * formated as 'domain/path1/path2/etc..'
+                 */
+                if(selected_service.body.viewData != undefined && Object.keys(selected_service.body.viewData).includes('wp-get')) {
+                    if(!Array.isArray(selected_service.body.viewData['wp-get'])) {
+                        const msg = `<div class="text-err" style="max-width:500px;" > Invalid wp-get value it should be an Array of Strings </div>`
+                        dash.alertError({
+                            message: msg,
+                            reload: true
+                        })
+                    } else {
+                        
+                        console.log('WP GET')
+                        dash.loading(true)
+                        dash.bottomAlert('Fetching resources')
+
+                        const url = `${process.env.API_URL}/wp-get`
+        
+                        const request_options = {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(selected_service.body.viewData)
+                        };
+                        fetch(url, request_options)
+                        .then(response => response.json())
+                        .then(data => {
+                            selected_service.body.viewData = data
+                            paneCollection.insertPaneCollectionItem(0)(selected_service.body)
+                            setTimeout(() => {
+                                dash.loading(false)
+                            },500)
+                        }).catch(err => {
+                            dash.loading(false)
+                            console.error(err)
+                            webpod.dash.alertError({
+                                message: err,
+                                reload: true
+                            })
+                        })
+                    }
+                } else {
+                    // viewData is not using wp-get
+                    paneCollection.insertPaneCollectionItem(0)(selected_service.body)
+                }
+
             }catch(err) {
-                location.reload()
+                dash.alertError({
+                    message: err,
+                    reload: true
+                })
+                console.error(err)
             }
         }, 0)
     }
@@ -120,7 +192,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             dashboard_locations[e.location][e.action](e.payload)
         } catch(err) {
             dash.alertError({
-                message: `<span> <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed, please check console logs for more information about this error. </span>`,
+                message: `<div class="text-err" style="max-width:500px;" > <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed, please check console logs for more information about this error. </div>`,
                 reload: true
             })
             console.error(err)
@@ -200,8 +272,9 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                 onLog: () => {},
                 onProgress: () => {},
                 onPaneToggle: () => {},
-                events: sessionEvents
+                events: sessionEvents,
             },
+            menuData: undefined,
             dashSettings: {
                 'Pane Slide': 'yes',
                 'Slide on history click':'yes'

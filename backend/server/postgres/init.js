@@ -36,7 +36,7 @@ function init (body, cb) {
     dbEvents.on('call', (name) => {
         event_count++
 
-        console.log(`layer  ${event_count} - `,name)
+        // console.log(`layer  ${event_count} - `,name)
 
         global.log(name)
         global.progress(`${event_count * 5}%`)

@@ -1,9 +1,10 @@
 const server = require('./admin-server')
 
-server.on('ready', (admin,dashboard) => {
+server.on('ready', (admin,dashboard,dbEvents) => {
 
     /** DASHBOARD OR CLIENT EVENTS */
     dashboard.on('getDashboardResource', async (payload) => {
+        console.log('getting resource!')
 
         // get admin
         const  { name, email, user, avatar, role_id }  = await admin.getAdmin(payload.user)
@@ -62,8 +63,44 @@ server.on('ready', (admin,dashboard) => {
         })
     })
 
+    /** DASHBOARD MENU CHANGE */
     dashboard.on('menuChange', async ({ token, user, menu }) => {
+      // dashboard.exec('dash','setMenuData', 'hello world!')
       console.log('menuChange: ', menu)
+    })
+
+    /** DASHBOARD WP GET */
+    dashboard.on('wpGet', async ({token, user, body}) => {
+      if(!Array.isArray(body)) {
+        // should be an array
+      } else {
+        const allItemsIsString = body.every(item => typeof item == 'string')
+        if(allItemsIsString) {
+          // validate each path string
+          // 1. does the user has access?
+          // 2. does the resource exist?
+          const masterAdminWpGet = body.includes('users') || body.includes('roles')
+          if( masterAdminWpGet ) {
+            // the users and roles resource is only available for the master admin or the creator
+            body.map(route => {
+              if(route == 'users') {
+                // get all users
+              }
+              if(route == 'roles') {
+                // get all roles
+              }
+              if(route == 'services') {
+                //get all services
+              }
+            })
+
+          } else {
+
+          }
+
+        }
+      }
+
     })
 
     /** ADMIN EVENTS */

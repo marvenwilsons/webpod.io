@@ -121,7 +121,7 @@ export default {
     },
 
     created() {
-
+        console.log('asdf', this.myData)
     }
 }
 </script>

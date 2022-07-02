@@ -1,5 +1,5 @@
 async function getMenu(menu_id) {
-    console.log(`=== getMenu ${menu_id} ===`)
+    // console.log(`=== getMenu ${menu_id} ===`)
     // const menus = db("SELECT * FROM menu WHERE id = $1",[menu_id])
     // menus.rows
 
@@ -35,7 +35,7 @@ async function getMenu(menu_id) {
         },
         {
           menu_id: 'menu-id-lkasdn9',
-          menu_name: 'Roles',
+          menu_name: 'System Manager',
         },
         {
           menu_id: 'menu-id-lkasdn10',
