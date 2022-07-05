@@ -88,8 +88,8 @@ Vue.component("media-explorer",mediaExplorer)
 import collections from '@/components/globals/wp-collections/index.vue'
 Vue.component("collections", collections)
 
-import role from '@/components/globals/wp-role/index.vue'
-Vue.component("Wp-Role", role)
+import role from '@/components/globals/wp-system-manager/index.vue'
+Vue.component("wp-system-manager", role)
 
 import wpDropDownOne from '@/components/globals/wp-dropdown-one/index.vue'
 Vue.component('wp-dropdown-one',wpDropDownOne)
