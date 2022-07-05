@@ -26,6 +26,16 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         const view = serviceMappingRole[ service_id ][ primary_version ]
         const { instancer, version_data, version_name } = view
         let selected_service = undefined
+        const empty = {body: {
+            paneConfig: {
+              isClosable: false,
+              title: 'No service assigned',
+            },
+            viewConfig: {},
+            view: 'pd',
+            viewData: undefined,
+            viewHooks: ''
+          }}
 
         if(instancer){
             selected_service = {
@@ -38,7 +48,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                     view: 'instancer',
                     viewData: {
                         instancer: {...instancer},
-                        version_data,
+                        version_data: version_data || empty,
                         title: selected
                     }
                 }
@@ -147,7 +157,10 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                         fetch(url, request_options)
                         .then(response => response.json())
                         .then(data => {
-                            selected_service.body.viewData = data
+                            selected_service.body.viewData = {
+                                ...selected_service.body.viewData,
+                                ...data
+                            }
                             paneCollection.insertPaneCollectionItem(0)(selected_service.body)
                             setTimeout(() => {
                                 dash.loading(false)

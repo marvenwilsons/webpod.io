@@ -36,18 +36,6 @@ async function getRole (_role_id) {
           // a service_version contains content that the dashboard system uses to run
           primary_version: 'my-custom-version', 
 
-          // assigning collection for the admin
-          collections: [
-            {
-              name: 'flowers',
-              tags_allowed: ['forest_flowers','river_flowers']
-            },
-            {
-              name: 'staff',
-              tags_allowed: ['teachers','cleaners']
-            }
-          ],
-
           // refers to multiple version from service_version table
           // the user can toggle through this versions to have a different view in the dashboard
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2'] 

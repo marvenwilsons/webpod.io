@@ -69,7 +69,6 @@ app.get('/apps', (req,res) => {
 // example route call: /apps/unitile
 // access: req.params
 app.get('/apps/:app_name', (req,res) => {
-  
   setTimeout(() => {
     res.json([
       {title: 'VID D23 23GDS',modified_date: '05/03/2022', modified_by: 'Marven Wilson Donque', instance_from: 'unitile'},

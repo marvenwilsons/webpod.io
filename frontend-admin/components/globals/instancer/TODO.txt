@@ -1,0 +1,3 @@
+App instances
+-   if app instancer has differrent kinds of instance types in list view of the instancer UI add a filter 
+    "type" filter, when click there will be a drop down showing all instnace types

@@ -11,14 +11,6 @@
             <!-- title -->
              <div class="flex flexcenter flexstart margintop025" >
                 <h4 class="merri-font marginright050" style="color:white; margin-bottom: 0; margin-top:0;">{{menuTitle}}/{{activeTab}}</h4>
-                <!-- <dropDown
-                    @command="(item) => createInstance( (instance_types.filter(e => e.type == item))[0] )"
-                    :options="instance_types.map(e => {return {title: e.type}})"
-                >
-                    <v-btn fab small >
-                        <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                </dropDown> -->
                 <v-btn @click="addNew()" fab small >
                         <v-icon>mdi-plus</v-icon>
                 </v-btn>

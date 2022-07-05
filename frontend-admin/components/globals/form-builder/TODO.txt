@@ -1,0 +1,9 @@
+- Add an array of string field, where user can type a sentence then add the sentence to an array.
+
++-----------------------------------------------------------+
+| 1. Task 1                                   update delete |
+| 2. Task 2                                   update delete |
++-----------------------------------------------------------+
+| type here                                   | add to list |
++-----------------------------------------------------------+
+
