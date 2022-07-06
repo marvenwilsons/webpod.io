@@ -22,7 +22,7 @@ function init (body, cb) {
         })
         dbEvents.emit('create-roles-table')
         dbEvents.emit('create-apps-table',() => {
-            dbEvents.emit('create-app-instance-table')
+            dbEvents.emit('create-app-instance-type-table')
         })  
         dbEvents.emit('create-collections-table', () => {
             dbEvents.emit('create-collection-instance-table')

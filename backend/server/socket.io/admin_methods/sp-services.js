@@ -139,6 +139,7 @@ async function  getServiceVersion(service_id, version_name) {
         svg: ''
       }
     ],
+    app_name: 'unitile' // fetches all unitile instances
     
   }
 

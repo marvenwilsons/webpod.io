@@ -322,6 +322,7 @@ export default {
     methods: {
         // instance CRUD
         fetchAppInstances() {
+            console.log('fetching app instance', this.app_name)
             webpod.server.apps.fetchAppInstances({
                 app_name: this.appName
             })
@@ -386,6 +387,7 @@ export default {
 
         },
         instanceSelect(selected,cb) {
+            console.log('instance_select', selected, this.app_name)
             this.clickedInstance = selected.title
             this.disableAll = true
             webpod.session.appInstanceOnFocus = selected.title
@@ -557,6 +559,7 @@ export default {
     },
 
     created() {
+        console.log(this.myData)
         this.user = webpod.dash.getUser().name
         const topAlert = webpod.dash.topAlert('loading...')
 
@@ -575,7 +578,7 @@ export default {
                 reload: true
             })
         } else {
-            this.appName = this.myData.version_data.body.view
+            this.appName = this.myData.instancer.app_name
 
             webpod.server.apps.fetchAppInstances(this.appName,(data) => {
                 this.instances = data

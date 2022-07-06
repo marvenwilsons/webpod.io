@@ -91,6 +91,9 @@ app.get('/apps/:app_name/:instance_title', (req,res) => {
   // returns a specific app instance project data
   // access: req.params
   const {app_name, instance_title} = req.params
+
+  console.log('APP_NAME', app_name)
+  console.log('instance_title', instance_title)
   // query the app_instances table
 
   const sample_response = {

@@ -115,23 +115,6 @@ dbEvents.on('list-all-users', function await (cb = df) {
     .then(d => {
         cb(d.rows)
     })
-
-
-    // let users = []
-    // const firstNames = ['Marven','Johny','Hannah','Chris','Eugine','Kwenten','Jun','Maverick','Ricky']
-    // const lastName = ['Jefersons','Wilsons','Dov','Vanny', 'golley','Xavier','Yowoming','Kent','Niner']
-    // for(let i = 0; i < firstNames.length - 1; i++) {
-    //     users.push({
-    //         firstName: firstNames[i],
-    //         lastName: lastName[i],
-    //         email: `${lastName[i]}${firstNames[i]}@smail.com`,
-    //         username: `${firstNames[i]}${i * 89}`,
-    //         password: 'jaghalsjdieklrwlke',
-    //         role: i > 3 ? 'Admin1' : i > 6 ? 'Admin3' : 'Admin2',
-    //         userId: ''
-    //     })
-    // }
-    // cb(users)
 })
 
 dbEvents.on('get-user', function (user_name,cb = df) {
@@ -472,6 +455,7 @@ dbEvents.on('create-app-instances-table', function (cb = df) {
             instance_from uuid NOT NULL,
             instance_title VARCHAR(250) NOT NULL,
             allowed_users uuid [],
+            instance_type uuid [],
             history VARCHAR(500) [],
             app_data jsonb,
             last_modified date,
@@ -545,6 +529,7 @@ dbEvents.on('list-all-collections', function () {
 
 })
 
+// collection instance
 dbEvents.on('create-collection-instance-table', function (cb = df) {
     const queryString =  `
         CREATE TABLE ${tablePrefix}collection_instance (
@@ -574,6 +559,26 @@ dbEvents.on('alter-collection-instance', function() {
 
 dbEvents.on('drop-collection-instance', function () {
 
+})
+
+// app instance types
+dbEvents.on('create-app-instance-type-table', function (cb=df) {
+    const queryString =  `
+        CREATE TABLE ${tablePrefix}app_instance_type (
+            instance_type_id uuid DEFAULT uuid_generate_v4(),
+            instance_type_name VARCHAR(255),
+            instance_type_desc VARCHAR(255),
+            app_id uuid REFERENCES ${tablePrefix}apps(app_id),
+            PRIMARY KEY (instance_type_id)
+        )
+    `
+
+    query(queryString).then(d => {
+        cb(d.rows)
+        dbEvents.emit('create-app-instance-type-table-done', d.rows)
+        dbEvents.emit('call','create-app-instance-type-table')
+        dbEvents.emit('query', queryString)
+    })
 })
 
 module.exports = dbEvents
