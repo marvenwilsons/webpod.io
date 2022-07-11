@@ -134,9 +134,9 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                  * 
                  * formated as 'domain/path1/path2/etc..'
                  */
-                if(selected_service.body.viewData != undefined && Object.keys(selected_service.body.viewData).includes('wp-get')) {
-                    if(!Array.isArray(selected_service.body.viewData['wp-get'])) {
-                        const msg = `<div class="text-err" style="max-width:500px;" > Invalid wp-get value it should be an Array of Strings </div>`
+                if(selected_service.body.viewData != undefined && Object.keys(selected_service.body.viewData).includes('wp_get')) {
+                    if(!Array.isArray(selected_service.body.viewData['wp_get'])) {
+                        const msg = <div class="text-err" style="max-width:500px;" > Invalid wp_get value it should be an Array of Strings </div>
                         dash.alertError({
                             message: msg,
                             reload: true
@@ -147,12 +147,12 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                         dash.loading(true)
                         dash.bottomAlert('Fetching resources')
 
-                        const url = `${process.env.API_URL}/wp-get`
+                        const url = `${process.env.API_URL}/wp_get`
         
                         const request_options = {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(selected_service.body.viewData)
+                            body: JSON.stringify(selected_service.body.viewData.wp_get)
                         };
                         fetch(url, request_options)
                         .then(response => response.json())
@@ -205,7 +205,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             dashboard_locations[e.location][e.action](e.payload)
         } catch(err) {
             dash.alertError({
-                message: `<div class="text-err" style="max-width:500px;" > <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed, please check console logs for more information about this error. </div>`,
+                message: <div class="text-err" style="max-width:500px;" > <strong>${e.location}</strong> - <strong>${e.action}</strong> cannot be executed, please check console logs for more information about this error. </div>,
                 reload: true
             })
             console.error(err)

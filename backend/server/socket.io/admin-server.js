@@ -12,11 +12,13 @@ const adminEvents = new events.EventEmitter()
 const tokenEvents = new events.EventEmitter()
 const dashboardEvents = new events.EventEmitter()
 const dbEvents = require('../postgres/events')
-const users = require('../users')
+const users = require('../express/users')
+const wpGet = require('../express/wp-get')
 
 app.use(express.json())
 
 users(app)
+wpGet(app)
 
 app.get('/', async (req,res) => {
   const r = await query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`)
