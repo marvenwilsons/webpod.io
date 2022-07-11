@@ -170,7 +170,9 @@ const postgres_container = {
   ports: ['5432'],
   environment: [...postgresEnv],
   volumes: [
-    '../postgres:/var/lib/postgresql/data'
+    // for windows: '../postgres:/var/lib/postgresql'
+    // for mac: '../postgres:/var/lib/postgresql/data'
+    '../postgres:/var/lib/postgresql'
   ]
 }
 
@@ -179,6 +181,7 @@ const postgres_container = {
  **************************************************************/
  const pgadmin_container = {
   container_name: 'pgadmin',
+  user: 'root', // required in wsl enviroment (windows subsytem for linux)
   image: 'dpage/pgadmin4',
   restart: 'unless-stopped',
   ports: ['5555:80'],
@@ -190,8 +193,8 @@ const postgres_container = {
   ],
   volumes: [
     "../pgadmin:/var/lib/pgadmin",
-    "../pgadmin:/pgadmin4/servers.json",
-    "../pgadmin:/pgadmin4/config_local.py"
+    // "../pgadmin:/pgadmin4/servers.json",
+    // "../pgadmin:/pgadmin4/config_local.py"
   ]
 }
 
