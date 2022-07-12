@@ -11,5 +11,6 @@
     "vetur.format.defaultFormatter.sass": "none",
     "vetur.format.defaultFormatter.scss": "none",
     "editor.formatOnSave": false,
-    "editor.fontSize": 13
+    "editor.fontSize": 13,
+    "editor.mouseWheelZoom": true
 }

@@ -142,7 +142,7 @@ dbEvents.on('create-services-table', function (cb = df) {
     query(queryString)
     .then(d => {
         cb(d.rows)
-        dbEvents.emit('create-service-table-done', d.rows)
+        dbEvents.emit('create-services-table-done', d.rows)
         dbEvents.emit('call', 'create-service-table')
         dbEvents.emit('query',queryString)
     })

@@ -10,23 +10,43 @@ function init (body, cb) {
         rows.length === 0 && dbEvents.emit('install-ossp-extension')
     })
 
+    /**
+     * Create essential webpod tables
+     */
     dbEvents.on('install-ossp-extension-done', () => {
-        /**
-         * Create essential webpod tables
-         */
         dbEvents.emit('create-users-table')
-        dbEvents.emit('create-services-table', () => {
-            dbEvents.emit('create-service-version-table', () => {
-                dbEvents.emit('create-menu-table')
-            })
-        })
+    })
+
+    dbEvents.on('create-users-table-done', () => {
+        dbEvents.emit('create-services-table')
+    })
+
+    dbEvents.on('create-services-table-done', () => {
+        dbEvents.emit('create-service-version-table')   
+    })
+
+    dbEvents.on('create-service-version-table-done', () => {
+        dbEvents.emit('create-menu-table')
+    })
+
+    dbEvents.on('create-menu-table-done', () => {
         dbEvents.emit('create-roles-table')
-        dbEvents.emit('create-apps-table',() => {
-            dbEvents.emit('create-app-instance-type-table')
-        })  
-        dbEvents.emit('create-collections-table', () => {
-            dbEvents.emit('create-collection-instance-table')
-        })
+    })
+
+    dbEvents.on('create-roles-table-done', () => {
+        dbEvents.emit('create-apps-table')  
+    })
+
+    dbEvents.on('create-apps-table-done', () => {
+        dbEvents.emit('create-app-instance-type-table')
+    })
+
+    dbEvents.on('create-app-instance-type-table-done', () => {
+        dbEvents.emit('create-collections-table')
+    })
+
+    dbEvents.on('create-collections-table-done', () => {
+        dbEvents.emit('create-collection-instance-table')
     })
 
     /**
