@@ -199,22 +199,24 @@ export default {
             })
         },
         setFilterMode(val) {
-            console.log('setting filter mode ', val)
-            if(val.includes('/')) {
-                this.displayedUsers = this.allUsers
-                this.roleMode = val.split('/')[1]
-                this.filterMode = val.split('/')[0]
+            if(val) {
+                if(val.includes('/')) {
+                    this.displayedUsers = this.allUsers
+                    this.roleMode = val.split('/')[1]
+                    this.filterMode = val.split('/')[0]
 
-                this.$nextTick(() => {
-                    this.displayedUsers = this.displayedUsers.filter(u => u.role == this.roleMode)
-                })
-            } else {
-                this.filterMode = val
-                this.roleMode = undefined
+                    this.$nextTick(() => {
+                        this.displayedUsers = this.displayedUsers.filter(u => u.role == this.roleMode)
+                    })
+                } else {
+                    this.filterMode = val
+                    this.roleMode = undefined
+                }
+
+
+                this.searchQuery = undefined
             }
-
-
-            this.searchQuery = undefined
+            
         },
         deleteUser() {
             this.$refs.stopAndGo.setLoading(true)
