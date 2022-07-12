@@ -26,6 +26,15 @@ docker container rm --force Admin
 
 rm -rf postgres
 rm -rf pgadmin
+rm -rf package-lock.json
+rm -rf yarn.lock
+rm -rf backend/package-lock.json
+rm -rf backend/yarn.lock
+rm -rf fontend-admin/package-lock.json
+rm -rf fontend-admin/yarn.lock
+rm -rf fontend-public/package-lock.json
+rm -rf fontend-public/yarn.lock
+
 
 # 1. generate docker-compose file
 cd config/app_starter
