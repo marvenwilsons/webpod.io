@@ -22,6 +22,7 @@
                     <template v-slot:content="{close}" >
                          <userFilter
                          :defaultRole="roleMode"
+                         :defaultFilter="filterMode"
                          @apply="(v) => {close(), setFilterMode(v)}"
                          />
                     </template>
@@ -170,17 +171,20 @@ export default {
 
             if(n) {
                 this.displayedUsers = this.displayedUsers.filter((u) => {
-                    if(this.roleMode) {
-                        if(u[this.filterMode].toLowerCase().includes(n.toLowerCase()) && u.role == this.roleMode) {
-                            console.log('rolemode', u.role)
-
-                            return u
-                        } 
-                    } else {
-                        if(u[this.filterMode].toLowerCase().includes(n.toLowerCase())) {
-                            return u
+                    if(u) {
+                        if(this.roleMode) {
+                            if(u[this.filterMode].toLowerCase().includes(n.toLowerCase()) && u.role == this.roleMode) {
+                                return u
+                            } 
+                        } else {
+                            if(u[this.filterMode].toLowerCase().includes(n.toLowerCase())) {
+                                return u
+                            }
                         }
+                    } else {
+                        this.filterMode = 'first_name'
                     }
+                    
                 })
             }
         }
@@ -201,9 +205,16 @@ export default {
         setFilterMode(val) {
             if(val) {
                 if(val.includes('/')) {
+                    console.log('this!', val.split('/')[0])
+
                     this.displayedUsers = this.allUsers
                     this.roleMode = val.split('/')[1]
-                    this.filterMode = val.split('/')[0]
+
+                    if(val.split('/')[0] != 'undefined') {
+                        this.filterMode = val.split('/')[0]
+                    } else {
+                        this.filterMode = 'first_name'
+                    }
 
                     this.$nextTick(() => {
                         this.displayedUsers = this.displayedUsers.filter(u => u.role == this.roleMode)
@@ -211,6 +222,9 @@ export default {
                 } else {
                     this.filterMode = val
                     this.roleMode = undefined
+                    this.$nextTick(() => {
+                        this.displayedUsers = this.allUsers
+                    })
                 }
 
 

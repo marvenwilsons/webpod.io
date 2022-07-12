@@ -35,13 +35,13 @@
 
 <script>
 export default {
-    props: ['roles','defaultRole'],
+    props: ['roles','defaultRole','defaultFilter'],
     data: () => ({
         userRoles: [],
         filter: {
             role: undefined
         },
-        selectedFilter: 'firstName',
+        selectedFilter: 'first_name',
         selectedRole: undefined,
         radioGroup: undefined,
         radioOptions: ['username','last_name','first_name','email']
@@ -58,7 +58,9 @@ export default {
 
         this.radioGroup = this.radioOptions.indexOf('firstName')
         this.selectedRole = this.defaultRole
-        console.log('filter option mounted', this.selectedRole)
+        this.radioGroup = this.radioOptions.findIndex(v => v === this.defaultFilter);
+        // this.radioGroup = this.defaultFilter
+        console.log('filter option mounted', this.selectedRole, this.defaultRole, this.defaultFilter)
 
     },
     methods: {
