@@ -17,7 +17,7 @@
                     v-if="ready"
                     id="login-s"
                     style="background:white; max-width:400px; margin-top:-120px; overflow: hidden;" 
-                    class="pad125 margintop125 marginbottom125 flex flexcenter rounded-xl" >
+                    class="pad125 margintop125 marginbottom125 flex flexcenter" >
                     <v-progress-linear
                         :active="showProgress"
                         :indeterminate="showProgress"

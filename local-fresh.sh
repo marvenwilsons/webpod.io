@@ -35,6 +35,8 @@ rm -rf fontend-admin/yarn.lock
 rm -rf fontend-public/package-lock.json
 rm -rf fontend-public/yarn.lock
 
+npm install
+
 
 # 1. generate docker-compose file
 cd config/app_starter
