@@ -59,9 +59,6 @@ export default {
         this.radioGroup = this.radioOptions.indexOf('firstName')
         this.selectedRole = this.defaultRole
         this.radioGroup = this.radioOptions.findIndex(v => v === this.defaultFilter);
-        // this.radioGroup = this.defaultFilter
-        console.log('filter option mounted', this.selectedRole, this.defaultRole, this.defaultFilter)
-
     },
     methods: {
         setFilterRole(value) {
