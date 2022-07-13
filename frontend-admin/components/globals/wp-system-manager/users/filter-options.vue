@@ -49,7 +49,6 @@ export default {
     watch: {
         radioGroup() {
             this.selectedFilter = this.radioOptions[this.radioGroup]
-            // console.log('sadf', this.radioOptions[this.radioGroup])
         }
     },
     mounted() {
