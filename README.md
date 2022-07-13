@@ -1,4 +1,12 @@
-### Running webpod.io in Windows OS
+### WebPod.io 
+- is a web system builder, it has the ability to create custom digital systems.
+- can also be used as a headless CMS
+- has CMS features
+- has multi user management feature.
+- uses postgreSQL as its primary database
+- uses Nuxt.js and Vue2
+
+### Running WebPod.io in Windows OS
 
 1. **Enable WSL (Windows Subsystem for linux)** in start menu search for `turn windows features on and off`, then scroll down to bottom and enable WSL
 
