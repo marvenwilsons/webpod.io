@@ -7,7 +7,7 @@ echo '*                                        *'
 echo '******************************************'
 echo ''
 
-rm backend/server/man.json
+rm -rf backend/server/man.json
 
 echo '
 {
@@ -17,7 +17,7 @@ echo '
     "db_table_prefix": null,
     "use_pg_admin": true,
     "pgadmin_url": null
-}' > config/app.json
+}' > webpod/app.json
 
 docker rm -f $(docker ps -aq)
 docker network rm $(docker network ls -q)
@@ -42,7 +42,7 @@ cd ..
 
 
 # 1. generate docker-compose file
-cd config/app_starter
+cd webpod/app_starter
 node compose-generator
 
 cd ..

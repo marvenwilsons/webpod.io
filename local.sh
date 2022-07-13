@@ -4,8 +4,8 @@ if [ -e $MANFILE ]
 then
     echo "Starting app"
 
-    # copy man.json file to config/app.json
-    cp $MANFILE config/app.json
+    # copy man.json file to webpod/app.json
+    cp $MANFILE webpod/app.json
 
     echo ''
     echo '******************************************'
@@ -16,7 +16,7 @@ then
     echo ''
 
     # 1. generate docker-compose file
-    cd config/app_starter
+    cd webpod/app_starter
     node compose-generator
 
     cd ..

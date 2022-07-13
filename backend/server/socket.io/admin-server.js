@@ -17,9 +17,6 @@ const wpGet = require('../express/wp-get')
 
 app.use(express.json())
 
-users(app)
-wpGet(app)
-
 app.get('/', async (req,res) => {
   const r = await query(`SELECT * FROM information_schema.tables WHERE table_schema = 'public'`)
   if(r.rows.length == 0) {
@@ -244,6 +241,8 @@ io.on('connection', async function (socket) {
   })
  
   serverEvents.emit('ready',adminEvents,dashboard,dbEvents)
+  users(app)
+  wpGet(app,dbEvents)
 
   // on request
   socket.on('req', async function ({name, payload}) {

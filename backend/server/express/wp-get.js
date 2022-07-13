@@ -1,4 +1,4 @@
-module.exports= (app) => {
+module.exports= (app,db) => {
     app.post('/wp_get', (req,res) => {
         console.log('wp_get!!!')
 
