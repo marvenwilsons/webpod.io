@@ -1,22 +1,12 @@
-# Git Branching strategy
+### Running webpod.io in Windows OS
 
-## frontend-admin directory and its dedicated git branch
-- frontend-admin dir belongs to frontend-admin git branch, frontend-admin dir shouldn't have any access to any outside directories
-or should not be aware of any directory outside its scope
+1. **Enable WSL (Windows Subsystem for linux)** in start menu search for `turn windows features on and off`, then scroll down to bottom and enable WSL
 
-## frontend-public directory and its dedicated git branch
-- frontend-public dir belongs to frontend-public git branch, frontend-public dir shouldn't have any access to any outside directories
-or should not be aware of any directory outside its scope
+2. **Install Ubuntu Distro** open Windows PowerShell and type `wsl --install -d Ubuntu` you will need to provide your credentials on ubuntu's first launch.
 
-## backend directory and its dedicated git branch
-- backend dir belongs to backend git branch, backend dir shouldn't have any access to any outside directories
-or should not be aware of any directory outside its scope
+3. **Install Docker Desktop & WSL Intigration** after installing docker desktop for windows, click the gear icon on the top part then go to `Resources > WSL INTEGRATION` make sure to Enable integration with my default WSL distro is checked and on the bottom the ubuntu distro the you installed should appeared and click the switch on to enable the integration.
 
-## main branch directries
-- config - main
-- backend - main
-- frontend-admin - frontend-admin(branch)
-- frontend-public - frontend-public(branch)
-- mediafiles - ignored*
-- postgres - ignored*
-- installed-plugins - ignored*
+4. **VS Code, Git CLone with WSL** launch a `WSL Window` in VS Code, click the bottom left corner click the icon that looks like: `><` there should a list that will appear on top, and click `New WSL Window`, next is you need to change directory `cd` to `mnt/wsl` then git clone webpod.io. It is important to `cd` to the wsl folder to enable file change reflection feature.
+
+
+**Open WSL Folder In Explorer** by openning an explorer window click network then on the address bar type `\\wsl$`

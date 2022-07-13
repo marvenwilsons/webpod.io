@@ -36,6 +36,9 @@ rm -rf fontend-public/package-lock.json
 rm -rf fontend-public/yarn.lock
 
 npm install
+cd backend
+npm install
+cd ..
 
 
 # 1. generate docker-compose file
