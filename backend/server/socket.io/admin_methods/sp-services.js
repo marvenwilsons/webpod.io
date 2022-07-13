@@ -208,10 +208,17 @@ async function  getServiceVersion(service_id, version_name) {
         view: 'wp-system-manager',
         viewData: {
           wp_get: [
-            'users',
-            'roles',
-            'services',
-            'collections/staff'
+            // 'users',
+            // 'roles',
+            // 'services',
+            // 'collections/staff',
+            {
+              domain: 'users',
+            },
+            {
+              domain: 'collections',
+              filters: [`category=Staff`]
+            }
           ],
           sampleExisitngPayload: {
             name: 'John Doe'
