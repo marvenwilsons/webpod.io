@@ -207,7 +207,7 @@ async function  getServiceVersion(service_id, version_name) {
         viewConfig: {},
         view: 'wp-system-manager',
         viewData: {
-          'wp-get': [
+          wp_get: [
             'users',
             'roles',
             'services',

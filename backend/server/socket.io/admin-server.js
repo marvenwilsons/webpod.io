@@ -51,15 +51,6 @@ app.post('/init', (req,res) => {
   })
 })
 
-app.post('/wp-get', (req,res) => {
-  console.log('wp-get!!!')
-  setTimeout(() => {
-    res.json({
-      message: 'OK'
-    })
-  },500)
-})
-
 app.get('/apps', (req,res) => {
   // returns an array of all apps installed
   // example: [{app_name: 'unitile'},{app_name: 'uniview'}]

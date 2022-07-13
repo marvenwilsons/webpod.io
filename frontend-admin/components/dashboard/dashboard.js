@@ -125,10 +125,10 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             try {
                  /**
                  * Check if viewData has wp-get property
-                 * wp-get is used to fetch data from the database like collections data
+                 * wp_get is used to fetch data from the database like collections data
                  * or users, app data.
                  * 
-                 * wp-get property holds an array of route strings ei.
+                 * wp_get property holds an array of route strings ei.
                  * ['users','collections/flowers'] .. from this example it will fetch all users
                  * and the all the flowers in the collections,
                  * 
