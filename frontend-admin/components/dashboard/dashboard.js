@@ -143,7 +143,6 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                         })
                     } else {
                         
-                        console.log('WP GET')
                         dash.loading(true)
                         dash.bottomAlert('Fetching resources')
 
@@ -159,7 +158,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                         .then(data => {
                             selected_service.body.viewData = {
                                 ...selected_service.body.viewData,
-                                ...data
+                                wp_get_data: data
                             }
                             paneCollection.insertPaneCollectionItem(0)(selected_service.body)
                             setTimeout(() => {
