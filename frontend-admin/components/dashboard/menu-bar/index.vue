@@ -20,7 +20,10 @@
                 >
                 <div :style="{color: $vuetify.theme.themes.light.primary}"  
                 class="pointer fullwidth pad050" >
-                    <i class="el-icon-box padleft025 padright025"></i>
+                    <!-- <i class="el-icon-box padleft025 padright025"></i> -->
+                    <v-icon :style="{color: $vuetify.theme.themes.light.primary}" >
+                        mdi-package-variant-closed
+                    </v-icon>
                     <span :style="{fontWeight: '400'}" >
                         {{item}}
                     </span>

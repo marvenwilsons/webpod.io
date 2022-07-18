@@ -102,6 +102,7 @@ export default {
     '@/assets/dq-css/normalize.css',
     '@/assets/dq-css/theme/main.css',
     '@/assets/el.css',
+    // '@/material-design-icons-iconfont/dist/material-design-icons.csss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -110,6 +111,7 @@ export default {
     { src: '~/plugins/element-ui.js', mode: 'client' },
     { src: '~/plugins/gsap.js', mode: 'client' },
     { src: '~/plugins/directives.js', mode: 'client' },
+    { src: '~/plugins/vuetify.js', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
