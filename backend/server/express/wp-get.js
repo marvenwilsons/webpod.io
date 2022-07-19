@@ -18,6 +18,7 @@ function transformValues(domain,rows) {
     return rows
 }
 
+// return all instances of a domain
 function fetchAllDataFromDomain(db,domain) {
     return new Promise((resolve,reject) => {
         if(isValidDomain(domain)) {
@@ -34,6 +35,7 @@ function fetchAllDataFromDomain(db,domain) {
 
 function fetchAllDataFromDomainWithFilter(db,domain,filter) {
     return new Promise((resolve,reject) => {
+        // SELECT * WHERE filter FROM domain
         resolve({key: domain, value: 'hey'})
     })
 }

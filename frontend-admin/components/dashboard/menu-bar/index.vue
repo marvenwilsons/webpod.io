@@ -19,12 +19,15 @@
                 @click="selected = item"
                 >
                 <div :style="{color: $vuetify.theme.themes.light.primary}"  
-                class="pointer fullwidth pad050" >
+                class="pointer fullwidth pad050 flex flexcenter flexstart" >
                     <!-- <i class="el-icon-box padleft025 padright025"></i> -->
-                    <v-icon :style="{color: $vuetify.theme.themes.light.primary}" >
+                    <v-icon v-if="selected != item" :style="{color: $vuetify.theme.themes.light.primary}" >
                         mdi-package-variant-closed
                     </v-icon>
-                    <span :style="{fontWeight: '400'}" >
+                    <v-icon v-if="selected == item" :style="{color: $vuetify.theme.themes.light.primary}" >
+                        mdi-package-variant
+                    </v-icon>
+                    <span class="body-1 marginleft025" :style="{fontWeight: '400'}" >
                         {{item}}
                     </span>
                 </div>
