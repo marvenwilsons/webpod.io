@@ -95,7 +95,7 @@
                                     </div>
                                     <wp-stop-go
                                         @stop="close()"
-                                        @go="deleteUser()"
+                                        @go="dropUser()"
                                         ref="stopAndGo"
                                     />
                                 </template>
@@ -232,8 +232,16 @@ export default {
             }
             
         },
-        deleteUser() {
+        dropUser() {
             this.$refs.stopAndGo.setLoading(true)
+            server.user.dropUser(this.selectedUser, (operationIsSuccessful) => {
+                if(operationIsSuccessful) {
+                    setTimeout(() => {
+                        this.$refs.stopAndGo.setLoading(false)
+                        webpod.dash.bottomAlert('User successfully deleted')
+                    }, 500)
+                }
+            })
         }
     },
     mounted() {

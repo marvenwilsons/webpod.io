@@ -30,7 +30,7 @@ export default {
         },
         addNewUser({firstName, lastName,email, username, password, role}) {
             // TODO:
-            const url = `${process.env.API_URL}/users`
+            const url = `${process.env.API_URL}/user`
         
             const request_options = {
                 method: 'POST',
@@ -69,8 +69,21 @@ export default {
                 })
             })
         },
-        deleteUser(user) {
-            
+        dropUser(user,cb) {
+            const url = `${process.env.API_URL}/user/${user.username}/`
+
+            fetch(url, {method: 'DELETE'})
+            .then(response => response.json())
+            .then(data => {
+                if(data.message == 'OK') {
+                    cb(true)
+                } else {
+                    webpod.dash.alertError({
+                        message: `<span>An error occured while deleting <strong>${user}</strong>: ${data.message}</span>`,
+                        reload: true
+                    })
+                }
+            });
         },
         sendUserMessage(user,message) {
     

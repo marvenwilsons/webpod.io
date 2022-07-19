@@ -35,24 +35,8 @@
             <WpUsers v-if="activeTab == 'Users'" ></WpUsers>
         </v-card>
         <!-- modals -->
-        <wp-modal   v-if="addNewUsersModalShow" >
-            <div style=" width:400px;" >
-                <v-text-field outlined label="First Name" autocomplete="off" ></v-text-field>
-                <v-text-field outlined label="Last Name" autocomplete="off" ></v-text-field>
-                <v-text-field outlined label="username" autocomplete="off" ></v-text-field>
-                <v-text-field type="text" outlined label="email" onfocus="this.removeAttribute('readonly');" readonly ></v-text-field>
-                <v-text-field outlined label="password" type="password" autocomplete="afsdgwerert" ></v-text-field>
-                <v-select
-                :items="['Admin']"
-                label="Role"
-                outlined
-                ></v-select>
-            </div>
-            <div class="flex flexend " >
-                <v-btn fab  style="background: linear-gradient(90deg, rgba(112,76,156,1) 0%, rgba(9,9,121,1) 100%); color: white;" >
-                    <v-icon>mdi-arrow-right</v-icon>
-                </v-btn>
-            </div>
+        <wp-modal  v-if="addNewUsersModalShow" >
+            <addNewUserFrom />
         </wp-modal>
     </main>
 </template>
@@ -62,9 +46,10 @@ import emptyBox from './empty-box.vue'
 import m from '@/m'
 import WpRole from './roles.vue'
 import WpUsers from './users.vue'
+import addNewUserFrom from './users/form-add-new-user.vue'
 export default {
     mixins: [m],
-    components: {emptyBox,WpRole,WpUsers},
+    components: {emptyBox,WpRole,WpUsers,addNewUserFrom},
     props: ['myData', 'hooks'],
     data: () => ({
         menuTitle: 'System Manager',
