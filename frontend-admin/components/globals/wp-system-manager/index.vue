@@ -98,7 +98,7 @@ export default {
     },
 
     created() {
-        console.log('asdf', this.myData)
+        const infoButton = webpod.dash.infoButton.show()
     }
 }
 </script>
