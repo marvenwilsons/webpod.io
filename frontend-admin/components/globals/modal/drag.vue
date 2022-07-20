@@ -1,6 +1,8 @@
 <template>
-    <div class="fullwidth flex flexcenter " >
-        <v-card id="mydiv" class="rounded-xl" elevation="8">
+    <div class="fullwidth flex flexcenter" >
+        <v-card id="mydiv" :class="['rounded-lg']" 
+        :style="{maxHeight: !fullscreen ? '95%' : '100%'}"  
+        elevation="8">
             
             <div id="mydivheader" style="background: whitesmoke;" class=" flex spacebetween flexcenter pad050 padleft125">
                 <div class="body-1"  >
@@ -27,8 +29,12 @@
                 color="primary"
             ></v-progress-linear>
             
-            <div id="wp-modal-content-container"  class="pad125 paneBorder" :style="fullscreen ? fullscreen_modal :  {zIndex:2,}" role="content" >
-                <div class="pad125" >
+            <div 
+            id="wp-modal-content-container"  
+            class="pad125 paneBorder" 
+            :style="fullscreen ? fullscreen_modal :  {zIndex:2, maxHeight: modalMaxHeight }" role="content" 
+            >
+                <div class="pad125" style="height: 100%;" >
                     <slot></slot>
                 </div>
             </div>
@@ -52,7 +58,8 @@ export default {
             height: undefined,
             width: undefined,
             zIndex: 2
-        }
+        },
+        modalMaxHeight: undefined
     }),
     methods: {
         handleClose() {
@@ -82,7 +89,9 @@ export default {
             this.$set(this.fullscreen_modal,'width',`${ww}px`)
         })
 
-        dragElement(document.getElementById("mydiv"));
+        const d = document.getElementById("mydiv")
+        dragElement(d)
+        this.modalMaxHeight = `${window.innerHeight - 100}px`
 
         function dragElement(elmnt) {
         var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
@@ -138,13 +147,11 @@ export default {
 
 #wp-modal-content-container {
     resize: both !important;
-    overflow: auto;
+    overflow: auto !important;
 }
 
 #mydivheader {
   cursor: move;
   z-index: 10 !important;
-  /* background-color: #1e1e1e; */
-  /* color: #fff; */
 }
 </style>

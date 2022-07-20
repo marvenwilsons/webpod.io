@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="" >
         <div style=" width:400px;" >
             <v-text-field v-model="firstName" outlined label="First Name" autocomplete="off" ></v-text-field>
             <v-text-field v-model="lastName" outlined label="Last Name" autocomplete="off" ></v-text-field>

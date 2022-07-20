@@ -63,11 +63,10 @@
                     class="grey lighten-4 pad050 flex flexcenter spacebetween " >
                         <div class="padleft050" >
                             <span v-if="!selectedUser" class="body-1 grey--text darken-4" >
-                                User Methods
+                                Users Info & Methods
                             </span>
                             <span v-if="selectedUser" class="body-1 grey--text darken-4" >
-                                {{selectedUser.firstName}}
-                                {{selectedUser.lastName}}
+                                User Properties
                             </span>
                         </div>
                         <div>
@@ -102,7 +101,7 @@
                             </wp-dropdown-one>
 
                              <v-btn @click="selectedUser = undefined" v-if="selectedUser"  class=""  fab small icon >
-                                <v-icon>mdi-close-outline</v-icon>
+                                <v-icon>mdi-close</v-icon>
                             </v-btn>
                         </div>
                     </div>
