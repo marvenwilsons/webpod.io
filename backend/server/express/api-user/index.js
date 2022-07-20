@@ -1,6 +1,4 @@
-const db = require('../postgres/events')
-
-module.exports = (app) => {
+module.exports = (app,db,adminEvents,dashboard) => {
     app.get('/users', async (req,res) => db.emit('list-all-users', users => res.json(users)) )
 
     // fetch a specific user
