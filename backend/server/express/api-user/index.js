@@ -15,22 +15,22 @@ module.exports = (app,db,adminEvents,dashboard) => {
     // drop user
     app.delete('/user/:username', async (req,res) => {
         // delete user
-        global.log('deleting user')
-        global.progress(2)
+        log('deleting user')
+        progress(2)
 
         setTimeout(() => {
-            global.log('deleting associated contents')
-            global.progress(70)
+            log('deleting associated contents')
+            progress(70)
 
             setTimeout(() => {
-                global.log('finalizing operation')
-                global.progress(90)
+                log('finalizing operation')
+                progress(90)
                 setTimeout(() => {
-                    global.progress(95)
+                    progress(95)
                     setTimeout(() => {
-                        global.progress(100)
+                        progress(100)
                         setTimeout(() => {
-                            global.log(null)
+                            log(null)
                         }, 3000)
                     },3000)
                 },3000)

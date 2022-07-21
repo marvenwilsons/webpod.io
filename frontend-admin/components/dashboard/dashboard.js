@@ -134,50 +134,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
                  * 
                  * formated as 'domain/path1/path2/etc..'
                  */
-                if(selected_service.body.viewData != undefined && Object.keys(selected_service.body.viewData).includes('wp_get')) {
-                    if(!Array.isArray(selected_service.body.viewData['wp_get'])) {
-                        const msg = <div class="text-err" style="max-width:500px;" > Invalid wp_get value it should be an Array of Strings </div>
-                        dash.alertError({
-                            message: msg,
-                            reload: true
-                        })
-                    } else {
-                        
-                        dash.loading(true)
-                        dash.bottomAlert('Fetching resources')
-
-                        const url = `${process.env.API_URL}/wp_get`
-        
-                        const request_options = {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(selected_service.body.viewData.wp_get)
-                        };
-                        fetch(url, request_options)
-                        .then(response => response.json())
-                        .then(data => {
-                            selected_service.body.viewData = {
-                                ...selected_service.body.viewData,
-                                wp_get_data: data
-                            }
-                            paneCollection.insertPaneCollectionItem(0)(selected_service.body)
-                            setTimeout(() => {
-                                dash.loading(false)
-                            },500)
-                        }).catch(err => {
-                            dash.loading(false)
-                            console.error(err)
-                            webpod.dash.alertError({
-                                message: err,
-                                reload: true
-                            })
-                        })
-                    }
-                } else {
-                    // viewData is not using wp-get
-                    paneCollection.insertPaneCollectionItem(0)(selected_service.body)
-                }
-
+                paneCollection.insertPaneCollectionItem(0)(selected_service.body)
             }catch(err) {
                 dash.alertError({
                     message: err,

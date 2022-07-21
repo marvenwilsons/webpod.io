@@ -188,11 +188,50 @@ export default {
         webpod.session.events.on('pane-toggle',(index) => {
             this.paneOnFocus = index
         })
-        // Assigning defaults
-        const {paneWidth,paneTitle} = this.paneCollection[this.paneIndex].paneConfig
-        this.paneWidth = paneWidth || '700px'
-        this.paneTitle = paneTitle || 'untitled'
+        
+        const rawData = this.paneCollection[this.paneIndex].viewData
+        if(rawData != undefined && Object.keys(rawData).includes('wp_get')) {
+            if(!Array.isArray(rawData['wp_get'])) {
+                const msg = <div class="text-err" style="max-width:500px;" > Invalid wp_get value it should be an Array of Strings </div>
+                webpod.dash.alertError({
+                    message: msg,
+                    reload: true
+                })
+            } else {
+                
+                webpod.dash.loading(true)
+                const url = `${process.env.API_URL}/wp_get`
 
+                const request_options = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(rawData.wp_get)
+                };
+                fetch(url, request_options)
+                .then(response => response.json())
+                .then(data => {
+                    console.log('ey', data)
+                    if(data) {
+                        this.paneCollection[this.paneIndex].viewData = {
+                            ...rawData,
+                            wp_get_data: data
+                        }
+                        // paneCollection.insertPaneCollectionItem(0)(selected_service.body)
+                        setTimeout(() => {
+                            webpod.dash.loading(false)
+                        },500)
+                    }
+                    
+                }).catch(err => {
+                    webpod.dash.loading(false)
+                    console.error(err)
+                    webpod.dash.alertError({
+                        message: err,
+                        reload: true
+                    })
+                })
+            }
+        }
         // extracting paneHooks
         const paneHooks = this.paneCollection[this.paneIndex].paneHooks || `() => {}`
 

@@ -20,6 +20,8 @@ function transformValues(domain,rows) {
 
 // return all instances of a domain
 function fetchAllDataFromDomain(db,domain) {
+    log(`fetching all ${domain}`)
+    progress(10)
     return new Promise((resolve,reject) => {
         if(isValidDomain(domain)) {
             console.log(`> Fetching all ${domain} using wp_get`)
@@ -49,7 +51,11 @@ module.exports= (app,db) => {
             )
             Promise.all(x).then(data => {
                 const object = data.reduce((obj, item) => (obj[item.key] = item.value, obj) ,{})
-                res.json(object)
+                setTimeout(() => progress(100), 500)
+                setTimeout(() => {
+                    res.json(object)
+                    log(null)
+                },1000)
             })
         } else {
             console.log('wp_get should a type of array')
