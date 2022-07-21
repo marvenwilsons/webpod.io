@@ -56,6 +56,7 @@ io.on('connection', async function (socket) {
   // loggers
   global.log      = Object.freeze(msg => socket.emit('log',msg))
   global.progress = Object.freeze(val => socket.emit('progress', val))
+  global.refresh  = Object.freeze(_ => socket.emit('refresh'))
   global.exec     = Object.freeze((fn,arg) => socket.emit('exec', fn, arg))
 
   Object.assign(adminEvents, {

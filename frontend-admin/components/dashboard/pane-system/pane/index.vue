@@ -180,58 +180,75 @@ export default {
         },
         spawnView(viewName, activator) {
             console.log('spawing view')
+        },
+        resolvePaneData() {
+            const rawData = this.paneCollection[this.paneIndex].viewData
+            console.log('resolving pane data')
+            if(rawData != undefined && Object.keys(rawData).includes('wp_get')) {
+                if(!Array.isArray(rawData['wp_get'])) {
+                    const msg = <div class="text-err" style="max-width:500px;" > Invalid wp_get value it should be an Array of Strings </div>
+                    webpod.dash.alertError({
+                        message: msg,
+                        reload: true
+                    })
+                } else {
+                    
+                    webpod.dash.loading(true)
+                    const url = `${process.env.API_URL}/wp_get`
+
+                    const request_options = {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(rawData.wp_get)
+                    };
+                    fetch(url, request_options)
+                    .then(response => response.json())
+                    .then(data => {
+                        // console.log('ey', data)
+                        if(data) {
+                            this.paneCollection[this.paneIndex].viewData = {
+                                ...rawData,
+                                wp_get_data: data
+                            }
+                            // paneCollection.insertPaneCollectionItem(0)(selected_service.body)
+                            setTimeout(() => {
+                                webpod.dash.loading(false)
+                            },500)
+                        }
+                        
+                    }).catch(err => {
+                        webpod.dash.loading(false)
+                        console.error(err)
+                        webpod.dash.alertError({
+                            message: err,
+                            reload: true
+                        })
+                    })
+                }
+            }
         }
     },
     mounted() {
         this.webpod = window.webpod
 
+        this.resolvePaneData()
+
         webpod.session.events.on('pane-toggle',(index) => {
             this.paneOnFocus = index
         })
-        
-        const rawData = this.paneCollection[this.paneIndex].viewData
-        if(rawData != undefined && Object.keys(rawData).includes('wp_get')) {
-            if(!Array.isArray(rawData['wp_get'])) {
-                const msg = <div class="text-err" style="max-width:500px;" > Invalid wp_get value it should be an Array of Strings </div>
-                webpod.dash.alertError({
-                    message: msg,
-                    reload: true
-                })
-            } else {
-                
-                webpod.dash.loading(true)
-                const url = `${process.env.API_URL}/wp_get`
 
-                const request_options = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(rawData.wp_get)
-                };
-                fetch(url, request_options)
-                .then(response => response.json())
-                .then(data => {
-                    console.log('ey', data)
-                    if(data) {
-                        this.paneCollection[this.paneIndex].viewData = {
-                            ...rawData,
-                            wp_get_data: data
-                        }
-                        // paneCollection.insertPaneCollectionItem(0)(selected_service.body)
-                        setTimeout(() => {
-                            webpod.dash.loading(false)
-                        },500)
-                    }
-                    
-                }).catch(err => {
-                    webpod.dash.loading(false)
-                    console.error(err)
-                    webpod.dash.alertError({
-                        message: err,
-                        reload: true
-                    })
+        webpod.session.events.on('refresh',() => {
+            this.resolvePaneData()
+            if(this.paneIndex == this.paneOnFocus) {
+                // console.log('refreshing pane!')
+                this.ready = false
+                this.$nextTick(() => {
+                    this.ready = true
                 })
             }
-        }
+        })
+        
+        
         // extracting paneHooks
         const paneHooks = this.paneCollection[this.paneIndex].paneHooks || `() => {}`
 

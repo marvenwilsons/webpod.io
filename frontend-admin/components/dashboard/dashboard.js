@@ -187,9 +187,13 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         dash.progress(val)
         console.log('progress', val)
 
-        if(val == '100%') {
+        if(val == '100%' || val == 100) {
             webpod.session.logs = []
         }
+    })
+
+    socket.on('refresh', () => {
+        webpod.session.events.emit('refresh')
     })
 
 
