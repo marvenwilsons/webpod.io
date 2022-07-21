@@ -237,7 +237,7 @@ export default {
                 if(operationIsSuccessful) {
                     setTimeout(() => {
                         this.$refs.stopAndGo.setLoading(false)
-                        webpod.dash.bottomAlert('User successfully deleted')
+                        // webpod.dash.bottomAlert('User successfully deleted')
                     }, 500)
                 }
             })

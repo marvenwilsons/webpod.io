@@ -160,7 +160,7 @@
                                     fab
                                     dark
                                 >
-                                    <v-icon dark>
+                                    <v-icon>
                                         mdi-account
                                     </v-icon>
                                 </v-btn>
@@ -184,9 +184,8 @@
                     v-if="bottomAlert.show" 
                     outlined
                     elevation="10"
-                    dark
                     style="z-index:800; position: absolute; bottom:0; left:50%; transform: translate(-50%,-50%)" 
-                    class="borderRad4 absolute pad050 paneShadow  " 
+                    class="borderRad4 absolute pad050 paneShadow grey darken-3 grey--text text--lighten-5" 
                     >
                         <div class="flex flexcenter body-1" >
                             <div style="font-family: Roboto,sans-serif" class="padleft025 padright025" >
@@ -196,6 +195,36 @@
                                 {{bottomAlert.buttonText}}
                             </v-btn>
                         </div>
+                    </v-card>
+                    <v-card
+                    v-if="log"
+                    elevation="20"
+                    dark
+                    style="
+                        min-width: 300px;
+                        z-index:800; 
+                        position: absolute; 
+                        bottom:0%; left:50%; transform: translate(-50%,-50%)
+                        min-width: 200px;
+                    " 
+                    class="borderRad4 absolute paneShadow grey darken-3 grey--text text--lighten-5"
+                    >
+                        <div class="flex flexcenter flexstart body-1" >
+                            <div style="font-family: Roboto,sans-serif" class="pad050 body-1 fullwidth" >
+                                <div class="pad050 flex fullwidth" >
+                                    <div class="flex1 fullwidth" >{{log}}</div>
+                                    <div v-if="logProgress" >
+                                        {{logProgress}}%
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+                        <v-progress-linear
+                            :value="logProgress"
+                            absolute
+                            bottom
+                            color="grey lighten-3"
+                        ></v-progress-linear>
                     </v-card>
                 </v-slide-y-reverse-transition>
                 <v-slide-y-reverse-transition>
@@ -237,6 +266,8 @@ export default {
     mixins: [m],
     components: {menubar, sidebar, notification, accentBg, init, modalDrag},
     data: () => ({
+        log: undefined,
+        logProgress: 0,
         panes: [],
         showModal: false,
         editor: false,
@@ -655,6 +686,15 @@ export default {
                 },
                 getUser: ()  => {
                     return this.user
+                },
+                log: (msg) => {
+                    this.log = msg
+                    if(!msg) {
+                        this.logProgress = 0
+                    }
+                },
+                progress: (val) => {
+                    this.logProgress = val
                 }
             }
 

@@ -222,10 +222,13 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     socket.on('log', (msg) => {
         webpod.session.logs.push(msg)
         webpod.session.onLog(msg)
+        dash.log(msg)
     })
 
     socket.on('progress', (val) => {
         webpod.session.onProgress(val)
+        dash.progress(val)
+        console.log('progress', val)
 
         if(val == '100%') {
             webpod.session.logs = []
