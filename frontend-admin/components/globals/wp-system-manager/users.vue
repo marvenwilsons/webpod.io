@@ -133,6 +133,7 @@ import server from './users/mixins/server'
 import m from '@/m'
 export default {
     components: {userTile, userHome, userFilter, userGeneralInfo},
+    props: ['users'],
     mixins: [m],
     data: () => ({
         selectedUser: undefined,
@@ -244,10 +245,9 @@ export default {
         }
     },
     mounted() {
-        server.user.getUsers(users => {
-            this.allUsers = users
-            this.$nextTick(() => this.displayedUsers = this.allUsers)
-        })
+        this.allUsers = this.users
+        this.$nextTick(() => this.displayedUsers = this.allUsers)
+
     }
 }
 </script>

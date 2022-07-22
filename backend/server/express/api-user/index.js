@@ -1,5 +1,5 @@
 module.exports = (app,db,adminEvents,dashboard) => {
-    app.get('/users', async (req,res) => db.emit('list-all-users', users => res.json(users)) )
+    app.get('/users', async (req,res) => db.emit('list-all-users', users => res.json(users)))
 
     // fetch a specific user
     app.get('/user/:userId', async (req,res) => {

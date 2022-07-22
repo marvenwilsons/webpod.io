@@ -32,7 +32,7 @@
             <!-- <h6>{{activeTab}}</h6> -->
             <!-- <div class="flex flexcenter" >Fetching {{activeTab}} ...</div> -->
             <WpRole v-if="activeTab == 'Roles'" ></WpRole>
-            <WpUsers v-if="activeTab == 'Users'" ></WpUsers>
+            <WpUsers v-if="activeTab == 'Users'" :users="myData.wp_get_data.users" ></WpUsers>
         </v-card>
         <!-- modals -->
         <wp-modal  v-if="addNewUsersModalShow" >

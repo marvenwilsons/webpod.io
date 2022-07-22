@@ -192,7 +192,6 @@ export default {
                         reload: true
                     })
                 } else {
-                    
                     webpod.dash.loading(true)
                     const url = `${process.env.API_URL}/wp_get`
 
@@ -210,6 +209,10 @@ export default {
                                 ...rawData,
                                 wp_get_data: data
                             }
+
+                            this.$nextTick(() => {
+                                this.ready = true
+                            })
                             // paneCollection.insertPaneCollectionItem(0)(selected_service.body)
                             setTimeout(() => {
                                 webpod.dash.loading(false)
@@ -225,6 +228,8 @@ export default {
                         })
                     })
                 }
+            } else {
+                this.ready = true
             }
         }
     },
@@ -238,14 +243,8 @@ export default {
         })
 
         webpod.session.events.on('refresh',() => {
+            this.ready = false
             this.resolvePaneData()
-            if(this.paneIndex == this.paneOnFocus) {
-                // console.log('refreshing pane!')
-                this.ready = false
-                this.$nextTick(() => {
-                    this.ready = true
-                })
-            }
         })
         
         
@@ -317,7 +316,6 @@ export default {
             // viewhooks
             this.viewHooks = new Function(`return ${viewHooks}`)()(paneCollectionMethods,paneObjectMethods,paneView,this.paneIndex)
             
-            this.ready = true
         } catch(err) {
             console.log('ERROR: ', err)
         }
