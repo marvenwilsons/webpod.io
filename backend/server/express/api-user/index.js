@@ -32,9 +32,9 @@ module.exports = (app,db,adminEvents,dashboard) => {
                         refresh()
                         setTimeout(() => {
                             log(null)
-                        }, 3000)
-                    },3000)
-                },3000)
+                        }, 600)
+                    },500)
+                },100)
             },500)
 
         },500)

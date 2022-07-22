@@ -243,7 +243,7 @@ export default {
         })
 
         webpod.session.events.on('refresh',() => {
-            this.ready = false
+            this.ready = false // resolvePaneData will set the ready to true after wpget fetch
             this.resolvePaneData()
         })
         
