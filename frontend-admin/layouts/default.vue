@@ -204,14 +204,14 @@
                         min-width: 300px;
                         z-index:800; 
                         position: absolute; 
-                        bottom:0%; left:50%; transform: translate(-50%,-50%)
+                        top:5%; left:50%; transform: translate(-50%,-50%)
                         min-width: 200px;
                     " 
                     class="borderRad4 absolute paneShadow grey darken-3 grey--text text--lighten-5"
                     >
                         <div class="flex flexcenter flexstart body-1" >
                             <div style="font-family: Roboto,sans-serif" class="pad050 body-1 fullwidth" >
-                                <div class="pad050 flex fullwidth" >
+                                <div class="flex fullwidth" >
                                     <div class="flex1 fullwidth" >{{log}}</div>
                                     <div v-if="logProgress" >
                                         {{logProgress}}%

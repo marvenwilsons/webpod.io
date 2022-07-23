@@ -3,14 +3,37 @@
         <div class="body-1" >
             {{promptBody.prompt.desc}}
         </div>
-        <div>
+        <!-- app -->
+        <div v-if="promptBody.prompt.fieldType == 'app'" >
+
+        </div>
+        <!-- text -->
+        <div v-if="promptBody.prompt.fieldType == 'text'" >
             <v-text-field
                 v-model="inputValue"
             ></v-text-field>
         </div>
+        <!-- number -->
+        <div v-if="promptBody.prompt.fieldType == 'number'" >
+            <v-text-field
+                v-model="inputValue"
+                type="number"
+            ></v-text-field>
+        </div>
+        <!-- select -->
+        <div v-if="promptBody.prompt.fieldType == 'select'" >
+
+        </div>
+        <!-- multi select -->
+        <div v-if="promptBody.prompt.fieldType == 'multi-select'" >
+
+        </div>
+        <!-- array of strings -->
+        <div v-if="promptBody.prompt.fieldType == 'array'" >
+
+        </div>
+        <!-- submit and cancel buttons -->
         <div class="flex flexend" >
-            <!-- <v-btn class="marginleft025" >cancel</v-btn>
-            <v-btn>submit</v-btn> -->
             <wp-stop-go 
                 @go="submit"
                 @stop="cancel"
