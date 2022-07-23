@@ -13,7 +13,7 @@ module.exports = (app,db,adminEvents,dashboard) => {
     })
 
     // drop user
-    app.delete('/user/:username', async (req,res) => {
+    app.delete('/user/:userId', async (req,res) => {
         // delete user
         log('deleting user')
         progress(2)
@@ -22,6 +22,14 @@ module.exports = (app,db,adminEvents,dashboard) => {
             log('deleting associated contents')
             progress(70)
 
+            prompt({
+                header: 'input answer',
+                desc: 'are you sure you want to delete'
+            }, function (value) {
+                console.log('prompt value: ', value)
+            })
+            
+
             setTimeout(() => {
                 log('finalizing operation')
                 progress(90)
@@ -29,7 +37,7 @@ module.exports = (app,db,adminEvents,dashboard) => {
                     progress(95)
                     setTimeout(() => {
                         progress(100)
-                        refresh()
+                        // refresh()
                         setTimeout(() => {
                             log(null)
                         }, 600)
@@ -44,4 +52,10 @@ module.exports = (app,db,adminEvents,dashboard) => {
             message: 'OK'
         })
     })
+
+    // update user
+    app.post('/user/:userId', async(req,res) => {
+        console.log('user')
+    })
+
 }

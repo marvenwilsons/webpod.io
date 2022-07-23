@@ -244,6 +244,10 @@
                     </v-card>
                 </v-slide-y-reverse-transition>
             </main>
+            <!-- prompt -->
+            <wp-modal v-if="prompt.state" >
+                <prompt :promptBody="prompt.body" />
+            </wp-modal>
         </v-main>
     </v-app>
 </template>
@@ -257,6 +261,7 @@ import sidebar from '@/components/dashboard/side-bar/index.vue'
 import notification from '@/components/dashboard/side-bar/notification.vue'
 import accentBg from '@/components/dashboard/accent-bg/index.vue'
 import init from '@/components/dashboard/init/index.vue'
+import prompt from '@/components/globals/wp-prompt/index.vue'
 
 import modalDrag from '@/components/globals/modal/drag.vue'
 
@@ -264,7 +269,7 @@ import m from '@/m'
 import EventEmitter from '@/EventEmitter'
 export default {
     mixins: [m],
-    components: {menubar, sidebar, notification, accentBg, init, modalDrag},
+    components: {menubar, sidebar, notification, accentBg, init, modalDrag, prompt},
     data: () => ({
         log: undefined,
         logProgress: 0,
@@ -321,6 +326,10 @@ export default {
         topAlert: {
             msg: undefined,
             show: false
+        },
+        prompt: {
+            state: false,
+            body: undefined
         }
     }),
     created() {
@@ -695,6 +704,10 @@ export default {
                 },
                 progress: (val) => {
                     this.logProgress = val
+                },
+                prompt: (val,body) => {
+                    this.$set(this.prompt,'state',val)
+                    this.$set(this.prompt,'body',body)
                 }
             }
 

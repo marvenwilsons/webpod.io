@@ -13,6 +13,7 @@ const tokenEvents = new events.EventEmitter()
 const dashboardEvents = new events.EventEmitter()
 const dbEvents = require('../postgres/events')
 const dashboardAndAdminApiRoutes = require('../express/index')
+const util = require('../utils/util')
 
 app.use(express.json())
 
@@ -49,6 +50,7 @@ app.post('/init', (req,res) => {
 
 const admin_methods = require('./admin_methods/index')
 const admin_auth = require('./admin_methods/admin_auth')
+const prompts = {}
 
 io.on('connection', async function (socket) {
   console.log('ℹ Client connected')
@@ -58,6 +60,19 @@ io.on('connection', async function (socket) {
   global.progress = Object.freeze(val => socket.emit('progress', val))
   global.refresh  = Object.freeze(_ => socket.emit('refresh'))
   global.exec     = Object.freeze((fn,arg) => socket.emit('exec', fn, arg))
+  global.prompt   = Object.freeze((prompt, cb) => {
+    // generate a unique string use it as a key and cb as the value
+    // save it to prompts object
+    // when prompts response, delete after executing the cb
+    const key = util.randId(20)
+    socket.emit('prompt', {
+      key,
+      prompt
+    })
+    
+    prompts[key] = cb
+
+  })
 
   Object.assign(adminEvents, {
     ...admin_methods(),
@@ -128,6 +143,18 @@ io.on('connection', async function (socket) {
         message: err.message
       })
     }
+  })
+
+  socket.on('prompt-response', function (responseBody) {
+    console.log('prompt response', responseBody)
+
+    if('key' in responseBody && 'data' in responseBody) {
+      prompts[responseBody.key](responseBody.data)
+      setTimeout(function() {
+        delete prompts[responseBody.key]
+      },0)
+    }
+
   })
 })
 

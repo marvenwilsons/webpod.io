@@ -195,6 +195,17 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
         webpod.session.events.emit('refresh')
     })
 
+    socket.on('prompt', (body) => {
+        const modalInstance = dash.modal.show({
+            modalTitle: 'header' in body ? body.header : 'Prompt',
+            viewTrigger: (state) => dash.prompt(state,body)
+        })
+
+        modalInstance.on('data', (data) => {
+            socket.emit('prompt-response', data)
+        })
+    })
+
 
 /*********************************** ON DASHBOARD LOAD *****************************************************/
     fetch(`${process.env.API_URL}`)
