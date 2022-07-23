@@ -545,6 +545,11 @@ export default {
                     hide: cb => {
                         let abort = false
 
+                        if(typeof this.modalOnClose == 'function') {
+                            this.modalOnClose()
+                            this.modalOnClose = undefined
+                        }
+
                         if(this.modalEvent != undefined) {
                             this.modalEvent.emit('close', (s) => {
                                 abort = s
@@ -578,10 +583,7 @@ export default {
                             }
 
                             if(cb) cb()
-                            if(typeof this.modalOnClose == 'function') {
-                                this.modalOnClose()
-                                this.modalOnClose = undefined
-                            }
+                            
                         } else {
                             this.shakeModal = true
                             setTimeout(() => {
@@ -598,7 +600,7 @@ export default {
                     },
                     onClose: (cb) => {
                         this.modalOnClose = cb
-                    },
+                    }
                 },
                 history: {
                     historyBtn: {

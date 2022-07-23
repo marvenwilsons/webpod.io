@@ -9,10 +9,14 @@
 export default {
     props: ['promptBody'],
     mounted() {
-        webpod.dash.modal.setData({
-            key: this.promptBody.key,
-            data: 'hello'
+        
+        webpod.dash.modal.onClose(() => {
+            webpod.dash.modal.setData({
+                key: this.promptBody.key,
+                data: 'wp-modal-close'
+            })
         })
+
     }
 }
 </script>

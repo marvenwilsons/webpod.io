@@ -64,7 +64,7 @@ io.on('connection', async function (socket) {
     // generate a unique string use it as a key and cb as the value
     // save it to prompts object
     // when prompts response, delete after executing the cb
-    const key = util.randId(20)
+    const key = util.randId(10)
     socket.emit('prompt', {
       key,
       prompt
@@ -146,8 +146,7 @@ io.on('connection', async function (socket) {
   })
 
   socket.on('prompt-response', function (responseBody) {
-    console.log('prompt response', responseBody)
-
+    
     if('key' in responseBody && 'data' in responseBody) {
       prompts[responseBody.key](responseBody.data)
       setTimeout(function() {

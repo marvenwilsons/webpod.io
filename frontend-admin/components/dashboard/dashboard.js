@@ -197,7 +197,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
 
     socket.on('prompt', (body) => {
         const modalInstance = dash.modal.show({
-            modalTitle: 'header' in body ? body.header : 'Prompt',
+            modalTitle: 'header' in body.prompt ? body.prompt.header : 'Prompt',
             viewTrigger: (state) => dash.prompt(state,body)
         })
 
