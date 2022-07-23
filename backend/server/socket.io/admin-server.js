@@ -148,10 +148,13 @@ io.on('connection', async function (socket) {
   socket.on('prompt-response', function (responseBody) {
     
     if('key' in responseBody && 'data' in responseBody) {
-      prompts[responseBody.key](responseBody.data)
-      setTimeout(function() {
-        delete prompts[responseBody.key]
-      },0)
+      console.log('prompt-response executed')
+      if(responseBody.key in prompts) {
+        prompts[responseBody.key](responseBody.data)
+        setTimeout(function() {
+          delete prompts[responseBody.key]
+        },0)
+      }
     }
 
   })
