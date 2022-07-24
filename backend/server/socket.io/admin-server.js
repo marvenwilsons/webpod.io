@@ -10,10 +10,11 @@ const events = require('events')
 const serverEvents = new events.EventEmitter()
 const adminEvents = new events.EventEmitter()
 const tokenEvents = new events.EventEmitter()
-const dashboardEvents = new events.EventEmitter()
+const dashboardEventHandler = require('./dash-event-handler')
 const dbEvents = require('../postgres/events')
 const dashboardAndAdminApiRoutes = require('../express/index')
 const util = require('../utils/util')
+const socketOnReq = require('./on-req')
 
 app.use(express.json())
 
@@ -79,71 +80,36 @@ io.on('connection', async function (socket) {
     token: tokenEvents
   })
 
-  const dashboard = Object.assign(dashboardEvents, {
-    exec: (location,action,payload) => {
-      setTimeout(() => {
-        socket.emit('exec', {
-          location,
-          action,
-          payload
-        })
-      },100)
-      return {
-        exec: this.exec
-      }
-    }
-  })
+  // const dashboard = Object.assign(dashboardEvents, {
+  //   exec: (location,action,payload) => {
+  //     setTimeout(() => {
+  //       socket.emit('exec', {
+  //         location,
+  //         action,
+  //         payload
+  //       })
+  //     },100)
+  //     return {
+  //       exec: this.exec
+  //     }
+  //   }
+  // })
+
+  // dashboardEvents.on('exec',(location,action,payload) => {
+  //   socket.emit('exec', {location,action,payload})
+  // })
+  const dashExec = (location,action,payload) => {
+    socket.emit('exec', {location,action,payload})
+  }
+
+  const dashboard = dashboardEventHandler(adminEvents,dashExec,dbEvents)
  
   serverEvents.emit('ready',adminEvents,dashboard,dbEvents)
   dashboardAndAdminApiRoutes(app,dbEvents,adminEvents,dashboard)
+  dashboardEventHandler(adminEvents,dashboard,dbEvents)
 
   // on request
-  socket.on('req', async function ({name, payload}) {
-    try {
-      console.log('** REQUESTING!!', name)
-
-      if(payload) {
-        if(payload.token == undefined && payload.user == undefined) {
-          // without user and token in payload object is invalid request
-          socket.emit('error', {
-            method_name: undefined,
-            message: 'authentication failed'
-          })
-        } else if(name == undefined) {
-          // without method name string is an invalid request
-          socket.emit('error', {
-            method_name: undefined,
-            message: 'authentication failed'
-          })
-        } else {
-          // process request
-          const authenticate_admin = await admin_auth({token: payload.token, user: payload.user})
-          tokenEvents.emit('data',payload.token)
-
-          if(authenticate_admin.is_valid) {
-            console.log('** PROCESSING REQUEST!!', name)
-            dashboard.emit(name, payload)
-          } else {
-            tokenEvents.emit('expire')
-
-            socket.emit('error', {
-              method_name: name,
-              message: 'authentication failed'
-            })
-            
-          }
-        }
-      }
-
-      
-    } catch(err) {
-      console.log('an error occured', err)
-      socket.emit('error', {
-        method_name: name,
-        message: err.message
-      })
-    }
-  })
+  socketOnReq(socket,dashboard,admin_auth,tokenEvents, adminEvents)
 
   socket.on('prompt-response', function (responseBody) {
     
@@ -166,4 +132,4 @@ server.listen(process.env.ADMIN_SERVER_PORT, 'backend', (err) => {
   }
 })
 
-module.exports = serverEvents
+// module.exports = serverEvents

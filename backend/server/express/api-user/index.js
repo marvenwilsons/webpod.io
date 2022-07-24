@@ -37,7 +37,7 @@ module.exports = (app,db,adminEvents,dashboard) => {
                     progress(95)
                     setTimeout(() => {
                         progress(100)
-                        // refresh()
+                        refresh()
                         setTimeout(() => {
                             log(null)
                         }, 600)

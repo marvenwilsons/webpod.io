@@ -158,6 +158,7 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
     socket.on('exec', (e) => {
         const dashboard_locations = { paneCollection, menu, service, dash, sidebar }
         try {
+            console.log('** dashboard exec ', e.location)
             dashboard_locations[e.location][e.action](e.payload)
         } catch(err) {
             dash.alertError({
@@ -216,14 +217,6 @@ export default function (paneCollection, menu, service, dash, sidebar, socket) {
             dash.showInitForms(true,generated_db_info)
         } else {    
             if(localStorage.getItem('token') != null && localStorage.getItem('user')) {
-                console.log('token detected', socket)
-                socket.emit('req', {
-                    name: 'getUserServices',
-                    payload: {
-                        token:localStorage.getItem('token'),
-                        user: localStorage.getItem('user')
-                    }
-                })
                 socket.emit('req', {
                     name: 'getDashboardResource',
                     payload: {

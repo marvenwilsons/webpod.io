@@ -82,7 +82,7 @@ function mock_getService({serviceName, serviceVersion}) {
 
 async function getUserServices(payload) {
   // get services by querying the database using the user value
-  console.log(payload)
+  // console.log(payload)
   const mock_services_admin = require('./mock/admin-services')
 
   return new Promise(function(resolve,reject) {
@@ -249,7 +249,7 @@ async function  getServiceVersion(service_id, version_name) {
       for(let i = 0; i < mock_service_versions.length; i++) {
         // console.log(`id:${service_id} name:${version_name}`)
         if(mock_service_versions[i].service_id == service_id && mock_service_versions[i].version_name == version_name) {
-          console.log(`   > found service `, service_id)
+          // console.log(`   > found service `, service_id)
           resolve(mock_service_versions[i])
         } else {
           if(i === mock_service_versions.length - 1) {

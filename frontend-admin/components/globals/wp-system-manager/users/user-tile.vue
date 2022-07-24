@@ -12,11 +12,11 @@
                     :color="getRandomColor()"
                     size="36"
                 >
-                    <span class="white--text t text-uppercase">
+                    <span class="white--text t text-uppercase body-1">
                         {{user.first_name.charAt(0)}}{{user.last_name.charAt(0)}}
                     </span>
                 </v-avatar>
-                <span class="marginleft050 " >
+                <span class="marginleft050 body-1" >
                     {{user.first_name}} {{user.last_name}}
                 </span>
             </div>

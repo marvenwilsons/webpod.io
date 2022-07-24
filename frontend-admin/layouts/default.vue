@@ -46,7 +46,7 @@
                     <div v-if="loading" class="absolute fullwidth fullheight-percent flex flexcenter modal-wrapper flexcol" >
                         <div  class="pad125 modalShadow flexcenter" >
                             <div class="flex flexcol relative" >
-                                <span style="border-radius: 100%;" class="absolute fullwidth fullheight-percent flex flexcenter paneShadow" >
+                                <span style="border-radius: 100%;" class="absolute fullwidth fullheight-percent flex flexcenter paneShadow flexcol" >
                                     <!-- logo LOGO -->
                                     <h1
                                     class="merri-font" 
@@ -57,13 +57,11 @@
                                         text-shadow:2px 2px 1px #0D47A1" 
                                         >
                                     W</h1>
+                                    <!-- <div v-if="log" class="margintop125" >
+                                        {{log}}
+                                    </div> -->
                                 </span>
-                                <v-progress-circular
-                                :size="200"
-                                :width="1"
-                                color="#0D47A1"
-                                indeterminate
-                                ></v-progress-circular>
+                                <div class="loader-1 center"><span></span></div>
                             </div>
                         </div>
                         <!-- <div style="color: #1565c0;" class="body-1 grey--text text--darken-2" >
@@ -746,4 +744,63 @@ html {
 .lobster-font {
     font-family: 'Lobster', cursive;
 }
+.loader-1 {
+	height: 232px;
+	width: 232px;
+	-webkit-animation: loader-1-1 4.8s linear infinite;
+	        animation: loader-1-1 4.8s linear infinite;
+}
+@-webkit-keyframes loader-1-1 {
+	0%   { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+@keyframes loader-1-1 {
+	0%   { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+.loader-1 span {
+	display: block;
+	position: absolute;
+	top: 0; left: 0;
+	bottom: 0; right: 0;
+	margin: auto;
+	height: 232px;
+	width: 232px;
+	clip: rect(0, 232px, 232px, 116px);
+	-webkit-animation: loader-1-2 1.2s linear infinite;
+	        animation: loader-1-2 1.2s linear infinite;
+}
+@-webkit-keyframes loader-1-2 {
+	0%   { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(220deg); }
+}
+@keyframes loader-1-2 {
+	0%   { transform: rotate(0deg); }
+	100% { transform: rotate(220deg); }
+}
+.loader-1 span::after {
+	content: "";
+	position: absolute;
+	top: 0; left: 0;
+	bottom: 0; right: 0;
+	margin: auto;
+	height: 232px;
+	width: 232px;
+	clip: rect(0, 232px, 232px, 116px);
+	border: 1px solid #0D47A1;
+	border-radius: 50%;
+	-webkit-animation: loader-1-3 1.2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+	        animation: loader-1-3 1.2s cubic-bezier(0.770, 0.000, 0.175, 1.000) infinite;
+}
+@-webkit-keyframes loader-1-3 {
+	0%   { -webkit-transform: rotate(-140deg); }
+	50%  { -webkit-transform: rotate(-160deg); }
+	100% { -webkit-transform: rotate(140deg); }
+}
+@keyframes loader-1-3 {
+	0%   { transform: rotate(-140deg); }
+	50%  { transform: rotate(-160deg); }
+	100% { transform: rotate(140deg); }
+}
+
 </style>

@@ -8,7 +8,7 @@ async function getRole (_role_id) {
 
   const { role_id, role_menu, role_name } = (await query(`SELECT * FROM ${process.env.TABLE_PREFIX}roles WHERE role_id = $1`, [_role_id]))
   // const menus = (await query(`SELECT menu_id FROM ${process.env.TABLE_PREFIX}menu WHERE `))
-  console.log('ROLE MENU', role_menu)
+  // console.log('ROLE MENU', role_menu)
   
   return new Promise((resolve,reject) => {
     // admin is assigned by a role
@@ -88,12 +88,12 @@ async function getRole (_role_id) {
           primary_version: 'my-custom-version7',
           versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version7']
         },
-        { // Layout Builder
-          menu_id: 'menu-id-lkasdn10',
-          service_id: 'service-id-dmni10',
-          primary_version: 'my-custom-version8',
-          versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
-        }
+        // { // Layout Builder
+        //   menu_id: 'menu-id-lkasdn10',
+        //   service_id: 'service-id-dmni10',
+        //   primary_version: 'my-custom-version8',
+        //   versions: ['my-custom-version', 'my-custom-version1', 'my-custom-version2']
+        // }
       ],
       role_name
     })
