@@ -80,24 +80,6 @@ io.on('connection', async function (socket) {
     token: tokenEvents
   })
 
-  // const dashboard = Object.assign(dashboardEvents, {
-  //   exec: (location,action,payload) => {
-  //     setTimeout(() => {
-  //       socket.emit('exec', {
-  //         location,
-  //         action,
-  //         payload
-  //       })
-  //     },100)
-  //     return {
-  //       exec: this.exec
-  //     }
-  //   }
-  // })
-
-  // dashboardEvents.on('exec',(location,action,payload) => {
-  //   socket.emit('exec', {location,action,payload})
-  // })
   const dashExec = (location,action,payload) => {
     socket.emit('exec', {location,action,payload})
   }
@@ -131,5 +113,3 @@ server.listen(process.env.ADMIN_SERVER_PORT, 'backend', (err) => {
     serverEvents.emit('error')
   }
 })
-
-// module.exports = serverEvents
